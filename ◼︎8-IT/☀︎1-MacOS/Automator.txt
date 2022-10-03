@@ -1,0 +1,370 @@
+❤️  AutoMator
+  进阶: 结合 shell / applescript 能干很多很多事情!!!
+
+
+
+
+🔵 AutoMator 作用: 
+
+    批量操作，自动化操作，
+    - 将图片批量改变大小加水印等等；
+    - 当文件夹里新增文件时自动改名备份，
+    - 新增图片时自动创建缩略图以便分享上传；
+    - 是到日历上的某一天给某人发邮件、短信提醒等。
+
+
+
+
+
+🔵 常用操作
+
+    🔸 打开某软件   launch application
+
+    🔸 选择某个文件      ask for finder items
+    🔸 获取鼠标选定文件  get selected finder items
+
+    🔸 运行shell脚本 run shell script
+    🔸 运行apple脚本 run applescript
+
+    🔸 设置变量:  set value of variable
+    🔸 获取变量:  get value of variable
+
+    🔸 打开某个网页: get specifiled urls
+
+
+
+
+
+
+
+
+
+
+
+Automator另一个特点是，随着系统里软件的增多，它能做的事情也越来越多。比如安装了office之后就多出了许多操作word、ppt文档的动作；安装了pixelmator之后多出了许多操作图片的动作。因此，经常探索Automator，看看有哪些能做的动作也是一件有趣的事情。
+
+
+Automator的基本用法也比较简单：从左边的列表里找到想要执行的动作，然后拖动到右侧空白区域。如果下一个动作能接受上一个动作的结果（比如“用图片新建pdf”能接受“图片文件”），两个动作就会连接在一起。
+
+
+1. 工作流程：最普通的工作流程，需要打开Automator进行运行。这项是用得最少的一种；
+2. 应用程序：保存之后是一个.app的应用程序，可以像其他应用一样双击执行，也可以将其他文件拖动到上面进行操作（比如拖动pdf文件到“pdf到图片”的图标上来将pdf转化为图片文件），用得比较多；
+3. 服务：服务一般出现在特定应用程序的主菜单或者右键菜单中。它只在输入符合要求时才显示，比如只接受文件夹的服务只会在邮件点击文件夹的时候才能看到它。下图是两个服务在菜单中的位置
+
+
+使用Automator有（经）时（常）会遇到挫折，请不要灰心丧气，这是正常的。工作流不能用的时候，请注意每一步的输入和输出是否符合要求，也可以在试运行时打开结果面板查看这一步的结果是否准确。
+
+
+对于老手来说，Automator支持使用Apple Script和bash script，能帮助你完成大量复杂的工作。
+
+
+
+可以给应用程序新建一个工作流.
+左边框框里说白了就是你要工作流程里要干的事，干什么你自己决定！
+
+
+
+服务:
+
+拷贝文件路径!!!
+打开 automator➜ 服务 ➜ 实用工具 ➜ copy to clipboard ➜ 服务指定到 文件/文件夹 ➜  服务位于 Finder ➜  取名保存 ➜ 
+现在找个文件 右键 ➜ 服务 ➜ 刚取的名字 就把当前文件夹路径保存到粘贴板了. 可以只能粘贴了.
+
+
+
+
+
+脚本 stdin
+
+文件路径可以获取.  也可以输入到下一步. 也就是  执行shell.
+stdin 方式传入到 脚本.
+
+管道数据来自stdin，而$*等读取的是args。
+
+echo $(stdin)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 数据库自动备份:
+
+1: launch application ➜ 选择 navacat
+2: watch me do ➜  右上角 开始录制. ➜ .... ➜ 停止录制.. 就可以了...
+
+
+🔵 锁定/解锁文件夹.
+
+ask for finder items    指定某个文件夹.选择文件. ➜ 打开终端 ➜ 获取文件夹路径 ➜ 运行命令. ➜ 
+
+变量 ➜ locaton ➜  path ➜ 获取文件路径...
+
+执行命令 run shell script 
+
+get selected finder items .
+
+set value of
+get value of
+iconutil -c icns "$1"
+
+
+
+
+
+
+
+🔵 解锁文件 ✔︎
+    1. get selected finder items 
+    2. set value of variable
+    3. get value of variable
+    4. run shell script  ➜ pass input 选择 as arguments!!!
+      脚本内容:
+      chflags nouappend "$1"
+
+🔵 锁定文件 ✔︎
+    1. get selected finder items 
+    2. set value of variable
+    3. get value of variable
+    4. run shell script  ➜ pass input 选择 as arguments!!!
+      脚本内容:
+      chflags uappend "$1"
+
+👁‍🗨 要解锁 某个被锁定文件夹下的某个文件. 必须先解锁这个文件夹!!!
+
+    ## Mac DMG 加密磁盘
+    建立一个加密的DMG文件夹. 
+    选择 256 加密
+    必须选择 稀疏磁盘 (这样你用多少就是多少容量. 可以设置一个上限容量)
+
+    然后DMG 创立后.. 如果不想被删除和修改 但是可以添加内容!!!!!
+    可以用 
+
+    '' chflags uappend + 空格 + 文件夹/文件路径(可以直接把文件/文件夹拖进终端. 记住 文件和命令之间有个空格的)
+    '' // 这样  即使有管理员密码也删除不了.
+    '' chflags uappend /Users/v/Desktop/dzrReact-master
+    '' // 这个就是实例.
+    '' 
+    '' 恢复可以删除:
+    '' chflags nouappend + 空格 + 文件夹/文件路径
+    
+    **如果你把 整个加密磁盘 给设置了 uappend . 那就必须先nouappend 这个dmg  然后才能输入密码打开..**
+    **如果你把 整个加密磁盘 给设置了 uappend . 那就必须先nouappend 这个dmg  然后才能输入密码打开..**
+    **如果你把 整个加密磁盘 给设置了 uappend . 那就必须先nouappend 这个dmg  然后才能输入密码打开..**
+
+    /Users/v/Desktop/Sites/Users/v/Desktop/第一本Docker书 高清完整版www.itshuji.com.pdf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 ssh 窗口!!
+http://www.carlosabalde.com/blog/2016/07/05/scripting-iterm2-using-applescript
+
+
+
+
+🔵 打开多个网页 ✔︎
+
+	Actions ➜ Library ➜ Internet ➜ 
+	获取指定的URL”（Get Specified URLs）拖入到操作栏内。
+	在设置处可以添加想要一次打开的所有网页的地址。
+	
+	最后再将“显示网页”（Display Webpages）拖入操作栏作为第二步。此“动作”旨在将小编刚才指定的网页在系统的默认浏览器中打开。
+
+
+
+🔵 将剪贴板（夹纸板）内容变成文本文件   ✔︎
+
+  这个“工作流”旨在运行时将您复制到剪贴板（夹纸板）内的内容直接以一个新的文本文件的形式生成。
+首先，选择“应用程序”模板。然后，将“实用工具”分类中的“获取夹纸板的内容”（Get Contents of Clipboard）动作拖拽到操作栏。
+ 
+        随后在“文本”分类中，找到“新建文本文件”动作并拖拽到操作栏作第二步。我们注意到第一步与第二步的动作间已经出现了三角箭头。这表明第一步中的信息将会被用来执行第二步操作。小编在动作栏内的“选项”下点选了“工作流程运行时显示此操作”。这样小编就能在每次运行“工作流”时自定义新文本文件的名称以及存储地点了。
+
+
+
+
+
+
+
+🔵 word ➜ PDF
+
+
+
+
+
+🔵 图片➜ pdf
+一、用图片新建pdf
+新建工作流程时记得选择“应用程序”。
+用法：将一些图片选中，拖动到这个图表上，就会生成一个PDF到桌面（或者其他指定的位置上）。分享设计稿就靠它了！
+
+
+🔵 pdf - 图片
+把pdf拖到上面化作一堆图片。据说这个可以破除pdf的加密。
+
+
+
+
+六、保存网页中的全部图片（服务）
+看到mb吧上号看的壁纸想全部保存下来？用这个服务就行。
+使用方法：在safari上打开一个网页，然后在菜单上safari->服务->(服务名)
+不过这个不是很令人满意的是会让系统变得卡顿。如果其他人有改进措施的话，请告诉我。
+
+
+
+
+
+七、批量调整图片大小（应用程序）
+也算是常用操作之一吧。喜欢动手的同学可以自己建立一连串的操作，比如先调整大小再加水印（需要pixelmator）之类的。
+
+
+
+
+
+八、自动给文件重命名加时间（文件夹操作）
+
+
+注意是“文件夹操作”!
+当有文件新增到制定文件夹时，自动复制一份并在文件名上加上今天的日期。
+
+
+
+
+九、在finder当前文件夹下新增文件（应用程序）
+
+
+最后来个高级点的，这个用到了Apple Script。
+用法：保存后将图标拖动到finder的工具条上，会变成一个按钮；以后点击这个按钮就会在当前目录下新建空白文本文件。
+
+
+
+
+
+
+
+3、自动备份文件、上传等
+
+
+
+
+
+Mac中如何把PDF转成JPG？
+页数少时直接用Photoshop另存即可，数量多则不行，效率很低也很繁琐，这个时候可以试试Automator。当然也可以用第三方软件。
+在launchpad中【其他】里找到Automator。
+
+
+Automator有八种文稿类型。工作流程最简单，应用程序则可以生成.app等，相当方便，后细述。
+
+把PDF转成JPG为例，我们来创建一个应用程序。 三个步骤：渲染PDF、选择地址、重命名。
+设置好以后，在Automator中鼠标点一下就可以完成。
+进入Automator界面后，资源库中选择【PDF】，然后双击选择【将PDF页面渲染为图像】，可以根据需要调节分辨率等。
+
+
+
+资源库中选择【文件和文件夹】，双击选择【拷贝Finder项目】，把渲染的图片拷贝出来，可以自定义图片存储的位置。
+
+
+
+比如我选择了桌面的一个文件夹，然后选择给Finder项目重命名，可以选择命名规律。
+然后保存到桌面后，会出现一个机器人的icon，这就是我们创建的应用程序了。
+
+
+
+使用时只需要把pdf拖到icon上运行就可以了。
+
+
+
+
+
+ 每天定时自动删除 QQ 的聊天记录。。。。 好吧我知道我雷人了。。。。（btw 这个需要配合 iCal 的提醒时自动打开文件功能）
+
+
+
+做ios开发的时候把2备图缩小成1倍图，然后在二倍图后面加上@2x
+
+
+
+从已知的 URL 列表（譬如说成规律命名的图片）批量下载文件: > Ask for Text ── Extract URLs from Text ── Download URLs  
+
+把目标页面上面某些链接指向的页面下载成 PDF 保存： Download URLs as PDFs.action (需要另外下载安装这个 action) > Get Current Webpage from Safari ── Get Link URLs from Webpages ── Filter URLs ── Download URLs as PDFs
+
+
+
+转换文本编码为UTF-8
+加密压缩文件
+下载YouTube （网址 > 右键 > service > download youtube）
+	•	本来没必要这么折腾，但是最近常用的那个YouTube下载网站基本处于歇菜状态，不能下载含有音乐的视频说什么侵权……干脆自己写个
+	•	需要安装youtube-dl，没装的用homebrew装吧
+	◦	Homebrew
+	◦	> brew install youtube-dl
+	•	最近回国了一趟，发现好像系统全局翻墙代理对这个无效。所以更新了一个 Download Youtube in China，里边有两行 --proxy xxx://host:port 把这个改成你们的代理就可以下载了。我这里边默认的是shadowsocks。当然如果没有办法翻墙的话，自然是不能下载的……
+	•	用了一阵发现国内网络状况堪忧太容易中断，又更新了一下，加了个无限重试，重试到死 [笑cry] 应该怎么都能下下来了……
+stream YouTube 视频用mpv 看 （网址 > 右键 > service > stream to mpv）
+	•	对大部分人用处有限……因为我是21:9屏幕，YouTube上的宽屏视频我看都是四面黑边，不过用mpv stream的话就可以全屏了……
+	•	需要安装mpv
+	◦	> brew install mpv
+	◦	> brew linkapps mpv
+
+
+
+
+为男神刷投票 
+－鼠标录制
+－（可以不要）shell脚本延时：sleep n秒
+－自动循环
+
+
+
+Notability 可以自己 convert ppt to pdf, 但是需要上传至 Google Drive, 然后转化, 因为众所周知的原因, 比较慢. 不如在 Mac 上, 利用 Office 强大的功能来做到.
+iPad 上还有 Readdle 家的 PDF Converter, 收费, 没用过.
+Mac 上也有一些软件可以来, 年份久远已忘记名字.
+一些网站提供相应服务, 不过要先上传, 能不能批量转换就不得知了. 上传再下载总觉得很慢.
+
+
+
+
+
+
+
+1. 一键音频输出切换
+我的桌面系统有一个 USB 连接的音箱和一个 DAC 连接的耳机。人是一种很奇怪的动物，有时候喜欢外放，有时候又喜欢独享。那么这就带来了一个问题：我们要怎么去切换输出的设备？
+我当然可以拔掉一个接另一个，可是这样一点都不酷。而且这些的连接部分都藏在电线收纳盒里，每次都插拔会把人都累死。另外一种方法是按 option 点击状态栏的音量图标，可以选择输出设备。可我想要一种更懒的方法，摊在椅子上，然后我「啪」的按一下键盘，音频就切换了。如果要我坐起来按住键盘用鼠标来选，我觉得特别麻烦，由此可见，懒真是促进人类科技发展得以一个重大动力。
+
+
+
+
+
+
+🔵  图片旋转
+
+图片选择 有问题的!!!   720k的 转一下 就变成 1.6M..  ..

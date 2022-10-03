@@ -1,0 +1,487 @@
+❤️ git/github
+
+🔸 Github 跳转技巧
+
+    比如你有一个文件里的某一行代码写得非常酷炫想分享一下。
+    可以在url后面加上 #L行号
+    比如，点击下面这个url：
+    https://github.com/AlloyTeam/AlloyTouch/blob/master/touch.js#L240
+    你便会跳到touch.js的第240行. 并高亮那行.
+    
+    https://github.com/AlloyTeam/AlloyTouch/blob/master/alloy_touch.js#L39-L45
+    跳转+高亮 39-45行!!!
+
+
+
+
+
+
+
+
+
+
+
+❤️️ 公共DNS
+  宽带商(ISP)不是专业的DNS服务商. 技术有限!而且会通过DNS劫持植入广告.
+  所以有必要用专业的DNS.
+
+  ⦿ anycast 技术
+      Anycast 能够让多个主机使用一个 IP 地址，
+      当用户连接这个 IP 地址的时候，连接到的只是这多个主机中的其中之一，
+      通常会选择最快的线路，能有效的降低延迟.
+
+      DNS 服务器只有一个IP, 但是DNS服务器绝对不止一台.
+      anycast 技术可以把数据发送到一组目标节点上. 通过路由协议选择最快的节点 
+      anycast 让用户访问离自己最近的 DNS服务器 来实现加速.
+
+  ⦿ 推荐 DNS
+      1. 谷歌的 8.8.8.8 
+      2. 阿里的 223.6.6.6
+        ping 8.8.8.8       只有 3  ms 的延迟
+        ping 223.6.6.6     只有 10 ms 的延迟
+        ping www.baidu.com 都有 30 ms 的延迟
+
+
+
+
+❤️ 代理.
+         ping 23.105.192.96 190 +
+
+  不开代理 ping gce 35.194.128.92 延迟 170 +
+  开了代理 ping gce 35.194.128.92 延迟 240 +
+  估计是开了代理后. 通过代理 连接的 gce 所以变慢了.
+
+
+  国内不同地方 ping gce 差别很大 有的 几十毫秒 有的 几百毫秒..
+
+
+
+
+
+❤️ CDN
+  网站服务器是GCE的 35.194.128.92 
+  但是ping 35.194.128.92 还是有240+ ms的延迟
+
+  其实可以用谷歌的 Google Cloud CDN 实现加速.
+  此功能就相当于一个 HTTP(S) 的反向代理，
+  所以只能针对 HTTP/HTTPS 请求进行负载均衡。
+
+  没有使用CDN之前 拓扑:
+  用户 -- 边缘服务器 -- 实例
+
+
+
+  Google 云端 CDN 利用 Google 遍布全球的边缘点，在距您的用户更近的位置缓存 HTTP(S) 内容，以提高内容传送速度并降低内容提供成本。要开始使用，请点击“添加来源”。
+  谷歌服务器 有很多节点可以选择.
+  如美国 日本 台湾.
+  中国用户当然访问台湾的最快了.
+  但是美国用户 肯定是访问美国节点最快了.
+  由于我们服务器是建立在 台湾的. 所以美国人访问就慢了.
+  解决办法是 在美国也建议一个服务器. 也搭建网页.
+  然后用 谷歌 的云端CDN 功能实现美国用户访问美国的服务器.
+  中国用户访问台湾的服务器.
+
+
+
+
+
+
+❤️ 监控 stackdriver
+
+
+
+
+
+
+
+
+
+
+
+
+
+网络 ➜ 云端CDN
+
+
+
+
+
+
+
+
+
+
+
+
+
+❤️ gitlab
+github 都是公开的.  如果要不公开就要收费.
+你可以自己搭建 gitlab 服务器. 实现比github 更加强大的功能.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# This script is used to download some images and packaged kubernetes used
+
+KUBEVERSION=$1
+
+images=(kube-proxy-amd64:$KUBEVERSION kube-discovery-amd64:1.0 kubedns-amd64:1.7 kube-scheduler-amd64:$KUBEVERSION kube-controller-manager-amd64:$KUBEVERSION kube-apiserver-amd64:$KUBEVERSION etcd-amd64:3.0.14-kubeadm kube-dnsmasq-amd64:1.3 exechealthz-amd64:1.1 pause-amd64:3.0 kubernetes-dashboard-amd64:v1.5.0)
+
+echo -e "\033[33mclean old files!\033[0m"
+rm -rf ~/kube_images > /dev/null 2>&1
+rm -f ~/kube_images-$KUBEVERSION.tar.gz > /dev/null 2>&1
+
+echo -e "\033[32mcreate download directory...\033[0m"
+mkdir ~/kube_images
+
+for imageName in ${images[@]} ; do
+  echo -e "\033[32mpull image: $imageName...\033[0m"
+  docker pull gcr.io/google_containers/$imageName
+  if [ ! "$?"=="0" ]; then
+    echo -e "\033[31merror: pull image: $imageName failed!\033[0m"
+    exit 1
+  fi
+  echo -e "\033[32msave image: $imageName...\033[0m"
+  docker save gcr.io/google_containers/$imageName > ~/kube_images/$imageName.tar
+
+  if [ -f ~/kube_images/$imageName.tar ]; then
+    echo -e "\033[32mdownload $imageName image success!\033[0m"
+  else
+    echo -e "\033[31mdownload $imageName image failed!\033[0m"
+    exit 1
+  fi
+done
+
+echo -e "\033[32mcreate images package...\033[0m"
+(cd ~/kube_images && tar -zcvf ~/kube_images-$KUBEVERSION.tar.gz *.tar)
+
+if [ -f ~/kube_images-$KUBEVERSION.tar.gz ]; then
+  echo -e "\033[32mcreate images package success!\033[0m"
+  echo -e "\033[32mclean temp files...\033[0m"
+  rm -rf ~/kube_images
+else
+  echo -e "\033[31merror: create images package failed!\033[0m"
+  exit 1
+fi
+
+
+
+
+
+for imageName in `docker images | grep -v "REPOSITORY" | awk '{print $1":"$2}'`;do docker save $imageName > `echo $imageName | tr '/' '_' | tr ':' '_'`.tar ; done
+
+
+
+
+
+cd /data/repo/centos/7/ && ls | xargs -i createrepo --update {}
+
+
+
+
+
+KUBE_API_SERVER=$1
+CERT_DIR=${CERT_DIR-"."}
+
+kubectl config set-cluster default-cluster --server=${KUBE_API_SERVER} \
+    --certificate-authority=${CERT_DIR}/ca.pem 
+
+kubectl config set-credentials default-admin \
+    --certificate-authority=${CERT_DIR}/ca.pem \
+    --client-key=${CERT_DIR}/apiserver-key.pem \
+    --client-certificate=${CERT_DIR}/apiserver.pem      
+
+kubectl config set-context default-system --cluster=default-cluster --user=default-admin
+kubectl config use-context default-system
+
+
+
+
+#!/bin/bash
+yum update -y
+yum install tmux wget lrzsz vim net-tools zsh bind-utils yum-utils ctags git -y
+sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
+
+
+
+
+# This script is use to automatically configure Conoha LAN IP
+# reference https://www.conoha.jp/conoben/archives/10174
+
+IPADDR=$1
+
+if [ "$IPADDR" == "" ]; then
+  echo -e "\033[33merror: ip address is blank\033[0m"
+  echo -e "\033[32muse ./init_private_neiwork.sh IPADDRESS NETMASK [ETH_BUMBER] [MAC_ADDRESS]\033[0m"
+  exit 1
+fi
+
+NETMASK=$2
+
+if [ "$NETMASK" == "" ]; then
+  echo -e "\033[33merror: netmask is blank\033[0m"
+  echo -e "\033[32muse ./init_private_neiwork.sh IPADDRESS NETMASK [ETH_BUMBER] [MAC_ADDRESS]\033[0m"
+  exit 1
+fi
+
+ETH_BUMBER=$3
+
+if [ "$ETH_BUMBER" == "" ]; then
+  ETH_BUMBER="eth1"
+fi
+
+MAC_ADDRESS=$4
+
+if [ "$MAC_ADDRESS" == "" ]; then
+  yum update -y >> /dev/null 2>&1 && yum upgrade -y >> /dev/null 2>&1 && yum install net-tools >> /dev/null 2>&1
+  MAC_ADDRESS=`ifconfig "$ETH_BUMBER" | grep ether | awk -F" " '{print $2}'`
+  if [ "$MAC_ADDRESS" == "" ]; then
+    echo -e "\033[33mget MAC_ADDRESS"
+    echo -e "\033[33mget MAC_ADDRESS failed! please input MAC_ADDRESS!"
+    exit 1
+  fi
+fi
+
+echo -e "\033[32mupdate /etc/sysconfig/network-scripts/ifcfg-$ETH_BUMBER...\033[0m"
+echo ""
+
+# setting network
+tee /etc/sysconfig/network-scripts/ifcfg-$ETH_BUMBER <<EOF
+DEVICE=$ETH_BUMBER
+TYPE=Ethernet
+HWADDR=$MAC_ADDRESS
+ONBOOT=yes
+NM_CONTROLLED=no
+BOOTPROTO=static
+IPADDR=$IPADDR
+NETMASK=$NETMASK
+EOF
+
+echo ""
+echo -e "\033[32mupdate  /etc/iproute2/rt_tables...\033[0m"
+echo ""
+
+tee /etc/iproute2/rt_tables <<EOF
+201     gate1
+EOF
+
+echo ""
+echo -e "\033[32mupdate  /etc/sysconfig/network-scripts/rule-$ETH_BUMBER...\033[0m"
+echo ""
+
+tee /etc/sysconfig/network-scripts/rule-$ETH_BUMBER <<EOF
+from $IPADDR table gate1
+EOF
+
+echo ""
+echo -e "\033[32mupdate  /etc/sysconfig/network-scripts/route-$ETH_BUMBER...\033[0m"
+echo ""
+
+tee /etc/sysconfig/network-scripts/route-$ETH_BUMBER <<EOF
+default via $IPADDR table gate1
+EOF
+
+echo ""
+echo -e "\033[32mrestart network...\033[0m"
+
+systemctl restart network
+
+
+
+
+
+tee /etc/yum.repos.d/docker.repo <<-'EOF'
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+
+yum install docker-engine -y
+
+systemctl enable docker
+systemctl start docker
+systemctl status docker
+
+
+
+
+
+curl -L "https://github.com/docker/compose/releases/download/1.8.1/docker-compose-$(uname -s)-$(uname -m)" > /usr/local/bin/docker-compose
+
+chmod +x /usr/local/bin/docker-compose
+
+echo "alias dc='docker-compose'" >> ~/.zshrc
+
+
+
+
+
+tee /usr/local/bin/proxy <<EOF
+#!/bin/bash
+http_proxy=http://192.168.1.21:8123 https_proxy=http://192.168.1.21:8123 \$*
+EOF
+
+chmod +x /usr/local/bin/proxy
+
+
+
+
+
+#nc -x192.168.1.21:1083 -X5 \$*
+connect-proxy -S 192.168.1.21:1083 $*
+EOF
+
+chmod +x /usr/local/bin/proxy-wrapper
+
+tee ~/.ssh/config <<EOF
+Host github github.com mritd.me
+#Hostname github.com
+#User git
+ProxyCommand /usr/local/bin/proxy-wrapper '%h %p'
+EOF
+
+
+# import key
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+
+# install elrepo repo
+rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+
+# install kernel
+yum --enablerepo=elrepo-kernel install kernel-lt kernel-lt-headers kernel-lt-devel -y
+
+# modify grub
+grub2-set-default 0
+
+
+
+
+
+
+
+
+
+
+
+
+set -e
+
+RPM_DIR=$1
+
+if [ "$RPM_DIR" == "" ];then
+    echo -e "\033[31mError: RPM_DIR is blank!\033[0m"
+    exit 1
+fi
+#yum install rpm-sign -y 
+
+# clean old files
+#rm -f /data/repo/centos/7/x86_64/{kubelet*,kubeadm*,kubernetes-cni*,kubectl*}
+
+# signature rpms
+echo %_signature gpg > ~/.rpmmacros
+echo "%_gpg_name mritd (mritd rpm repository)" >> ~/.rpmmacros
+
+for rpmName in `ls ${RPM_DIR}/*.rpm`; do
+  rpm --addsign $rpmName
+  cp -f $rpmName /data/repo/centos/7/x86_64
+done
+
+# create repodata
+`pwd`/flush_repo.sh
+
+# sync cdn
+`pwd`/syncrpm.sh
+
+
+
+
+
+
+FORCEPUSH=$1
+
+# clean old files
+upx rm centos/7/x86_64/\*
+upx rm centos/7/x86_64/repodata/\*
+
+# waiting cdn clean cache
+echo "Wating cdn sync:"
+if ! [ "$FORCEPUSH" == "-f" ];then
+    for i in `seq -w 120 -1 1`;do
+        echo -ne "\033[1;31;32m\b\b\b$i\033[0m";
+        sleep 1;
+    done
+fi
+
+# sync rpm
+cd /data/repo/centos/7/x86_64/ && for rpmName in `ls *.rpm`;do upx put $rpmName centos/7/x86_64/;done
+cd /data/repo/centos/7/x86_64/repodata/ && for repodata in `ls`;do upx put $repodata centos/7/x86_64/repodata/;done
+
+
+
+
+
+
+VERSION=$1
+VERSION2=$2
+
+function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
+function version_le() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" == "$1"; }
+function version_lt() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" != "$1"; }
+function version_ge() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" == "$1"; }
+
+if version_gt $VERSION $VERSION2; then
+   echo "$VERSION is greater than $VERSION2"
+fi
+
+if version_le $VERSION $VERSION2; then
+   echo "$VERSION is less than or equal to $VERSION2"
+fi
+
+if version_lt $VERSION $VERSION2; then
+   echo "$VERSION is less than $VERSION2"
+fi
+
+if version_ge $VERSION $VERSION2; then
+   echo "$VERSION is greater than or equal to $VERSION2"
+fi
+
+
+
+
+

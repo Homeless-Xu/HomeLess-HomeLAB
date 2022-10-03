@@ -1,0 +1,274 @@
+❤️ Hadoop 环境搭建
+
+      学习hadoop. 需要一个最基本的 hadoop 环境: 一台 master 两台 slave
+          三台电脑可以用实体机. 也可以用虚拟机(vmware / vbox / Docker)
+          我们只有一台笔记本.所以选择docker.  vm/vb 跑三个虚拟机实在太卡了. 
+          Mac 原生是不支持docker的. 虽然Docker 官方也提供Mac 的安装包,但是不好用.
+          强烈建议在 Ubuntu/Debian/CentOS/Kali 这样的Linux平台运行 Docker
+          Linux 内核版本必须是 2.6以上的. 推荐CentOS 7+
+
+        我们在Mac上搭建. CentOS7 的虚拟机.
+        在Centos7 上搭建Docker环境.
+        在Docker 中 搭建两个centos slave 虚拟机
+        现在我们就有三个centos了; 一个 vm出来的centos; 两个 docker 出来的 centos..
+
+
+
+❤️ CentOS7 虚拟机网络配置 
+      虚拟机安装的时候选择带界面的GUI模式!!! 不要选最小化.CLI模式怕你网络都配置不好.
+
+      🔸 设置固定IP 然后重启服务.
+           service network restart ➜  重启网络服务来生效 
+
+      🔸 查看ssh远程设置(默认自带ssh服务,并且开启的)!!! 
+            service sshd status                  ➜  正常应该是运行的.
+            service listening on 0.0.0.0 port 22 ➜  说明 CentOS 是允许所有电脑进行远程的.
+
+      🔸 免密码SSH登录设置
+            客户端: 🔅 cd /Users/v/.ssh/
+                // Mac的公钥是在这个位置的.
+            服务器: 🔅 mkdir ~/.ssh
+                // 文件是传到 服务器对应用户的.ssh目录下的. 如果没有这个文件夹.你得自己建立.
+            客户端: 🔅 scp -r id_rsa.pub root@192.168.169.111:~/.ssh/   
+                // scp 这里有可能连不是虚拟机. 
+                // ssh 认证是双向的. 
+                // 你连过哪些服务器的IP. 本地把服务器的公钥也保存下来的!!
+                // 一旦你服务器重装系统. 也就意味着服务器的公钥变了.
+                // 一旦你在本地用同样的ip连重装系统的服务器.就会导致服务器的公钥和本地之前存的服务器公钥不一致.
+                // 这些记录在 /Users/v/.ssh/ 的 known_hosts文件中.
+                // 如果某服务器登录不了. 可以试着在这文件里面删除对应的服务器公钥.
+            服务器: 🔅 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+      🔸 虚拟机设置快照来备份
+          选择虚拟机 ➜  右键 ➜  snapshot ➜  take ..
+
+
+❤️️ ️容器固定IP设置
+    📌📌 IP设置如果看不懂. 务必先看 docker.txt 里面有详细教怎么给容器设置固定IP.
+
+    🔸 brctl addbr xujian                       添加一个网桥(虚拟网卡):xujian
+    🔸 ip addr add 192.168.1.1/24 dev xujian    给这个网卡设置网段:  
+    🔸 ip link set dev xujian up                开启这个网卡:  
+    🔸 systemctl stop  docker.service           停止docker服务                       
+
+    🔸 vim /etc/sysconfig/docker         
+            编辑docker 配置文件 目的就是把虚拟的桥接口由默认的docker0改为bridge0
+            将   OPTIONS='--selinux-enabled --log-driver=journald'
+            改为 OPTIONS='--selinux-enabled --log-driver=journald -b=xujian'
+
+    🔸 systemctl start  docker.service    开启docker服务 
+
+    🔸 docker run -itd --name=Master --net=none centos7ifconfig /bin/bash   用--net=none 模式新建一个叫Master容器. 
+    🔸 docker run -itd --name=Slave1 --net=none centos7ifconfig /bin/bash   用--net=none 模式新建一个叫Slave1容器. 
+    🔸 docker run -itd --name=Slave2 --net=none centos7ifconfig /bin/bash   用--net=none 模式新建一个叫Slave2容器. 
+
+    🔸 pipework xujian -i eth0 Master 192.168.1.10/24@192.168.1.1           给Master容器 一个固定IP
+    🔸 pipework xujian -i eth0 Slave1 192.168.1.11/24@192.168.1.1           给Slave1容器 一个固定IP
+    🔸 pipework xujian -i eth0 Slave2 192.168.1.12/24@192.168.1.1           给Slave2容器 一个固定IP
+
+    🔸 docker attach Master  进入容器用ifconfig 查看IP是否生效. 并ping外网试试能不能上网.
+    🔸 docker attach Slvae1  进入容器用ifconfig 查看IP是否生效. 并ping外网试试能不能上网.
+    🔸 docker attach Slave2  进入容器用ifconfig 查看IP是否生效. 并ping外网试试能不能上网.
+
+
+
+
+
+❤️ hadoop
+参考 http://kiwenlau.com/2016/06/12/160612-hadoop-cluster-docker-update/
+
+🔵 Hadoop Docker镜像
+你当然可以用 centos 的docker镜像.然后在里面安装 hadoop...
+安装hadoop 又需要一大堆的依赖软件. 反正就是麻烦.
+我们重点是学习 hadoop. 暂时不花精力去搭建hadoop.
+用 hadoop的docker 镜像可以快速地在单个机器上搭建Hadoop集群，这样可以方便新手测试和学习。
+
+
+Hadoop 的镜像不小!!!!
+ubuntu 就130MB. 加上 vim / hadoop / ssh / JDK(java) 有 500MB ..
+
+
+
+原理:
+三个hadoop容器: 一个 master 两个slave 分别运行在三个不同的 容器中.
+
+hadoop-master 容器运行: namenode 和 resourcemanager
+hadoop-slave 容器运行: datanode 和 nodemanager
+namenode 和 datanode 是 hadoop分布式文件系统的组件. 负责存取数据.
+resourcemanager 和 nodemanager 是hadoop集群资源管理系统. 负责cpu/内存资源的调度.
+
+
+创建 hadoop 单独的网络.也就是hadoop专用网桥.
+sudo docker network create --driver=bridge hadoop
+
+然后在运行Hadoop容器时，使用”–net=hadoop”选项，
+这时所有容器将运行在hadoop网络中，它们可以通过容器名称进行通信。
+
+
+
+🔵 拉取镜像:
+
+    sudo docker pull kiwenlau/hadoop:1.0
+
+下载 git仓库:
+git clone https://github.com/kiwenlau/hadoop-cluster-docker
+
+3. 创建Hadoop网络
+sudo docker network create --driver=bridge hadoop
+
+
+4. 运行Docker容器
+cd hadoop-cluster-docker
+./start-container.sh
+
+运行结果
+start hadoop-master container...
+start hadoop-slave1 container...
+start hadoop-slave2 container...
+root@hadoop-master:~#
+
+启动了3个容器，1个master, 2个slave
+运行后就进入了hadoop-master容器的/root目录
+
+
+
+5. 启动hadoop
+./start-hadoop.sh
+
+6. 运行wordcount
+./run-wordcount.sh
+
+input file1.txt:
+Hello Hadoop
+input file2.txt:
+Hello Docker
+wordcount output:
+Docker	1
+Hadoop	1
+Hello	2
+
+
+Hadoop网页管理地址:
+NameNode: http://192.168.59.1:50070/
+ResourceManager: http://192.168.59.1:8088/
+
+192.168.59.1为运行容器的主机的IP。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 安装hadoop: 
+  wget http://mirrors.cnnic.cn/apache/hadoop/common/hadoop-2.7.2/hadoop-2.7.2.tar.gz
+  sudo mkdir /usr/local/hadoop
+  sudo tar zxf hadoop-2.7.2.tar.gz -C /usr/local/hadoop
+  sudo echo "export HADOOP_HOME=/usr/local/hadoop/hadoop-2.7.2" >> /etc/bashrc
+  sudo echo "export HADOOP_CONFIG_HOME=$HADOOP_HOME/etc/hadoop" >> /etc/bashrc
+  sudo echo "export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin" >> /etc/bashrc
+  source /etc/bashrc
+
+
+
+🔵 配置 hadoop
+
+    配置:  https://github.com/kbyyd24/blog/issues/2
+
+
+
+
+
+🔵 免密码登录
+
+    ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
+    cd ~/.ssh
+    #获取宿主机的公钥，方便宿主机登录
+    scp melo@172.17.0.1:~/.ssh/id_rsa.pub authorized_keys
+    cat id_rsa.pub >> authorized_keys
+    chmod 600 authorized_keys
+
+    还有一个细节，因为后面运行时，如果每次都从镜像启动，那都是全新的环境，使用ssh登录时是需要确认的。
+    为了避免不必要的麻烦，特意查了资料，找到解决办法。
+    想要达到连接新主机时不用确认的效果，
+    就需要修改客户端的ssh配置的StrictHostKeyChecking。该参数默认为ask，修改为no
+        Host *
+        StrictHostKeyChecking no
+        
+        http://www.worldhello.net/2010/04/08/1026.html
+
+
+
+🔵 Docker 配置
+
+🔸保存Container
+docker commit -m "hadoop installed" <container id|container name> centos:hadoop
+
+
+🔸启动Hadoop
+
+  slave需要知道master在哪里，才能向master发送心跳和数据块，否则master上的namenode将找不到datanode
+  因为对docker的网络配置不熟悉，所以我采用了一个简单的办法，修改/root/run.sh
+  #!/bin/bash
+  echo "172.17.0.4    master" >> /etc/network
+  /usr/sbin/sshd -D
+  因为节点只有3个，我也只开这三个容器，master又是最后启动的，所有master的地址就是172.17.0.4
+
+  所以上面创建的镜像已经可以使用了。
+
+
+
+🔸启动容器
+
+    $ docker run -d --name slave1 centos:hadoop /root/run.sh
+    $ docker run -d --name slave2 centos:hadoop /root/run.sh
+    $ docker run -d --name master -h master -P --link slave1:slave1 --link slave2:slave2 centos:hadoop /root/run.sh
+
+    我将以上三个命令写到了一个启动脚本里，直接就可以启动了，然后在用ssh登录到master上启动hadoop
+    因为使用的是docker的默认网络，所有可以算出master的IP地址，当然，也可以通过docker netword inspect bridge命令去获取
+
+
+🔸 启动 Hadoop
+
+  切换到$HADOOP_HOME目录，首先格式化namenode:
+  ./bin/hadoop namenode -format
+  然后就可以启动Hadoop了
+  就可以使用浏览器 查看web 管理接口!!
+  详细文章: https://github.com/kbyyd24/blog/issues/2
+
+
+
+
+
+
+
+🔵  NTP时间同步
+        集群中所有主机必须保持时间同步，如果时间相差较大会引起各种问题。
+        具体思路如下：master节点作为ntp服务器，对所有datanode节点提供时间同步服务。
+        所有datanode节点以master节点为基础同步时间
+        所有节点安装相关组件：yum install ntp。
+        完成后，配置开机启动：chkconfig ntpd on,
+        检查是否设置成功：chkconfig --list ntpd其中2-5为on状态就代表成功
+

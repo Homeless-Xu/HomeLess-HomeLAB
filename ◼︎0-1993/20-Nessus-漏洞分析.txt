@@ -1,0 +1,268 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 Nessus-漏洞扫描  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 Nessus 简介
+    nmap 扫描出主机后. 就要对特定电脑进行漏洞扫描了.
+    Nessus 最流行的 漏洞扫描工具.
+
+
+🔸 Nessus 安装
+    Nessus Home 个人版免费的. 
+    Nessus Pro  商业版收费的. 
+
+    个人免费申请注册码.需要翻墙.挂代理.
+    安装好 就自动打来一个网页. 这个网页地址要记住.
+
+    要设置一个本地的. 管理员账户. root toor
+    然后输入 邮箱收到的激活码.
+    这个激活码是一次性的. 换电脑./ 卸载软件都要重新获取激活码的.
+    激活后 就会自动下载一些插件什么的....
+
+    👹 下载失败:
+        Mac 程序文件夹 里面的 nessus 文件夹整个删除. 然后重新安装就能登录了.
+        还是之前的 root toor 这里可能需要断网...
+
+    ⦿ 插件更新
+        网页 ➜ 设置 ➜ scanners ➜ software update 
+
+
+🔸 扫描
+    扫描都是用插件的. 所有插件都是默认开启的.
+    但是 这个会影响时间. 一台电脑要好久才能扫描好.
+    要缩短时间 就必须合适的选择插件.
+    有些插件是 针对 win的.   有些是针对linux的.  有些是针对服务器的. 按需要选择.
+
+
+🔸 扫描结果
+    按照颜色来分. 红色>黄色>绿色>蓝色.   蓝色最安全. 红色最不安全.
+
+
+
+🔸 插件简介:
+    Backdoors                       扫描秘密信息
+    Brute Force Attacks             暴力攻击
+    CentOSo Local Security Checks   扫描CentOS系统的本地安全漏洞
+    DNS                             扫描DNS服务器
+    Debian Local Security Checks    扫描Debian系统的本地安全漏洞
+    Default Unix Accounts           扫描默认Unix用户账号
+    Denial of Service               扫描拒绝的服务
+    FTP                             扫描FTP服务器
+    Fedora Local Security Checks    扫描Fedora系统的本地安全漏洞
+    Firewalls                       扫描防火墙
+    FreeBSD Local Security Checks   扫描FreeBSD系统的本地安全漏洞
+    Gain a shell remotely           扫描远程获得的Shell
+    General                         扫描漏洞
+    Gentoo Local Security Checks    扫描Gentoo系统的本地安全漏洞
+    HP-UX Local Security Checks     扫描HP-UX系统的本地安全漏洞
+    Mandriva Local Security Checks  扫描Mandriva系统的本地安全漏洞
+    Misc                            扫描复杂的漏洞
+    Red Hat Local Security Checks   扫描Red Hat系统的本地安全漏洞
+    SMTP Porblems                   扫描SMTP问题
+    SNMP                            扫描SNMP漏洞
+    Scientific Linux Local Security Checks扫描Scientific Linux系统的本地安全漏洞
+    Slackware Local Security Checks 扫描Slackware系统的本地安全漏洞
+    Solaris Local Security Checks   扫描Solaris系统的本地安全漏洞
+    SuSE Local Security Checks      扫描SuSE系统的本地安全漏洞
+    Ubuntu Local Security Checks    扫描Ubuntu系统的本地安全漏洞
+    Web Servers                     扫描Web服务器
+
+
+
+🔸 打补丁
+    漏洞扫描出来就该打补丁了.
+    这个不是更新下 windows 补丁这么简单.
+    Nessus 扫描出来的每个漏洞都附带解决方式的!
+  
+    ⦿ 危险漏洞
+        比如 xcode、 Firefox Wireshark...  一般就是去官网 下载最新版本..
+    
+    ⦿ 普通漏洞
+        SMB Signing Disabled
+        就是你的 smb 不需要密码就能登录!配置下smb 就行了.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 四: 漏洞扫描
+
+Nessus   OpenVAS 都可以扫描出目标的漏洞:
+Linux / Windows / 网络服务 / 本地安全 漏洞
+Nessus 全球最流行的漏洞扫描工具. 有免费和收费版本.
+OpenVAS 完全免费.Kali 不自带.需安装.
+
+
+
+主要就是利用各种插件 来帮助扫描.
+只要成功更新了插件. 默认所有插件都是 开启的.可以手动禁止
+
+
+
+
+**用Nessus 扫漏洞前 需要新建扫描策略和扫描任务**
+
+
+
+
+
+## 添加策略:
+policy → new policy 
+默认有很多 策略类型.
+这里先选择 advanced scan
+
+然后就需要你输入 一些信息了.
+name 随便
+描述 随便.
+
+插件标签: ... 这里由于之前下载失败. 估计一个插件也没有.
+去右上角的 设置图标 → soft update → manual software update 
+就会自动更新了.  
+
+
+
+## 添加扫描任务:
+先添加策略后. 才能添加扫描任务. 有了扫描任务后 才能进行漏洞扫描.
+
+scan →  new scan →  添加需要扫描的IP.  运行
+
+
+
+
+
+
+### 扫描结果
+Hosts:  活动的主机
+Vulnerabilities: 脆弱点.
+History: 
+
+
+#### Vulnerabilities:
+
+两种颜色: 黄色 Medium  蓝色: info
+黄色代表: 有中等漏洞
+颜色代表: 无漏洞.
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Nessus 本地漏洞实测
+浏览器 127.0.0.1:8834  
+登录 → policies  → new policy 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Nessus 网络漏洞
+测试虚拟机里面的 windows/linux 都有什么漏洞吧,
+
+### Nessus Linux 漏洞
+一般服务器都是linux的. 
+
+
+### Nessus Windows 漏洞
+
+
+
+
+# 五: 漏洞利用
+
+漏洞是获取系统权限 最重要的途径.有了权限才能进行控制.
+扫描出 几个高危漏洞后怎么办呢...
+
+这时候就用到 metaspoit 这个软件了.
+
+可以很容易的获取漏洞 并进行攻击..
+本身附带 数百个 专业的 漏洞攻击工具.
+
+
+nessus 的漏洞结果可以导入到 .. metasploit 框架的 安全工具 armitage中. 然后就可以攻击了.
+
+攻击成功 就可以用 shell 来控制对方电脑了.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

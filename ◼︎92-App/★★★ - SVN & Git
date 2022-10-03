@@ -1,0 +1,805 @@
+🔸 why
+
+    假如老板让你做一份公司的最新通讯录, 当然现在肯定有个旧的通讯录. 
+    只不过有些员工要么离职了 要么换手机了. 要么有多个手机号.遇到这种情况要怎么处理. 
+    你是把所有的离职员工信息都删除么? 万一以后要用怎么办.
+    当然离职员工的信息肯定也不能出现在最新的通讯录上.. 毕竟已经离职了.
+    你肯定会想到... 备份旧文件! 新建个通讯录...这个没错.. 
+    但是如果员工离职率很高....  你每个星期都要更新一次通讯录怎么办...
+    每个星期都备份一次通讯录么...  这样下去.. 备份文件之后越来越多.
+    哪天要你找某个离职员工的信息你得一个个文件全部打来来 查找一遍..
+    所以就需要版本控制.
+    也就是你只需要创建一个通讯录. 
+    每次有修改 只要先进行本次操作的备注, 让后提交. 就可以更新通讯录了.
+    你要找历史记录. 只要更具 以前提交时候的备注 就可以快速找到以前的那个文件!!
+
+    这只是一个通讯录. 你如果是开发人员. 就必须使用版本控制了!
+    比如你开发一个网页! 网站可是由非常多的功能组成的!
+    而且用户会有各种需求. 一会要你新增功能. 一会要你删除功能,有时候还要你恢复之前被删除的功能..
+    .....  用版本控制就可以解决这些问题.
+
+
+
+🔸 版本控制
+
+    版本控制是 一种记录文件内容变化的软件.
+    有个服务器! 所有最终操作都提交到服务器上. 所有历史版本也能在服务器上找到.
+
+
+🔸 版本控制 经历
+
+    ⦿ 第一代
+        最初的版本控制是在本地的! 单机的! 不是放在服务器上的.
+        这也就导致了 只有你能进行修改.  就算别人想帮你改进某些功能,也没办法.
+
+    ⦿ 第二代 SVN 
+        于是就有了 客户端-服务器 模式  也就是 C/S 模式.   也就是 SVN 的诞生.
+        主要实现了 中心服务器端的代码版本管理. 可以让多人对项目进行下载和修改. 
+        但是这个也有缺点.  历史版本都在中心服务器中! 如果没网络就不能看历史版本.
+        而且由于所有历史数据都在中心服务器. 必须经常备份! 不然一旦服务器挂了. 所有数据都没了.
+        而且如果项目比较大! 每次操作都需要和服务器通信. 会造成服务器负载过大.
+
+
+    ⦿ 第三代 GIT 
+        这个就是分布式代码版本控制了. 结合了第一代个第二代的优点.
+
+        中心服务器有所有的历史记录.
+        客户端也有所有的历史记录! 所以要看历史版本就不需要网络了.
+        唯一的缺点是... 学习曲线优点陡峭... 
+
+
+
+🔸 GIT SVN 总结
+
+    GIT 和 SVN 都是版本控制工具, 两者有不同的理念.
+
+    SVN 是集中式的.
+    Git 是分布式的.
+
+    SVN 好学不好用
+    GIT 好用不好学
+
+
+
+🔸 Git 缺点
+
+    git 有一定的难度..大公司推广都有难度! 
+    svn 简单多了... svn 都用不好... 就别折腾 git 了..
+
+    绝大部分公司用git只会把事情搞糟
+
+    就算你对员工进行培训, 员工也只能学会简单的操作.
+    而且是在图形化界面里进行操作.
+    你要员工在命令行中使用git... 又得深入培训.而且是多次培训..
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵   SVN    🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 GUI 客户端
+    有界面的就容易上手很多!
+    不要一开始就用命令行来吓人, 也就是在没有安装GUI的服务器上操作需要用命令行.
+    一般用户使用完全可以用 有界面的软件.
+    Mac 的话 SVN 可以用 Cornerstone 这个软件.
+
+
+🔸 SVN 简介 
+    虽然有点过时了! 但是架不住简单易学啊...
+    而且一般个人或者小公司使用的话也用不到 git . svn 足够了.
+
+
+
+🔸 SVN 作用 
+
+
+
+
+🔸 SVN 安装 
+    Mac 自带命令行 SVN  !  输入 svn help 就可以查看用法
+    图形化工具可以用 SnailSVNLite 
+
+
+
+🔸 SVN 使用
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵    Git   🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸 Git 简介
+    Git 最流行的版本控制工具.开发必备技.最佳写作平台
+    每次文件修改,一旦提交(commit),再 sync 之后. 就完全不用担心数据丢失.因为你可以回到任意commit处
+
+    只有git仓库才能使用git, 新文件夹必须用git init 把文件夹初始化成 git 仓库再使用
+
+
+    ⦿ 文件状态: 
+      - modified  已修改,但没有保存; 
+      - committed 已提交,且安全保存在本地数据库中;
+      - sync:     才是把本地的 同步到Git网站.
+
+    ⦿ 基本操作
+        • 分支: brand
+        • 获取: fetch
+        • 合并: merge
+
+
+
+🔸 主要命令
+
+    - git clone
+    - git remote
+    - git fetch
+    - git pull
+    - git push
+
+
+
+🔸 git clone
+
+    一般都是从远程仓库克隆一个版本库开始的.
+    就是是新建.也一般先从远程新建.然后clone
+
+    git clone 语法:
+    git clone 版本库地址
+    git clone https://github.com/jquery/jquery.git
+    这样会把在本地新建一个和远程一样的项目名文件夹.
+
+    git clone <版本库的网址> <本地目录名>
+    这样就可以自定义本地的文件夹名了.不必和远程一样
+
+    git clone 支持协议
+    http/https,ssh,git 等等...
+    $ git clone http[s]://example.com/path/to/repo.git/
+    $ git clone ssh://example.com/path/to/repo.git/
+    $ git clone git://example.com/path/to/repo.git/
+    $ git clone /opt/git/project.git 
+    $ git clone file:///opt/git/project.git
+    $ git clone ftp[s]://example.com/path/to/repo.git/
+    $ git clone rsync://example.com/path/to/repo.git/
+
+    SSH 另一种写法(coding 用的.....)
+    SSH 另一种写法(coding 用的.....)
+    git clone [user@]example.com:path/to/repo.git/
+
+
+
+
+🔸 git remote
+
+    管理远程主机的.也就是要 同步文件到哪里.
+    可以是github, 可以是coding,也可以同时同步到GitHub和coding.
+
+    示例:
+    一个 fork 别人的项目.
+    ➜  jekyllthemes git:(master) ✗ git remote -v
+    mattvh  https://github.com/mattvh/jekyllthemes.git (fetch)
+    mattvh  https://github.com/mattvh/jekyllthemes.git (push)
+    origin  https://github.com/Xu-Jian/jekyllthemes.git (fetch)
+    origin  https://github.com/Xu-Jian/jekyllthemes.git (push)
+    克隆版本库的时候 远程主机会被自动命名成 origin
+
+    显示远程主机
+    ➜  2017 git:(master) ✗ git remote show
+    Coding
+    Github
+    Github&Coding
+
+    添加远程主机
+    1. 命令方式添加
+      git remote add <主机名> <网址>
+    2. 直接修改项目下的 .git/config 文件.
+    3. 
+    删除远程主机
+    git remote rm <主机名>
+
+    重命名远程主机
+    git remote rename <原主机名> <新主机名>
+
+
+
+🔸 git fetch
+
+    git里的更新叫 commit
+    一旦远程主机版本库有了更新.需要把更新取回本地.
+    git fetch <远程主机名>
+    一般都是 多人开发.查看别人开发进程用的
+    取回的代码对本地开发没有影响!!!!!!
+
+    默认取回所有分支(branch)的更新
+    也可以取回指定分支 如 master
+    $ git fetch origin master
+    在本地主机上要用"远程主机名/分支名"的形式读取。
+    比如origin主机的master，就要用origin/master读取
+
+
+
+🔸  git pull
+    取回某分支.再与本地指定分支合并
+    git pull <远程主机名> <远程分支名>:<本地分支名>
+
+    git pull示例:
+    1. 取回origin主机的next分支，与本地的master分支合并.
+      git pull origin next:master
+
+    2. 远程分支与当前分支合并: 冒号后面可省略
+      git pull origin next
+    取回origin/next分支，再与当前分支合并。
+    实质上，这等同于先做git fetch，再做git merge。
+
+
+
+🔸 git push
+    本地更新推送到远程主机.
+
+    如果当前分支只有一个追踪分支，那么主机名都可以省略。
+    如果有多个分支. 就需要使用可选参数了.
+
+    ⦿ 指定一个默认主机 -u
+        git push -u origin master
+        不带任何参数的git push,默认只推送当前分支，这叫做simple方式。
+
+    ⦿ 推送当前分支到所有主机
+        git push --all origin
+        将所有本地分支都推送到origin主机
+
+    ⦿ 强制推送
+        如果远程主机的版本比本地版本更新，推送时Git会报错.
+        要求先在本地做git pull合并差异，然后再推送到远程主机。
+        这时，如果你一定要推送，可以使用--force选项。
+        git push --force origin 
+        结果导致远程主机上更新的版本被覆盖。
+        除非你很确定要这样做，否则应该尽量避免使用--force选项。
+
+
+🔸 apply/save stash
+    stash 贮藏
+
+    有时候 你不想提交一个新的更新.(比如开发只进行了一半)
+    你想转到别的分支进行工作. 这时候就可以用到stash了,
+    不然以后你无法回到这个开发了一半又没有提交的工作点.
+
+
+🔸 Merge
+    分支合并..
+
+    主分支都是正式版本.
+    你要测试/添加新功能 最好是从master上分支出来.在这个分支上操作.
+    当功能添加完成 再合并到主分支上.  又变成一个分支了...
+
+
+🔸 rebase
+    把一个分支中的修改整合到另一个分支有两种办法:merge & rebase
+    rebase 衍合的意思...
+
+    反正就是复杂的合并...
+    rebase 详细参考 (https://git-scm.com/book/zh/v1/Git-分支-分支的衍合)
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Github-OAuth2.0 ✔︎ 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 注册你的应用
+
+    每一个成功注册的 OAuth 应用会有一个唯一的 Client ID 和 Client Secret
+    不要共享你的Client Secret
+
+
+
+🔸 授权回调URL
+
+    如果是用 firebase的话 只要把 firebase 里开启github登录验证 下面自动给你生成的网址 添加到 授权url 就可以了
+
+    Git OAuth应用注册界面  (https://github.com/settings/applications/new) 除了 授权回调URL 这个 其他内容可以随意填写.
+
+    授权回调URL 是配置OAuth应用最重要的部分.
+
+    它是 github 在成功认证用户之后 返回的 回调URL
+
+    比如:
+    本地实例的地址被设置为 http://localhost:4567
+    所以让我们将回调 URL 填写为 http://localhost:4567/callback。
+
+    想用 OAuth 登录应用必须有一个服务器.
+
+    用code 与 secret 与OAuth服务器交换token
+
+
+
+🔸 大致过程:
+
+    1. 在 github 上建一个 application，    设置 Homepage URL(homeUrl)， 和 Authorization callback URL(backUrl)
+
+    2. 用户访问 homeUrl 点击登录按钮，    浏览器把用户转到 https://github.com/login/oauth/authorize
+
+    3. 用户同意对该 app 的授权，    github 会把用户转到你原先填的 backUrl，并带上一个code    github 应该是根据 homeurl 判断用户在使用哪个 application的
+
+    4. 你自己的服务器 接收到这个请求后，    用 code 和 application 的 secret id 向 github 换取 token。
+
+    5. 你自己的服务器 把 token 放到用户浏览器中?????
+
+    6. 然后，用户就可以拿着这个 token 修改用户 github 上的内容了（如果应用包含这个权限了的话）
+
+    可以看出，想通过 OAuth2 得到 用户的 token，操作github 上内容。你自己必须有一个服务器来和 github OAuth 服务器通信。
+    第五步的疑问：可以用浏览器带 token 使用 github api 吗，还是这个也必须由 自己的服务器 来做？
+
+    设置 Authorization callback URL(backUrl)
+    如果用户同意对你app的授权.github 会把用户转到你原先填的 backUrl，并带上一个code（github 应该是根据用户原先所在 url 查找用户在使用那个 application吧？）
+
+    1.  用户访问 homeUrl 点击登录按钮，浏览器把用户转到 https://github.com/login/oauth/authorize
+    2.  如果用户同意对该 app 的授权，github 会把用户转到你原先填的 backUrl，并带上一个code（github 应该是根据用户原先所在 url 查找用户在使用那个 application吧？）。
+    3.  你自己的服务器 接收到这个请求后，用 code 和 application 的 secret id 向 github 换取 token。
+    4.  你自己的服务器 把 token 放到用户浏览器中。// TODO: 不太确定??
+    5.  然后，用户就可以拿着这个 token 修改用户 github 上的内容了（如果应用包含这个权限了的话）
+    可以看出，想通过 OAuth2 得到 用户的 token，操作github 上内容。你自己必须有一个服务器来和 github OAuth 服务器通信。
+    第五步的疑问：可以用浏览器带 token 使用 github api 吗，还是这个也必须由 自己的服务器 来做？
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Github&Coding双线部署✔︎ 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 获取 github项目 url
+    url = https://github.com/Xu-Jian/Xu-Jian.github.io.git
+
+🔸 获取 coding项目 url
+    url = https://git.coding.net/xx0219/xx0219.coding.me.git
+
+🔸 修改 Coding项目 url
+    https:// 后面加上 用户名@ 
+    url = https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git
+
+
+🔸 编辑 .git/config 文件
+    其实 .git是个隐藏文件夹. 我一直以为是个文件..... -.-
+    用命令添加也好. 还是直接打开本地目录下的 .git/config 手动编辑也好
+    最终 git/config 内容变了就对了.其他都不用管,其实就是多了 最下面的4行!!!!
+    第一行 all 是名字而已(推送的时候 有好几个选项的.选择这个名字就可以).
+    然后就 可以推送了!!!!
+
+        [core]
+        bare = false
+        filemode = true
+        precomposeunicode = true
+        logallrefupdates = true
+        [core]
+        repositoryformatversion = 0
+        [remote "Github"]
+        url = https://github.com/Xu-Jian/Xu-Jian.github.io.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+
+        [remote "Coding"]
+        url = https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+
+        [branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+        [remote "Github&Coding"]
+        url = https://github.com/Xu-Jian/Xu-Jian.github.io.git
+        fetch = +refs/heads/*:refs/remotes/all/*
+        url = https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git
+
+
+    ⦿ Push
+        随便改个文件 → commit → push 
+        push 肯定有选项的. 
+        第一次的话.请把 force push 打勾.. 
+        不然会报错(虽然好像报错也能两边都推送....)
+
+
+
+
+🔸 测试 Tower
+
+    ⦿ 实现功能:
+
+        本地一个git文件夹. 
+        coding上一个git文件夹. 
+        github上一个git文件夹.
+
+        实现 本地修改. 同时推送到 github 和 coding.
+
+
+
+    ⦿ 步骤简介.
+
+        1. 先同步 Coding 和 本地.
+        2. 再 本地 git 配置文件里加上github的 项目链接就可以了.
+
+        现在是 coding上有内容.
+        GitHub上 没有内容.(就算有也清空它.反正按coding为准)
+        本地没有内容.
+
+        先把coding上的 用 tower clone到本地.
+
+        再本地 修改 git config 文件. 
+        把 git的 链接添加进去.
+
+        在随便修改个文件.. 然后推送. 就同步了....
+          千万不要 手动去 网站上改文件. 要改就本地改.然后推送.
+          不然 导致同步出错 你有不熟悉git 很麻烦的!!!!!
+
+            config 内容
+
+            [core]
+            bare = false
+            filemode = true
+            precomposeunicode = true
+            logallrefupdates = true
+            [core]
+            repositoryformatversion = 0
+            [remote "Github"]
+            url = https://github.com/Xu-Jian/Xu-Jian.github.io.git
+            fetch = +refs/heads/*:refs/remotes/origin/*
+
+            [remote "Coding"]
+            url = https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git
+            fetch = +refs/heads/*:refs/remotes/origin/*
+
+            [branch "master"]
+            remote = origin
+            merge = refs/heads/master
+
+            [remote "Github&Coding"]
+            url = https://github.com/Xu-Jian/Xu-Jian.github.io.git
+            fetch = +refs/heads/*:refs/remotes/all/*
+            url = https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git
+
+
+            你的看着改. 应该是改下url 就可以的.
+
+
+    ⦿ tower 先添加 coding 项目.
+        选择 respomse  ➜ 左下角添加 ➜ clone git res....
+        1. https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git (https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git)
+
+        然后输入帐号密码.就可以下载了.
+
+        然后下载好的文件夹 随便加个文件进去 . 推送 
+        就提交成功.额...
+
+        然后 添加github 的项目
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Git GUI 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+桌面软件: Github desktop
+  
+新建仓库 → Finder 中打开仓库文件夹 → 添加/修改文件 
+Commit(提交修改, 全保存在本地数据库)  → 同步到Git网站.
+
+删除仓库: Github 网站 → 仓库 →  设置 → 删除 
+
+编辑文件: Ulysses 编辑 → guihub 客户端 → 先提交 commiter 再 push....
+
+克隆仓库(完整下载别人的仓库…): 先安装本地客户端 → 去网页 → 选项目 → 克隆到本地. 
+
+
+储存大文件:   直接放文件夹 同步就可以了
+
+经典教程 
+1. http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000 (http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
+
+2. http://backlogtool.com/git-guide/cn/ (http://backlogtool.com/git-guide/cn/)
+
+
+
+http://git-scm.com/book/zh 这书 必看. 
+ 
+
+安装好之后, 就可以使用 命令行的git工具了 还有个图形界面的 git项目管理工具.
+ 
+初次运行git前 的 配置. 也就是配置git工作环境.
+ 
+第一个要配置的 就是你个人用户 名称 和电子邮件. 每次git提交都会用这两条信息,说明谁提交了更新, 永久纳入历史更新.
+ 
+设置默认文件编辑器, 一般用 vim
+ 
+查看已有的配置信息 git config --list 命令.
+ 
+ 
+http://zuyunfei.com/2013/04/10/setup-github-ssh-key/ ssh 链接github教程
+ 
+ 
+
+新建项目 教程 网页登录 http://www.jianshu.com/p/df7ce9f3a5cb  
+建好之后 会自动跳转到 新建项目的主页 主页的右下角 有个clone in desktop
+就是克隆到 本地电脑的意思 会自动打开本地电脑的github软件 你选一个要存储的文件夹 就好了.
+ 
+再就是 添加代码 再上传 git add git push 的事情了
+ 
+ 
+学习 config 命令 git help config
+ 
+新建好项目后 电脑 用户名下 就有个 github 文件夹了
+里面就有 你 克隆 下来的全部项目.
+ 
+如果你要给某个开源项目出力 先把该项目的 git仓库复制一份出来
+ 
+
+
+Git 部署(推送)
+部署 就是把 文件夹 同步到远程服务器上.
+可以使用 GUI 视图工具. 也可以使用命令来部署.
+
+部署方式
+- https 部署 
+- ssh   部署
+- git   部署
+
+SSH 部署
+本地电脑生成一对密钥.(公钥+私钥)
+私钥要保密. 留在自己电脑上.
+公钥传到服务器上...
+这样你这台电脑用ssh登录到服务器就可以不用输密码了.
+
+SSH 比喻:
+一块玉佩 掰成两瓣. 一瓣给服务器(银行).一瓣自己留着.
+你需要去银行帮某种业务:
+你拿着自己的一瓣 去服务器(银行)那里证明某个银行账户是你的. 
+如果吻合就说明这个账户是你的,你就可以有各种权限.
+不吻合就不给你读写的权限...
+
+HTTPS 部署
+应该就是通过网页. 输入账户名 密码来验证你的身份.
+
+
+
+Coding 部署
+
+一个文件夹 同时部署到github+coding...
+
+
+coding 是需要ssh 来访问仓库的.
+公钥官网设置教程 (https://coding.net/help/doc/git/ssh-key.html)
+
+SSH 生成
+
+电脑 生成SSH.  得到私钥和公钥.
+公钥传到coding 的个人page设置里面.
+然后验证. 就可以推送 项目了.
+
+
+➜  2017 git:(master) ✗ ssh-keygen -t rsa -b 4096 -C "xx2610@gmail.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/v/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /Users/v/.ssh/id_rsa.
+Your public key has been saved in /Users/v/.ssh/id_rsa.pub.
+The key fingerprint is:
+
+
+
+
+1. 生成密钥.用你自己的注册邮箱
+   ssh-keygen -t rsa -b 4096 -C "xx2610@gmail.com"
+
+2. 回车+回车+回车 就生成好了...
+
+3. 打开本地的 id-rsa.pub 文件. 
+4. 复制里面全部内容(rsa 开头到结尾)到coding 账户设置 → ssh 公钥下.(设置里公钥名字任意取.)
+
+5. ssh -T git@git.coding.net
+6. 任意目录下 用ssh 输入上面命令. 输入yes 进行连接.
+
+
+这里千万不要弄错把私钥上传上去.格式不一样的
+这里千万不要弄错把私钥上传上去.格式不一样的
+
+
+没事不要改私钥公钥名称.至少成功连接coding之前不要改
+
+
+连接成功后呢?????
+
+
+
+添加新的远程仓库
+ git remote 
+
+可以给一个别名.不一定要远程项目的名字.
+
+git remote add [shortname] [url] 命令
+
+
+此时您就可以通过 ssh://git@git-ssh.coding.net:443/{username}/{reponame}.git 的形式进行 Git 操作了。
+
+
+ssh://git@git.coding.net:xx0219/xx0219.coding.me.git
+
+
+
+另外，您还可以修改您的 SSH 配置文件默认使用该方式进行 Git 操作。
+只需要修改您的 /.ssh/config 文件即可：
+Host git.coding.net
+  Hostname git-ssh.coding.net
+  Port 443
+最后您可以通过以下命令测试是否配置正确：
+$ ssh -T git@git.coding.net
+Hello username You've connected to Coding.net by SSH successfully!
+
+
+
+
+别折腾 命令行了  用 sourcetree吧..
+
+→ 新建项目 → from url → 要复制的coding项目的https 链接复制下来.
+
+https://git.coding.net/xx0219/xx0219.coding.me.git
+
+这里要稍微修改下...  前面要加上用户名@
+
+https://xx0219@git.coding.net/xx0219/xx0219.coding.me.git
+ 第二个是 本地文件夹. 不能是有内容的 要空的文件夹才行
+
+
+
+然后 下拉就可以了.....
+
+提交的时候 自然会要你输入账户的密码的...
+
+
+Coding 自定义域名
+
+域名购买处: cname www pages.coding.me
+
+coding 项目 → pages 服务 → 自定义域名 → 绑定
+
+这里地址要写 www.0214.live  而不是 0214.live
+
+
+
+
+Coding SSL
+pages 服务里面 直接开启 https 就行... 
+证书都不用你自己申请..... 
+简单....
+
+
+
+
+可以用 git gc --prune，那就再也找不回来了。
+
+好像没什么 区别么...
+
+虽然已经删除了 
+好像还是保留的 等待垃圾回收....
+
+
+## 还要强制 上传
+2 git push origin --force
+
+
+
+
+
+
+
+## 跳转+高亮 github某文件代码
+
+比如你有一个文件里的某一行代码写得非常酷炫想分享一下。
+'' 可以在url后面加上 #L行号
+'' 比如，点击下面这个url：
+'' https://github.com/AlloyTeam/AlloyTouch/blob/master/touch.js#L240
+'' 你便会跳到touch.js的第240行. 并高亮那行.
+'' 
+'' https://github.com/AlloyTeam/AlloyTouch/blob/master/alloy_touch.js#L39-L45
+'' 跳转+高亮 39-45行!!!
+
+
+
+## HTML 嵌入 Github
+
+也就是显示 项目有多少星星
+
+''  <iframe src="//ghbtns.com/github-btn.html?user=alloyteam&repo=alloytouch&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+
+user和repo改成你想要展示的便可以
+
+
+
+
+
+
+@: 1986-02-01-‼️Github Demo 预览✔︎
+---
+layout: post
+title: ‼️Github Demo 预览
+tags: Git
+categories: Tooles
+---
+
+
+
+**任何一个github项目都可以开启HTML预览.**
+**任何一个github项目都可以开启HTML预览.**
+**任何一个github项目都可以开启HTML预览.**
+> 而不只是 github-pages 可以开启html预览
+
+
+## 一: 文件定位
+1. github 网站文件定位到 index.html
+
+## 二: 地址栏加前缀
+2. 浏览器地址栏最前面(http/https 前面)加上后面的前缀`htmlpreview.github.io/?`
+
+
+
+
+
+
+
+
+
+
+
+
+[教程参考资源]
+
+
+正常情况下 每个账户都有一个 博客主页的.
+这个一般是写博客用的...
+
+其实还可以个任何项目创建演示Demo来展示一些你自己的东西.. 
+
+
+流程: 
+
+1. github上 新建项目.
+2. 新项目 clone 到本地.
+3. 本地 写start.html代码...
+4. 上传到github.
+5. 去github 打开新建的项目
+6. github 进入 start.html 文件. 
+7. 网址最前面添加[htmlpreview.github.io/?]
+`htmlpreview.github.io/?https://github.com/Xu-Jian/React/blob/master/aall.html`
+
+
+回车 就可以看到demo了... 这个链接发给别人就可以了...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+
+
+
+
+

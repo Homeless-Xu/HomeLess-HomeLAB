@@ -1,0 +1,424 @@
+🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶 ADO 🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
+
+🔵 ADO 简介
+
+    ADO: ActivateX Data Objects
+    微软出的东西. 用于访问 数据源的一个组件.
+    方便开发人员访问数据库. 而不用关心底层到底是如何实现访问数据库的.
+
+
+
+🔵  ADO 对象
+
+    🔶❗️连接 - Connection
+    🔶❗️记录集 - Recordset
+    🔶❗️命令 - Command
+ 
+
+    🔶 记录 - Record 
+    🔶 流 - Stream 
+    🔶 错误 - Error 
+    🔶 字段 - Field 
+    🔶 参数 - Parameter 
+    🔶 属性 - Property 
+
+
+🔵 ADO 对象简介
+
+    connection Command 和 Recordset 是ADO 的核心.
+    通过 Connection 和数据库建立连接.
+    然后 利用 command 执行查询.从而返回结果.
+    最后把结果(记录集) 存入 Recordset 对象.
+    然后访问 Recordset 对象就可以获得 查到的内容.
+
+
+
+
+🔵 ODBC 数据源种类
+
+    🔶 数据源( DSN ): Data Source Name 
+
+        DSN 定义了一个确定的数据库连接必须用到的驱动程序.
+        首先你要创建一个DSN. 
+        然后给这个数据源 选择对应的驱动
+        然后还要选择 tnsnames.ora 里面的一个名字.
+        然后输入用户名密码就可以连上数据库了.
+
+
+    🔶 用户数据源
+        只能被当前用户使用. 
+        同一台计算机里面别的用户是无法使用这个 DSN 的
+
+
+    🔶 系统数据源
+        整个电脑的所有用户都可以使用.
+
+    🔶 文件数据源
+        只要安装了驱动就能用.别的电脑也能用...
+
+
+
+
+🔵 ADO 使用 基本步骤
+
+    1. 创建一个到数据库的 ADO 连接  ➜  连接到数据库中.
+    2. 打开数据库连接
+    3. 创建 ADO 记录集     ➜ 这样才能保存数据库中的数据.
+    4. 从记录集提取您需要的数据
+    5. 关闭记录集
+    6. 关闭连接
+
+
+
+
+🔵 ADO 组件使用方法 ✔
+
+
+    🔶 创建法: - 无需引入库 (推荐!!!)
+
+        Set cnn = CreateObject("ADODB.Connection")  
+        Set rst = CreateObject("ADODB.Recordset")  
+
+
+    🔶 引用法: - 需要引入库
+
+        引用ADO相关组件：必须先引用 ADO 相关的库.
+        打开VBA编辑器，在菜单中点选“工具”--》“引用”。
+        确保“Microsoft ActiviteX Data Objects 2.8 Library”
+        和“Microsoft ActiviteX Data ObjectS Recordset 2.8 Library”被勾选上。
+        
+        引用后才能在代码里面声明: 
+
+            Dim cnn As New Connection  '声明链接对象
+            Dim rst As New Recordset    '声明记录集对象
+
+
+
+
+🔵 Connection 语法 
+
+
+Excel 2007之前版本和之后版Connection不一样
+Excel 2007之后版本
+cnn.Oen "provider=Microsoft.ACE.OLEDB.12.0;extended properties=excel 12.0;data source=D:\tmp.xlsx"
+
+
+
+
+
+🔵 Provider
+
+    VBA 入门主要是连接数据源(数据库)问题. 
+    数据源分好多种. Excel 数据源, Access 数据源, MySQL 数据源. Oracle 数据源...
+
+    64位的OFFICE 2016已經不支援古老的Jet資料庫引擎....
+
+
+    🔶 Excel 数据源
+
+        Dim sConstr  As String
+        '在32位平台下可以用的连接字符串
+        sConstr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\MyExcel.xls;Extended Properties=Excel 8.0;HDR=Yes;IMEX=1"
+
+
+        Dim sConstr  As String
+        '在64位平台下可以用的连接字符串
+        sConstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=c:\myExcelFile.xls;Extended Properties=Excel 8.0;HDR=YES"
+        在OFFICE 2007开始，微软引入了一个新的连接程序，Office 2007 OLEDB driver
+
+
+
+
+    🔶 Access 数据源
+
+
+        Dim sConstr  As String
+        '32位下用的连接字符串
+        sConstr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\mydatabase.mdb"
+
+
+        Dim sConstr  As String
+        '64位下用的连接字符串
+        sConstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\myAccessFile.accdb"
+
+
+
+
+
+On Error Resume Next
+
+Const adOpenStatic = 3
+Const adLockOptimistic = 3
+Const adCmdText = &H0001
+
+Set objConnection = CreateObject("ADODB.Connection")
+Set objRecordSet = CreateObject("ADODB.Recordset")
+
+objConnection.Open "Provider=Microsoft.Jet.OLEDB.4.0;" & _
+    "Data Source=C:\Scripts\Test.xls;" & _
+        "Extended Properties=""Excel 8.0;HDR=Yes;"";" 
+
+objRecordset.Open "Select * FROM [Sheet1$]", _
+    objConnection, adOpenStatic, adLockOptimistic, adCmdText
+
+Do Until objRecordset.EOF
+    Wscript.Echo objRecordset.Fields.Item("Name"), _
+        objRecordset.Fields.Item("Number")
+    objRecordset.MoveNext
+Loop
+
+
+
+
+
+
+Public Sub GenInFolder()
+    Dim cnn As Object, cat As Object, d As Object
+    Dim SQL$, MyFile$, arr(), i&, j&, t$, s$, wk$, m&, n&
+    Application.ScreenUpdating = False
+    
+    Set cnn = CreateObject("adodb.connection")
+    cnn.Open "provider=Microsoft.ACE.OLEDB.12.0;extended properties='excel 12.0;hdr=no';data source=D:\tmp.xlsx"
+    SQL = "select f1,sum(f2) from [Sheet1$a2:b65536] group by f1"
+    Sheet1.[a1].CopyFromRecordset cnn.Execute(SQL)
+   
+    cnn.Close
+    Set cnn = Nothing
+    Application.ScreenUpdating = True
+End Sub
+复制代码
+
+
+
+
+
+
+
+
+Sub OracleLocalConnect()
+  Dim RecordSet As New ADODB.RecordSet
+  Dim con As New ADODB.Connection
+  Dim ExcelRange As Range
+  Dim SQLStr As String
+  
+  Dim ws As Worksheet
+
+  con.ConnectionString = "Provider=OraOLEDB.Oracle;" & _
+  "Data Source=(DESCRIPTION=(CID=GTU_APP)(ADDRESS_LIST=" & _
+  "(ADDRESS=(PROTOCOL=TCP)(HOST=LocalHost)(PORT=1521)))" & _
+  "(CONNECT_DATA=(SERVICE_NAME=XE)(SERVER=DEDICATED)));" & _
+  "User Id=System;Password=oracle;"
+  
+  con.Open
+  Set RecordSet = CreateObject("ADODB.Recordset")
+
+  SQLStr = "SELECT 'Retrieved' Status, per.person_id, per.person_type, per.title, per.first_name, per.last_name " & _
+  "FROM  persons  per "
+  
+
+  RecordSet.Open SQLStr, con ' , adOpenStatic, adLockReadOnly
+ 
+  Set ws = ActiveWorkbook.Sheets("Persons")
+  Set ExcelRange = ws.Range("C3")
+  ExcelRange.CopyFromRecordset RecordSet
+  
+  RecordSet.Close
+  con.Close
+Exit Sub
+
+
+
+
+我也经常遇到这样的情况。
+
+有时候提示：“对象关闭时，不允许操作”
+
+是由于代码结束时用的是 RST.Close ，改成 RST = Nothing 就可以了。
+
+
+
+
+
+
+
+🔵 连接数据库
+
+
+strConnection = "Procider=OraOLEDB.oracle;Data Source=192.168.10.17:1521:YNTATEST;User Id=ta;Passwod=ta;"
+
+
+
+
+ ' Open connection  
+    strCnxn = "Provider='sqloledb';Data Source='MySqlServer';" & _  
+        "Initial Catalog='Pubs';Integrated Security='SSPI';"  
+    Set Cnxn = New ADODB.Connection  
+    Cnxn.Open strCnxn  
+
+
+
+
+
+
+
+🔵 创建连接对象
+
+    set 实例名=Server.CreateObject("ADODB.Connection")
+
+
+🔶 连接到实例
+
+open 
+
+
+🔶 关闭/释放 连接
+    Set conn=Nothing
+
+    服务器的连接数是有限制的!
+
+
+
+🔶 执行命令
+
+　　　　Set 对象变量名=连接对象.Execute("SQL 查询语言")
+
+
+
+
+
+CommandTimeOut　　　 设置Execute方法的最长执行时间，默认为30秒。设置为0，无限制。
+ConnectionTimeOut　　设置Open方法的最长执行时间，默认为15秒。设置为0，无限制。
+ConnectionString　　 设置连接对象的链接信息，如DSN、提供者、用户名、口令等。
+
+
+
+🔵 ADO 数据库连接
+
+创建一个 ODBC 数据库连接
+假设您拥有一个名为 "northwind" 的 ODBC 数据库，您可以使用下面的 ASP 代码连接到此数据库：
+
+<%
+set conn=Server.CreateObject("ADODB.Connection") 
+conn.Open "northwind"
+%>
+
+
+
+
+🔵 例子
+
+
+
+dim myconnection, myrecordset, name
+set myconnection = server.createobject("ADODB.Connection")
+' 创建连接
+set myrecordset = server.createobject("ADODB.Recordset")
+' 创建记录集
+
+
+myconnection.open mydatasource
+myrecordset.open "Phonebook", myconnection
+myrecordset.find "PhoneNumber = '555-5555'"
+name = myrecordset.fields.item("Name")
+myrecordset.close
+
+set myrecordset = nothing
+set myconnection = nothing
+
+
+
+
+
+
+
+
+
+🔵 
+
+
+1、引用法
+     引用ADO相关组件：打开VBA编辑器，在菜单中点选“工具”--》“引用”。
+     确保“Microsoft ActiviteX Data Objects 2.8 Library”
+     和“Microsoft ActiviteX Data ObjectS Recordset 2.8 Library”被勾选上。引用后再声明: 
+
+    Dim cnn As New Connection  '声明链接对象
+    Dim rst As New Recordset       '声明记录集对象
+
+下面是例程：
+
+
+
+
+Dim cnn As New Connection  
+Dim rst As New Recordset  
+cnn.Open "Provider=msdaora.1;Data Source=dl580;User Id=emssxjk;Password=emssxjk;"  
+OraOpen = True '成功执行后，数据库即被打开  
+  
+sqls = "select count(*) from tb_evt_dlv where mail_num='" & emsid & "'"  
+Set rst = cnn.Execute(sqls)  
+If rst(0) > 0 Then  
+    sqls = "select b.zj_code,b.zj_mc,b.jgfl,b.city,b.ssxs  from tb_evt_dlv a, tb_jg b "  
+    sqls = sqls & "where a.dlv_bureau_org_code = b.zj_code and a.mail_num='" & emsid & "' and rownum=1"  
+    Set rst = cnn.Execute(sqls)  
+    sqls = "CopyFromRecordset"  
+    'maxrow = Sheets(qfxx).[A65536].End(xlUp).Row  
+    'If maxrow > 1 Then Sheets(qfxx).Range("a2:H" & maxrow).ClearContents  
+    Cells(row1, pos_sav).CopyFromRecordset rst  
+Else  
+    sqls = "select b.zj_code,b.zj_mc,b.jgfl,b.city,b.ssxs  from tb_evt_mail_clct a, tb_jg b "  
+    sqls = sqls & "where a.clct_bureau_org_code = b.zj_code and a.mail_num='" & emsid & "' and rownum=1"  
+    Set rst = cnn.Execute(sqls)  
+    sqls = "CopyFromRecordset"  
+    'maxrow = Sheets(qfxx).[A65536].End(xlUp).Row  
+    'If maxrow > 1 Then Sheets(qfxx).Range("a2:H" & maxrow).ClearContents  
+    Cells(row1, pos_sav + 5).CopyFromRecordset rst  
+End If  
+
+
+
+
+
+🔵 2、创建法
+
+不需要引用ADO相关组件，直接使用CreateObject函数创建ADO对象，即：
+      Set cnn = CreateObject("ADODB.connection")     '创建ado对象
+      Set rst = CreateObject("ADODB.recordset")      '创建记录集
+下面是例程（和上面例程类似，前半部分不同，后面的相同）：
+
+[vb] view plain copy
+Dim cnn As Object, rst As Object  
+  
+Set cnn = CreateObject("ADODB.Connection")  
+Set rst = CreateObject("ADODB.Recordset")  
+cnn.Open "Provider=msdaora.1;Data Source=dl580;User Id=emssxjk;Password=emssxjk;"  
+OraOpen = True '成功执行后，数据库即被打开  
+
+其它组件的使用也和这个差不多，建议用创建法，这样就不用管“引用”中的设置了，例如：
+
+Dim dic As Object       '直接创建不需要引用
+Set dic = CreateObject("scripting.dictionary")     '创建字典对象
+
+
+Dim fso as Object       '直接创建不需要引用
+Set fso = CreateObject("Scripting.FileSystemObject")     '创建文件对象模型
+
+
+
+
+🔵 count 👹 
+
+
+    本地使用windows7 64位旗舰版，在自带的iis7下调试一个asp网站。
+    原来在服务器运行好好的网站到了本地却出现ASP连接ACCESS错误：
+    ADODB.Connection 错误 '800a0e7a' 未找到提供程序。该程序可能未正确安装。 
+      主要原因，出现ADODB.Connection 错误 '800a0e7a' 未找到提供程序。该程序可能未正确安装。 
+      错误的原因在于在64位系统中，IIS7应用程序池默认没有启用32位程序，也就是说如果使用的是64位操作系统，
+      而没有64位的Jet 4.0驱动程序，那么就要在IIS7中启用32位程序。
+
+    我这个..offcie 是 64的啊!! 但是我那个 oracle 客户端是 32 的... 坑..
+
+
+操作方法如下：
+
+
+IIS信息管理器 - 查看应用程序池 - 右边操作中选择--设置应用程序池默认设置，在常规中设置--启用 32 位程序为True.

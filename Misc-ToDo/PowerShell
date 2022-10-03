@@ -1,0 +1,305 @@
+🔵 总结 
+
+    Mac 远程Windows 的 Powershell 非常麻烦. 别折腾饿了..
+
+
+
+🔵 WHY 
+
+    一直很羡慕Linux的命令提示符（当然他们叫Shell）。 bash. zsh 等等...
+    正则表达式，管道，各种神奇的命令，组合起来就能高效完成很多复杂的任务。效率实在是高。
+    流了n年的哈喇子以后，终于有幸用上了Win7，邂逅了cmd的升级版：Windows PowerShell。
+    从此暗爽无比，原来Windows下也有这样的利器呀~
+
+    PowerShell是跨平台的，cmd是Windows专用的。
+    cmd 远远不如 Powershell 强大
+
+
+
+🔵 强大的 PowerShell 
+
+    微软是一个很”低调”的公司,取名为微软，感觉有“微微软下去”的意思，这是个玩笑了。
+    windows 操作系统 和office办公软件，如此之优秀，微软也没敢命名为PowerOS 和 PowerOffice，
+    但是在Monad（PowerShell的前身）发布后的第二年（2006年），
+    微软就直接就发布了Windows PowerShell 1.0，并且”大言不惭“地命名为PowerShell，这也有点太不淡定了。
+    今天我根据自己的体验来稍微总结一下为什么PowerShell如此之强大。
+
+    为什么PowerShell如此之强大？
+    破天荒的方便诸如存储计算中GB，MB，KB单位等；数组声明中的1..n和下标为-1的处理；
+    还有所见即所得，通俗易懂的动词+名词结构Cmdlet。
+    面向对象与面向过程，面向文本相比，面向对象更方便更容易描述现实世界，也算赶上了时髦。
+    绑上.NET这棵大树正所谓大树下面好乘凉，
+    PowerShell绑上.NET这个大款了，借助.NET Framework平台强大的类库，几乎让一切都成为可能。
+    强大的兼容性完全兼容windows 平台上其它调用，如可执行文件(exe)，批处理bat和vb script脚本等。
+    基于平台的可扩展性这一条是重点。微软有个优点，与应用相比，它更喜欢做平台。
+    PowerShell早已变成一个平台，在PowerShell 刚发布的第二年，
+    微软的System Center Operations Manager 和 SharePoint就提供了针对该平台的组件，
+    后来的AD，Hyper-V，Windows Azure，Office 365就更不用说了。
+    除了微软，亚马逊的云平台管理，Dell的out-of-hand 管理，也都提供了基于PowerShell的管理组件。
+    PowerShell 俨然变成了一个标准，变成了一个规范。
+
+
+
+🔵 WinRM
+
+Powershell远程管理采用一种新的通信协议，
+Web Services for Management，简称WS-MAN
+它通过http或者https进行工作，
+WS-WAN的实现主要基于一个后台服务:Windows远程管理（WinRM）。
+Server2008R2中默认开启该服务，从Server2012开始，该服务便集成在系统中默认开启，
+Win7默认安装此服务，但是默认为禁用状态，
+Win8，Win10默认开启。这种远程连接不会被客户端察觉到，也不会占用远程连接数！
+
+    我们需要两台计算机进行测试，并且这两台计算机需要在同一个域中（如果不在域中的话，需要添加受信任的主机，并且输入对方计算机的凭据，稍后会演示如何远程非域计算机）
+
+
+
+
+
+===域中计算机远程管理
+
+1.管理员权限运行Powershell，输入Enable-PsRemoting开启Powershell远程管理，远程端和被远程端都需要启用，另外说明一下，WinRM也就是Powershell远程管理时使用的端口http,5985;https,5986
+
+
+
+2.S12-1Powershell远程管理S12-2，就这么容易，但是如果不是域中的计算机可就没这么简单了
+
+可以看到Shell命令格式变成了[s12-2]:PS...，说明已经该链接成功建立
+
+    现在执行的所有语句都是在S12-2上运行，可以输入任何命令，需要注意的是你远程对方时需要知道对方的计算机名称，因为WinRM默认不允许使用IP地址或者DNS中的别名进行远程处理。
+
+🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶 远程连接 🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
+
+🔵 需求
+
+    Mac 远程连接 Windows 里面的PowerShell; 达到操控Windows 的目的. 
+    当然最简单的还是通过 Telnet. 这个实在不安全. 换PowerShell 吧
+
+        主控端是 MacOS; (手动安装 PowerShell)
+        被控端是 Win;   (已经自带 PowerShell)
+
+        被控端需要运行 PowerShell 服务.这样客户端 Mac 才能连上去.
+
+
+    实现不了好像!!!!!
+    https://github.com/PowerShell/PowerShell/issues/3708
+    也许mac不支持... 
+
+
+
+🔶 1.) MacOS 安装 PowerShell
+
+    brew update
+    brew cask install powershell
+
+
+🔶 2.) MacOS 进入 PowerShell
+
+    软件安装好程序里面就多了个 PowerShell 了. 
+    单击程序图标就会自动打开 bash. 进入Powershell 界面.
+    其实只要在任意终端输入 pwsh 就可以进去的.
+
+
+🔶 3.) Win 启用远程管理 (这样才能被连)
+
+    PS C:\> Enable-PSRemoting
+        全部选是就好.
+
+    这个命令会启动/重启 WinRM 服务.
+    把 WinRM 服务设置为自动启动.
+    创建一个监听器. 监听所有的外网IP.
+
+    注意 Windows 的防火墙, 关了吧.
+
+
+🔶 4.) Win 本机连接测试
+
+    Enter-PSSession –ComputerName localhost
+    Win 上 PowerShell 里面输入上面命令 (不用改) 应该能远程到自己的.
+
+
+
+🔶 4.) PowerShell 端口测试
+
+    默认情况下，PowerShell远程管理使用5985(http)和5986(https)端口。
+    丫的 Windows 防火墙都关了. 居然还有个端口是被过滤了....
+
+        ∙MAC ~ ➜ nmap -p 5985,5986 192.168.21.77
+        Starting Nmap 7.70 ( https://nmap.org ) at 2018-04-18 20:00 CST
+        Nmap scan report for 192.168.21.77
+        Host is up (0.0018s latency).
+
+        PORT     STATE    SERVICE
+        5985/tcp open     wsman
+        5986/tcp filtered wsmans
+
+        Nmap done: 1 IP address (1 host up) scanned in 1.30 seconds
+
+
+
+
+🔶 远程连接 
+
+New-PSSession -ComputerName <computername> -Credential <domain\account>
+
+👹 报错.....
+
+Mac PSRP/WSMan only supports Basic auth, please try that and see if it works. Recommendation is to install OpenSSH on Windows and use PSRP/SSH
+
+
+
+
+
+
+🔶 修改 WSMan 信任主机设置
+
+在所有加入工作组的计算机——包括Windows XP，Windows Vista或更高版本，
+用户需要使用如下命令增加所有远程客户端的IP地址到受信主机清单中：
+PS C:\ > Set-item wsman:localhost\client\trustedhosts –value *
+使用*用于将所有主机添加为受信主机，如果需要指定特定的主机可以使用下面的命令：
+PS C:\ > Set-item wsman:localhost\client\trustedhosts –value Copmuter1,Computer2
+如果需要添加指定域名下的所有主机可执行下面的命令：
+PS C:\ > Set-item wsman:localhost\client\trustedhosts –value *.testdomain.com
+
+如果需要添加远程主机的IP地址到受信主机的清单：
+PS C:\ > Set-item wsman:localhost\client\trustedhosts –value 10.0.0.1
+PS C:\ > Set-item wsman:localhost\client\trustedhosts –value 192.168.21.223
+
+
+
+一旦做了上面的更改，用户能用Enable-PSRemoting cmdlet在这些工作组中的主机。
+
+1.3在混合域环境中使用远程管理
+默认情况下，不同域下的用户即使是本地管理员组的成员仍然不能连接到其他域中的主机。
+这是因为从其他域的远程连接只是运行在独立的用户权限之上。为了能使不同域的主机可以连接到本地计算机，用户可以更改LocalAccountTokenFilterPolicy注册表键值(设置为1)来允许其他域的成员到本地计算机
+PS C:\ > new-itemproperty -name LocalAccountTokenFilterPolicy -path ` HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -propertyType DWord -value 1
+
+
+
+
+
+可以通过使用Set-Item cmdlet修改wsman:\Localhost\listener\listener*\port对端口号进行设置，需要注意的是这样的操作将会改变系统中每个WinRM监听器端口号。
+当给Enable-PSRemoting cmdlet增加-force参数后执行将会在静默状态下启用远程管理，PowerShell远程管理是不能通过远程启用的。
+1.1 测试PowerShell远程管理
+如果远程管理被启用了，可以使用下面的cmdlet查看：
+PS C:\ > Enter-PSSession –ComputerName localhost
+用户将会看到如下图2所示的提示符：
+
+
+
+
+
+
+为了能在企业或域环境中的多台主机上启用远程管理，用户需要使用组策略，更多的信息可以从http://technet.microsoft.com/en-us/library/dd347642.aspx地址获取。
+1.5禁用远程管理
+用户可以使用Disable-PSRemoting在本地主机上禁用远程管理。Disable-PSRemoting将会使线程配置信息失效，这样的操作并不会移除所有Enable-PSRemoting创建的配置，包括WinRM的启用状态和为PS远程管理创建的监听器。
+如果在本机上没有任何服务或组件需要WinRM服务，用户可以通过执行下列命令禁用WinRM服务：
+Set-Service winrm -StartupType Manual
+Stop-Service winrm
+为了移除默认情况下WinRM在5985端口设置的监听器可以执行的下述命令：
+Get-ChildItem WSMan:\localhost\Listener –Recurse | Foreach-Object { $_.PSPath } | Where-Object { (Get-Item "$_\Port").Value -eq 5985 } | Remove-Item
+2 执行远程命令
+在远程管理的情况下，有两种方式在远程主机上运行命令或脚本。包括Invoke-Command cmdlet和交互式远程线程。一旦用户在本机启用远程管理，用户就能用Invoke-Command cmdlet在本机或远程主机运行命令和脚本。
+2.1 在本地或远程主机运行脚本块
+用户能用下面的方式在本地和远程主机调用命令：
+Invoke-Command -ComputerName WinServ-wfe -ScriptBlock {Get-Process}
+脚本块此参数能用于指定在远程主机运行的一系列命令。如果要在本地执行命令，则ComputerName参数不是必须的。如果用户需要在多个远程主机上执行相同的命令，用户能如下例所示通过逗号分隔的ComputerName参数或使用文本文件将主机清单传递给cmdlet：
+Invoke-Command -ComputerName WinServ-wfe, SQL-Server2008 -ScriptBlock {Get-Process}
+或
+Invoke-Command -ComputerName (get-content c:\scripts\servers.txt) -ScriptBlock {Get-Process}
+这种方式也被称之为散开式或一对多远程管理。用户能用一条命令在多台主机上执行相同的命令。
+脚本块中所有的命令和变量均会在远程计算机上运行。如果用户采用类似于-ScriptBlock {Get-Process –Name $procName}，PowerShell认为远程计算机线程中$procName变量已经定义过了。用户能通过使用Invoke-Command命令，将本地计算机上的变量传递到远程线程。
+2.2 传递变量到远程线程
+前面的例子中，用户可以传递要寻找的进程名作为变量。ArgumentList参数能帮助用户传递到远程线程中：
+$procName = "powershell"
+Invoke-Command -ComputerName (get-content c:\scripts\servers.txt) ` -ScriptBlock {param ($Name) Get-Process -Name $Name} –ArgumentList $procName
+上面的例子中可以显示如何使用-ArgumentList参数传递本地变量到远程线程。
+2.3 通过Invoke-Command使用持久线程
+用户可以使用带-ComputerName参数的Invoke-Command建立临时的线程执行远程命令。会在每次使用Invoke-Command cmdlet时，都会重新建立线程。在只是执行简单、为数不多的命令时可能无所谓，但是如果要执行大量命令和脚本时将会非常的耗时费力。为了避免这种情况，就需要使用持久线程，用户能使用New-PSSession cmdlet创建对远程主机的持久连接。
+$s = New-PSSession -ComputerName WinServ-wfe
+此时，$s包含持久连接的线程细节，可以使用$s在远程主机上调用命令语法如下：
+Invoke-Commad -Session $s -ScriptBlock {get-Process}
+当在远程组合机上执行命令时，$s会包含所有创建和修改的变量。这样以$s作为线程的后续执行的命令能够访问所有在远程主机上创建和更新的变量，如下例所示：
+$s = new-pssession -computername WinServ-wfe
+Invoke-Command -Session $s -ScriptBlock {$fileCount = (Get-ChildItem D:\ -Recurse).Count}
+invoke-command -session $s -scriptblock {$fileCount}
+用户能访问$fileCount变量，因为是使用了持久线程执行命令。如果只是使用-ComputerName调用命令这是不可能实现的。
+2.4作为后台任务运行远程命令
+前面的例子中获取远程主机上所有D:\下的文件数量，如果包含的文件数量很大的情况下将会很耗时，这样就需要等待远程命令完成执行。为了避免这一点，用户可以使用-AsJob参数使命令作为远程主机的后台任务。命令格式如下所示：
+Invoke-Command -ComputerName WinServ-wfe -ScriptBlock {(Get-ChildItem D:\ -Recurse).Count} –asJob
+执行后效果如下图4所示：
+2041951.jpg
+当用户使用带-AsJob参数的Invoke-Command cmdlet时，远程主机上的后台任务将会被创建和运行，在后台任务被创建后，可以使用*-job cmdlet管理任务对象。
+比如，用户可以使用Get-Job监控任务的状态并且一旦任务状态变为完成，就可以使用Receive-Job cmdlet获取指定脚本块的输出。
+Get-Job –id 3 | Receive-Job
+用户也能使用Start-Job在远程主机上用脚本块创建后台任务。然而，通过这样方式建立的任务的输出结果只会在远程主机上显示。当用户需要从该后台任务获取输出输出时，就需要在Invoke-Command调用的脚本块中使用Receive-Job cmdlet。
+2.5 为远程管理指定凭据
+前面的文章里，能够用在工作组中的计算机间使用PowerShell远程管理。在前面的例子中只是假定是使用管理员权限访问远程计算机，这样的方式可以在域中任何以管理员凭据登陆的计算机上在域环境中很好的工作，用户不需要显式的传递凭据给Invoke-Command。然而，这样的方式是无法在工作组环境下使用，需要传递凭据给Invoke-Command，如下例所示：
+$cred = Get-Credential
+Invoke-Command -ComputerName WinServ-wfe -ScriptBlock { Get-Process} -Credential $cred
+在上面的例子中，Get-Credential会向用户索取访问远程主机的凭据，并使用该凭据调用Invoke-Command cmdlet。
+3 总结
+在本文中，首先介绍了如何启用powershell的远程管理，以及如何在工作组和混合域环境下配置计算机，需要注意的是禁用远程管理不能通过Enable-PSRemoting的逆操作来实现。如果本地计算机不再需要远程管理功能，用户需要手动撤销所有的设置，包括停止和禁用WinRM服务，移除为可信主机添加的监听器。
+接下来介绍了如何使用Invoke-Command cmdlet用于在远程主机上执行命令，创建持久线程，在多个命令间同一线程传递的变量和参数。用户还可以在执行较费时的命令时以后台任务的形式实现，并在执行完毕后使用命令回调执行结果。
+
+🔶 4.) 主控端 运行命令 ➜ 连接被控端. 
+
+        New-PSSession 192.168.21.77 -Credential YNL006\jian.xu
+
+
+        Enter-PSSession 192.168.3.1 -Credential abc\administrator
+
+
+
+
+Enter-PSSession : 
+连接到远程服务器失败，错误消息如下: WinRM 客户端无法处理该请求。如果身份验证方案与 Kerberos 不同，或 
+者客户端计算机未加入到域中， 则必须使用 HTTPS 传输或者必须将目标计算机添加到 TrustedHosts 配置设置。 
+使用 winrm.cmd 配 置 TrustedHosts。请注意，TrustedHosts 列表中的计算机可能未经过身份验证。
+
+上一般都是说要添加一个TrustedHosts表，相当于一个信任列表。
+执行如下命令，将IP为192.168.3.*的主机都加入信任列表
+Set-Item wsman:\localhost\Client\TrustedHosts -value 192.168.3.*
+注意这个命令需要在 客户端上执行 不是在服务端执行 且客户端需要已管理员权限执行，这一点许多教程没有说，走了不少弯路。
+之后再用 Enter-PSSession 192.168.3.1 -Credential abc\administrator 命令就可以完成连接了。
+ 
+
+
+
+
+
+🔵 PowerShell 安装 - macOS ✔
+
+具体方法：
+1.在服务器上 用管理员权限 执行 Enable-PSRemoting 命令
+之后会有一堆的确认操作 全部YES就好了
+ 
+2 在客户端上 执行 Enter-PSSession IP地址 -Credential 域名\用户名
+例如：Enter-PSSession 192.168.3.1 -Credential abc\administrator
+
+
+
+Set-Item wsman:\localhost\Client\TrustedHosts -value 192.168.21.*
+
+
+
+
+🔵 Win 开启 Powershell 远程登录功能
+
+
+🔶 被控端 - Windows 
+
+winrm s winrm/config/client '@{TrustedHosts="XXX.XXX.XXX.XXX"}'
+信任主控端的IP地址.
+
+winrm s winrm/config/client '@{TrustedHosts="192.168.21.219"}'
+
+
+
+🔶 主控端 - Mac
+
+$session = New-PSSession XXX.XXX.XXX.XXX -Credential domain\userName
+连接到客户端
+
+$session = New-PSSession 192.168.21.77 -Credential YNL006\jian.xu
+

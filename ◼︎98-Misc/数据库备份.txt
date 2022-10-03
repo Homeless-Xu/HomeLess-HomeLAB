@@ -1,0 +1,24 @@
+navicat mysql. 备份:
+
+
+选择一个数据库 如 ss
+
+点击 backup → 右键 → 新建备份 → start → 
+
+
+
+
+修改备份路径:
+这个是 连接数据库 里面设置的.
+edit connection → advanced → location 
+
+
+
+
+恢复备份:
+
+双击备份文件.. 开始 就可以了...
+就这么简单...
+
+
+

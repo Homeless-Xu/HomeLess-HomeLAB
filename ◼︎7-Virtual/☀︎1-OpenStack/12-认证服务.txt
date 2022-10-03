@@ -1,0 +1,506 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 认证服务 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 简介.
+
+    企业云. 的第一步肯定是登录!  也就是认证. 
+    不同的用户 可以分配到不同的资源 (cpu/内存/硬盘...)
+    所以 openstack 首先要安装的就是 认证服务. 
+
+
+🔸 Admin Token
+    所有服务共享的一个密钥，如果设置不同，那些依赖keystone的服务将无法正常工作.
+
+
+
+🔸 Tenants
+    Tenants 是一个高层次的组，表示一组用户。
+    一个tenant 是一个小组，共同拥有 Nova里的虚拟机，或者Swift里的容器。
+    一个tenant可以有一个或者多个用户，
+    用户可以属于一个或者多个tenant，
+    针对每个tenant，用户拥有一个角色(role)
+
+    认证几个要素：tenants, users, roles
+
+    业务端口：5000
+    管理端口：35357
+
+
+
+🔸 管理API测试：
+    获取版本号：
+    curl http://192.168.28.5:35357/ | python -mjson.tool
+    curl http://192.168.28.5:35357/v2.0/ | python -mjson.tool
+
+🔸 业务API 测试：
+    获取版本号：
+    curl http://192.168.1.112:5000/ | python -mjson.tool
+    curl http://192.168.1.112:5000/v2.0/ | python -mjson.tool
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸准备🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+    在你配置 OpenStack 身份认证服务前，你必须创建一个数据库和管理员令牌
+
+🔸 创建 数据库 
+
+    ⦿ 启动:   systemctl start mariadb.service
+    ⦿ 状态:   systemctl status mariadb.service
+    ⦿ 登录:   mysql -u root -p         无密码直接回车就行.
+    ⦿ 登录:   mysql -u root -ptoor      有密码,密码可以直接写在 -p 后面. 
+    ⦿ 创建：  CREATE DATABASE keystone;
+    ⦿ 权限：  
+        作用就是 在数据库中创建 keystone 用户, 并给予localhost 和 % 权限
+        % 权限就是 你可以用 keystone 通过外网连接数据库. 
+        用自己的的密码替换 KEYSTONE_DBPASS 
+        
+        GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'KEYSTONE_DBPASS';
+        GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';
+
+    ⦿ 退出:   exit;
+
+
+
+🔸 开启 root 用户数据库外网访问 (可选)
+    就是把 root ::1 改下 root % . 就有外网权限了.
+
+    mysql -u root -p
+    use mysql;   
+    select user,host from user; 
+    UPDATE mysql.user SET host='%' WHERE host='::1';
+    select user,host from user;
+    flush privileges;
+
+
+🔸 数据库检验 
+    Mac 电脑:
+        图形工具 用 root 登录 mysql 数据库.  查看是否 keystone 数据库.
+
+    Mac 电脑: 
+        mysql -h 192.168.1.111 -u keystone -pKEYSTONE_DBPASS
+        看看能否登录.
+
+
+
+🔸 生成管理员令牌
+    就是一串数字而已. 要记住. 下面有用.
+    openssl rand -hex 10
+        fe8e78e52229f610fa0e
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 安装  keystone 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 keystone 安装:    yum install openstack-keystone httpd mod_wsgi -y 
+
+    👹 Error downloading packages:
+        python-sqlalchemy-1.0.11-1.el7.x86_64: [Errno 256] No more mirrors to try.
+        python2-babel-2.3.4-1.el7.noarch: [Errno 256] No more mirrors to try.
+        python-routes-1.13-2.el7.noarch: [Errno 256] No more mirrors to try.
+        python-netaddr-0.7.18-1.el7.noarch: [Errno 256] No more mirrors to try.
+
+        个别安装包 下载不了. 
+        解决办法:   yum clean metadata && yum clean all
+        然后重新安装.
+
+
+
+
+
+🔸 keystone 配置:    vi /etc/keystone/keystone.conf 
+
+    ⦿ [database] 下添加行 
+        connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone
+        将``KEYSTONE_DBPASS``替换为你为KEYSTONE数据库设置的密码。
+
+    ⦿ [token] 下添加行. 无需修改
+        provider = fernet
+
+🔸 keystone 配置检验 
+    cat /etc/keystone/keystone.conf | grep ^connection
+    cat /etc/keystone/keystone.conf | grep ^provider
+
+
+
+🔸 初始化身份认证服务的数据库： 同步keystone数据库 
+    su -s /bin/sh -c "keystone-manage db_sync" keystone
+
+            ⦿ 命令解析
+                • su -s :
+                    若 /etc/shells 允许，则运行 shell; 
+                    /etc/shells 里面包含本机安装的所有shell;
+                • -c "keystone-manage db_sync"
+                    引号里面就是要执行的 shell 命令.
+                • keystone
+                    用这个用户运行命令.
+
+            ⦿ CLI∙1 ~ ➜ type keystone-manage
+                keystone-manage is /usr/bin/keystone-manage
+
+            ⦿ CLI∙1 ~ ➜ cat /usr/bin/keystone-manage     发现是个 python 文件!
+                #!/usr/bin/python2
+                # PBR Generated from u'console_scripts'
+                import sys
+                from keystone.cmd.manage import main
+                if __name__ == "__main__":
+                    sys.exit(main())
+
+
+
+🔸 初始化Fernet keys：
+    keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+    keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+
+
+🔸 启动 认证服务
+    这里需要设置 keystone 的密码.  ADMIN_PASS 改成你想设置的密码.
+
+    keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
+    --bootstrap-admin-url http://controller:35357/v3/ \
+    --bootstrap-internal-url http://controller:5000/v3/ \
+    --bootstrap-public-url http://controller:5000/v3/ \
+    --bootstrap-region-id RegionOne
+
+    
+    ⦿ 认证服务端口验证
+        nmap -p 5000,35357 127.0.0.1
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 配置 Apache  HTTP 服务器 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 Apache 配置 
+    vi /etc/httpd/conf/httpd.conf
+        #ServerName www.example.com:80  改成  ServerName controller
+
+
+🔸 创建软链接 
+    这样 apache 才会加载 /usr/share/keystone/wsgi-keystone.conf 这个Apache配置文件
+    ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/
+
+
+🔸 Apache  开机自启   systemctl enable httpd.service
+🔸 Apache  启动服务   systemctl start httpd.service
+
+🔸 配置环境变量 
+    下面的命令 直接在终端里面运行就可以了.
+    ADMIN_PASS 改成上面设置启动认证服务时候设置的密码.
+
+        export OS_USERNAME=admin
+        export OS_PASSWORD=ADMIN_PASS
+        export OS_PROJECT_NAME=admin
+        export OS_USER_DOMAIN_NAME=Default
+        export OS_PROJECT_DOMAIN_NAME=Default
+        export OS_AUTH_URL=http://controller:35357/v3
+        export OS_IDENTITY_API_VERSION=3
+
+
+        ⦿ Export 命令
+            在shell中执行程序时，shell会提供一组环境变量。
+            export 命令 设置环境变量用. 可以用 export 查看当前设置.
+            export可新增，修改或删除环境变量，供后续执行的程序使用
+            export的效力仅及于该次登陆操作
+
+            • 添加变量:  export OS_TOKEN=fe8e78e52229f610fa0e  关闭终端失效.
+            • 更新变量:  export OS_TOKEN=fe8e78e52229f610fa00  重复添加会覆盖
+            • 删除变量:  unset OS_TOKEN
+            • 查看变量:  echo $OS_TOKEN      echo $OS_USERNAME
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸Create a domain, projects, users, and roles🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 废话
+    openstack 对安全是极其严格的.  几乎任何操作都要进行身份认证.
+    核心服务也就几个. 但是 企业云的用户却是成千上万的.
+    每个用户对各个服务的权限也不一样的. 就像每个 vps 的硬盘、内存、cpu 等配置都是不一样的.
+    身份认证服务 给所有的 openstack 核心服务提供验证功能.
+    身份认证服务 根据: domains, projects, users, and roles. 来控制权限.
+    所以我们要 创建 domain, projects, users, and roles
+
+
+
+
+🔸 创建 service project:
+    openstack project create --domain default --description "Service Project" service
+       👁‍🗨 yum install python-openstackclient 就安装了 openstack 这个命令了.
+        👹 Unable to establish connection to http://controller:35357/v3/auth/tokens: 
+            ⦿ 查看 apache 状态   systemctl status httpd.service ✔︎
+            ⦿ 清空防火墙  iptables -F ✔︎
+            ⦿ 查看防火墙  iptables -L ✔︎
+            ⦿ 端口查看 nmap -p 5000,35357 127.0.0.1 ✔︎
+                keystone v3 版本的话，5000 和 35357 这两个端口的使用基本没有区别，API 是一致的。
+                5000 和 35357 端口都是 apache 端口! 是在 apache 里面配置的. 
+                查看下面这个文件  cat /usr/share/keystone/wsgi-keystone.conf
+
+            ⦿ 链接状态 ✗
+                curl http://controller:35357/  | python -mjson.tool
+                不能解析 controller  你需要手动设置 host 文件.坑, 自己来吧 .
+                echo "192.168.1.112 controller" >> /etc/hosts
+                cat /etc/hosts
+                注意 这里绝对不能用 127.0.0.1 代替 192.168.1.112 . 会引起其他服务启动失败.
+                然后重新运行命令.. 出现另外一个错误了...
+
+                👹 An unexpected error prevented the server from fulfilling your request.
+                 (HTTP 500) (Request-ID: req-eb81db79-d32e-467d-ae04-d9b493935527)
+
+                ⦿ 日志分析
+                    • 日志位置
+                        cat /usr/share/keystone/wsgi-keystone.conf | grep ErrorLog
+                            ErrorLog /var/log/httpd/keystone.log
+                            CustomLog /var/log/httpd/keystone_access.log combined
+
+                    • 日志查看
+                        cat /var/log/httpd/keystone.log  ➜ 空文件....
+                        cat /var/log/httpd/keystone_access.log ➜  有内容了!
+                            "GET /v3 HTTP/1.1" 200 250 "-" "osc-lib/1.3.0 keystoneauth1/2.18.0 python-requests/2.11.1 CPython/2.7.5"
+                            "POST /v3/auth/tokens HTTP/1.1" 500 143 "-" "osc-lib/1.3.0 keystoneauth1/2.18.0 python-requests/2.11.1 CPython/2.7.5"
+                            get 是客户端从网页获取内容.  post 是客户端向网页提交内容. 比如用户登录的用户名和密码.
+                            500 错误, 问题应该就在Post这行.  keystoneauth1 这方面问题.  应该就是认证方面的问题了.
+
+
+                ⦿ 浏览器分析
+                    mac 浏览器: http://192.168.1.112:35357/v3
+                    {"version": {"status": "stable", "updated": "2017-02-22T00:00:00Z", "media-types": [{"base": "application/json", "type": "application/vnd.openstack.identity-v3+json"}], "id": "v3.8", "links": [{"href": "http://192.168.1.112:35357/v3/", "rel": "self"}]}}
+
+                    mac 浏览器: http://192.168.1.112:35357/v3/auth
+                    {"error": {"message": "\u627e\u4e0d\u5230\u8be5\u8d44\u6e90\u3002", "code": 404, "title": "Not Found"}}
+                    这个链接就错了! 
+
+                    mac 浏览器:  http://192.168.1.112:35357/v3/auth/token
+                    {"error": {"message": "\u627e\u4e0d\u5230\u8be5\u8d44\u6e90\u3002", "code": 404, "title": "Not Found"}}
+
+
+                ⦿ 重启服务器. 
+                
+                    • 查看 Apache    Web服务器状态:  systemctl status httpd.service                   
+                    • 查看 MariaDB   数据库状态:     systemctl status mariadb.service
+                    • 查看 rabbitmq  消息队列状态:   systemctl status rabbitmq-server.service
+                    • 查看 Mencached 缓存状态:       systemctl status memcached.service 
+                        👹 memcached[2740]: failed to listen on TCP port 11211: Address already in use
+                        Mencached 端口被占用.启动失败, 难怪验证出错.这个服务就是缓存令牌的...
+                        nmap -p 11211 127.0.0.1 发现端口也没开启啊. 
+
+                        vi /etc/sysconfig/memcached
+                        OPTIONS="-l 127.0.0.1,::1,controller"
+                        我们在 hsot 里面 把 controller 映射到 127.0.0.1 了 这里重复了! 所以报错!
+                        要 vi /etc/hosts  contoll  改成本机 ip: 192.168.1.112   而不是 127.0.0.1...!
+
+                        然后启动 Mencached 服务:  systemctl start memcached.service && systemctl status memcached.service 
+
+                    • 生成管理员令牌     ➜  openssl rand -hex 10   ➜ 8259e4f5f9a15af6bef1  (不用记下来的,)
+                    • 同步keystone数据库 ➜  su -s /bin/sh -c "keystone-manage db_sync" keystone
+
+                    • 初始化Fernet keys：
+                        keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+                        keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+
+                    • 启动认证服务
+                        keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
+                        --bootstrap-admin-url http://controller:35357/v3/ \
+                        --bootstrap-internal-url http://controller:5000/v3/ \
+                        --bootstrap-public-url http://controller:5000/v3/ \
+                        --bootstrap-region-id RegionOne
+                        
+                    • 认证服务端口验证:   nmap -p 5000,35357 127.0.0.1
+                    • 再次设置环境变量 
+                        export OS_USERNAME=admin
+                        export OS_PASSWORD=ADMIN_PASS
+                        export OS_PROJECT_NAME=admin
+                        export OS_USER_DOMAIN_NAME=Default
+                        export OS_PROJECT_DOMAIN_NAME=Default
+                        export OS_AUTH_URL=http://controller:35357/v3
+                        export OS_IDENTITY_API_VERSION=3
+
+                    • 尝试创建 service project:
+                        openstack project create --domain default --description "Service Project" service
+
+                        +-------------+----------------------------------+
+                        | Field       | Value                            |
+                        +-------------+----------------------------------+
+                        | description | Service Project                  |
+                        | domain_id   | default                          |
+                        | enabled     | True                             |
+                        | id          | 347a8d619cb44cf493498084035eb7f8 |
+                        | is_domain   | False                            |
+                        | name        | service                          |
+                        | parent_id   | default                          |
+                        +-------------+----------------------------------+
+                        ...  终于成功了额....  这只是一个组件的一个小设置而已... 加油
+
+
+
+🔸 creates the demo project and user.
+    上面创建的是 正式项目. 一般的 非管理员用户 最好创建个 Demo 项目. 
+
+
+⦿ 创建 demo 项目:
+    openstack project create --domain default --description "Demo Project" demo
+        +-------------+----------------------------------+
+        | Field       | Value                            |
+        +-------------+----------------------------------+
+        | description | Demo Project                     |
+        | domain_id   | default                          |
+        | enabled     | True                             |
+        | id          | ea376b3c10354873ae16fa6212f60983 |
+        | is_domain   | False                            |
+        | name        | demo                             |
+        | parent_id   | default                          |
+        +-------------+----------------------------------+
+
+⦿ 创建 Demo 用户:
+    openstack user create --domain default --password-prompt demo
+    需要设置 demo用户的密码 . 输入两次. 这里密码设置成  demo
+        +---------------------+----------------------------------+
+        | Field               | Value                            |
+        +---------------------+----------------------------------+
+        | domain_id           | default                          |
+        | enabled             | True                             |
+        | id                  | 4a7e63e0da8d487e8d884d5fd05e7283 |
+        | name                | demo                             |
+        | options             | {}                               |
+        | password_expires_at | None                             |
+        +---------------------+----------------------------------+
+
+
+⦿ 创建 User 这个用户角色:
+    openstack role create user  
+        +-----------+----------------------------------+
+        | Field     | Value                            |
+        +-----------+----------------------------------+
+        | domain_id | None                             |
+        | id        | c0d7ea4d7a98417eb0da3b6a1f63ff6c |
+        | name      | user                             |
+        +-----------+----------------------------------+
+
+⦿ 把角色添加到 demo project  和 demo user 中
+    openstack role add --project demo --user demo user
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸验证🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 关闭临时认证令牌机制.
+    上面我们只是随便生成了一个 token . 就能登录 认证服务器进行各种操作.
+    这个是非常不安全的. 我们要关闭临时令牌机制. 然后获取正式令牌.
+
+    vi /etc/keystone/keystone-paste.ini 
+    从``[pipeline:public_api]``，[pipeline:admin_api]``和``[pipeline:api_v3]``部分删除``admin_token_auth 。
+
+
+🔸 重重置OS_AUTH_URL 和 OS_PASSWORD 环境变量： 也就从环境路径中是删除 这两个变量.
+    unset OS_AUTH_URL OS_PASSWORD
+
+
+🔸 为 admin 用户申请认证令牌
+
+    openstack --os-auth-url http://controller:35357/v3 \
+    --os-project-domain-name default --os-user-domain-name default \
+    --os-project-name admin --os-username admin token issue
+
+        需要输入 admin 的密码:  ADMIN_PASS
+        +------------+------------------------------------------------------------------------------+
+        | Field      | Value                                                                        |
+        +------------+------------------------------------------------------------------------------+
+        | expires    | 2017-08-25T11:01:19+0000                                                     |
+        | id         | gAAAAABZn_VvsdSvjBR90MSBsD0W5QQPrfEAC2Yde9kUojvUNXc0zqK14IVLV1LBdzVJre10OEbU |
+        |            | 2FtumsDHubvOtpCaHw-e-7lWbFbhKUTwDHqmYev6lP0rofLt4dLoz90XUYO1w8fqqlswTUIf7Tgo |
+        |            | zT3Ufbyr82OFN_Zxbjr6wykmVLkLVQE                                              |
+        | project_id | 48cbf0c9f5854d64aea5f260c7b7221e                                             |
+        | user_id    | c5b9da77aae4451fbb0314352c1e653b                                             |
+        +------------+------------------------------------------------------------------------------+
+
+
+🔸 为 demo 用户申请认证令牌
+    openstack --os-auth-url http://controller:5000/v3 \
+    --os-project-domain-name default --os-user-domain-name default \
+    --os-project-name demo --os-username demo token issue
+        需要输入 demo 的密码: demo
+        +------------+------------------------------------------------------------------------------+
+        | Field      | Value                                                                        |
+        +------------+------------------------------------------------------------------------------+
+        | expires    | 2017-08-25T11:03:07+0000                                                     |
+        | id         | gAAAAABZn_XbIlV1ZLMy6Ok3F-iZHUKS_6SmzPi7T3UISu_R9                            |
+        |            | -J_ibiHo_Bc3ldsfclk6KvdOyqkJ0mQYRrS-PlQlWj2UMGMI-                            |
+        |            | YsZHVTjbvYkcZdIlcZALG1vkvp2Ru-HSCwo53z6bJTYE05Sk10FojVbX2-yyAfqw--           |
+        |            | NkSfj73R8ItP-b-f-lA                                                          |
+        | project_id | ea376b3c10354873ae16fa6212f60983                                             |
+        | user_id    | 4a7e63e0da8d487e8d884d5fd05e7283                                             |
+        +------------+------------------------------------------------------------------------------+
+        这个命令使用``demo`` 用户的密码和API端口5000，这样只会允许对身份认证服务API的常规（非管理）访问。
+        5000 端口是业务端口.   35357 端口是管理端口. 权限不一样的!
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸创建 OpenStack 客户端 环境脚本🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 脚本作用.
+    不用每次都设置 环境路径..
+    脚本文件位置随便.. 就 /root 吧 .
+
+
+🔸 创建脚本.
+
+    ⦿ 创建 admin-openrc 文件
+        记得把 ADMIN_PASS 改成你自己的 admin 用户的密码
+        vi admin-openrc
+            export OS_PROJECT_DOMAIN_NAME=Default
+            export OS_USER_DOMAIN_NAME=Default
+            export OS_PROJECT_NAME=admin
+            export OS_USERNAME=admin
+            export OS_PASSWORD=ADMIN_PASS
+            export OS_AUTH_URL=http://controller:35357/v3
+            export OS_IDENTITY_API_VERSION=3
+            export OS_IMAGE_API_VERSION=2
+
+
+    ⦿ 创建 demo-openrc 文件
+        记得把 OS_PASSWORD=demo 的 demo 改成 demo 用户的密码
+        vi demo-openrc
+            export OS_PROJECT_DOMAIN_NAME=Default
+            export OS_USER_DOMAIN_NAME=Default
+            export OS_PROJECT_NAME=demo
+            export OS_USERNAME=demo
+            export OS_PASSWORD=demo
+            export OS_AUTH_URL=http://controller:5000/v3
+            export OS_IDENTITY_API_VERSION=3
+            export OS_IMAGE_API_VERSION=2
+
+
+
+🔸 使用脚本
+    ⦿ source 命令.
+        source命令也称为“点命令”，也就是一个点符号（.）
+        source命令通常用于重新执行刚修改的初始化文件，使之立即生效，而不必注销并重新登录。
+        可以用 . + 文件名   也可以用 source + 文件名
+
+
+    ⦿ 加载文件中的变量
+        . admin-openrc
+        source admin-openrc
+
+    ⦿ 请求认证令牌:
+        openstack token issue
+            +------------+-----------------------------------------------------+
+            | Field      | Value                                               |
+            +------------+-----------------------------------------------------+
+            | expires    | 2017-08-25T11:39:37+0000                            |
+            | id         | gAAAAABZn_5psbtiN6baICkmRs_ajJ8DoaIPUW229xxrp7wB5qa |
+            |            | knneQLcDfZdTU-zCLtGqr8m2-hBLch002j7D9lX_-iE7SR-     |
+            |            | f6UBn4xDADOVJr8a8xZ6WsTLk-                          |
+            |            | nqStMEYzZmVfCfxugxWEuaU_W3E47RnzGhLGtQGOrKQYLEf3xP- |
+            |            | QLX_Aec8                                            |
+            | project_id | 48cbf0c9f5854d64aea5f260c7b7221e                    |
+            | user_id    | c5b9da77aae4451fbb0314352c1e653b                    |
+            +------------+-----------------------------------------------------+
+
+

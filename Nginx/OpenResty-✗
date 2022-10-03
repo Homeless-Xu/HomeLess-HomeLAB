@@ -1,0 +1,64 @@
+🔸 Why 
+
+    想要深入学习Nginx  用OpenResty是个不错的选择.
+
+    这个项目是 用 Nginx 开发网站. 偏开发的. 
+    如果你是运维. 是不需要学这个的! 只要会用就可以了. 是两回事情...
+
+
+
+
+
+
+
+🔵 OpenResty 简介
+
+    Apache、Nginx 都是web服务器. OpenResty 也是! 
+
+    OpenResty 打包了Nginx的核心.加上很多高质量的 第三方模块 以及各种依赖.
+    OpenResty 于是变成了一个非常强大的 web 服务器.
+
+    OpenResty 的目标是让你的web服务 直接跑在 Nginx 服务内部.  
+    充分利用 Nginx 的非阻塞 I/O 模型.
+    不仅仅对 HTTP 客户端请求. 甚至于对后端: MySQL Redis 等等都可以实现高性能响应
+
+    Openresty = Nginx + ngxhttp_lua_module + lua_resty*；
+    Nginx 加上 HTTP_LUA模块  再加上一系列Lua_resty模块组成的一个Ngx_Lua高性能服务生态。
+
+    在没有 OpenResty 的时候, 基于Nginx 开发高性能的后端服务是一件高上大的事情..
+    没有很深的C语言基础 是开发不了的 .
+    就是C语言基础很不错, 但是 没有对 Nginx 整体架构有深入的了解. 也是不行的! 
+    C语言模块的开发调试 还真是不简单哈!!!   这时候你才会知道 OpenResty 的好...
+    你改C代码要 编译 ➜ 替换老.so ➜  重启nginx (甚至重新编译 Nginx) ➜ CURL 请求测试...
+    有了 Openresty 值需要改 lua 代码 ➜ Curl 请求测试就可以了
+
+
+    web 开发人员可以用 lua 脚本调动 Nginx 支持的各种 模块.
+    可以快速构造出足以胜任 10K 以上并发连接响应的超高性能 web 应用系统.
+    360 阿里云... 等等 都是 openresty 的深度用户..
+
+
+    基于OpenResty的服务端开发，实际是在一个Nginx环境中扩展的Lua引擎运行Lua代码。
+    需要至少两方 面的基础知识：Nginx配置、Lua语法。
+
+
+
+🔵 LUA
+
+    lua 是种轻量小巧的脚本语言. 目的是为了嵌入到应用程序中
+    从而为应用程序提供灵活的扩展和定制功能. 
+
+    脚本语言么,  和shell 差不多. 也是非常简单的. 
+
+
+
+
+🔵 Nginx 
+
+
+
+
+
+
+
+★★★★★ openresty 中文教程    https://openresty.org/cn/getting-started.html

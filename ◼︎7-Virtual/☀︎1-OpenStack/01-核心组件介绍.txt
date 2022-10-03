@@ -1,0 +1,289 @@
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 OpenStack 核心 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 OpenStack 核心: 
+	• 计算 Nova
+	• 认证 Keystone
+	• 镜像 Glance
+	• 存储 Cinder 
+	• 网络 Neutron
+
+
+
+
+
+
+（1）Nova
+        这个是最核心的，Nova最开始的时候，可以说是一套虚拟化管理程序，还可以管理网络和存储。
+（2）keystone
+        这是提供身份认证和授权的组件。任何系统，身份认证和授权，其实都比较复杂。尤其Openstack 那么庞大的项目，每个组件都需要使用统一认证和授权。
+       目前keystone 要做的东西其实还是很多。没法基于角色的授权，web管理用户等。
+
+
+（3）Dashboard
+         (代号为“Horizon”) 为所有OpenStack的服务提供了一个模块化的web-based用户界面。使用这个Web GUI，可以在云上完成大多数的操作，如启动实例，分配IP地址，设置访问控制等。
+（4）Glance
+        这是镜像管理。
+        目前Glance的镜像存储，支持本地存储，NFS，swift，sheepdog和Ceph，基本是够用了。
+        目前Glance的最大需求就是多个数据中心的镜像管理，如何复制，不过这个功能已经基本实现。还有就是租户私有的image管理，这些目前功能都已经实现。
+       个人感觉：Glance后续基本就是一个bug修复，稳定的阶段。
+（5）Quantum
+        这是网络管理的组件，也是重头戏，Openstack的未来，基本都要靠quantum。上面介绍nova的时候，说过网络相关的内容，都会交给Quantum。不过Quantum的开发进度不是太如人意。Flosom规划实现功能，到Grizzly才实现。未来nova network的代码清理，估计到H版本都不见得可以实现。
+Quantum 后端可以是商业产品或者开源。开源产品支持Openvswitch，和linux bridge。网络设备厂商都在积极参与，让他们的产品支持Quantum。
+（6）Swift
+        这是对象存储的组件。对于大部分用户来说，swift不是必须的。你只有存储数量到一定级别，而且是非结构化数据才有这样的需求。很多人都问一个相同的问题：是否可以把虚拟机的存储放在swift上。简单回答：不行。你需要搞明白对象存储是干啥，擅长那些地方，那些是不行的。
+swift是Openstack所有组件了最成熟的,可以在线升级版本,各种版本可以混合在一起,也就是说,1.75版本的swift可以和1.48的在一个群集里.这个是很难得的.
+（7）Cinder
+        这是存储管理的组件。Cinder存储管理主要是指虚拟机的存储管理。
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 keystone  认证 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 keystone 链接:	http://10.140.0.5/dashboard/identity/users/
+
+
+🔸  keystone 作用 
+	管理用户 & 权限.
+	维护  OpenStack Services 的 Endpoint
+	Authentication（认证）和 Authorization（鉴权）
+
+
+
+🔸 keystone 储备知识 
+
+	⦿ User
+		User 指: 用户 或者其他系统 或者服务.
+		User 访问 openstack 时 keystone 会对 User 进行验证.
+
+		除了默认的 admin 和 demo，
+		OpenStack 也为 nova、cinder、glance、neutron 服务创建了相应的 User。
+		admin 也可以管理这些 User。
+
+
+	⦿ Credentials 凭证(名称)
+		Credentials 是 User 用来证明自己身份的信息，可以是： 
+		1. 用户名/密码 
+		2. Token 
+		3. API Key 
+		4. 其他高级方式
+
+
+	⦿ Authentication 身份验证(动词)
+		Authentication 是 Keystone 验证 User 身份的过程。
+
+		User 访问 OpenStack 时向 Keystone 提交用户名和密码形式的 Credentials，
+		Keystone 验证通过后会给 User 签发一个 Token 作为后续访问的 Credential。
+
+
+	⦿ Token
+		Token 是由数字和字母组成的字符串，
+		User 成功 Authentication 后由 Keystone 分配给 User。
+
+		Token 用做访问 Service 的 Credential
+		Service 会通过 Keystone 验证 Token 的有效性
+		Token 的有效期默认是 24 小时
+
+
+	⦿ Project
+		Project 用于将 OpenStack 的资源（计算、存储和网络）进行分组和隔离。 
+		根据 OpenStack 服务的对象不同，Project 可以是一个客户（公有云，也叫租户）、部门或者项目组（私有云）
+
+		这里请注意：
+
+		资源的所有权是属于 Project 的，而不是 User。
+		在 OpenStack 的界面和文档中，Tenant / Project / Account 这几个术语是通用的，
+		但长期看会倾向使用 Project
+		每个 User（包括 admin）必须挂在 Project 里才能访问该 Project 的资源。 
+		一个User可以属于多个 Project。admin 相当于 root 用户，具有最高权限
+
+		Horizon 在 Identity->Projects 中管理 Project
+
+		通过 Manage Members 将 User 添加到 Project 中
+
+
+
+	⦿ Endpoint
+		Endpoint 是一个网络上可访问的地址，通常是一个 URL。 
+		Service 通过 Endpoint 暴露自己的 API。 
+		Keystone 负责管理和维护每个 Service 的 Endpoint。
+
+		可以使用下面的命令来查看 Endpoint。
+		source devstack/openrc admin admin 
+		openstack catalog list
+
+
+	⦿ Service
+		OpenStack 的 Service 包括 
+		Compute (Nova)、
+		Block Storage (Cinder)、
+		Object Storage (Swift)、
+		Image Service (Glance) 、
+		Networking Service (Neutron) 
+
+		每个 Service 都会提供若干个 Endpoint，User 通过 Endpoint 访问资源和执行操作。
+
+
+
+	⦿ Role
+		安全包含两部分：Authentication（认证）和 Authorization（鉴权）
+		Authentication 解决的是“你是谁？”的问题 Authorization 解决的是“你能干什么？”的问题
+
+		Keystone 是借助 Role 来实现 Authorization 的：
+
+		Service 决定每个 Role 能做什么事情 
+		Service 通过各自的 policy.json 文件对 Role 进行访问控制。 
+
+		对于 create、attach_network 和 attach_volume 操作，任何Role的 User 都可以执行； 
+		但只有 admin 这个 Role 的 User 才能执行 forced_host 操作。
+
+		OpenStack 默认配置只区分 admin 和非 admin Role。 
+		如果需要对特定的 Role 进行授权，可以修改 policy.json。
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Glance  镜像管理 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+⦿ 镜像链接:	http://10.140.0.5/dashboard/project/images
+
+
+⦿ 什么是镜像 
+	个人电脑装系统可以用 光盘/镜像/网络...
+	云服务器装系统需要更加高效的解决方案: Image 
+
+
+⦿ 镜像好处. 
+
+	你可以用 cd 装哈一个 纯净版本的win7 . 然后安装好各种基础软件, 打好补丁.
+	然后把这个系统 制作成镜像! 以后用这个镜像装系统. 就自带基础软件+补丁了.
+
+	gce 安装系统的时候提供很多系统选择. 这些都是镜像.
+	当你安装好系统. 安装好各种软件后创建的快照也可以看成是镜像, 
+	你可以直接用备份好的快照 新建一个系统!
+
+	镜像创建速度非常快!  管理也非常简单.
+
+
+⦿ Glance 功能 
+	Image Service 的功能是管理 Image，让用户能够发现、获取和保存 Image。 
+	OpenStack 用 Glance 来管理镜像
+
+
+
+🔸 Glance 架构
+
+⦿ glance-api 进程
+	对外提供 REST API，响应 image 查询、获取和存储的调用。 
+
+	glance-api 不会真正处理请求。 
+	如果是与 image metadata（元数据）相关的操作，glance-api 会把请求转发给 glance-registry； 
+	如果是与 image 自身存取相关的操作，glance-api 会把请求转发给该 image 的 store backend。 
+
+	在控制节点上可以查看 glance-api 进程 
+
+
+⦿ glance-registry 进程
+	负责处理和存取 image 的 metadata，例如 image 的大小和类型。 
+	在控制节点上可以查看 glance-registry 进程 
+
+
+⦿ Database
+	Image 的 metadata 会保持到 database 中，默认是 MySQL。 
+	在控制节点上可以查看 glance 的 database 信息 
+
+
+⦿ Store backend
+	Glance 自己并不存储 image。 真正的 image 是存放在 backend 中的。 
+	Glance 支持多种 backend，包括 
+		A directory on a local file system（这是默认配置）
+		GridFS
+		Ceph RBD
+		Amazon S3
+		Sheepdog
+		OpenStack Block Storage (Cinder)
+		OpenStack Object Storage (Swift)
+		VMware ESX
+		具体使用哪种 backend，是在 /etc/glance/glance-api.conf 中配置的
+		在我们的 devstack 环境中，image 存放在控制节点本地目录 /opt/stack/data/glance/
+
+
+🔸 创建镜像
+	两种方法创建镜像: CLI 和 WEB GUI.  都要会用!
+	因为和其他任何软件一样, 要开发出WEB 网页是要花费大量精力的!
+	有些操作只能通过CLI完成.  而且 ，CLI 返回结果更快，操作起来更高效
+
+
+⦿ 准备测试镜像
+
+	cirros 是一个很小的 linux 镜像，15MB 非常适合测试用. 
+	下载 http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
+
+
+
+			这个镜像的用户名和密码
+
+		user:cirros
+		pass:cubswin:)
+
+
+		cirros-0.3.4-x86_64-disk.img。 
+
+
+
+		你可以在Horizon的vnc登录或者通过SSH登录。
+
+		如果你通过Horizon设置密码，其实就是设置Cirros镜像的root的密码，设置完成后，你可以在控制台或者SSH，使用root和你设置的密码登录。
+
+		如果你希望使用秘钥，用root身份登录，那么默认是不行的，你会客户端看到提示
+
+		Please login as 'cirros' user, not as root
+		如果你使用cirros用户登录，你会发现其实root的目录下也注入的公钥，只是
+
+		$ sudo ls /root/.ssh/
+		authorized_keys
+		$ sudo cat /root/.ssh/authorized_keys
+
+		# The following ssh key was injected by Nova
+		command="echo Please login as \'cirros\' user, not as root; echo; sleep 10" ssh-rsa 
+		ofEJnEpgbTIuO1Wc5vTs/cMuPmaJ7x6dAX2vg84LkRyX1dDzvQ8nD/tYpFYnSjzrh72N7tMm76GAaR
+		HzMxg3uNMGVk+wXCBU/Ffm1vE1A5uQ== root@node12
+		$ 
+		在公钥里加入一行，导致root无法登录。我们可以通过Horizon提供的user data的功能，实现root登录
+
+
+
+
+
+⦿ 通过 WEB 创建镜像: ✔︎
+	链接:  http://10.140.0.5/dashboard/project/images
+	项目 ➜ 计算 ➜ 镜像 ➜ 新建 ➜ 下面设置 ➜ 创建
+		• 镜像名称: testimage 
+		• 文件: 上传下载的  cirros 镜像 
+		• 镜像格式: QCOW2
+		• 镜像可见性: 公有 
+		• 受保护的: 不
+
+
+
+⦿ OpenStack CLI
+	OpenStack 服务都有自己的 CLI。 命令很好记，就是服务的名字，
+	比如 Glance 就是 glance，Nova 就是 nova。 
+
+	不同服务用的命令虽然不同，但这些命令使用方式却非常类似，可以举一反三。 
+
+
+
+⦿ 设置环境变量.
+	这些变量包含用户名、Project、密码等； 
+	如果不设置，每次执行命令都必须设置相关的命令行参数 
+
+
+
+
+
+

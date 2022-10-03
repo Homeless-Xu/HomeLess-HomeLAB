@@ -1,0 +1,122 @@
+🔸 运维开发 VS 信息安全 
+
+    后者说白了就是黑客. 黑客必然是会开发的!! 所以得先有开发基础.
+    所以建议先 干运维开发. 然后自学信息安全! 最后架构师
+    信息安全可以自学! 职业还是DevOps吧.
+
+
+
+🔸 运维开发 VS Linux 运维 
+
+    相对来说 Linux 运维技能要求低! 但是工资和DevOps 差不多!!!
+    Linux 职位远比DevOps 多很多.  岗位数量几乎是10倍的关系了!!! 
+    能找DevOps 尽量找DevOps . 毕竟运维是夕阳行业!迟早要死的! 
+    实在不行就找Linux 运维.先混饭吃! 
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 DevOps 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+★★★★★
+
+    • 1) Python 
+
+    • 2) Nginx
+    
+    • 3) AWS
+    
+
+
+
+
+★★★★
+    
+    /MongoDB/Redis/HaProxy
+
+    • Puppet、Ansible、Jenkins、Git、gitLab
+
+
+Hadoop、
+Kafka
+ELK
+
+Docker 
+
+
+
+
+
+
+
+
+★★★ 
+
+10、有使用过Ansible/Puppet/SaltStack/Chef等自动化运维管理工具者优先
+
+11、有使用过Jenkins/TeamCity/Gitlab-CI等自动化发布工具者优先
+
+12、有使用过Zabbix/Nagios/Ganglia等开源监控系统者优先
+
+13、有使用过ELK等日志处理分析系统者优先
+
+
+
+Mesos
+
+zookeeper / kafka / storm
+
+
+
+了解队列软件，如 RabbitMQ 及 Kafka
+
+
+9、熟悉 Jenkins CI 持续集成工具。
+
+
+7、了解 Storm 实时计算平台。
+
+
+
+
+熟悉 SA 
+
+
+
+
+
+★
+node.js 
+
+5. 有flume、kafka、storm、hbase相关经验优先；
+
+6. 有资产管理平台、自动构建及部署系统、配置管理系统、监控报警平台等有实际建设经验者优先。
+
+
+
+管理 CI/CD 系统和容器集群，保障测试和生产
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Linux 运维 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+★★★★★
+K8s 
+
+
+
+🔸 SDN  
+
+🔸 负载均衡 LVS HAProxy F5 
+
+100+  linux 服务器.  才能有15K...
+
+

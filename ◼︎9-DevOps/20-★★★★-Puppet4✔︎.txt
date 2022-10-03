@@ -1,0 +1,1968 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 精简 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⦿ 详细参考 ★★★★★  http://www.jianshu.com/p/50b37ee596e0
+⦿ 详细参考 ★★★★★  https://kisspuppet.gitbooks.io/puppet/chapter3.html
+
+🔵 端口 
+    客户端定时连接服务器. 只要服务器端口开了就行.客户端端口不一定要开启的.
+
+    agent  : 8139/tcp 、 master : 8140/tcp
+    
+    lsof -i:8140
+    nmap -p 8139,8140 127.0.0.1
+    ss ???
+
+
+
+
+🔵 目录 / 配置
+
+    🔸 软件总 目录     cd /etc/puppetlabs  
+    🔸 agent  目录     cd /etc/puppetlabs/puppet 
+    🔸 server 目录     cd /etc/puppetlabs/puppetserver
+
+    🔸 agent  配置     vi /etc/puppetlabs/puppet/puppet.conf    
+    🔸 server 配置     vi /etc/puppetlabs/puppetserver/puppetserver.conf
+
+    🔸 agent  ssl:     /etc/puppetlabs/puppet/ssl            
+    🔸 server ssl:     /etc/puppetlabs/puppetserver/ssl            
+
+    🔸 server 清单:     vi /etc/puppetlabs/code/environments/production/manifests/site.pp
+    🔸 server 模块:     cd /etc/puppetlabs/code/environments/production/modules
+
+
+🔵 目录简介
+    manifests      # puppet脚本主文件目录，site.pp文件必须存在
+    modules        # puppet模块目录
+
+  
+
+
+
+🔵 常用命令
+
+    🔅puppet help agent       查看agent该子命令的详细用法.
+        puppet agent -V       查看版本
+        puppet agent -v       详细输出命令.  
+        puppet agent -t       测试+运行.
+        puppet agent --noop   模拟运行.
+
+    🔸证书相关命令:.
+        puppet cert list                     列出未签名请求. (未签名最前面没有+号)
+        puppet cert list --all               列出所有的签名. 包括已签名的(已签名最前面有个+号)
+        puppet cert sign host2.example.com   给某个客户端请求进行签名(服务器上操作).
+        puppet cert sign --all               给所有客户端请求进行签名(服务器上操作).
+
+
+        ss -tlunp | grep puppet           查看puppet的端口 默认8140
+        👁‍🗨 升级版本. 先卸载(yum remove puppet-server) 再安装
+
+
+
+🔵 服务端命令 
+
+    ⦿ 启动    sudo systemctl start puppetserver && systemctl status puppetserver
+    ⦿ 停止    sudo systemctl stop puppetserver && systemctl status puppetserver
+
+
+
+🔵 客户端命令
+
+    ⦿ 连接测试    puppet agent --test
+
+    ⦿ 启动
+        sudo /opt/puppetlabs/puppet/bin/puppet  resource service puppet ensure=running enable=true
+
+
+    ⦿ 配置文件    vi /etc/puppetlabs/puppet/puppet.conf  
+
+        • [master] 模块
+            自带模块. 应用于server端和agent端，都会生效
+
+        • [agent] 模块
+            这个模块默认是没有的,需要新增, 该模块下的设置会在agent端生效
+            server = gce.c.cloudpan-172312.internal
+
+
+
+🔵 证书重置
+    客户端 连接失败 一般需要删除客户端的证书.然后重新生成. 下面是双方删除证书步骤
+    
+    • 客户端: rm -rf /etc/puppetlabs/puppet/ssl     删除ssl文件夹所有内容
+        
+    • 服务器: 
+        puppet cert list                            显示未签名证书.
+        puppet cert list --all                      显示所有证书.
+        puppet cert clean vps2.localdomain          删除对应证书. 
+        puppetserver reload ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️           删除/失效某证书后必须重启服务器
+
+    • 客户端: puppet agent --test                   重新申请证书.
+    
+    • 服务器: puppet cert list                      列出客户端的请求
+    • 服务器: puppet cert sign –all                 对所有客户端进行签名.
+    • 服务器: puppet cert sign mail.0214.help       对mail.0214.help 这客户端进行签名.
+
+    • 客户端: puppet agent --test                   重新请求连接.
+
+
+
+🔵 流程
+
+    GCE 服务器安装服务端;  VPS1 服务器安装客户端;
+
+    客户端 配置 hosts 文件  和 配置文件.
+
+    客户端连接测试.(申请证书) ➜ 服务器同意证书 ➜ 客户端连接测试.(连接成功)
+
+    服务器下载模块 ➜  服务器安装模块 ➜ 服务器自定义修改模块
+
+
+
+🔵 Misc 
+  
+    ⦿ 显示配置  puppet config print
+    ⦿ 修改配置  puppet config set key=value
+         此些值的修改是对/etc/puppet/puppet.conf文件生效
+
+    服务器配置模块:  是一个完整的功能，包含清单和清单所依赖的文件
+    服务器配置清单:  针对一台客户端，它所需要的所有模块
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 储备知识 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔵 puppet 初衷
+
+    puppet 是自动化运维工具, 管理大量服务器; google 都用 puppet.
+
+    puppet 的创始者是个 mac 系统管理员. 用 applescript 管理 MacOS.
+    运维是一系列重复的机械劳动.  比如装系统.纯净版本的win7 至少2小时.  ghost的话快很多...
+    苦逼的系统管理员们需要有一个崭新的工具来使得他们的工作更高效，更便捷。
+    puppet 这个工具是为系统管理员而设计的.
+    puppet 学习成本低，开发高效，跨平台，代码可复用，安全，可扩展性高等等。
+    puppet 是基于ruby 开发的. 不会ruby 照样可以学好 puppet.
+    不是为了找工作而学习puppet, 而是puppet 可以帮你干什么!
+
+
+🔵 Puppet 作用
+
+    集群的环境管理是个最大的问题. 
+
+    机器分为 物理机 和 虚拟机.
+        • 对于大部分类 Web 程序我们使用虚拟机
+        • 对于 Hadoop、Mysql 等资源消耗型程序我们使用物理机
+
+    不管是虚拟机还是实体机.新机器都必须部署基础环境后才能发布应用程序.
+
+
+    Puppet 能管理多达将40多种资源管理，
+        例如：file、user、group 、host、package、service、cron、exec、yumrepo等，
+
+    ⦿ 管理一台主机或者虚拟机的整个生命周期:
+        初始安装
+        软件升级
+        SSH 配置
+        系统维护
+        配置更新
+        系统下线
+        搭建服务
+        文件下载
+        定时任务
+
+        服务器迁移                
+        创建用户/群组.
+        Apache虚拟主机创建
+
+
+
+🔸 配置简介 
+    puppet的组成清单这主要包含这几个部分
+
+    资源，文件，模板，节点，类，定义
+
+    puppet中有个模块的定义，这个比较重要，基本是puppet的核心，这个模块主要是由资源，文件，模板，类，定义来组成的。
+
+    puppet的清单文件是以.pp来结尾的，在载入文件的时候就不需要写.pp的扩展名了。
+
+
+
+🔸 基础 
+    site.pp 是 puppet 的基础. 
+    客户端连到服务器后首先查看的就是这个文件. 然后更具该文件的配置.执行对应操作.
+
+
+
+
+🔸 常用参数
+
+    ⦿ ensure => {present|installed|absent|latest|purged|"version"}, 指定文件的目标状态
+            => present|installed, 检查文件是否存在，不存在则新建之
+            => absent, 无其他软件依赖，可删除，否则会报错。
+            => latest, 检查文件是否为最新版本，否则升级为最新版本
+            => purged, 删除该包包括所有依赖的包,有风险慎用
+            => "2.7.21-1", 指定某一个版本处于安装状态
+
+    ⦿ name => package name, 包的名字，默认与title相同可不写
+
+    ⦿ provider => rpm, 要求通过rpm命令安装包，需要通过source指定安装那些包
+
+
+
+
+
+
+🔸 常见资源类型 type
+    • group   ➜ 用户组相关设置
+    • user    ➜ 用户相关设置
+    • file    ➜ 文件/文件夹/连接 
+    • exec    ➜ 执行文件 
+    • motify  ➜ 通知,客户端提示,是否成功
+    • cron    ➜ 计划任务
+    • package ➜ 软件包的安装、卸载、升级等
+    • service ➜ 实现服务管理
+
+
+    ⦿ exec 可执行文件
+        有onlyif、unless、creates等属性以实现命令的条件式运行
+        有refreshonly属性，以实现只有订阅的资源发生变化时才执行
+
+
+    ⦿ package 软件包
+        默认使用 yum.
+        ensure
+            present         只要存在即可，或installed。
+            installed       必须安装好了。
+            absent          删除（无依赖），当别的软件包依赖时，不可删除。
+            pureged         删除所有配置文件和依赖包，有潜在风险，慎用。
+            latest          升级到最新版本。
+            version         指定安装具体的某个版本号（yum list），格式：ensure => "版本号",
+
+        discription : 描述信息
+        configfiles : 配置文件
+        keep
+        replace
+        install_options : 安装选项
+        name : 程序包名称
+        status : 状态
+        source : 程序包的来源，可以本地文件路径或URL
+        provider : 使用什么方式安装，如安装rpm命令来安装
+
+
+    ⦿ 特殊属性
+
+        • 定义依赖关系
+            被依赖的资源中使用before
+            依赖其它的资源中使用require
+
+        • 定义通知关系
+
+        • 资源引用
+            Type["title"] : type首字母一定要大写，如User["zhenping"]
+
+
+
+
+🔸 定义资源语法
+
+    type {"title":
+        attribute => value,
+        attribute => value,
+    }
+
+    注意：type必须小写， tile在同一类型下必须唯一
+
+
+
+🔸 定义资源参考
+
+    user {'docker':
+            ensure => present,
+            uid => 5000,
+            system => false,
+            groups => hadoop,
+            home => "/home/docker",
+            password => "zhenping.com",
+            salt => 3kkxxkjfk,
+            shell => "/bin/bash",
+            comment => "docker virtual teach",
+    }
+
+
+
+
+🔸 puppet 变量 / 作用域
+
+    ⦿ 变量
+        puppet变量名称必须以$开头，赋值操作符为"=",任何非正则表达式类型的数据均可赋值变量，
+        puppet的每个变量都有两个名字，简短名称和长格式完全限定名称
+
+    ⦿ 作用域
+        定义代码的生效范围，以实现代码单隔离
+        仅能隔离: 变量，资源的默认属性
+        不能隔离: 资源的名称，及引用
+
+    ⦿ 每个变量两种引用路径
+        相对路径 :$name
+        绝对路径 :$::scope::scope:variable
+
+    ⦿ 示例
+        $webserver=nginx
+        package {$webserver:
+            ensure => latest,
+        }
+
+
+
+
+🔵 基本概念
+
+    ⦿ 资源抽象层(resource abstraction layre)
+
+        相似的资源被抽象成同一种资源“类型”，如程序包资源、用户资源及服务资源等
+
+        将资源属性或状态的描述与其实现方式剥离开来，如仅说明安装一个程序包而不用关心其具体是通过yum、pkgadd、ports或是其它方式实现
+
+        仅描述资源的目标状态，也即期望其实现的结果，而不是其具体过程，如“确定nginx运行起来”而不是具体描述为“运行nginx命令将其启动起来
+
+
+
+
+
+
+🔵 puppet资源类型
+
+    🔸 group资源类型
+
+        allowdupe : 是否允许使用相同的GID号
+        ensure
+        present :   建立
+        absent :    删除
+        gid :       指定GID号
+        name :     组名，namevar,不显示定义就使用title
+        system : 是否为系统组
+        true
+        false
+        members : 成员
+
+
+
+    🔸user资源类型
+
+        comment : 描述信息
+        ensure
+        present
+        absent
+        expiry : 过期时间
+        gid : 基本组ID
+        groups : 附加组
+        home : 家目录
+        keys : 指明密钥
+        name : namevar,不显示定义就使用title
+        password : 密码
+        salt : 密码的salt
+        shell : 默认shell
+        uid : UID
+        system : 是否为系统用户
+        true
+        false
+
+
+    🔸 file资源类型
+
+        content : 直接给出文件内容，支持换行符和制表符
+        source : 从指定位置下载文件,可以是本地文件路径，也可以是远程服务端的路径
+        ensure
+        file : 文件
+        directory : 目录
+        link :连接文件
+        present
+        absent
+        force : 强行运行
+        true
+        false
+        group : 属组
+        owner : 属主
+        mode : 权限，可以使用ugo=rw或可以使用0664
+        replace :覆盖
+        path : 路径
+        target : 当ensure为link时，target表示path指向的文件是一个符号连接文件，其目标为些target属性所指向的路径，此时content和source属性自动失效
+
+
+
+
+    🔸 exec资源类型
+
+        使用特性
+
+        命令本身具有幂等性
+        资源有onlyif、unless、creates等属性以实现命令的条件式运行
+        资源有refreshonly属性，以实现只有订阅的资源发生变化时才执行
+        常用属性
+
+        command     : 命令
+        creates     : 文件不存在就新建.
+        cwd         : 命令执行路径.
+        environment : 命令运行的环境变量，可以直接定义一个path
+        group       : 以指定的组运行命令
+        user        : 以指定的用户身份运行命令
+        onlyif      : 仅在此命令执行成功（返回状态码为0）时，才运行command指定的命令
+        unless      : 仅在此命令执行失败（返回状态码非0）时，才运行command指定的命令
+        refresh     : 默认是执行command中定义的命令，当接受到其它资源发来的Notify时，即会执行refresh后面指定的命令
+        refreshonly : 仅在订阅的资源运行成功后，才运行此资源
+        returns     : 期望的状态返回值，返回非此值时表示命令执行失败
+        timeout     : 命令执行超时时长
+        tries       : 尝试次数，默认为1次
+        path        : 命令路径，其功能类似path环境变量.
+
+
+
+
+    🔸 notify资源类型
+        显示通知信息
+
+
+
+
+    🔸 cron 资源类型 
+        管理计划任务
+
+        command     : 要运行的job
+        ensure
+        present
+        absent
+        user        : 运行任务的用户
+        name        : 任务计划的名称
+        target
+        hour        : 小时
+        minute      : 分钟
+        month       : 月
+        monthday    : 每月的第几天
+        weekday     : 每周几
+        environment : 运行时的环境变量
+
+
+
+    🔸 package资源类型
+        管理程序包的安装、卸载、升级等
+
+        ensure
+        installed
+        present
+        absent
+        purged
+        held
+        discription     : 描述信息
+        configfiles     : 配置文件
+        keep
+        replace
+        install_options : 安装选项
+        name            : 程序包名称
+        status          : 状态
+        source          : 程序包的来源，可以本地文件路径或URL
+        provider        : 使用什么方式安装，如安装rpm命令来安装
+        rpm
+
+
+
+
+    🔸 service资源类型
+
+        binary     : 二进制程序文件路径
+        enable     : 是否开机自动启动
+        true
+        false
+        manual
+        ensure
+        stopped
+        running
+        hasrestart : 服务脚本是否支持restart参数
+        true
+        false
+        hasstatus  : 服务脚本是否支持status参数
+        true
+        false
+        name       : 服务的名称，namevar
+        path       : 服务脚本的搜索路径
+        pattern    : 用于搜索此服务相关进程的模式，通过匹配进程名称确定服务是否正常运行
+        restart    : 用于执行重启的命令
+        start      : 用于执行开始的命令
+        status
+        stop
+
+
+
+
+
+
+    Puppet 可以单机使用(测试用). 一般都是多机器使用
+
+        📌 Puppet 两种执行模式:
+            直接读取puppet file.manifest配置
+            通过puppetd --server puppetmaster.server.com，从服务端下载manifest配置
+
+
+    服务器只有一台. 客户端可以有千万台. 
+    所有客户端 都先查看 site.pp 这个总的配置文件.
+    这个配置文件里 可以给每个客户端进行不同的配置.
+
+
+    🔸 作用.
+        可以在客户端运行命令、运行脚本 等等操作.
+
+    如 创建一个 xu用户.
+    user{'11':
+        name => xu,
+        ensure => present,
+    }
+
+
+
+    🔸 节点
+        域名只要 客户端ping 服务器名. 能正确解析到服务器ip就可以.
+        
+
+        vps2. 104.224.139.45
+
+        gce.c.cloudpan-172312.internal
+
+        vps2.localdomain
+        vps2.localdomain
+
+
+
+    🔸 site.pp 
+        就是节点的配置文件，里面可以包含对各个节点的配置描述。
+        在实例配置文件中，”puppetagent”就是节点的主机名。
+        包含在 puppetagent 中的配置描述就是该节点的资源集合的描述。
+
+    默认在所有节点执行命令.
+
+
+    指定节点运行特定命令: 
+    node 'mail.0214.help'{
+      include  motd
+    }
+
+
+    node slave01 {
+      file {
+        "/tmp/testpuppet": #在slave节点上创建该文件
+        content=>"good morning!\n"; #文件中打印如下内容
+      }
+    }
+
+
+
+
+
+    🔸 第一个配置文件. ✔︎
+        在客户端新建一个文件.并写入内容.
+
+        • 服务器
+            vi /etc/puppetlabs/code/environments/production/manifests/site.pp
+            
+        file { 'helloworld':
+
+            path => '/etc/helloworld.txt',
+            owner  => 'root',
+            group  => 'root',
+            mode   => '655',
+            content => "hello world from puppet!\n",
+            }
+
+        • 客户端
+            ✘✘∙𝒗2 ~ ➜ puppet agent --test
+
+            然后就多了个文件出来了
+            ✘✘∙𝒗2 ~ ➜ cat /etc/helloworld.txt
+            hello world from puppet!
+
+
+
+
+
+
+
+    🔸 执行脚本.
+        作为进阶的任务，我们希望节点可以执行一些更加复杂一点的任务。
+        我们希望节点可以从 PuppetServer 获取一个命令脚本，并且执行该脚本。
+
+        • 创建一个名叫”test”的模块文件夹
+            mkdir /etc/puppetlabs/code/environments/production/modules/test
+
+        • 在 test 模块下面创建一个”files”文件夹。在这个文件夹里的文件是可以被节点获取的。
+            mkdir /etc/puppetlabs/code/environments/production/modules/test/files
+
+        • 在”files”文件夹里创建一个 shell 脚本 test.sh
+            该脚本会在/etc/目录下创建 helloworld.log 文件，然后在文件里添加”hello world”内容。
+
+            vi /etc/puppetlabs/code/environments/production/modules/test/files/test.sh
+            脚本内容
+        touch /etc/helloworld.log
+        echo "helloworld" >> /etc/helloworld.log
+
+        • 编辑 site.pp
+            我们定义了两个资源：一个文件资源和一个执行命令资源。
+            这两个资源有依赖关系，命令执行资源依赖于文件资源，所以 Puppet 会优先处理文件资源。
+            执行命令资源会在文件资源存在后再执行。
+
+            vi /etc/puppetlabs/code/environments/production/manifests/site.pp
+
+
+        file { 'test.sh':
+        path => '/etc/test.sh',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '655',
+        source => 'puppet:///modules/test/test.sh',
+        }
+        exec { 'execute ':
+        command => 'bash /etc/test.sh',
+        require => File['test.sh'],
+        path => ["/bin/"],
+        }
+
+
+        • 客户端
+            puppet agent --test
+
+                Info: Using configured environment 'production'
+                Info: Retrieving pluginfacts
+                Info: Retrieving plugin
+                Info: Caching catalog for vps2.localdomain
+                Info: Applying configuration version '1500166128'
+                Notice: /Stage[main]/Main/File[test.sh]/ensure: defined content as '{md5}4a7fef6d906b79559966eef350f380a6'
+                Notice: /Stage[main]/Main/Exec[execute ]/returns: executed successfully
+                Notice: Applied catalog in 0.41 seconds
+
+        • 客户端检测
+            cat /etc/helloworld.log
+            出现 helloworld
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 个人模块 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔵 简单模块 ✔︎
+
+🔸 流程 
+    服务端: 创建模块文件夹, 完善模块目录.
+    服务端: 创建 pp 文件.  init.pp 
+    服务端: 修改 site.pp 
+
+    客户端: 连接服务
+    客户端: 结果测试.
+
+
+🔸 模块文件夹
+    ⦿ 创建模块结构 
+        cd /etc/puppetlabs/code/environments/production/modules
+
+        mkdir -p /etc/puppetlabs/code/environments/production/modules/motd/files/etc
+        mkdir -p /etc/puppetlabs/code/environments/production/modules/motd/manifests
+        mkdir -p /etc/puppetlabs/code/environments/production/modules/motd/templates
+
+        touch /etc/puppetlabs/code/environments/production/modules/motd/files/etc/motdFile
+        touch /etc/puppetlabs/code/environments/production/modules/motd/manifests/init.pp
+
+        tree /etc/puppetlabs/code/environments/production/modules/motd
+
+
+    ⦿ 结构参考
+        /etc/puppetlabs/code/environments/production/modules/motd
+        ├── files            #存放文件目录
+        │   └── etc
+        │       └── motdFile
+        ├── manifests        #存放模块pp配置文件目录
+        │   └── init.pp
+        └── templates        #存放模板目录
+
+        4 directories, 2 files
+
+
+🔸 编辑 motdFile 文件.
+    这是一个测试文件. 目的是把这个文件从服务器上下发到客户端.
+    这个文件不是空的就行. echo >> 是追加到文件尾部.
+    echo "-★--puppet test--★-" >> /etc/puppetlabs/code/environments/production/modules/motd/files/etc/motdFile
+
+    cat /etc/puppetlabs/code/environments/production/modules/motd/files/etc/motdFile
+
+
+🔸 编辑 site.pp
+    vi /etc/puppetlabs/code/environments/production/manifests/site.pp
+
+    $puppetserver = 'gce.c.cloudpan-172312.internal' #设置全局变量,必须. init.pp 会用到
+
+    node 'mail.0214.help'{
+    include  motd
+    }
+
+
+🔸 编辑 init.pp 文件
+    井号后面是注释. 可以保留注释.
+    vi /etc/puppetlabs/code/environments/production/modules/motd/manifests/init.pp
+
+class motd{                          # 必须要有一个 class 
+
+    # 🔸 新建群组 ✔︎
+    group {'puppetGroup':            # 群组名字
+        ensure => present,       # 确保群组存在. present:建立; absent: 删除;
+        gid => 200,              # 指定 gid 
+        system => true,          # 是否为系统组.  true/false
+
+        # 客户端测试: 查看群组  cat /etc/group
+        }
+
+
+    # 🔸 新建用户 ✔︎
+    user {'puppetUser':                  # 设置 用户名 
+        ensure => present,           # 确保群组存在. present:建立; absent: 删除;
+        uid => 5000,                 # 设置 uid 
+        system => false,             # 是否为系统组.  true/false
+        groups => puppetGroup,       # 设置 群组
+        home => "/home",             # 设置 家目录 
+        password => "puppetpasswd",  # 设置 密码
+        shell => "/bin/bash",        # 设置 登录shell
+        comment => "test user",      # 用户注释
+
+        # 客户端测试: 查询用户是否存在    finger puppetUser 
+        }
+
+
+    # 🔸 创建文件示例 ✔︎
+    file {"/tmp/test4.txt": ensure => present, }
+        # 客户端测试: cat /tmp/test4.txt
+
+
+    # 🔸 创建目录示例 ✔︎
+    file {"/tmp/test": ensure => directory, }
+        # 客户端测试: cd /tmp/test
+
+
+    # 🔸 删除文件夹 ✔︎
+    file { "/tmp/testFolder": ensure => absent, force   => true, }
+        # 客户端测试: 先建立一个文件夹 ➜ 同步 puppet ➜  然后看看有没有被删除. 
+
+
+    # 🔸 向文件中添加文本内容 1 ✔︎
+    file {"/tmp/puppet.txt":
+            ensure => file,
+            content => "This is a puppet write content .",
+            mode => '700',       # 必须加引号. 该值是字符串类型.不是整数.
+            replace => true,
+            
+            # 客户端测试:     cat /tmp/puppet.txt
+            }
+
+
+    # 🔸 向文件中添加文本内容 2 ✔︎
+    file { 'helloworld':                 # 第一个文件. 客户端新建文件,内容是 content 值
+        ensure  => present,              # 文件必须存在,就算客户端删了也会新建.
+        path => '/etc/helloworld.txt',   # 客户端文件存放位置.
+        owner  => 'root',                # 文件 用户属性
+        group  => 'root',                # 文件 群组属性
+        mode   => '655',                 # 文件 权限
+        content => "hello puppet!\n",    # 文件 具体内容
+
+        # 客户端测试: 查看新建文件的内容    cat /etc/helloworld.txt
+        }
+
+
+    # 🔸 远程文件复制示例 1 ✔︎
+     file { 'syncfile':                  # 第二个文件. 同步服务器的 motdFile 到客户端
+        ensure  => present,              # 文件存在/新建
+            # file : 文件、directory : 目录、link :连接文件、present、absent
+        path => '/etc/syncfile.txt',     # 客户端文件存放位置.
+        owner  => 'root',
+        group  => 'root',
+        mode   => '655',
+        source  => "puppet://$puppetserver/modules/motd/etc/motdFile", # 服务器文件路径
+
+        # 客户端测试: 查看同步文件的内容    cat /etc/helloworld.txt           
+        }    
+
+
+    # 🔸 yum 升级 ✔
+    exec { "yum update": command => "yum update -y" }
+
+
+    # 🔸 yum 安装软件: ✔︎
+    # 先用 yum list installed 判断是否安装了 nload; 需要在 path 指定 yum 执行路径.
+    # 没安装就执行 command 命令.
+    exec { "install nload":
+        command => "yum install nload -y",                   # 运行命令.
+        cwd => "/root"                                       # 该文件夹下执行command命令
+        user => root,                                        # 命令执行用户
+        group => root,                                       # 命令执行群组
+        path => ["/usr/local/bin","/usr/sbin","/usr/bin"],   # 命令环境路径,不然命令必须用绝对路径
+        unless => "yum list installed | grep nload",         # unless 执行失败才执行commad
+            # onlyif 是命令执行成功. 才执行 command 指定的命令.
+    }
+
+    # 生成时间戳文件: ✔︎
+    exec {
+        "generate timestamp file":
+        command => "date +%s > timestamp.file",
+        path    => "/usr/bin:/usr/sbin:/bin",
+        onlyif  => "test -f timestamp.file",                 # 测试文件是否存在.
+        cwd     => "/tmp";
+    }
+
+
+
+
+
+
+    # 🔸 通知 ✔︎
+    # 会在 客户端同步的时候 显示.. 好像没啥用啊.  排错用么
+    nofify {"hello world":}
+    notify {'warning':  message=> "From warning notify resource." }
+
+
+    # 🔸 计划任务 ✔︎
+    # ntpdate 和 ntpd 都是时间同步. 前者是立即同步. 后者是顺滑同步.
+    # 立即同步 会造成时间变化过快. 对某些依赖时间的软件是致命的.
+    # 很多免费的NTP server . http://ntp.org.cn/看.
+    # ✘✘∙𝒗1 /tmp ➜ ntpdate cn.ntp.org.cn
+    # VPS 好多主机共享的. 所以不能改时间. 会执行失败.没办法的. 
+    cron {"sync time":
+        command => "/usr/sbin/ntpdate cn.ntp.org.cn &> /dev/null",
+        hour => "18",
+        minute => "28",
+        user => root,   # 接收此任务的用户.
+        # 客户端测试: 查看当前计划任务:  crontab -l
+    }
+
+    # 下面 cron 未测试.
+    cron {
+        "check raid":
+        command => "/usr/local/scripts/check_raid.sh",
+        user    => root,
+        hour    => '*',
+        minute  => '*/5',
+        ensure  => present;
+
+        "add puppet cron":
+        command => "/usr/bin/puppet agent --server puppet.server.com",
+        user    => root,
+        minute  => [0,30];
+    }
+
+
+
+
+
+
+
+
+    # 🔵 package 软件包: 安装、卸载、更新; 默认使用 yum.
+    # 🔸 卸载软件 ✔︎
+    # 被卸载的软件 不能是别的软件的依赖组件. 如 postfix 就不能直接卸载.因为 sendmail 要用到.
+    package { "htop": ensure =>   absent; }
+
+    # 🔸 软件安装 ✔︎
+    package { "nmap": ensure =>   present; }
+    package { "httpd": name    => "httpd.x86_64", ensure  => installed; }
+    package { "epel-release": ensure =>   present; }
+    # epel-release 是第三方源. 解决yum 默认软件版本过低问题.!!!
+
+
+    # 🔸 安装指定版本 ✔︎
+    # 用 yum 查看所有可用版本需要额外参数 --showduplicates
+    # yum list zsh                   ➜ 显示最新版本 5.0.2-25.el7_3.1
+    # yum --showduplicates list zsh  ➜ 显示所有版本 5.0.2-25.el7 + 5.0.2-25.el7_3.1
+    package { "zsh": ensure   => "5.0.2-25.el7"; }
+
+    # 🔸 软件更新 ✔︎
+    # package { "postfix": ensure   => latest; }
+    
+
+    # 🔸 rpm 安装 未测试.
+    package {"jdk":
+        ensure => installed,
+        provider => rpm,                                    # rpm 安装. 需 source 指定rpm路径 
+        source => ‘/usr/local/src/jdk-8u25-linux-x64.rpm’,  # rpm 包路径
+        }
+
+
+
+    # 🔵 service资源类型
+    # 🔸 nginx 持续运行 ✔︎
+    service {"nginx":
+        ensure => running,                             # 保证服务处于运行状态
+        enable => true,                                # 定义是否开机自启
+        hasrestart => true,                            #
+        hasstatus => true,                             #
+        path => "/usr/sbin/nginx",                     # 服务路径
+        restart => "systemctl restart nginx.service",  # 定义restart的方式
+
+        # 客户端测试 查看当前状态. ➜  service nginx status
+        # 客户端测试 停止nginx     ➜  service nginx stop   或   service nginx force-quit
+    }
+
+
+
+    # 🔵 特殊属性.
+    # 🔸 依赖关系 1  ︎ ✔
+    # puppet 的执行不一定是从上到下的. 所以有依赖的需要定义 依赖关系. require  / before
+    # 比如 创建用户和用户组.  要新建用户组. 然后用户的用户组属性才能用刚新建出来的组.
+    group {"linux":
+        gid => 2001,
+        ensure => present,
+        before => User["linux"],
+    }
+
+    user {"linux":
+        ensure => present,
+        uid => 2001,
+        gid => 2001,
+        shell => "/bin/bash",
+        home => "/home/linux",
+        system => false,
+        password => "0214.help”,
+        require => Group["linux"],
+    }
+
+
+    # 🔸 依赖关系 2 ✔︎
+    # 先安装 nginx ➜ 然后配置 nginx ➜ 最后启动 nginx
+    package {"nginx":
+        ensure => latest,
+        allow_virtual => false,
+        before => File["/etc/nginx/nginx.conf"],
+    }
+
+    file {"/etc/nginx/nginx.conf":
+        source => "/tmp/nginx.conf",
+        owner => nginx,
+        group => nginx,
+        require => Package["nginx"],
+        notify => Service["nginx"],
+        ensure => file,
+    }
+    service {"nginx":
+        ensure => running,
+        enable => true,
+        hasrestart => true,
+        hasstatus => true,
+        restart => "systemctl reload nginx",
+        path => "/usr/lib/systemd/system",
+        require => [Package["nginx"],File["/etc/nginx/nginx.conf"]],
+        subscribe => File["/etc/nginx/nginx.conf"],
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 现成模块 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔵 现成模块
+
+🔸 简介
+
+    puppet 是通过模块 管理服务器的,有现成的模块.
+    https://forge.puppet.com/    一个免费的模块库,基本覆盖所有操作系统以及常用软件。
+
+
+🔸 模块搜索: 
+
+    • 进入网站 ➜ 搜索 nginx ➜ 选择第一个模块 puppet/nginx https://forge.puppet.com/puppet/nginx
+    • 终端直接搜索: puppet module search nginx   ➜ 也会出来结构.
+
+
+🔸 模块安装:
+
+    官网模块安装文档: https://docs.puppet.com/puppet/4.10/modules_installing.html
+    不同版本,安装方法有区别.这里用 4.10 为准
+
+    自动安装: mod 'puppet-nginx', '0.7.0' 添加到 Puppetfile
+    手动安装✔︎: puppet module install puppet-nginx --version 0.7.0
+
+        ✘✘∙GCE puppetlabs ➜ puppet module install puppet-nginx --version 0.7.0
+        Notice: Preparing to install into /etc/puppetlabs/code/environments/production/modules ...
+        Notice: Downloading from https://forgeapi.puppet.com ...
+        Notice: Installing -- do not interrupt ...
+        /etc/puppetlabs/code/environments/production/modules
+        └─┬ puppet-nginx (v0.7.0)
+        ├── puppetlabs-apt (v2.4.0)
+        ├── puppetlabs-concat (v3.0.0)
+        └── puppetlabs-stdlib (v4.18.0)
+
+
+🔸 模块结构 
+
+    ✘✘∙GCE nginx ➜ ls
+    total 156
+    -rw-r--r-- 1 root root 114005 Aug  1 19:24 CHANGELOG.md
+    -rw-r--r-- 1 root root   8029 Aug  1 19:25 checksums.json
+    -rw-r--r-- 1 root root    304 Aug  1 19:24 composer.json
+    drwxr-xr-x 2 root root    123 Aug  1 19:25 examples
+    -rw-r--r-- 1 root root   3745 Aug  1 19:24 Gemfile
+    drwxr-xr-x 3 root root     19 Aug  1 19:25 lib
+    -rw-r--r-- 1 root root   1079 Aug  1 19:24 LICENSE.md
+    drwxr-xr-x 4 root root    115 Aug  1 19:25 manifests  ➜ 里面的 init.pp 是重点
+    -rw-r--r-- 1 root root   1511 Aug  1 19:25 metadata.json
+    -rw-r--r-- 1 root root   1577 Aug  1 19:24 Rakefile
+    -rw-r--r-- 1 root root  10304 Aug  1 19:24 README.md
+    drwxr-xr-x 6 root root   4096 Aug  1 19:25 spec
+    drwxr-xr-x 7 root root     79 Aug  1 19:25 templates  
+    drwxr-xr-x 2 root root     32 Aug  1 19:25 types
+
+
+
+    tree -d 只显示目录.
+ 
+    tree /etc/puppetlabs/code/environments/production/modules/nginx -d
+        /etc/puppetlabs/code/environments/production/modules/nginx
+        ├── examples
+        ├── lib
+        │   └── facter
+        ├── manifests
+        │   ├── package
+        │   └── resource
+        │       └── upstream
+        ├── spec
+        │   ├── acceptance
+        │   │   └── nodesets
+        │   │       ├── docker
+        │   │       └── ec2
+        │   ├── classes
+        │   ├── defines
+        │   └── unit
+        │       └── facter
+        │           └── util
+        ├── templates
+        │   ├── conf.d
+        │   ├── mailhost
+        │   ├── server
+        │   │   └── locations
+        │   ├── streamhost
+        │   └── upstream
+        └── types
+
+
+
+🔸 模块命令
+
+    ⦿ puppet-4.10 模块默认安装位置
+       cd /etc/puppetlabs/code/environments/production/modules
+
+    ⦿ 查看模块
+        ll /etc/puppetlabs/code/environments/production/modules
+        tree /etc/puppetlabs/code/environments/production/modules/nginx -d
+
+    ⦿ 模块升级
+        puppet module upgrade puppet-nginx --version 0.7.0
+        0.7.0 改成 最新的就可以.
+    
+    ⦿ 模块删除  
+        puppet module uninstall puppet-nginx
+
+
+🔵 模块常识
+    了解了模块.你就基本了解了 puppet 结构.
+    每个模块都是一个单独的文件夹!   
+    模块一般都在 modules 文件夹下. 不同版本, modules 文件夹路径不同!!!
+
+    🔸 manifests   manifests是清单的意思  里面的 init.pp 最重要
+
+
+🔵 模块使用
+
+    🔸 master主机
+        ⦿ 创建/安装 模块
+
+        ⦿ 配置站点清单
+            puppet 4.10 默认站点清单位置 /etc/puppetlabs/code/environments/production/manifests/
+            puppet cert list --all  可以查看节点名字.
+
+
+            vi /etc/puppetlabs/code/environments/production/manifests/site.pp
+            node mail.0214.help {
+                include nginx
+            }
+
+
+        ⦿ 重启
+            sudo systemctl start puppetserver && systemctl status puppetserver
+
+
+    🔸 agent节点
+        ⦿ 连接服务器  puppet agent --test
+
+
+    🔸 变化.
+        模块干了什么... 就要分析模块了...
+        从 puppet agent --test 的运行结果看是增改了一些文件.
+        -    include /etc/nginx/conf.d/*.conf;
+        +  include /etc/nginx/conf.d/*.conf;
+        +  include /etc/nginx/sites-enabled/*;
+        }
+
+        Info: Computing checksum on file /etc/nginx/nginx.conf
+        Info: /Stage[main]/Nginx::Config/File[/etc/nginx/nginx.conf]: Filebucketed /etc/nginx/nginx.conf to puppet with sum f7984934bd6cab883e1f33d5129834bb
+        Notice: /Stage[main]/Nginx::Config/File[/etc/nginx/nginx.conf]/content: content changed '{md5}f7984934bd6cab883e1f33d5129834bb' to '{md5}2cd40583be476db9fe1b949ab0d82ca1'
+        Info: Class[Nginx::Config]: Scheduling refresh of Class[Nginx::Service]
+        Info: Class[Nginx::Service]: Scheduling refresh of Service[nginx]
+        Notice: /Stage[main]/Nginx::Service/Service[nginx]/enable: enable changed 'false' to 'true'
+        Notice: /Stage[main]/Nginx::Service/Service[nginx]: Triggered 'refresh' from 1 events
+        Notice: Applied catalog in 6.17 seconds
+
+
+🔵 nginx 模块详解
+
+🔸 简介
+    命令都是在 site.pp 中的.
+    cat /etc/puppetlabs/code/environments/production/manifests/site.pp
+    node mail.0214.help {
+        include nginx
+    }
+    这个 site.pp 包含了模块.  所以具体命令要去nginx模块看
+    cd /etc/puppetlabs/code/environments/production/modules/nginx
+    每个模块都有各自的 puppet 配置文件(.pp 结尾), 一般都在 模块/mainifests 目录下.
+
+    ✘✘∙GCE manifests ➜ ls
+    total 36
+    -rw-r--r-- 1 root root  9231 Aug  1 19:24 config.pp
+    -rw-r--r-- 1 root root 11592 Aug  1 19:24 init.pp
+    drwxr-xr-x 2 root root    38 Aug  1 19:25 package
+    -rw-r--r-- 1 root root  1360 Aug  1 19:24 package.pp ➜ 程序的安装卸载升级
+    -rw-r--r-- 1 root root  3738 Aug  1 19:24 params.pp
+    drwxr-xr-x 3 root root   137 Aug  1 19:25 resource
+    -rw-r--r-- 1 root root  1581 Aug  1 19:24 service.pp ➜ 服务管理
+
+    可以看成 nginx 模块有 5 puppet配置文件.
+
+🔸 service.pp 
+下面的语法是用 puppet 自己的语法. 其实很简单的.
+
+
+
+
+✘✘∙GCE manifests ➜ cat service.pp
+
+class nginx::service(   ➜ 应该是设置变量的
+  $service_restart = $::nginx::service_restart,
+  $service_ensure  = $::nginx::service_ensure,
+  $service_name    = $::nginx::service_name,
+  $service_flags   = $::nginx::service_flags,
+  $service_manage  = $::nginx::service_manage,
+) {
+
+  assert_private()
+
+  $service_enable = $service_ensure ? {
+    'running' => true,
+    'absent'  => false,
+    'stopped' => false,
+    'undef'   => undef,
+    default   => true,
+  }
+
+  if $service_ensure == 'undef' {
+    $service_ensure_real = undef
+  } else {
+    $service_ensure_real = $service_ensure
+  }
+
+  if $service_manage {
+    case $::osfamily {
+      'OpenBSD': {
+        service { 'nginx':
+          ensure     => $service_ensure_real,
+          name       => $service_name,
+          enable     => $service_enable,
+          flags      => $service_flags,
+          hasstatus  => true,
+          hasrestart => true,
+        }
+      }
+      default: {
+        service { 'nginx':                    ➜ service资源类型
+          ensure     => $service_ensure_real, 
+          name       => $service_name,
+          enable     => $service_enable,   ➜ 开机启动
+          hasstatus  => true,
+          hasrestart => true,
+        }
+      }
+    }
+  }
+
+  # Allow overriding of 'restart' of Service resource; not used by default
+  if $service_restart {
+    Service['nginx'] {
+      restart => $service_restart,
+    }
+  }
+}
+
+
+
+
+
+
+🔸 package 
+✘✘∙GCE manifests ➜ cat package.pp
+
+class nginx::package {
+
+  $package_name             = $::nginx::package_name
+  $package_source           = $::nginx::package_source
+  $package_ensure           = $::nginx::package_ensure
+  $package_flavor           = $::nginx::package_flavor
+  $passenger_package_ensure = $::nginx::passenger_package_ensure
+  $manage_repo              = $::nginx::manage_repo
+
+  assert_private()
+
+  case $::osfamily {
+    'redhat': {
+      contain ::nginx::package::redhat
+    }
+    ➜ redhat 系统
+
+    'debian': {
+      contain ::nginx::package::debian
+    }
+    ➜ debian 系统
+
+
+    'Solaris': {
+      # $package_name needs to be specified. SFEnginx,CSWnginx depending on
+      # where you get it.
+      if $package_name == undef {
+        fail('You must supply a value for $package_name on Solaris')
+      }
+
+      package { 'nginx':     ➜ package资源类型
+        ensure => $package_ensure,
+        name   => $package_name,
+        source => $package_source,
+      }
+    }
+    ➜ Solaris 系统: 比较小众. 没听过也正常..
+
+
+    'OpenBSD': {
+      package { $package_name:
+        ensure => $package_ensure,
+        flavor => $package_flavor,
+      }
+    }
+    default: {
+      package { $package_name:     ➜ package资源类型,  这个软件
+        ensure => $package_ensure, ➜ 确保这个软件是　启动的!!
+      }
+    }
+  }
+}
+
+
+
+
+
+🔸 自定义模块
+✘✘∙𝒗1 ~ ➜ cd /etc/nginx
+✘✘∙𝒗1 nginx ➜ ls
+total 60
+drwxr-xr-x 2 root root 4096 Aug 16 21:12 conf.d
+drwxr-xr-x 2 root root 4096 Aug 16 21:12 conf.mail.d
+drwxr-xr-x 2 root root 4096 Aug 16 21:12 conf.stream.d
+-rw-r--r-- 1 root root 1007 Jul 11 21:50 fastcgi_params
+-rw-r--r-- 1 root root 2837 Jul 11 21:50 koi-utf
+-rw-r--r-- 1 root root 2223 Jul 11 21:50 koi-win
+-rw-r--r-- 1 root root 3957 Jul 11 21:50 mime.types
+lrwxrwxrwx 1 root root   29 Aug 16 21:12 modules -> ../../usr/lib64/nginx/modules
+-rw-r--r-- 1 root root 1502 Aug 16 21:12 nginx.conf
+-rw-r--r-- 1 root root  636 Jul 11 21:50 scgi_params
+drwxr-xr-x 2 root root 4096 Aug 16 21:12 sites-available
+drwxr-xr-x 2 root root 4096 Aug 16 21:12 sites-enabled
+drwxr-xr-x 2 root root 4096 Aug 16 21:12 streams-available
+drwxr-xr-x 2 root root 4096 Aug 16 21:12 streams-enabled
+-rw-r--r-- 1 root root  664 Jul 11 21:50 uwsgi_params
+-rw-r--r-- 1 root root 3610 Jul 11 21:50 win-utf
+
+
+其实nginx 模块干了很多事情.  有效是我们不需要的.
+其实现在我们要 给 vps1 加个 虚拟主机. 完全可以通过 gce 的puppet 执行.
+
+比如现在 vps1 的ip 是到 nginx 的欢迎页面的.  /home/wwwroot/defaulet 
+我们把它改掉.  /home/wwwroot/cv.0124.help  确保下面有 index.html 文件.
+首先我们进行域名解析. 
+puppetcv.0214.help ➜ 23.105.192.96
+
+只要在模块下新建个配置. 
+
+cd /etc/puppetlabs/code/environments/production/modules/nginx/manifests
+
+vi cv.pp
+
+include ::nginx
+
+::nginx::resource::server { 'puppetcv.0214.help':
+    ensure => present,
+    www_root => '/home/wwwroot/cv.0124.help/',
+}
+
+然后客户端重新连服务器
+puppet agent --test
+应该会执行....
+这个可是按照 模块的样本文件来的啊..
+
+
+⦿ ping 测试 
+    ping puppetcv.0214.help
+    确保已经解析到 23.105.192.96
+
+
+⦿ 浏览器测试 
+    puppetcv.0214.help
+    没变化啊...
+    哪里错了...
+    自己新建文件不行... 那就修改文件..
+    这个属于配置 
+    👹 ❌.........  不知道怎么办了 
+官方说明文档看不懂啊..
+    https://forge.puppet.com/puppet/nginx
+
+那就先创建最简单的模块吧. 不改别人的模块了
+
+
+
+
+
+
+
+
+
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 例一 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+
+
+
+
+
+
+
+🔵 master/agent的多环境支持
+
+puppet的多环境支持：
+    master端环境配置段：为不同的主机配置不同的配置
+        [master]
+        enviroment = production, testing, development   #声明master支持那些环境配置
+
+        [production](生产环境）
+        manifest = /etc/puppet/environments/production/manifests/site.pp
+        modulepath = /etc/puppet/enviroments/production/modules/
+        fileserverconfig = /etc/puppet/fileserver.conf
+
+        [testing]
+        manifest = /etc/puppet/environments/testing/manifests/site.pp
+        modulepath = /etc/puppet/enviroments/testing/modules/
+        fileserverconfig = /etc/puppet/fileserver.conf
+
+        [development]
+        manifest = /etc/puppet/environments/development/manifests/site.pp
+        modulepath = /etc/puppet/enviroments/development/modules/
+        fileserverconfig = /etc/puppet/fileserver.conf    
+
+    agent端配置文件：
+        [agent]
+        enviroment = testing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Puppet 安装 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔵 安装简介
+                                  ❤️❤️️❤️ Puppet 极品入门教程 ❤️❤️❤️
+     http://www.zsythink.net/archives/category/%E8%BF%90%E7%BB%B4%E7%9B%B8%E5%85%B3/puppet/
+
+                ❗️❗️❗️❗️❗️❗️安装puppet-server 会自动安装 puppet-agent.❗️❗️❗️❗️❗️❗️
+                ❗️❗️❗️❗️❗️❗️安装puppet-server 会自动安装 puppet-agent.❗️❗️❗️❗️❗️❗️
+                          不管什么电脑要用puppet安装 puppet-server 就对了.
+                           所以: 服务器尽量安装最新版本. 客户端相对无所谓.
+
+
+                        📌别在Mac上折腾 puppet-agent. 我反正半天没折腾成功📌
+    🔸目的: 在无公网IP的Centos7虚拟机上搭建 puppet-server 服务器. 控制有公网IP的 vps.(puppet-agent)
+
+
+
+🔵 三个组件:
+    🔸puppet-server    Puppet Server. 会自动安装 puppet-agent!!!
+    🔸puppet-agent     多合一安装包.会安装 Puppet-agent, Ruby, Facter.等各种依赖.
+                       👁‍🗨Facter 获取客户端数据并传给服务器.
+    🔸puppetdb         数据库. 可以更好的使用 puppet.
+
+        Puppet: C/S架构软件.
+            📌服务器一般要安装 puppet-server
+            📌客户端一般也安装 puppet-server 反正会自动安装puppet-agent的.       
+
+
+
+
+
+🔵 Puppet 工作流程
+
+    puppet是批量管理服务器的, 比如要安装/输出/更新软件、新建/删除用户、启动/停止进程...
+    所有的配置文件都是储存在服务器中.客户端每半小时连一次服务器. 看服务器上面的配置文件是否有更新.
+    如果有更新.就下载配置文件.然后在本地执行
+
+    客户端的facter 会获取客户端自己电脑的信息(如主机名，内存大小，ip地址等) 发送给服务器.
+    服务器的facter 根据客户端主机名.在服务器配置文件中找到对应的配置.来分析客户端是否成功执行
+
+    客户端和服务器之间的通信是基于SSL证书的.
+    任何客户端都可以请求连接服务器. 但是只有在服务器同意后才可以和服务器通信!!
+
+    puppet  会让系统保持在人们所期望的某种状态并一直维持下去.例如：
+        保证某个文件一直存在， 如果该文件被删除了   puppet下次执行时（默认30分钟）会重新创建文件.
+        保证ssh服务始终开启，  如果ssh服务被关闭了  puppet下次执行时（默认30分钟）会重启ssh服务.
+
+
+
+
+
+
+
+
+
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 CentOS6 安装 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+
+    🔵依赖环境
+        🔸 lsb_release -a                查看系统版本. ➜  Description: CentOS release 6.9 (Final)
+        🔸 uname -a                      查看系统是32位还是64位. 只有输出是x86_64 才是64位的. 其他都是32位的!!!!
+        🔸 yum install ruby ruby-rdoc    安装ruby环境.
+        🔸 添加puppet 的官方yum源.
+            rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-6.noarch.rpm
+            ❗️❗️这个PC1源(Puppet Collections)才可以安装4.+版本 ❗️❗️
+
+                    rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
+                    👁‍🗨 这个源最高只能安装 3.8.7的版本!! 别用这个源.
+
+                    👹 package puppetlabs-release-22.0-2.noarch is already installed
+                    如果出现 xxx is already installed 类似提示.  用 rpm --force -i  ✚ 网址 强制安装.
+                    rpm --force -i https://yum.puppetlabs.com/puppetlabs-release-pc1-el-6.noarch.rpm
+
+    🔵安装puppet-server
+        🔸yum install puppetserver
+            👁‍🗨 4+ 版本和3+的安装命令是不一样的 3+ 的好像是: yum install puppetmaster
+            Server默认对内存要求高得2G... 256m的vps跑个客户端就可以了别跑服务端了...
+        🔸 配置环境路径
+                安装好后你会发现不能执行puppet命令!
+                    👁‍🗨 如果你用的是 3.8.7 的那个源是可以直接使用puppet命令的.也就不需要配置环境路径. 
+                正常 puppet agent -V 就能显示当前客户端版本的.
+                📌Puppet4 的变化比较大. 
+                    👁‍🗨 配置路径: /etc/pupperlabs
+                    👁‍🗨 程序路径: /opt/puppetlabs
+                直接去程序安装路径去看看能不能执行.
+                cd /opt/puppetlabs/bin
+                ./puppet agent -V
+                    这下就显示出当前版本了!说明安装成功的.自己配下环境路径就好了. 
+                    这一这个命令前的 ./ 这个表示当前文件夹!!!!
+
+                下面我们手动把 /opt/puppetlabs/bin   这个路径添加到环境路径中!!
+                以后任何位置都可以运行puppet命令了. 而不是必须cd到puppet的安装路径下才能运行puppet命令.
+                环境路径 和你使用的sehll有关. 
+                我用zsh 那么只要在  ~/.zshrc 这个文件里加下面行.然后重启shell生效.
+                export PATH=/opt/puppetlabs/bin:$PATH
+                在文件尾部添加一行 最简单的方法是使用echo. 当然你也可以手动vi添加.
+                🔅 echo 'export PATH=/opt/puppetlabs/bin:$PATH' >> ~/.zshrc
+                👁‍🗨 这里必须用 单引号. 单引号里面的内容才会一模一样的追加到文件中.不然$PATH这个变量会展开.
+                👁‍🗨 添加变量后记得重启shell. 服务器的话.断开ssh 重新连就可以了.
+
+                
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸❤️ FRP 内网穿透设置❤️ 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+    角色           系统             IP地址    安装软件           主机名.
+    puppet-server  Centos7(虚拟机)  内网IP    puppet-server      VM-C7     
+    puppet-agent   Centos6(VPS)     公网IP    puppwt-agent       mail.0214.help 
+
+要使用 puppet. 必须保证 双方能用域名互相解析到. 
+因为 puppet 是通过  VM-C7 和 mail.0214.help  主机名来互相交流的!
+
+🔵 如果 puppet-server 和 puppet-agent 都在一个局域网内. 比如:
+    puppet-server 的IP地址是 192.168.1.1, 主机名是 master
+    puppet-agent  的IP地址是 192.168.1.2, 主机名是 client
+
+    那么域名解析非常简单.
+        只要在puppet-server 的hosts文件添加一行: 192.168.1.2  client
+            添加后你去puppet-server 电脑开终端 ping client 就是ping 192.168.1.2
+
+        只要在puppet-agent 的hosts文件添加一行: 192.168.1.1  master
+            添加后你去puppet-agent 电脑开终端 ping master 就是ping 192.168.1.1
+
+        这就是域名解析. 也就是把一个名字 对应到一个IP上. 就这么简单.
+
+🔵 如果 puppet-server 和 puppet-agent 不在一个局域网内.比如:
+    puppet-server 的内网IP地址是 192.168.1.1,  主机名是 VM-C7
+    puppet-agent  的公网IP地址是 23.105.192.96 主机名是 mail.0214.help
+    要实现互相解析就需要对网络 和 puppet 有点了解了. 需要借助内网穿透工具.推荐用frp. 
+    两台puppet表面上是通过 域名来互相交流的. 实际上是通过IP来互相交流的.
+    用域名只是为了方便人类记忆. 好比 姓名和身份证号码. 肯定是姓名容易记啊..
+
+    再深入一点. 服务器可以同时运行很多软件.一般一个服务器也就一个外网IP.
+    电脑上的每个软件只用了IP的几个端口而已.
+    比如网页:   http 的80端口、https 的443端口.
+    比如puppet: puppet-server 的8140端口. puppet-agent 的8139端口.
+
+    其实 puppet-server 和 puppet-agent 之间用的是 http 协议.
+    puppet-agent 通过电脑上的8139端口 发消息给 puppet-server 上的8140端口.
+    既然端口是确定的. 我们不用管.那么我们只要解决IP问题就好了. 
+    puppet-agent 服务器是本身带有公网IP的. 任何电脑要解析到puppet-agent很简单.  解析可以理解成连接. 比如ssh连接.
+    puppet-server 是内网电脑.没有IP的.     任何电脑要解析到puppet-server就很难. 用了 frp就很简单!!!
+    frp 原理这里不说. 自己看 frp.txt去.
+
+
+🔵 FRP服务器设置 (Centos6 VPS 公网IP: 23.105.192.96)
+    vi frps.ini                 ➜ 编辑frp服务器配置文件,添加下面三行: 
+    [vm-centos7-puppetserver]   ➜ 模块名字. 名字任意取.但是必须和frp客户端配置文件中的模块名一样.
+    auth_token = 123            ➜ 密码. 服务器和客户端 交流要先对比密码的. 双方密码一直才可以成功连上服务器.
+    listen_port = 8140          ➜ 这个就是重点了. 这个是frp服务器端口.
+                                ➜ 如果有人访问23.105.192.96:8140 首先是连接到frp服务器这台电脑.
+                                ➜ 然后frp服务器就会把这个端口的所有数据转发给我们等下就去设置的客户端.
+                                ➜ 文件编辑好后需要重启frp服务.
+
+    🔸 pidof frps                    ➜ 找出frps进程: 
+    🔸 kill xxx                      ➜ 杀死frps进程. 也就是停止程序了.
+    🔸 ./frps -c ./frps.ini          ➜ 测试启动. 有错误会报错! 没报错再用下面的命令进行后台长期运行..
+    🔸 nohup ./frps -c ./frps.ini &  ➜ 后台运行.断开ssh也没关系.
+
+
+
+🔵 FRP客户端设置 (puppet-server Centos7 虚拟机)
+    🔸下载对应的客户端 wget https://github.com/fatedier/frp/releases/download/v0.9.3/frp_0.9.3_linux_386.tar.gz
+    🔸 解压文件        tar -xzf 
+    🔸 vi frpc.ini  编辑frp客户端配置文件
+    [common]                       ➜ 别动; 连接FRP服务器的模块名称.
+    server_addr = 23.105.192.96    ➜ 修改; FRP服务器IP    
+    server_port = 7000             ➜ 不管; FRP服务器端口. 
+
+    auth_token = 123               ➜ 不管
+    privilege_token = 12345678     ➜ 不管
+
+    [vm-centos7-puppetserver]      ➜ 重点! 这个需要和FRP服务器上的模块名对应.
+    local_port = 8140              ➜ 重点! 任何数据访问服务器上的 8140端口 23.105.192.96:8140 
+                                        FRP服务器 就会把数据转发到这台电脑. 但是这台电脑有很多端口. 
+                                        local_port=8140的意思就是 转发到8140这个端口
+                                        现在别的iFFmpeg按钮表面上是访问的 23.105.192.96:8140 
+                                        其实经过frp服务器在中转后 实际就变成了访问 puppet-server的8140端口了.
+                                        也就是别的电脑想要连接到 pupper-server.
+    🔸nohup ./frpc -c ./frpc.ini &  ➜ 后台启动frp 客户端
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸域名解析 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 关闭 SELINUX
+    Security-Enhanced Linux的缩写，是一种非常安全的LINUX模式。
+    基本上用户得不到什么权限在这个系统下面。
+    🔅  /usr/sbin/sestatus -v                     ➜ 查看当前SELINUX状态. 
+        vi /etc/selinux/config                    ➜ 修改这个文件来永久关闭SELINUX
+        将SELINUX=enforcing改为SELINUX=disabled   ➜ 修改后重启电脑.
+
+
+🔸 新手关闭防火墙.
+
+🔸 时间设置
+       Puppet的master节点的时间必须设置准确，因为他将用于证书签发.尽可能的使用NTP.
+
+🔸Cent0s7 更改主机名:
+        hostname                                      ➜ 查看当前主机名.
+        sudo hostnamectl --static set-hostname VM-C7  ➜ 永久更改主机名成VM-C7
+
+
+🔸puppet-agent域名解析
+    vi /etc/hosts         
+    23.105.192.96 VM-C7 ➜  添加这行就可以了. 你不用管端口的 
+                        ➜ 这个电脑运行的是puppet-agent 那么它肯定是去连接服务器的.肯定是去连接8140端口的.
+                        ➜ 23.105.192.96:8140 端口的所有数据.都会被frp服务器.转个puppet-server的8140端口.
+
+🔸 编辑puppet-agent配置文件. 在[agent]模块下添加下面一行.
+    vi /etc/puppetlabs/puppet/puppet.conf
+    server = VM-C7      ➜ 这个就是你要连接的 puppet-server 的主机名/域名
+                        ➜ puppet-agent 是连到叫这个名字的服务器上的. 
+                        ➜ 这个名字对应的ip 就是我们hosts文件里添加的dns解析
+
+🔸 puppet-agent 连接服务器测试
+    🔅 puppet agent --test
+    Info: Creating a new SSL key for mail.0214.help
+
+    puppet 为了信息安全. 双方采用了SSL协议. 也就是https. 需要用到证书!
+    客户端运行 就自动会向服务器申请建立连接. 
+    这时候要去服务器同意客户端的连接.客户端才能真正连上服务器.
+    同意连接这个操作就叫签名.
+    服务器和客户端就会长期保持通信(客户端每半小时连一次服务器)!!!
+
+
+🔸 puppet-server 服务器查看客户端连接请求
+    🔅puppet cert list
+      "mail.0214.help" (SHA256) 6E:3F:48:F6:F1:52:18:30:F8:DD:2F:D3:7E:BA:C1:2E:1E:89:8A:0D:37:96:DF:E3:F5:79:A0:7F:85:5C:28:97
+      出现一个 前面没带加号的 就说明有客户端想要连服务器.如果你同意对方连接 就需要签名.
+
+🔸 puppet-server 对客户端请求进行签名
+    🔅puppet cert sign mail.0214.help
+    Signing Certificate Request for:
+    "mail.0214.help" (SHA256) 6E:3F:48:F6:F1:52:18:30:F8:DD:2F:D3:7E:BA:C1:2E:1E:89:8A:0D:37:96:DF:E3:F5:79:A0:7F:85:5C:28:97
+    Notice: Signed certificate request for mail.0214.help
+    Notice: Removing file Puppet::SSL::CertificateRequest mail.0214.help at '/etc/puppetlabs/puppet/ssl/ca/requests/mail.0214.help.pem'
+
+
+🔸puppet-server 查看所有证书
+    🔅requests puppet cert list -all
+    + "mail.0214.help" (SHA256) 4D:01:04:D7:4B:C8:75:D6:C2:D5:63:BA:93:46:C2:E1:D9:82:D6:97:AA:AC:A8:50:69:9F:6A:A8:67:27:67:F2
+    + "mail.0214.live" (SHA256) D3:D7:DB:74:E6:53:CC:0F:EE:55:83:5E:65:A5:9B:32:4B:D6:9F:E5:DA:D1:50:67:88:31:3C:44:EE:C0:EE:92
+
+🔸puppet-server 失效某证书  puppet cert --revoke mail.0214.live
+🔸puppet-server 删除某证书  puppet cert --clean mail.0214.live
+    ❗️❗️证书签名的过期或删除需要重启puppetmaster服务。❗️❗️
+    sudo systemctl restart puppetserver
+
+🔸puppet-agent 连接设置.
+    ➜  puppet puppet agent --test
+    Error: Could not request certificate: The certificate retrieved from the master does not match the agent's private key.
+    Certificate fingerprint: 4D:01:04:D7:4B:C8:75:D6:C2:D5:63:BA:93:46:C2:E1:D9:82:D6:97:AA:AC:A8:50:69:9F:6A:A8:67:27:67:F2
+    To fix this, remove the certificate from both the master and the agent and then start a puppet run, which will automatically regenerate a certificate.
+    On the master:
+    puppet cert clean mail.0214.help
+    On the agent:
+    1a. On most platforms: find /etc/puppetlabs/puppet/ssl -name mail.0214.help.pem -delete
+    1b. On Windows: del "\etc\puppetlabs\puppet\ssl\certs\mail.0214.help.pem" /f
+    2. puppet agent -t
+
+
+    📌如果客户端连接服务器出问题. 
+    📌 1. 首先排除frp问题. 看frps/frpc 服务是否正常运行
+    📌 2. 进行下面的步骤
+    📌还不行就重装客户端.   还不行就重装服务器.  再不行就自己分析问题原因了.
+    1. 客户端: rm -rf /etc/puppetlabs/puppet/ssl/*     删除ssl文件夹所有内容. 不要只删除某个文件.
+    3. 服务器: puppet cert clean mail.0214.help        删除证书. 
+    4. 服务器️:️ puppetserver reload ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️ ️       删除/失效某证书后必须重启服务器
+    5. 客户端: puppet agent --test                     重新申请证书.
+    6. 服务器: puppet cert list                        列出客户端的请求
+    7. 服务器: puppet cert sign mail.0214.help         对mail.0214.help 这客户端进行签名.
+    8. 客户端: puppet agent --test                     重新请求连接.
+        👹 Info: Caching certificate for mail.0214.help
+        Error: Could not request certificate: 
+        Server hostname 'VM-C7' did not match server certificate; 
+        expected one of localhost.localdomain, DNS:puppet, DNS:localhost.localdomain
+        Exiting; failed to retrieve certificate and waitforcert is disabled
+            又报错了...  服务器的名字 和服务器的证书不服.
+            问题出在服务器. 其实服务器是改过主机名字的. 
+            原来名字是 localhost.localdomain 安装好puppetserver后改成VM-C7了.
+            其实puppetserver 安装的时候是需要生成服务端证书的! 生成证书肯定用到主机名的. 
+            这时候用的主机名是localhost.localdomain.  对应服务器证书上的主机名是localhost.localdomain
+            🔸解决方法一: 卸载重装.puppet-server
+
+            🔸解决方法二: 客户端: 添加参数. --server 
+                ➜  ~ puppet agent --test --server localhost.localdomain
+                Info: Caching certificate_revocation_list for ca
+                Info: Using configured environment 'production'
+                Info: Retrieving pluginfacts
+                Info: Retrieving plugin
+                Info: Caching catalog for mail.0214.help
+                Info: Applying configuration version '1492656142'
+                Info: Creating state file /opt/puppetlabs/puppet/cache/state/state.yaml
+
+            🔸解决方法三: 
+                编辑客户端的配置文件 [anent] 下面的server name 改掉
+                vi /etc/puppetlabs/puppet/puppet.conf
+                server = localhost.localdomain
+
+                还要添加 一条域名解析..
+                vi /etc/hosts
+                23.105.192.96 localhost.localdomain
+
+                ➜  puppet puppet agent -t
+                Info: Using configured environment 'production'
+                Info: Retrieving pluginfacts
+                Info: Retrieving plugin
+                Info: Caching catalog for mail.0214.help
+                Info: Applying configuration version '1492656538'
+                Notice: Applied catalog in 0.02 seconds
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+首先 你得大概知道puppet 有多少子命令. 每个puppet 子命令又有哪些action..
+✘✘∙𝒗 pp puppet help
+
+Usage: puppet <subcommand> [options] <action> [options]
+
+Available subcommands:
+
+  agent             The puppet agent daemon
+  apply             Apply Puppet manifests locally
+                    ➜ 在客户端本地运行xx.pp 
+
+  cert              Manage certificates and requests
+                    ➜ 证书相关命令.
+
+  config            Interact with Puppet's settings.
+ 
+  facts             Retrieve and store facts.
+
+  lookup            Data in modules lookup function
+
+  master            The puppet master daemon
+  module            Creates, installs and searches for modules on the Puppet Forge.
+
+  node              View and manage node definitions.
+  parser            Interact directly with the parser.
+  plugin            Interact with the Puppet plugin system.
+
+
+
+
+
+
+
+
+
+🔵 puppet apply 
+
+puppet agent 客户端默认都是从服务器下载配置文件.然后再执行这个配置文件.
+puppet apply 客户端当然也可以不从服务器下载.而是直接运行本地的配置文件.
+
+🔸配置文件:
+config.pp
+class puppet::config{
+  include puppet::params
+  file { '/etc/puppet/puppet.conf':
+    ensure  => present,
+    content => template('puppet/puppet.conf.erb'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => Class['puppet::install'],
+    notify  => Class['puppet::service'],  #配置更新后主动通过puppet服务重启
+  }
+}
+
+🔸 模拟执行这个配置文件.
+✘✘∙𝒗 pp puppet apply config.pp --noop --verbose
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 GCE(CentOS7_x64) puppet-server 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+
+🔸 其他设置
+
+    ⦿ CentOS 更改主机名:
+        hostname                                      ➜ 查看当前主机名.
+        sudo hostnamectl --static set-hostname gce    ➜ 永久更改主机名成gce
+
+
+🔸 安装&配置
+
+    ⦿ puppet官方yum源: 
+        https://yum.puppetlabs.com/
+    ⦿ Centos6 添加puppet 的官方yum源.
+        rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-6.noarch.rpm
+    ⦿ Centos7 添加puppet 的官方yum源.
+        rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+        👁‍🗨 只要选一个.  根据centos 版本选就可以了
+
+    ⦿ 安装ruby环境             yum install ruby ruby-rdoc -y
+    ⦿ 安装 puppet-server       yum install puppetserver -y
+
+    ⦿ 配置环境路径并重载(zsh)       
+        echo 'export PATH=/opt/puppetlabs/bin:$PATH' >> ~/.zshrc && source ~/.zshrc
+    ⦿ 配置环境路径并重载(bash)      
+        echo 'export PATH=/opt/puppetlabs/bin:$PATH' >> ~/.bash_profile && source ~/.bshrc
+
+    ⦿ 查看 puppet agent 版本   puppet agent -V
+
+    ⦿ ❗️修改内存要求(服务端)❗️    
+        默认2G的内存. 不然就启动不了! 只能手动修改内存要求.
+        当然也可以手动改.一般512m 还是要的... 256 好像也能启动...
+        随便你改. 可以是256m 也可以是1g. 建议分配多点..
+        vi /etc/sysconfig/puppetserver 
+            JAVA_ARGS="-Xms2g -Xmx2g"  ➜ JAVA_ARGS="-Xms256m -Xmx256m"
+            JAVA_ARGS="-Xms2g -Xmx2g"  ➜ JAVA_ARGS="-Xms1g -Xmx1g"
+
+    ⦿ 启动puppet-server   可能需要几分钟           
+        sudo systemctl start puppetserver && systemctl status puppetserver
+    ⦿ 开机启动
+        sudo systemctl enable puppetserver
+
+    ⦿ 8140端口状态
+        nmap -p 8140 127.0.0.1 && netstat -nlatp | grep 8140
+
+
+
+
+
+
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 VPS2 (CentOS7_x64) puppet-agent 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+
+
+❗️❗️域名设置.  主机名字不重要! 只要能解析到 服务器的IP就行.❗️❗️
+比如服务器的IP是 104.224.139.45
+www.0214.live 和 ss.0214.live 都是指向 104.224.139.45的.
+那么 主机名. 选择www.0214.live 或者 ss.0214.live 都可以.
+
+
+
+
+
+
+🔸 其他设置
+
+    ⦿ CentOS 更改主机名:
+        hostname                                      ➜ 查看当前主机名.
+        sudo hostnamectl --static set-hostname VPS2   ➜ 永久更改主机名成vps2
+
+        👹 Warning: Server hostname 'gce' did not match server certificate; expected one of gce.c.cloudpan-172312.internal, DNS:puppet, DNS:gce.c.cloudpan-172312.internal
+        用gce的服务器要注意了.   gce 服务器的主机名 不是 hostname 查询出来的主机名.
+        而是类似 这样的格式. gce.c.cloudpan-172312.internal
+
+
+        👹 帮瓦工 vps
+        改名直接去控制面板改.
+
+
+
+
+🔸 安装&配置
+
+
+    ⦿ Centos7 添加puppet 的官方yum源.
+        rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+
+    ⦿ 安装 puppet-agent     sudo yum -y install puppet-agent
+
+    ⦿ 配置环境路径(zsh)        echo 'export PATH=/opt/puppetlabs/bin:$PATH' >> ~/.zshrc
+    ⦿ 配置环境路径(bash)       echo 'export PATH=/opt/puppetlabs/bin:$PATH' >> ~/.bash_profile
+    ⦿ 重新加载 zsh 配置文件    source ~/.zshrc
+
+    ⦿ 查看 puppet agent 版本   puppet agent -V
+
+    ⦿ 开启客户端: 
+        sudo /opt/puppetlabs/bin/puppet resource service puppet ensure=running enable=true
+
+
+    ⦿ 域名解析
+        vi /etc/hosts 
+        35.194.128.92 gce.c.cloudpan-172312.internal
+
+    ⦿ 编辑puppet-agent配置文件. 
+        vi /etc/puppetlabs/puppet/puppet.conf  
+        在添加下面两行.
+
+        [agent]
+        server = gce.c.cloudpan-172312.internal
+
+
+🔸 puppet-agent 连接测试
+    puppet agent --test
+
+
+    客户端第一次连接服务器要先获得服务器的允许后才能连接服务器.
+    要去服务器同意先.
+
+
+    安装过程中也遇到一些问题，主要都是DNS导致。
+    一开始 直接用hosts 来配置是最简便的，把server的ip指定为puppet域名
+
+    ✘✘∙𝒗2 ~ ➜ puppet agent --test
+    Info: Caching certificate_revocation_list for ca
+    Info: Using configured environment 'production'
+    Info: Retrieving pluginfacts
+    Info: Retrieving plugin
+    Info: Caching catalog for vps2.localdomain
+    Info: Applying configuration version '1500102434'
+    Notice: Applied catalog in 0.03 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+

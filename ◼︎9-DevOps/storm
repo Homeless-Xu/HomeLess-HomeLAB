@@ -1,0 +1,92 @@
+🔸 参考
+
+    ★★★★★ Storm简介  http://www.voidcn.com/article/p-oksoghpg-kw.html
+
+
+
+
+🔸 大数据
+
+    大数据是收集、整理、处理海量数据的技术.
+    本文介绍大数据系统中的一个最基本的组件: 处理框架.
+
+
+
+🔸 处理框架
+
+    流处理: 直接处理 / 在线处理
+    批处理: 先储存 后处理
+
+      • 仅批处理框架: Hadoop 
+      • 仅流处理框架: Storm
+      •     混合框架: Spark
+
+
+
+🔸 流处理系统:
+    
+    对随时进入系统的数据进行计算.与批处理是完全不同的处理方式.
+
+
+
+🔸 Storm 
+
+  storm是一个分布式，高容错的实时计算系统，善于处理大量的实时数据流.
+  弥补了 Hadoop 批处理不能满足实时的要求.
+
+  Storm常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。
+  对数据实时计算提供了简单的spout和bolt原语
+
+Storm实时低延迟，主要有两个原因：
+– storm进程是常驻内存的，不像hadoop里面是不断的启停的，就没有不断启停的开销。
+– 第二点，Storm的数据是不经过磁盘的，都是在内存里面，处理完就没有了，处理完就没有了，数据的交换经过网络，这样就避免磁盘IO的开销，所以Storm可以很低的延迟。
+
+
+
+在Storm的集群里面有两种节点：控制节点(Master Node)和工作节点(Worker Node)。
+控制节点上面运行一个名为Nimbus的进程,它用于资源分配和状态监控；每个工作节点上面运行一个Supervisor的进程，它会监听分配给它所在机器的工作，根据需要启动/关闭工作进程。Storm集群架构如下图所示
+
+
+
+
+🔸 Storm 架构
+    numbis ➜ zookeeper 集群 ➜ supervisor 集群 ➜ worker 
+
+Nimbus:  主控制节点!  资源分配 + 任务调度. 
+
+Zookeeper: 协调集群! 公共数据的存放 如心跳数据/集群状态/配置信息.
+           Niubus 把分配给 Supervisor的任务写入到 Zookeeper.
+
+Supervisor : 运行在节点上. 监听分配的任务.  更具需要 启动/关闭工作进程. 
+             每个运行storm 的机器都要运行一个 Supervisor. 
+
+worker: 在Supervisor上创建一个 JVM 实例.
+        Worker中运行Executor, Executor 作为 Task 运行的容器.
+
+Executor: 运行Task所在的直接容器. 
+
+Task:  Spout/Bolt 在运行时所表现出来的实体.
+
+
+
+Storm提交运行的程序称为Topology，它处理的最小的消息单位是一个Tuple，也就是一个任意对象的数组。
+
+Topology由Spout和Bolt构成，Spout是发出Tuple的结点，Bolt可以随意订阅某个Spout或者Bolt发出的Tuple。
+
+spout ➜ bolt ➜ bolt 
+
+
+
+
+Topologies ： 拓扑，也俗称一个任务。（可以理解为一个storm集群）
+Spouts ： 拓扑的消息源。
+Bolts ： 拓扑的处理逻辑单元。（一个Bolt类会在集群里面很多机器上并发执行）
+（Spouts ，Bolts 可以理解为storm中的两个组件）
+tuple：消息元组（是在Spouts ，Bolts中传递数据的一种封装的格式）
+Streams ： 流
+Stream groupings ：流的分组策略
+Tasks ： 任务处理单元
+Executor :工作线程
+Workers ：工作进程
+Configuration ： topology的配置
+

@@ -1,0 +1,437 @@
+🔵 需求:
+
+    用 Excel 里面的 vba 连接 oracle 数据库. 并获取数据.
+
+
+
+🔵 前提
+
+    电脑需要按 Oracle 客户端. 
+
+    然后网上找个 VBA的代码. 改下数据库连接设置 
+
+
+
+🔵 代码
+
+
+Public Const sConnect As String = "xxx??; Initial Catalog=xxx; User ID=ta;Password=ta;"
+
+Sub GetData1()
+
+Sheets(1).Range("a1:ao20000").ClearContents
+
+Dim rsConnection As ADODB.Connection
+Dim rsRecordset As ADODB.Recordset
+Dim sQuerry As String
+
+sQuerry = "select * from xxx"
+
+Set rsConnection = New ADODB.Connection
+Set rsRecordset = New ADODB.Recordset
+
+rsConnection.ConnectionString = sConnect
+rsConnection.Open
+
+Set rsRecordset = rsConnection.Execute(sQuerry)
+
+Worksheets(1).Range("A2").CopyFromRecordset rsRecordset
+
+rsConnection.Close
+
+Set rsConnection = Nothing
+Set rsRecordset = Nothing
+
+End Sub
+
+
+
+
+
+
+
+🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
+
+🔵 JDBC  ODBC 区别..
+
+🔶 功能 
+	都可以连接 Oracle 数据库.
+
+
+
+
+
+🔶 JDBC  Java Date Base Connectivity .  Java 数据库连接.
+执行SQL语句的 Java API.
+
+
+
+🔶 ODBC 
+Open Database Connectivity  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+参考:    https://www.youtube.com/watch?v=Adz0zZFePf8
+
+
+
+🔵 宏 VBA - JDBC 
+
+excel 也可以连接数据库的! 
+三种方法: 
+
+1. office data connection (.odc)
+2. Data Source Name (DSN)
+3. Oracle's Transparent Networking Substrate (TNS)
+
+在64位系统上用 32位的驱动 要特别注意!!!
+
+
+
+🔵 TNS - 最简单的 
+配置下 tnsnames.ora 文件就行.
+当然首先要安装... oracle 客户端?
+然后就是配置环境变量. 让系统知道你这个 tnsnames.ora 文件在哪.
+也就是 TNS_ADMIN 变量的值是 tnsnames.ora 文件路径.
+
+
+
+🔵 DSN ✔
+
+
+控制面板 ➜ 管理工具 ➜ 数据源 (ODBC)
+怎么打不开啊..  因为 这个东西是需要你安装 oracle 客户端后才能打开的.
+而且. oracle 客户端分 32 位 和 64位. 
+如果你在 64为系统安装 32为的 oracle 客户端 
+(64为系统安装 64位客户端有问题!!!  估计只能安装 32位的客户端.)
+那么默认是打不开的.
+
+你需要去手动运行   
+C:\Windows\SysWOW64\odbcad32.exe
+来启动 ODBC数据源管理器
+
+然后 添加 32位的 oracle odbc 数据源.
+这个路径可以自己弄个快捷方式..
+
+
+
+🔵 odbc 连接 oralce 数据库.
+
+
+🔵 启动 数据源管理器
+
+win7 64bit，安装了 oracle11g（32bit）的客户端
+首先要启动 ODBC 数据源管理器: 
+C:\Windows\SysWOW64\odbcad32.exe
+
+
+🔵 下载 ODBC 驱动
+
+	安装了 oralce 客户端就会自动安装驱动的!
+
+
+
+🔵 配置数据源
+ODBC 数据源管理器 ➜ 用户DSN ➜ 添加 ➜ oracle in instantclient....
+➜ 输入数据库信息: DSN 名字.
+➜ 输入数据库信息: tnsnames.ora 里面的 名字就可以
+➜ 测试连接 输入用户密码  测试成功..
+
+加好了 怎么使用呢!!! 这就要宏了...
+
+
+
+🔵 MDX Provider 
+
+	甲骨文 推出的 面向 Oracle OLAP 3.0 的 simba mdx provider.
+	这个产品 主要针对 依靠电子数据表 或者 excel 来报告数据的企业.
+
+	在 excel 里面. 执行智能操作. 提高业务性能...
+	简单说 就是 让 excel 更好的使用 oralce 数据库的东西.
+
+	MDX Provider for Oracle OLAP
+
+
+	Simba Technologies 直接销售 MDX Provider for Oracle OLAP。
+	它支持 Microsoft Excel 2007 和 2003，以及 Oracle Database 11g OLAP 选件第 1 版和第 2 版
+	...  丫的.. 收费的啊...
+
+
+
+
+🔵 打开 excel 
+
+
+菜单栏 data 数据 ➜ 自其他来源 ➜ 数据连接向导 ➜ other/advanced 
+➜ 选择  xxx for ODBC Driver 
+➜ 指定数据源. 也就是上一步建立的..
+➜ 输入 用户名 密码  
+
+
+
+1、首先装完oracle客户端之后，在控制面板-》管理工具-》数据源 是找不到32位的oracle odbc驱动
+
+解决方法：
+
+如果是装的是64位客户端，则可以看到64位的oracle odbc驱动，但是配置完成后该数据源不能在32位程序中使用，会提示说驱动和应用程序结构体系不对，如果是装的是32位客户端，则在“ODBC数据源管理器”中是看不到的，这时需要启动C:\Windows\SysWOW64\odbcad32.exe来启动“ODBC数据源管理器”，添加32位的 oracle odbc数据源
+
+
+
+
+
+
+
+
+2、第一步添加驱动后，连接还是不能成功。错误信息：
+
+[Microsoft][ODBC 驱动程序管理器] 驱动程序的 SQLAllocHandle on SQL_HANDLE_ENV 失败
+
+解决方法：
+
+修改环境变量path值：
+
+把
+
+d:\app\south-ares\product\11.2.0\client_1\bin;d:\oracle\product\10.2.0\db_1\bin;
+
+修改成
+
+d:\oracle\product\10.2.0\db_1\bin;d:\app\south-ares\product\11.2.0\client_1\bin;
+重启问题解决。
+
+另外还要注意的一个问题就是，pd不要安装在带‘（）’，如Program Files (x86)这样的路径，貌似有些软件装在这个目录都出异常。
+
+\
+
+
+
+🔵 VBA - 加载 驱动程序
+
+Class.forName("JDBCDriverClass")  
+
+	MySQL	com.mysql.jdbc.Driver
+	Oracle	oracle.jdbc.driver.OracleDriver
+	Access	sun.jdbc.odbc.JdbcOdbcDriver（JDK中已经包含）
+
+
+
+🔵 建立 Connection 连接对象
+
+
+	Connection connection = DriverManager.getConnection("databaseURL");  
+
+	🔶 databaseURL 写法 
+
+		MySQL	jdbc:mysql//hostname/dbname	指定主机名，数据库名
+		Oracle	jdbc:oracle:thin:@hostname:port#oracleDBSID	指定主机名，数据库监听输入连接请求的端口号，定位数据库的数据库名
+		Access	jdbc:odbcLdataSource	先在Windows下的ODBC数据管理器创建一各ODBC数据源，在创建Connection对象
+
+
+
+	🔶 例子
+
+//Mysql  
+Connection connection = DriverManger.getConnection("jdbc:mysql//localhost/bookrama","username","password");   
+//Oracle  
+Connection connection = DriverManger.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","username","password");  
+//Access  
+Connection connection = DriverManager.getConnection("jdbc:odbc:ExampleMDBDSource");  
+
+
+
+
+🔵 3、创建Statement对象 ??
+
+Statement statement = connection.createStatement(int ResultSetType,innt ResultSetConcurrency);  
+Connection对象是Java程序与数据库的连接通道，Statement对象时通道上的信息交换器； 
+参数 ResultSetType 指定返回结果集的类型，ResultConcurrency 指定结果集的并发类型，connection.createStatement() 不指定参数等同于使用默认参数 connection.createStatement( TYPE_FORWARD_ONLY，CONCUR_READ_ONLY)；
+ResultSetType 参数候选值
+ResultSet.TYPE_FORWARD_ONLY
+光标只能在结果集中向前移动（默认值）
+ResultSet.TYPE_SCROLL_INSENSITIVE
+光标可以向前和向后滚动，结果集对创建结果集后发生的数据库所做的更改不敏感。
+ResultSet.TYPE_SCROLL_SENSITIVE
+光标可以向前和向后滚动，结果集对创建结果集之后发生的其他数据库的更改敏感。
+ResultSetConcurrency 参数候选值
+ResultSet.CONCUR_READ_ONLY
+创建只读结果集（默认值）
+ResultSet.CONCUR_UPDATABLE
+创建可更新的结果集
+
+
+
+
+🔵 执行 SQL 语句.
+
+
+执行查询操作:
+[java] view plain copy
+ResultSet resultSet = statement.executeQuery("SQLString");  
+执行更新、删除、添加等操作
+
+[java] view plain copy
+statement.executeUpdate("SQLString");  
+
+
+
+🔵  完整实例 
+
+
+Class. forName("com.mysql.jdbc.Driver");  
+Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/bookrama","root","root");  
+  
+Statement statement = connection .createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);    
+ResultSet resultset = statement.excuteQuery("select * from books order by price asc");  
+//将返回结果集中第4行以后的所有price字段全部执行更新操作  
+resultset.absolute(3);  
+while(resultset.next()){  
+    resultset.updateFloat("price",resultset.getFloat("price")+100);  
+    resultSet.updateRow();  
+}  
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 开启宏
+
+https://zh.wikihow.com/%E5%9C%A8-Microsoft-Excel-%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%8F
+
+
+功能 ➜ 自定义 ➜ 勾选 开发者选项.
+excel ➜ 视图 ➜ 宏 ➜ 录制宏... .. 编辑宏..
+
+
+
+Sub linkOracle()  
+  
+    Dim strConn As String  '连接字符串  
+    ' 连接数据库 肯定需要 数据库IP 用户密码什么的.  这些信息需要报错到变量中的.
+
+    Dim dbConn As Object  '连接对象  
+    Dim resSet As Object  '查询结果集  
+      
+    Dim db_sid, db_user, db_pass As String 'sid,用户名,密码  
+      
+    '设置自己的链接数据  
+    db_sid = "MYORCL"  
+    db_user = "scott"  
+    db_pass = "tiger"  
+      
+    '创建对象  
+    Set dbConn = CreateObject("ADODB.Connection")  
+    Set resSet = CreateObject("ADODB.Recordset")  
+    '拼接链接字符串 下面两个选一个   
+    strConn = "Provider=OraOLEDB.Oracle.1; user id=" & db_user & "; password=" & db_pass & "; data source = " & db_sid & "; Persist Security Info=True"  
+    strConn = "Provider=MSDAORA.1; user id=" & db_user & "; password=" & db_pass & "; data source = " & db_sid & "; Persist Security Info=True"  
+         
+   
+    '-----打开数据库----  
+    dbConn.Open strConn  
+      
+    '执行查询  
+    Set resSet = dbConn.Execute("select * from emp")  
+      
+    '打印表头  
+    For j = 0 To resSet.Fields.COUNT - 1  
+      Cells(1, j + 1) = resSet.Fields(j).Name  
+    Next  
+      
+    '粘贴结果  
+    Range("A2").CopyFromRecordset resSet  
+      
+    '-----关闭连接----  
+    dbConn.Close '关闭数据库  
+      
+End Sub  
+
+
+
+
+
+上面 该掉 用户名 和 密码就可以了.
+    dbConn.Open strConn    会报错..
+	dbConn.Open
+
+
+	还是
+
+
+
+
+
+
+🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
+
+🔵 简介  
+
+定义三个变量. 
+
+🔶 引用...
+
+
+
+
+
+
+
+
+
+
+
+🔵 实例
+
+
+
+sub VBA-To-OracleDB()
+
+
+dim mtxData As Variant 
+dim cn As ADODB.Connection
+dim rs Ad ADODB.Recordset
+' 必须去引用里面 勾选 Microsoft Activex Data Objects xxx library..
+' ADODB 这个东西是 在 Microsoft Activex Data Objects xxx library 里面定义的. 
+' 当然要先引用 再使用啦. 不然会报错的!!!
+
+
+set cn = New ADODB.Connection 
+set rs = New ADODB.Recordser
+
+
+cn.open (
+"user id=ta" & 
+"; password=ta" & 
+"; data source =YNTA" & 
+"; Provider=OraOLEDB.Oracle.1"
+)
+
+
+
+
+' 运行完需要清除结果. 
+set rs = Nothing
+set cn = Nothing
+
+End Sub
+
+
+
+

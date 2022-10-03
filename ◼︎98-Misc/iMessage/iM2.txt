@@ -1,0 +1,945 @@
+🔸 iMessage 过滤&群发
+
+
+🔸 基础信息
+
+iMessage PID: 用活动监视器查
+
+使用端口:  5223、443
+用little snitch 发送imessage 语音的时候.  网络流量用的多的那个进程 就是网络通信进程. 发现是 443 和 5223 两个端口.
+就不知道是哪两个 服务器ip了. 有三个IP.
+1-courier.push.apple.com          ➜  17.252.140.157
+8-courier.sandbox.push.apple.com  ➜  17.188.165.202
+9-courier.sandbox.push.apple.com  ➜  17.188.166.10
+
+ip.addr == 17.252.140.157 
+
+
+可能用了代理翻墙的原因 抓包失败..重新来...
+
+
+
+
+
+
+iMessage 服务器IP: 根据端口查 
+  sodu lsof -i :80,443,5223
+      ✘✘∙𝒗 Desktop sudo lsof -i :80,443,5223
+      COMMAND    PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+      apsd       110 root    6u  IPv4 0x193bf4e769914fef      0t0  TCP 192.168.1.125:49155->17.252.156.68:5223 (ESTABLISHED)
+      apsd       110 root    7u  IPv4 0x193bf4e769914fef      0t0  TCP 192.168.1.125:49155->17.252.156.68:5223 (ESTABLISHED)
+      apsd       110 root   15u  IPv4 0x193bf4e770887fef      0t0  TCP 192.168.1.125:49369->17.188.165.200:5223 (ESTABLISHED)
+      apsd       110 root   17u  IPv4 0x193bf4e770887fef      0t0  TCP 192.168.1.125:49369->17.188.165.200:5223 (ESTABLISHED)
+      httpd      112 root    4u  IPv6 0x193bf4e7697fdf5f      0t0  TCP *:http (LISTEN)
+      httpd      340 _www    4u  IPv6 0x193bf4e7697fdf5f      0t0  TCP *:http (LISTEN)
+      Electron   384    v   62u  IPv4 0x193bf4e77070edff      0t0  TCP 192.168.1.125:49266->191.238.172.191:https (CLOSED)
+      Electron   384    v   64u  IPv4 0x193bf4e77070e507      0t0  TCP 192.168.1.125:49267->191.238.172.191:https (CLOSED)
+      Google     386    v   15u  IPv4 0x193bf4e77012d507      0t0  TCP 192.168.1.125:49202->203.208.40.32:https (CLOSED)
+      Google     386    v   75u  IPv6 0x193bf4e7654329df      0t0  TCP localhost:52430->localhost:http (CLOSED)
+      Google     386    v   86u  IPv4 0x193bf4e7706ac507      0t0  TCP 192.168.1.125:49335->120.55.144.72:https (CLOSED)
+      Google     386    v   88u  IPv4 0x193bf4e7706abc0f      0t0  TCP 192.168.1.125:49334->120.55.144.72:https (CLOSED)
+      Google     386    v   90u  IPv4 0x193bf4e770709fef      0t0  TCP 192.168.1.125:49263->a184-28-34-237.deploy.static.akamaitechnologies.com:https (CLOSED)
+      Google     386    v  112u  IPv4 0x193bf4e7701a58e7      0t0  TCP 192.168.1.125:49227->tl-in-f139.1e100.net:https (CLOSED)
+      Google     386    v  123u  IPv4 0x193bf4e76ee47317      0t0  TCP 192.168.1.125:49336->120.55.144.72:https (CLOSED)
+      Google     386    v  124u  IPv4 0x193bf4e7701a3507      0t0  TCP 192.168.1.125:49328->120.55.144.72:https (CLOSED)
+      Google     386    v  130u  IPv4 0x193bf4e7701a4fef      0t0  TCP 192.168.1.125:49329->120.55.144.72:https (CLOSED)
+      Google     386    v  137u  IPv4 0x193bf4e771348317      0t0  TCP 192.168.1.125:49337->120.55.144.72:https (CLOSED)
+      Google     386    v  145u  IPv4 0x193bf4e770586c0f      0t0  TCP 192.168.1.125:49342->120.55.144.72:https (CLOSED)
+      Google     386    v  146u  IPv4 0x193bf4e7705858e7      0t0  TCP 192.168.1.125:49343->124.192.164.34:https (CLOSED)
+      Google     386    v  147u  IPv4 0x193bf4e770886507      0t0  TCP 192.168.1.125:49285->a184-85-121-165.deploy.static.akamaitechnologies.com:https (CLOSED)
+      Google     386    v  148u  IPv4 0x193bf4e770584fef      0t0  TCP 192.168.1.125:49344->120.55.144.72:https (CLOSED)
+      Google     386    v  156u  IPv4 0x193bf4e7705846f7      0t0  TCP 192.168.1.125:49345->120.55.144.72:https (CLOSED)
+      Google     386    v  168u  IPv4 0x193bf4e770583507      0t0  TCP 192.168.1.125:49239->ec2-50-16-224-82.compute-1.amazonaws.com:https (CLOSED)
+      Google     386    v  180u  IPv4 0x193bf4e770588fef      0t0  TCP 192.168.1.125:49250->ec2-50-16-224-82.compute-1.amazonaws.com:https (CLOSED)
+      Google     386    v  278u  IPv4 0x193bf4e770f53c0f      0t0  TCP 192.168.1.125:49297->124.192.164.34:https (CLOSED)
+      Google     386    v  279u  IPv4 0x193bf4e770f568e7      0t0  TCP 192.168.1.125:49298->124.192.164.34:https (CLOSED)
+      Google     386    v  280u  IPv4 0x193bf4e770f53317      0t0  TCP 192.168.1.125:49299->124.192.164.34:https (CLOSED)
+      Google     386    v  282u  IPv4 0x193bf4e77134a6f7      0t0  TCP 192.168.1.125:49302->124.192.164.34:https (CLOSED)
+      httpd     2357 _www    4u  IPv6 0x193bf4e7697fdf5f      0t0  TCP *:http (LISTEN)
+ 
+然后根据 command 下的进程名来判断. 这里的 apsd 就是我们要的. 
+但是我们发现有两个服务器IP..17.252.156.68:5223    17.188.165.200:5223
+dns 是把域名解析成IP
+arp 是把ip 解析成Mac地址.
+用 wireshark过滤出所有 dns 查询包. 显示过滤器输入 dns 就可以了.
+肯定有个dns包 返回数据中是有这两个IP的. 
+domain name system(response) ➜ 组成:
+queries 这个是问题.  也就是想查那个域名的IP.
+answers 就是结果么???
+authoritative nameservers  这个就是权威服务器. 大概就是这些服务器都可以解析出 github.com这个结果.
+additional records  额外结果.  其他服务器 也能解析出 github.com 这个结果
+
+我们要找的结果就在 Answers 中.  好像要用到正则式过滤了哦..
+Address: 192.30.255.113  就是这个  ➜ 右键 作为过滤器. 然后显示过滤器就自动出现过滤代码了. dns.a == 192.30.255.112
+
+我们把 dns.a == 192.30.255.112 改成 
+dns.a == 17.252.156.68 || dns.a == 17.188.165.200  
+就可以得到我们想要的. 但是... 居然没有任何数据过滤出来.....
+可能是一开机就自动查询的...
+那么我先关闭wifi . 然后重启电脑. 然后开始抓包. 然后启动Wi-Fi..
+还是没有..... ....
+苹果肯定有自己的dns服务器的. ... 
+
+
+
+估计结果被缓存到电脑中了. 怎么查看nds缓存了 
+看dns缓存麻烦. 直接清楚了吧: 
+sudo killall -HUP mDNSResponder
+
+还是抓不到 数据包...
+aspf 这个肯定是苹果的 域名解析服务.   这个服务用的就是5223 端口.
+那么就wireshark 抓 tcp.port == 5223 的包. 抓到很多. 两个IP都有数据.
+
+
+
+
+
+
+但是怎么才能找出 message 发出的dns包呢. 换句话说 某个dns查询包是由谁发起的...
+
+那么先来找出两个iP对应的域名.
+要通过IP查域名.需要事先进行反向解析. 一般是没做的....  
+只能查到下面两个ip都是苹果公司的. 可能一个是备份把..
+17.252.156.68  
+17.188.165.200
+
+我们只需要在dns中 搜索出 上面两个ip的包. 就可以看成是那个域名了
+
+
+
+
+iMessage 服务器证书?
+iMessage 软件证书?
+
+
+相关进程: apsd. 用这个查找服务器的ip地址!
+
+
+模拟 信息app 进行发送信息....    需要一个 tcp 转发器!!
+
+ngrok / frp 就是数据转发啊... .. 
+
+IM的域名先指向到 vps. 的frp某个端口. 然后在frp再转发到真正的苹果服务器...
+接下来 就是数据破解了...  信息是加密了的! 你有密钥 当然就能破解.
+
+
+
+
+
+
+🔸 服务器信息
+目的: 查出imessage 所用端口. 以及服务器ip.
+
+
+1. 首先用活动监视器某程序使用的进程pid: message ➜ pid 396
+
+2. 根据进程找该进程使用的端口: 只需要列出所有端口. 过滤出程序名就好了. lsof | awk '$2==396'
+
+
+
+
+
+
+
+
+
+
+活动监视器 查看并双击 imessage 进程 ➜ 得到进程 33024 
+
+
+⦿ netstat
+    先简单的介绍一下netstat命令的主要作用：
+    可以查看系统当前的连接状态，不管是TCP连接还是udp协议连接，以及每个连接的进程号、是哪个应用程序、连接所用的端口号，这些都可以陈列出来。是不是很强大。
+
+    在讲监测检测之前，先给大家在普及一个知识，那就是TCP连接的状态，TCP进行3次握手，其过程有很多状态，不同的连接状态，都有想对应的状态码，看下面列表：
+
+    LISTEN：侦听来自远方的TCP端口的连接请求
+    SYN-SENT：再发送连接请求后等待匹配的连接请求
+    SYN-RECEIVED：再收到和发送一个连接请求后等待对方对连接请求的确认
+    ESTABLISHED：代表一个打开的连接
+    FIN-WAIT-1：等待远程TCP连接中断请求，或先前的连接中断请求的确认
+    FIN-WAIT-2：从远程TCP等待连接中断请求
+    CLOSE-WAIT：等待从本地用户发来的连接中断请求
+    CLOSING：等待远程TCP对连接中断的确认
+    LAST-ACK：等待原来的发向远程TCP的连接中断请求的确认
+    TIME-WAIT：等待足够的时间以确保远程TCP接收到连接中断请求的确认
+    　
+
+
+    不同系统的netstat 命令用法有点区别. 查 netstat --help
+    Mac 下的netstat 功能有限. 建议用 lsof 代替netstat 
+
+
+
+🔸 lsof
+
+sudo  必须!  不加sudo只能查看 当前用户运行的程序.
+
+sudo lsof             显示所有端口列表
+sudo lsof -i :端口号  显示某端口信息
+    launchd   1 root   47u  IPv6 0x193bf4e762e7749f      0t0  TCP *:ssh (LISTEN)
+    apsd    110 root    6u  IPv4 0x193bf4e769914fef      0t0  TCP 192.168.1.125:49155->17.252.156.68:5223 (ESTABLISHED)
+
+sudo lsof -iTCP   显示所有TCP端口
+    apsd       110     root    6u  IPv4 0x193bf4e769914fef      0t0  TCP 192.168.1.125:49155->17.252.156.68:5223 (ESTABLISHED)
+
+sudo lsof -iUDP   显示所有UDP端口信息
+    SystemUIS  408    v   15u  IPv4 0x193bf4e76272e27f      0t0  UDP *:54046
+
+
+
+
+
+
+        ....
+
+
+
+3. 从上面命令中过滤出 pid 是396的行.  需要用到.. 三剑客.
+从有固定结构的内容里取出数据用awk '$2==33' 从第二个字段中取出值是33的行.
+
+
+
+
+
+
+
+查看当前所有正在监听的TCP 端口+PID
+✘✘∙𝒗 Desktop lsof -nP -iTCP -sTCP:LISTEN
+COMMAND    PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+imagent    399    v    7u  IPv4 0x193bf4e768d1ac0f      0t0  TCP *:49513 (LISTEN)
+Code\x20H  888    v   27u  IPv6 0x193bf4e7697fe49f      0t0  TCP *:49331 (LISTEN)
+privoxy   1038    v    3u  IPv4 0x193bf4e7714bb6f7      0t0  TCP 127.0.0.1:1087 (LISTEN)
+ss-local  1050    v    5u  IPv4 0x193bf4e7714badff      0t0  TCP 127.0.0.1:1086 (LISTEN)
+SpechtLit 1067    v    4u  IPv4 0x193bf4e767c13507      0t0  TCP 127.0.0.1:9090 (LISTEN)
+SpechtLit 1067    v    5u  IPv4 0x193bf4e767c12c0f      0t0  TCP 127.0.0.1:9091 (LISTEN)
+
+
+查看某端口被哪些程序使用
+✘✘∙𝒗 Desktop lsof -i :80
+COMMAND   PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+Google    386    v   75u  IPv4 0x193bf4e7706adfef      0t0  TCP 192.168.1.125:49333->118.244.253.74:http (CLOSED)
+Google    386    v   97u  IPv4 0x193bf4e76f10f317      0t0  TCP 192.168.1.125:49184->47.93.223.218:http (CLOSED)
+Google    386    v  126u  IPv4 0x193bf4e77070a8e7      0t0  TCP 192.168.1.125:49371->118.244.253.70:http (CLOSED)
+
+✘✘∙𝒗 Desktop lsof -i :443
+COMMAND    PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+Electron   384    v   62u  IPv4 0x193bf4e77070edff      0t0  TCP 192.168.1.125:49266->191.238.172.191:https (CLOSED)
+Electron   384    v   64u  IPv4 0x193bf4e77070e507      0t0  TCP 192.168.1.125:49267->191.238.172.191:https (CLOSED)
+Google     386    v   15u  IPv4 0x193bf4e77012d507      0t0  TCP 192.168.1.125:49202->203.208.40.32:https (ESTABLISHED)
+Google     386    v   86u  IPv4 0x193bf4e7706ac507      0t0  TCP 192.168.1.125:49335->120.55.144.72:https (CLOSED)
+Google     386    v   88u  IPv4 0x193bf4e7706abc0f      0t0  TCP 192.168.1.125:49334->120.55.144.72:https (CLOSED)
+Google     386    v   90u  IPv4 0x193bf4e770709fef      0t0  TCP 192.168.1.125:49263->a184-28-34-237.deploy.static.akamaitechnologies.com:https (CLOSED)
+Google     386    v  103u  IPv4 0x193bf4e770198317      0t0  TCP 192.168.1.125:49566->ec2-23-23-97-192.compute-1.amazonaws.com:https (CLOSED)
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+群发难题: 号码过滤 和 群发.
+
+
+其实电脑的发送效率更高，为什么不用电脑来群发呢？
+一是考虑到成本问题，二是如果被苹果封设备了，电脑被封带来的损失更大。
+
+
+
+
+🔸 获取号码: 代码自动扫描/人工.
+
+
+群发好办..
+
+tell application "Messages"  
+    set csvData to read "/Users/xxxx/Desktop/test.csv"  
+    set csvEntries to paragraphs of csvData  
+    repeat with i from 1 to count csvEntries  
+        set phone to (csvEntries's item i)'s text  
+        set myid to get id of first service  
+        set theBuddy to buddy phone of service id myid  
+        send "今天北京晴，气温13到27度；周二晴，气温11到26度，北风3-4级；周三晴，气温11到24度，微风<3级" to theBuddy  
+    end repeat  
+end tell 
+
+
+
+
+🔸 号码过滤困顿..
+一种是 ... 人工 .一种是脚本.
+脚本也有很多实现方式. 
+
+0. 添加对方号码到buddy. 然后进行状态判断? 
+1. 通过添加一个号码. 然后判断 颜色.....
+2. 劫持tcp包, 修改里面的手机号码.然后根据返回码判断状态..... 主动和 imessage 服务器进行通讯..
+3. 加密方式一样的话. 数据包中肯定有一个字段是 imessage的. 能找出这个字段也行
+
+
+
+要劫持tcp 必须用 host 文件修改域名? 
+或者.. 用路由? 
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+结合 little snitch 
+查看 apsd 进程的 域名... 所有通信!
+
+
+
+有基于进程抓包的软件...
+
+找出ip 简单.. 直接facetime 视频... 
+
+
+用的是  commnat-main.ess.apple.com   UDP 16384 
+.... imessage 语音 
+
+发语音 居然还用到了 IMTransferAgent
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+在线RSA加密解密
+
+首先得有 公钥+私钥+ 被加密内容.
+先不管imessage 我们自己来生成一堆密钥 来试试怎么加密解密.
+ssh-keygen -t rsa  生成密钥.
+cd /Users/v/.ssh/  密钥默认路径 Mac OS: 
+github_rsa.pub ➜ 这个是公钥
+github_rsa    ➜ 这个是私钥
+
+查看内容 直接用 vi 就可以.
+记住. 公钥是用来加密的. 私钥是解密的.
+首先获取公钥的内容.
+
+✘✘∙𝒗 .ssh cat github_rsa.pub
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+wireshark ssh 解密. 
+例子: 用wireshark 解密 ssh 服务器数据包.
+
+1. 首先实现ssh 免密码登录. 也就是.
+实现方式有两种. 要么服务器的公钥下载到本地. 要么本地的公钥上传到服务器.
+我们用本地生成一对密钥.然后把公钥传给服务器.
+
+之前生成过密钥的话 也能用之前的.
+id_rsa.pub 是公钥 
+id_rsa 是私钥
+....
+
+然后 我们ssh登录就不用密码了.
+接下来. 我们用wireshark 随便抓一些包. 显示过过滤器 tcp.port == 2222
+然后追踪流. 就能看到一堆字母了.  你看不懂是因为这些数据是加密后的.
+下面我们用 wireshark自到的功能来解密!!!
+
+设置➜ protocols ➜ ssh 
+
+
+decrypt ssh traffic using wireshark
+
+
+
+🔸证书/密钥格式.
+
+⦿ 私钥格式
+    pem 格式.
+
+    最普通的证书格式，以-----BEGIN CERTIFICATE----- 开头，以-----END CERTIFICATE-----结尾；
+    base64编码；
+    有.pem, .crt, .cer, .key文件后缀；
+
+
+加密格式也有很多的. 
+eoenssl asn 格式最常见.
+
+-----BEGIN RSA PRIVATE KEY-----  
+Proc-Type: 4,ENCRYPTED  
+DEK-Info:DES-EDE3-CBC,4D5D1AF13367D726  
+BASE64私钥内容  
+-----END RSA PRIVATE KEY----- 
+
+
+还有 
+PKCS#8 私钥加密格式
+-----BEGIN ENCRYPTED PRIVATE KEY-----  
+BASE64私钥内容  
+-----ENDENCRYPTED PRIVATE KEY-----  
+
+PKCS#8 私钥非加密格式
+-----BEGIN PRIVATE KEY-----  
+BASE64私钥内容  
+-----END PRIVATEKEY-----  
+
+
+
+Openssl ASN格式在加密私钥数据时只能用MD5算法生成key，而且只迭代计算了1次。
+ 如果大家想要研究其他格式，可以使用以下命令：
+ genrsa 生成ASN格式
+ rsa 生成或转换为PVK格式
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+加密 解密 用法 ✔︎
+
+
+
+❗️❗️❗️ 文件加密只能用 openssl rsautl 命令. 必须把 id_rsa.pub 转换成 pub.pem 格式的才能用这命令 
+❗️❗️❗️ 文件解密 可以直接用 id_rsa 而不需要转换.
+⦿ cd 到 Mac的密钥路径. 
+    cd /Users/v/.ssh/
+
+⦿ 密钥生成(.pub 格式)
+    ssh-keygen -t rsa
+    用RSA2048  和 sha256 创建的密钥.
+    会有两个文件: id_rsa  和 id_rsa.pub
+
+⦿ 公钥格式转换
+    ssh-keygen -f ~/.ssh/id_rsa.pub -e -m PKCS8 > id_rsa.pem.pub
+
+⦿ 创建文件: 
+    文件名称:test.txt
+    文件内容: 12345,4321
+
+⦿ 文件加密:
+    openssl rsautl -encrypt -pubin -inkey id_rsa.pem.pub -ssl -in test.txt -out testENC.txt
+
+⦿ 查看加密文件:
+    cat testENC.txt  ➜ 会发现是一堆乱码.看不懂.
+
+⦿ 解密文件:
+    openssl rsautl -decrypt -inkey ~/.ssh/id_rsa -in testENC.txt -out testDecrypted.txt
+
+⦿ 查看解密文件
+    cat testDecrypted.txt
+
+⦿ 更换密钥准备
+
+    本地加密测试完成后. 然后就去服务器测试了. 
+    把 id_rsa.pub 上传到服务器. 让ssh 用密钥验证. 
+    然后ssh中传输的数据都是经过 id_rsa.pub 加密的. 
+    然后我们抓ssh的数据包. 看看本地能不能解密出来.
+
+    如果你之前没在服务器上 用过 本地的公钥证书,那跳过这步.
+
+    如果你之前用过 证书. 现在在本地换了个证书. 
+    那就需要在服务器的 authorized_keys 中删除之前的一条数据.
+    还有本地的 konw_hosts 中也删除
+
+⦿ 上传公钥到服务器
+
+    1. 首先到服务器home目录 建立.ssh 文件夹.
+    2. 然后把mac本地的公钥上传到服务器的 .ssh 文件夹下
+        scp -P 2222 -r id_rsa.pub root@23.105.192.96:~/.ssh/
+    3. 服务器新建个 authorized_keys 文件.并把pub.pem 里面的内容加进去
+        cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+⦿ ssh 链接测试
+    正常应该可以直接 登录ssh 不需要密码了.
+
+
+
+
+
+
+⦿ ssh 加密方式 
+    想要远程登录服务器.有两种方法: ssh、telnet
+    不管用什么方法登录首先你必须得有服务器的IP、帐号、密码、端口.
+    telnet 和 ssh的区别就是 
+        telnet 把数据用明文传送给服务器. 可以通过抓包软件获取你服务器的IP、帐号、密码、端口
+        ssh    把数据先加密 然后再传输给服务器. 这样就保证了数据在传输过程中的安全.
+
+    但是 ssh 也是有缺点的.我们先来了解下ssh的原理.
+    数据可以看成快递包裹. 本地电脑是发件人. 服务器是收件人.
+    加密可以看成 锁. 解密可以看成 锁的钥匙.
+    目的是 发见人给收件放一个快递. 这个快递要保证绝对安全.快递可以丢失,但是里面的信息决定不能泄漏.
+
+    1.Alice想给Bob传信，为了防止快递员中途偷看，于是她把信装在了一个盒子里，并给盒子上了第一把锁锁A。2.Bob收到来自Alice的箱子后，给箱子加了第二把锁锁B，然后让快递员把加了两把锁的箱子送回去。
+    3.Alice收到加了锁A和锁B的箱子后，用自己的钥匙将锁A打开，然后让快递员把只加了锁B的箱子送还给Bob。4.Bob得到箱子后，用自己的钥匙打开了锁B，得到了信件。
+    全剧终。
+
+    这里的锁A 就是本地电脑的公钥. 
+    这里的锁B 就是服务器端的公钥. 
+
+    服务器收到客户端请求. 把服务器的公钥发给用户.
+    用户用服务器公钥 把 登录密码加密后 发给服务器.
+    服务器用服务器私钥 解密数据. 对比密码 密码正确就允许登录..
+
+
+    使用对称加密算法时，密钥交换是个大难题，所以Diffie和Hellman提出了著名的Diffie-Hellman密钥交换算法。
+
+
+
+
+
+⦿ wireshark 抓包
+    运行 wireshark ➜ 显示过滤器 tcp.port == 2222 ➜ 追踪tcp流 ➜ 保存数据 
+    显示和保存格式 选择 ascii  然后保存到桌面.
+    这时候 桌面就会多出个文本文件 这里文件名是123
+
+
+⦿ 解密 
+    openssl rsautl -decrypt -inkey ~/.ssh/id_rsa -in /Users/v/Desktop/123.txt -out /Users/v/Desktop/123Decrypted.txt
+
+    你会发现报错!! 那是因为ssh建立后用的加密方法不是RSA这种非对称加密了!
+    rsa 对解密内容的长度也有限制. 本来就不是用来传输大批量内容的.是用来加密 密码的!
+    比如ssh的登录密码. 
+    当然 ssh 也不是一定要用rsa.  ssh 有自己的加密方法. 也能保证安全. 
+    只是 ssh用了rsa后 可以不用输入密码就能登录服务器而已...
+
+
+
+
+⦿ RSA 简介
+    加密极品文章: http://liaoph.com/encrytion-and-openssl/
+
+    RSA 是非对称加密.  有密钥和公钥.  
+    客户端和服务器都得创建密钥和公钥!!!
+    我们一般都是把本地的公钥上传到服务器.然后就可以连接了. 好像没有涉及到服务器的公钥!
+    但是 第一次用 RSA 连接ssh服务器的时候.会有个提示 要求你输入yes/no
+    这个就是是否接收服务器的公钥!!!! yes就是接收了! 
+    然后以后连接ssh服务器 的时候输入的输入的帐号、密码、端口 都会先用服务器公钥加密后传给服务器.
+    等 ssh 连接成功后!  使用的加密方法就不是 RSA了! 
+    RSA是非对称加密. 很复杂,性能很差! 一般只用来 传输密钥的时候用. 
+    等连接建立后. 还是使用对称加密. 性能高很多.. 
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+
+⦿ 公钥格式:
+    对于密钥（单指公私钥）的保存，并不需要特殊的格式，
+    直接将base64编码后的密钥作为字符串存入文档即可。
+
+⦿ base 64 编码好处..
+    前端项目 连图片都需要base64编码. 肯定有原因的.
+    base64编码的字符串更适合在不同平台不同语音直接传输. 不受其他编码影响! 这点很重要...
+
+
+ssh 就算有私钥也没法破解. 那么就来看看 imessage tcp吧
+肯定是发一个数据包.然后有信息返回.
+我们抓到这个数据包. 稍加修改. 就能批量查询手机号码.
+
+但是苹果服务器是 要验证的. 不是谁都可以连上去查询的..
+首先是 imessage 的帐号 证书.  然后是 imessage软件的内容加密.
+
+由于用的tcp..  不是http.
+
+
+
+
+🔸 imessage 简介
+
+端到端加密.
+充分利用了apple 推送通知服务. APNs
+
+设备启用 imessage 服务后. 设备会生成两对密钥.
+1. 用于加密的 rsa 1280位密钥.  
+2. nist p-256 曲线上用于签名的 ECDSA 256 位密钥.
+
+两组密钥的 私钥储存在设备的钥匙串中  (keys 分类下)
+两组密钥的 公钥 和设备的 APNs地址 一起发给 apple的目录服务IDS
+在目录服务中. 公钥会和用户的号码或者邮箱关联在一起.
+
+
+🔸 imessage 原理
+
+
+
+
+
+
+
+用户通过输入一个地址或姓名来开始一次 iMessage 对话。
+
+    如果他们输入一个电话号码或电子邮件 地址，
+        设备就会与 IDS 进行联系，来提取与该地址相关联的所有设备的公钥和 APNs 地址。
+
+    如果用 户输入的是一个名字，
+        设备首先会使用用户的“通讯录”应用来收集与该名字相关联的电话号码和电子邮件地址，然后再从 IDS 中获取公钥和 APNs 地址。
+
+
+对于每个接收者的设备，用户发出的信息都会单独进行加密。
+接收设备的公共 RSA 加密密钥取自 IDS 。
+
+对于每台接收设备，发送设备将利用自身所生成的随机 128 位密钥并使用 AES 在 CTR 模式 
+下对信息进行加密。
+此信息独有的 AES 密钥采用接收设备上用于加密公钥的 RSA-OAEP （算法）进行加密。
+之后使用 SHA-1 对加密的信息文本和加密的信息密钥进行混编，该哈希值会使用发送 
+设备的专用签名密钥通过 ECDSA 签名。针对每部接收设备所生成的每条信息包含加密的信息文本、 
+加密的信息密钥和发送者的数码签名。信息然后会分派至 APNs 以进行发送。时间戳和 APNs 路由 
+信息等元数据则不加密。与 APNs 的通信使用前向保密 TLS 频道加密。 
+
+
+
+在接收方，每台设备接收到的是 APNs 发来的信息的副本，而且如有需要，设备会从 iCloud 提取
+附件。如果发送人的电话号码或电子邮件地址与接收者的通讯录相匹配，则会显示一个名字。
+与所有推送通知一样，信息在发出之后就会从 APNs 中删除。然而与其他 APNs 通知不同的是，
+如果设备不在线，iMessage 信息会列入队列等待发送。信息当前会储存长达 30 天。
+
+
+
+
+🔸 apsd 
+apple push service 进程负责和 苹果服务器进行通信. 才用TLS加密.
+加密肯定要一个证书. 苹果设备第一次使用需要https方式来激活.
+
+证书无法更新的. 只能新建一个.
+
+
+
+
+
+
+2、消息加密iOS keychain中存储着两个私钥 RSA "iMessage encryption key" 和 ECDSA "iMessage signing key"。跟踪一下，首先用AES256对明文进行加密，然后用"iMessage encryption key"加密一下AES密钥，最后用"iMessage signing key"签名一下密钥和密文。解密出来就是这样子的。
+
+
+
+重点是... 怎么解密tcp数据流.
+
+明文短信  ➜ aes 256 加密 对称加密. 加密后就会生成一个密钥. + 密文
+    ➜ 密钥:  用rsa 加密来传送这个密钥.
+    ➜ 密文(短信内容): 还是用的aes256 加密.  只要有密钥就能解出密码.
+
+获取密码: 抓包. 
+aes-256 密钥是随机生成的, 先用对方的 公钥加密. 要解密就得有对方的私钥. 这不现实 那么肯定不行.
+我们只是想知道 自己电脑给服务器发了什么信息. 
+这里是本机 和 苹果服务器之间的通信. 还没涉及到 imessage.
+
+本地数据 发给苹果服务器. 
+
+
+🔸 tcp http 数据查看...
+    http 肯定用的tcp ... 我们来看看能不能获取数据.
+    怎么过滤出http. 用 tcp.port == 80  然后追踪流..
+    确实可以获取数据.  分好几部分.  http头是明文的. 
+    但是 网页内容是软吗..估计被 gzip 加密了.
+
+    怎么解决 http 包中的gzip
+
+    之前用tcpdump抓包的时候，只要是gzip压缩过的数据就没有办法直接还原原始的数据。这段时间学了一下python正好看里面有gzip模块。今天先尝试了一下解压web server返回的压缩过的数据。测试了一下OK
+
+    要么就使用 zlib 库了..  没办法...
+
+
+🔸 tcp https 数据查看.
+
+    一样的操作..
+
+    但是获取到的数据..  看不到https的头.
+    加密的是什么啊... 所有内容么....
+
+
+
+
+
+
+⦿ https 原理.
+https = http + ssl/tls
+
+http 本来就在应用层. 
+ssl/tls 是在http上面一种 处理加密信息的模块.
+也就是在  tcp层 和应用层之间.
+
+RSA性能是非常低的，原因在于寻找大素数、大数计算、数据分割需要耗费很多的CPU周期，所以一般的HTTPS连接只在第一次握手时使用非对称加密，通过握手交换对称加密密钥，在之后的通信走对称加密。
+
+HTTPS在传输数据之前需要客户端（浏览器）与服务端（网站）之间进行一次握手，在握手过程中将确立双方加密传输数据的密码信息。TLS/SSL协议不仅仅是一套加密传输的协议，更是一件经过艺术家精心设计的艺术品，TLS/SSL中使用了非对称加密，对称加密以及HASH算法。
+
+
+
+
+双方所有的信息传输 都会通过加密后再传输.
+和ssh一样.  
+双方通信主要用的是对称加密. 这个密钥用 ssl/tls 来传输.
+
+
+证书也是有私证和公证的. 
+
+
+客户端 想访问服务器.   服务器会返回公证给客户端.
+客户端生成随机密钥. 然后用公证来加密密钥.传给服务器.
+服务器用私证解开数据包. 获得密钥.
+然后双方就用密钥 来解密数据....
+
+
+
+
+证书可以自己制作 也能申请.
+区别就是 自己颁发的证书 需要客户端验证通过才能继续访问.
+而受信任组织发布的证书 就不会弹出提示页面.
+
+证书是一套的. 其实就是 公钥+私钥.
+传输证书 就是传输公钥.  公证比公钥多了很多信息而已. 如颁发机构.过期时间..
+
+
+
+客户端解析证书
+由客户端的tls完成. 首先验证公钥是否有效. 如颁发机构.过期时间. 
+如果有异常 那么就会弹框警告.
+如果正常. 就生成一个随机值. 然后用证书对随机值进行加密.
+
+传送加密信息
+传送的是证书加密后的随机值. 目的就是让服务器 获得这个随机值.
+以后客户端和服务端的通信 就可以用这个随机值来加密解密了!!!!
+
+6. 服务段解密信息
+服务端用私钥解密后，得到了客户端传过来的随机值(私钥)，然后把内容通过该值进行对称加密。所谓对称加密就是，将信息和私钥通过某种算法混合在一起，这样除非知道私钥，不然无法获取内容，而正好客户端和服务端都知道这个私钥，所以只要加密算法够彪悍，私钥够复杂，数据就够安全。
+
+7. 传输加密后的信息
+这部分信息是服务段用私钥加密后的信息，可以在客户端被还原
+
+8. 客户端解密信息
+客户端用之前生成的私钥解密服务段传过来的信息，于是获取了解密后的内容。整个过程第三方即使监听到了数据，也束手无策。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸 tcp 5223
+一旦数据离开本地电脑 就必须用对方的私钥来解密..
+那么... 只能在数据离开前想办法了.  也就是中间人攻击....
+也就是...  劫持...  tcp 中转!!!
+
+
+
+tcp 劫持...
+
+
+
+
+
+Nothing so exciting, I'm afraid.  
+iMessage initially 最初 connects to configuration.apple.com (as do many Apple services) to get assigned to a specific server in Apple's iMessage server farms.  
+
+The resulting name of the actual server that a given iMessage client uses ends up looking something like st11p01st-courier035-bz.push.apple.com
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+dns 劫持... 好像没戏 ..    你都不知道哪个 nds请求 解析出来的  imessage服务器的ip
+就算解析出来.  还是tcp三次握手. 服务器也得回应啊..  还是得写程序..
+
+看来只能..  tcp 转发 中间人攻击/劫持了...
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+tcp 劫持....   丫的还是tls... 出了网络 和 没出网络 完全是两个事情..
+
+买《Windows防火墙与网络封包截获技术》这本书吧，电子工业出版社。朱雁辉 著。菜鸟也能成高手！！！！！！！！！！！！
+
+
+
+或者直接修改数据包里的ip.....
+
+IP数据包经由路由转发的时候源IP，目的ip是否改变？
+这是个搞网络的基础问题，答案是不能改变的，除非做了nat转换才能改变。
+否则，数据包在整个传输过程中，源IP和目的IP不会发生改变。
+
+不过MAC地址是变化的，因为发送端开始不知道目的主机的MAC地址，所以每经过一个路由器，MAC地址都会发生变化。
+
+目的MAC地址是如何得到的？
+TCP/IP里面是用的ARP协议。比如新建了一个内网，如果一台机器A找机器B，封装Fram时（OSI的第二层用的数据格式），要封装对方的 MAC，开始时A不知道B的MAC，只知道IP，它就发一个ARP包，源IP是自己的，目的IP是B的，源MAC是自己的，目的MAC是广播的。然后这个ARP请求包在内网内被广播，当其他机器接到这个包时，用目的IP和自己的IP比较，不是的话就丢弃。是的话，B接到时，发现IP与自己的一样，就答应这个包的请求，把自己的MAC送给A。如果B是其他子网的机器，那么路由器会判断出B是其他子网，然后路由器把自己的MAC返回给A，A以后再给B发包时，目的MAC封装 的是路由器的。
+
+路由转发过程：
+当主机A发向主机B的数据流在网络层封装成IP数据包，IP数据包的首部包含了源地址和目标地址。主机A会用本机配置的24位IP网络掩码255.255.255.0与目标地址进行与运算，得出目标网络地址与本机的网络地址是不是在同一个网段中。如果不是将IP数据包转发到网关。
+在发往网关前主机A还会通过ARP的请求获得默认网关的MAC地址。在主机A数据链路层IP数据包封装成以太网数据帧，然后才发住到网关……也就是路由器上的一个端口。
+当网关路由器接收到以太网数据帧时，发现数据帧中的目标MAC地址是自己的某一个端口的物理地址，这时路由器会把以太网数据帧的封装去掉。路由器认为这个IP数据包是要通过自己进行转发，接着它就在匹配路由表。匹配到路由项后，它就将包发往下一条地址。
+路由器转发数据包就是这样，所以它始终是不会改IP地址的。只会改MAC.
+当有数据包传到路由器时，路由器首先将其的目的地址与路由表进行对比，如果是本地网络，将不会进行转发到外网络，而是直接转发给本地网内的目的主机；但是如果目的地址经路由表对比，发现不是在本网中，有nat就将改变源地址的IP（原源地址的Ip地址改为了路由器的IP地址），路由器将数据包转发到相应的端口，进行通信。
+
+举个例子，如：A访问B： 
+首先对比是否同一子网，
+如果是,检查ARP表,有B的MAC就直接发送,没有就发送ARP请求.
+如果否，发送到默认网关C，源IP为A，源MAC为A，目的IP为B，目的MAC地址为C， 
+C接收到这个包，检查路由表，发送到下一跳D，源IP为A，源MAC为C，目的IP为B，目的MAC为D….. 
+如此循环,直到发送到B.
+NAT为特殊应用，会修改源IP为网关自己外网IP。
+
+
+
+❗️❗️❗️❗️... 丫的.  必须先退出代理... 难怪防火墙/host 一直无效呢...
+防火墙中 有bloacked 就可以了... 说明拦截成功了...  
+防火墙不要去拦截... 直接转发到 23.105.192.96 去 
+
+防火墙上显示红色 .有可能是防火墙屏蔽了额.  有可能是 服务器 没放回数据..
+下面我们可以抓 去23.105.192.96的 5223 端口的数据包了.  
+
+
+等了半天 终于抓到4个..
+但是 为什么是灰色和绿色的
+也许客户端发起请求 服务器没有响应!! 自然就报错了... 就有了颜色..
+而且抓到了 443 和 5223 两个端口的信息..
+下面就来看看这两个包 是什么内容..
+
+正常三次握手 是: syn ➜ syn ack ➜ ack
+抓到的都是 syn ....    都是握手包.  连接都没有建立啊! 肯定没数据传输了...
+没回应是因为 服务器的5223 端口没开啊. 没有程序在监听...自然没有数据返回了..
+那么就 弄个 frp 中转把..
+
+把 23.105.192.96:5223 的端口都装到  
+9-courier.sandbox.push.Apple.com  17.188.138.71 的5223 去
+首先 namp -p 5223 17.188.138.71 看看苹果服务器有没有开端口!  开了.. 下面来.frp设置..
+
+
+首先开启服务器服务... 能登录网页控制页面 说明服务器是启动恶劣.
+然后开启本地服务... 在桌面的 frp 文件夹.
+/Users/v/Desktop/frp/frpc -c /Users/v/Desktop/frp/frpc.ini &
+这个就能启动了.   
+
+然后来配置.... 先配置服务器 frps.ini
+添加一个模块... 
+
+  42 [iMessage]
+     43 type = tcp
+     44 auth_token = 123
+     45 custom_domains = 9-courier.sandbox.push.apple.com
+
+frp 这个不行.
+客户 访问服务器某端口  转到本地某端口  本地和服务器都需要安装frp
+这里是本地 访问服务器某端口 转到苹果服务器某端口...
+
+重启服务器进程...
+
+
+
+🔸 端口转发:  iptables、ssh、rinetd、socat ..
+
+使用iptables 资源使用率高...
+如rinetd。这些代码有点古老，但很短小、高效，对于解决这种问题来说是非常完美的。
+
+官网 https://boutell.com/rinetd/
+下载: wget http://www.boutell.com/rinetd/http/rinetd.tar.gz
+解压: tar -xvf rinetd.tar.gz
+
+3.修改rinetd.c 将查询到的65536修改为65535，创建/usr/man目录，在进行安装
+sed -i 's/65536/65535/g' rinetd.c （修改端口范围，否则会报错）
+
+
+[root@DaoBiDao tmp]#cd rinetd
+[root@DaoBiDao rinetd]#sed -i 's/65536/65535/g' rinetd.c
+[root@DaoBiDao rinetd]# mkdir /usr/man/
+[root@DaoBiDao rinetd]#make && make install
+
+➜  rinetd make && make install
+cc -DLINUX -g   -c -o rinetd.o rinetd.c
+rinetd.c:176: warning: conflicting types for built-in function 'log'
+cc -DLINUX -g   -c -o match.o match.c
+gcc rinetd.o match.o -o rinetd
+install -m 700 rinetd /usr/sbin
+install -m 644 rinetd.8 /usr/man/man8
+
+rinetd --version  能查看到版本就安装成功了.
+下面就是 配置了.
+
+/etc 文件夹下 新建个 rinetd.conf 文件
+
+配置格式很简单. 
+来源ip 来源端口 目的ip 目的端口.
+
+比如把 所有到服务器的8080 端口 都转发到 苹果服务器的 80端口
+0.0.0.0 8080 appe.com 80
+我们是 所有到服务器的5223 端口 都转发到苹果的 5223
+我们是 所有到服务器的443 端口 都转发到苹果的 443
+这里最好写服务器的ip 而不是域名...
+
+allow *.*.*.*
+0.0.0.0 5223 17.188.138.71 5223
+0.0.0.0 443 17.188.138.71 443
+logfile /var/log/rinetd.log
+
+配置文件中可以对某个IP或者IP段进行允许/拒绝，藉此提高内网端口的安全性；
+如果二者冲突，测试的结果来看是拒绝优先。
+
+
+
+启动  /usr/sbin/rinetd
+关闭：  killall rinetd
+重启  killall rinetd && /usr/sbin/rinetd
+
+查看是否启动.
+netstat -tanulp|grep rinetd
+tcp  0  0 0.0.0.0:65534   0.0.0.0:*   LISTEN  20669/rinetd
+
+
+7.开机启动：
+
+在/etc/rc.local 文件中，添加/usr/sbin/rinetd 或者 /usr/sbin/rinetd -c /etc/rinetd.conf 启动命令即可。
+
+
+现在 mac 能抓到很多发给 vps 的数据包了 
+但是imessage 还是不能正常发送 不知道为什么...
+
+或许要追踪数据包流量了...
+在mac上ping apple的服务器 如果定向到 vps的ip那就对了.
+下面我们要确定 vps 的5223 端口的数据 是被转到 苹果上面的...
+
+简单点来个测试把.
+23.105.192.96:333  重定向到 http://119.75.218.70/:80 
+也就是百度的网址..
+
+vi rinetd.conf   添加
+0.0.0.0 333 119.75.218.70 80
+然后重启...
+然后浏览器访问 23.105.192.96:333  没有百度的页面出来啊..
+看日志去....
+
+
+10/Jun/2017:14:49:13 	45.78.0.14	0.0.0.0	333	119.75.218.70	80	00	not-allowed
+
+10/Jun/2017:14:57:14 	112.64.217.83	0.0.0.0	333	119.75.218.70	80	566	0	done-local-closed
+
+
+
+就是设置 0.0.0.0:444 ss.0214.help 80  . 也是not allowed . 
+但是这时候有反馈了. 502  nginx..
+说明还是转发过去了的.... 是服务器端的问题..
+
+
+
+
+
+.... 端口转发 和 tcp转发 区别...
+还是直接 研究 中间人攻击..... 
+
+
+
+
+🔸 
+https = http + ssl/tls
+tcp 也可以用ssl + tcp  就叫tls..
+
+
+
+
+🔸 tcp 中是数据 怎么才能可读..

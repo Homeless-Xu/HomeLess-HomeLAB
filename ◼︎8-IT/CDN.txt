@@ -1,0 +1,116 @@
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 阿里云 CDN 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 简介
+    不管是 wordpress 还是 Django-CMS  这些动态网站 越来越臃肿! 
+    所以 各种 静态博客 越来越受欢迎: jekyll 、hexo.... 等等..
+    动态网站是不能用CDN的. 图片什么的到时可以.
+    静态网站是整个网站可以进CDN的. 能极大的加快用户加载速度.
+    我们选择 阿里云 CDN 
+
+
+
+🔸 CDN 简介
+    用于视频、图片、文件的快速跨网域分发.
+
+
+
+
+
+🔸 阿里云 CDN
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+---
+layout: post
+title:  CDN简介
+tags: CDN
+categories: Web
+---
+
+http://www.epinv.com/post/9013.html (http://www.epinv.com/post/9013.html)
+
+
+
+js 公共库 服务是前端常用的. 
+
+
+
+作为开发者，你一定对 Google CDN 不陌生，微软也有 Microsoft Ajax CDN，他们都提供了常用 JavaScript 库的 CDN 加速服务。国内的七牛、又拍云、百度、360 等也纷纷上线了各自的 CDN 公共库服务。
+此外，还有 jsDelivr 和 cdnjs 这 2 家国外的服务商，托管 JavaScript、CSS、images、fonts 等所有类型文件的 CDN 加速服务。
+
+
+
+CDN公共库是指将常用的JS库存放在CDN节点，以方便广大开发者直接调用。与将JS库存放在服务器单机上相比，CDN公共库更加稳定、高速。一般的CDN公共库都会包含全球所有最流行的开源JavaScript库，你可以在自己的网页上直接通过script标记引用这些资源。这样做不仅可以为您节省流量，还能通过CDN加速，获得更快的访问速度。
+
+
+
+
+
+
+
+
+常用 JavaScript 库 CDN 加速服务对比
+服务商   更新频率    国内访问速度  HTTPS/SSL
+国内
+BootCDN ★★★★    ★★★★★ 支持
+又拍云JS库加速服务  ★★  ★★★★★ 支持
+开放静态文件 CDN  ★★★★    ★★  支持
+360网站卫士 ★★★   ★★  -
+百度静态资源公共库 ★★★   ★★★   -
+百度开放云平台   ★★  ★★★   -
+新浪 SAE  ★★  ★★★★    支持
+国外
+Google  ★★★★★ 无法访问    支持
+Microsoft   ★★★★★ ★★★   强制
+cdnjs   ★★★★★ ★★★★    支持
+jsDelivr    ★★★★★ ★★★★★ 支持
+测试文件为各服务商在 http 协议下的 jQuery 2.0.0 minified 版本
+
+
+
+
+如果网站面向国内用户推荐使用 BootCDN，面向国际用户则使用 jsDelivr（当然这是个人意见）。
+
+
+
+如果你使用 CDN 服务，建议准备一个备胎，万一 CDN 服务挂了，可以从自己的服务器上读取：
+
+<script src="//cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/jquery.min.js"><\/script>')</script>
+
+
+
+
+
+
+
+

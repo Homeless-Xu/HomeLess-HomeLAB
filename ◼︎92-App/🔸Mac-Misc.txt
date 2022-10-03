@@ -1,0 +1,99 @@
+FTp 服务器 设置
+Mac 系统偏好设置   共享里面  打开文件共享    就可以了
+
+￼    ￼     ￼￼
+opt  ⌘ i        多个文件在一个地方显示简介.
+
+
+- Mac finder 窗口技巧
+ 
+Mac 所有窗口大小的调整 都会使用   第一次开启这个软件的动作来调整  
+所以  第一次开软件 就把窗口调到位  下次就自动那个位置了
+
+ 
+Finder 窗口的  上面那条东西  可以自定义的  在那右击就可以
+按住⌘  可以拖动位置
+ 
+分栏显示下  option+   永久调整分割线  
+ 
+快速定位文件          finder里面  按下文件的 第一个字母  
+ 
+
+
+
+
+不开  airdrop     
+ 
+备忘录 / imessage  也能同步照片  / icloude drive  
+
+
+设置偏好里  节能器 强制关机 ,  好习惯
+ 
+Com + s  朗读所选
+ 
+ 
+ 
+ 
+影片加水印 :  弄个图标 再imovie 
+ 
+私密文件 新建.pkg文件夹  就当成安装程序了   双击打不开 只能显示包内容打开
+dmg
+  
+mac os shell脚本hello world
+
+ 
+1) 可以用shell
+ 
+新建一个a.sh，内容：
+# !/bin/bash
+echo ‘hello world’
+ 
+保存，运行如下命令：
+chmod +x a.sh 
+./a.sh
+ 
+ 
+ 文件保存到桌面   终端 先cd到桌面  就可以
+ 
+ 
+手机发邮件 mac 睡眠: iphone 当遥控器
+ 
+脚本编辑器
+写入  tell application “System Events” to sleep  
+保存 名字.scpt
+ 
+
+去邮件的偏好设置 规则 
+如果 
+主题     是      Mac sleep 
+执行  在finder中打开  - 把脚本复制进去     就能选那个脚本了 
+ 
+试试吧 
+ 
+1.  iphone邮件  清空 mac 垃圾桶
+2.    脚本命令  写入
+• tell application “Finder”
+• empty the trash
+• end tell
+ 
+ 
+保存 到mail 的scpt文件夹里面    
+
+
+
+Mac ⌘ +u 快速睡眠方法 
+Automator  类型选服务   然后资源库列表下面找到 启动睡眠保护程序
+拖到右边     上面的服务接收 选择 没有输入项目 输入名字(一键睡眠)   再储存
+就能在系统设置 键盘下面 服务下面  找到一键睡眠了  加个快捷键就好了.
+ 
+ 
+
+
+ 
+影片加水印  
+ 
+ 
+ 
+- Keynote 技巧 
+多张图片的话  调整成统一大小的办法
+ 先调整好一张图片   再opt+ 拖到就会复制出来另外一张一样大小的图片  更改里面的图片内容就好了.

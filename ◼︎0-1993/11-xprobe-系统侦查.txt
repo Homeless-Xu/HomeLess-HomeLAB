@@ -1,0 +1,196 @@
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 xprobe-简介  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+系统指纹识别:  识别某设备的操作系统类型.
+
+通过分析设备发出数据包中的 某些协议标记/选项/和数据 我们可以推断出操作系统.
+
+
+许多安全漏洞 都依赖于操作系统版本的.
+攻击之前 必须要做的就是 收集目标操作系统信息.
+
+如果不指定对方服务器的操作系统.就不知道 对方运行的是IIS还是Apache.
+你用IIS的漏洞去攻击Apache 肯定是无功而返的..
+
+
+nmap 也可以识别操作系统. 但是不专业. 不准确.
+
+xprobe2 就是专业干这个的.
+
+
+
+
+
+❤️ 使用
+
+➜  ~ xprobe2 127.0.0.1
+
+Xprobe2 v.0.3 Copyright (c) 2002-2005 fyodor@o0o.nu, ofir@sys-security.com, meder@o0o.nu
+
+[+] Target is 127.0.0.1
+[+] Loading modules.
+[+] Following modules are loaded:
+[x] [1] ping:icmp_ping  -  ICMP echo discovery module
+[x] [2] ping:tcp_ping  -  TCP-based ping discovery module
+[x] [3] ping:udp_ping  -  UDP-based ping discovery module
+[x] [4] infogather:ttl_calc  -  TCP and UDP based TTL distance calculation
+[x] [5] infogather:portscan  -  TCP and UDP PortScanner
+[x] [6] fingerprint:icmp_echo  -  ICMP Echo request fingerprinting module
+[x] [7] fingerprint:icmp_tstamp  -  ICMP Timestamp request fingerprinting module
+[x] [8] fingerprint:icmp_amask  -  ICMP Address mask request fingerprinting module
+[x] [9] fingerprint:icmp_port_unreach  -  ICMP port unreachable fingerprinting module
+[x] [10] fingerprint:tcp_hshake  -  TCP Handshake fingerprinting module
+[x] [11] fingerprint:tcp_rst  -  TCP RST fingerprinting module
+[x] [12] fingerprint:smb  -  SMB fingerprinting module
+[x] [13] fingerprint:snmp  -  SNMPv2c fingerprinting module
+[+] 13 modules registered
+[+] Initializing scan engine
+[+] Running scan engine
+[-] ping:tcp_ping module: no closed/open TCP ports known on 127.0.0.1. Module test failed
+[-] ping:udp_ping module: no closed/open UDP ports known on 127.0.0.1. Module test failed
+[-] No distance calculation. 127.0.0.1 appears to be dead or no ports known
+[+] Host: 127.0.0.1 is up (Guess probability: 50%)
+[+] Target: 127.0.0.1 is alive. Round-Trip Time: 0.00008 sec
+[+] Selected safe Round-Trip Time value is: 0.00016 sec
+[-] fingerprint:tcp_hshake Module execution aborted (no open TCP ports known)
+[-] fingerprint:smb need either TCP port 139 or 445 to run
+[-] fingerprint:snmp: need UDP port 161 open
+[+] Primary guess:
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.22" (Guess probability: 100%)
+[+] Other guesses:
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.23" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.21" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.20" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.19" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.24" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.25" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.26" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.27" (Guess probability: 100%)
+[+] Host 127.0.0.1 Running OS: "Linux Kernel 2.4.28" (Guess probability: 100%)
+[+] Cleaning up scan engine
+[+] Modules deinitialized
+[+] Execution completed.
+
+
+
+我们看下 系统到底是什么版本.
+➜  ~ uname -a
+Linux mail.0214.help 2.6.32-042stab120.16 #1 SMP Tue Dec 13 20:58:28 MSK 2016 i686 i686 i386 GNU/Linux
+
+差不多.. 稍微有点偏差 ... 可能是没找到 -ng版本的原因吧.
+
+
+也就能猜出个大概来... 没啥用...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 安装 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+最好的 系统侦查工具:  xprobe2
+系统只要大概判断出Linux 还是win 还是Mac 就可以了. 不用很准确的.
+但是一旦涉及到某个软件 就必须知道详细版本了.
+不同的版本有不同的漏洞的!!!!
+所以对方的系统不必纠结. 知道大概就好.
+Nessus 可以准确查出对方系统的!!! 好用多了...
+
+
+https://www.aldeid.com/wiki/Xprobe2
+
+依赖环境: gcc、libsui++、lipcap
+
+    lipcap安装:
+
+        1.安装GCC：
+          yum -y install gcc-c++
+
+        2.安装flex： 
+          yum -y install flex 
+          没有flex，直接安装libpcap会提示"Your operating system's lex is insufficient to compile libpcap"错误；
+
+        3.安装bison
+          yum -y install bison
+          前面安装的是flex，就需要搭配bison，如不会提示"don't have both flex and bison;reverting to lex/yacc"错误；
+
+        4.安装 libpcap
+          下载地址：http://www.tcpdump.org/
+          下载版本：wget -c http://www.tcpdump.org/release/libpcap-1.5.3.tar.gz
+
+          tar zxf libpcap-1.5.3.tar.gz
+          cd libpcap-1.5.3/
+          ./configure
+          make && make install
+
+
+
+
+wget https://cytranet.dl.sourceforge.net/project/xprobe/xprobe2/Xprobe2%200.3/xprobe2-0.3.tar.gz
+
+tar xvfz xprobe2-0.3.tar.gz && cd xprobe2-0.3
+./configure
+make && make install
+
+
+这里必须注意.  make的时候 很可能会报错!!!
+
+需要在解压出来的文件夹内修改几个文件!!! 
+
+🔸vi libs-external/USI++/src/ip.cc
+    After line 15: #include "config.h" add;
+    #include <cstdlib>
+
+    Save and exit
+
+🔸vi libs-external/USI++/src/misc.cc
+    After line 2: #include "usi++/usi-structs.h" add;
+    #include <cstdlib>
+
+    Save and exit
+
+🔸vi libs-external/USI++/usi++/tcp.h
+    After line 17: #include "ip.h" add;
+    #include <cstring>
+
+    Save and exit
+
+🔸make clean
+🔸make
+🔸make install
+
+
+
+然后就可以使用了!!
+
+
+
+
+
+
+
+
+
+
+
+❤️ xprobe-ng
+现在最新版本的 是xprobe-ng
+不过找不到地方下...奇怪了 算了..
+
+
+
+
+❗️❗️❗️❗️❗️Mac 就算安装好了 使用也有问题...建议直接用 kali 或者vps上安装这个....

@@ -1,0 +1,222 @@
+# 一: 信息收集 
+
+
+DNSenum
+dnsenum 就是一个 perl 脚本. 
+
+返回信息 主要是三部份.
+- Host's addresses:
+- Name Servers:
+- Mail (MX) Servers:
+
+#### Host address : 
+就是IP地址的 主机部分. 
+这里可以看到 是A类IP地址. 那么掩码也就是8位. 主机数是24位... 
+
+#### Name Server
+
+名称服务器. 域名服务器 是最著名的 名称服务器.
+
+#### Mail Server
+
+邮件服务器. 一般企业都需要用到邮箱.
+
+
+
+
+
+
+
+
+
+## 作用
+域名信息收集工具.
+
+目的: 尽可能收集一个 域 的信息..
+能通过谷歌 或者字典文件 猜到可能存在的域名.
+对一个网段 进行反向查询.
+可以查询 网站的 主机地址信息. 域名服务器. 邮件交换记录
+
+
+
+1. 主机地址信息.
+
+
+2. 域名服务器
+
+
+3.  MX record  邮件交换记录
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 中文使用说明
+'' root@kali:~# dnsenum -h
+'' dnsenum.pl VERSION:1.2.3
+'' 用法：dnsenum.pl [选项] <域>
+'' [选项]：
+'' 注意：'-f'选项是用于穷举爆破的
+'' 一般选项：
+''   --dnsserver <server>   将此DNS服务器用于A，NS和MX查询
+''   --enum                 快捷方式选项相当于--threads 5 -s 15 -w
+''   -h，--help             打印此帮助消息
+''   --noreverse            跳过反向查找操作
+''   --nocolor              禁用ANSIColor输出
+''   --private              显示并在文件domain_ips.txt的末尾保存私有IP
+''   --subfile <file>       将所有有效的子域写入此文件
+''   -t，--timeout <value>  tcp和udp超时值（以秒为单位，默认值：10s）
+''   --threads <value>      将执行不同查询的线程数
+''   -v，--verbose          详细信息：显示所有进度和所有错误消息。
+'' Google抓取选项：
+''   -p，--pages <value>    抓取名称时要处理的Google搜索页面数，默认值为5页，必须指定-s开关
+''   -s，--scrap <value>    将从Google抓取的子域的最大数量（默认值为15）
+'' 子域穷举选项：
+''   -f，--file <file>      从此文件读取子域进行爆破
+''   -u，--update <a|g|r|z> 向使用-f开关指定的文件更新有效的子域
+''         a（all）         使用所有结果更新。
+''         g                仅使用Google抓取结果更新
+''         r                仅使用反向查找结果进行更新
+''         z                仅使用zonetransfer结果更新
+''   -r，--recursion        递归子域，穷举具有NS记录的所有子域
+'' WHOIS网络选项：
+''   -d，--delay <value>    在whois查询之间等待的最大值（秒），该值自定义，默认值：3s
+''   -w，--whois            在c类网络范围上执行whois查询
+''                          **警告**：这可能会产生非常大的网络流量，它需要大量的时间来执行反向查找
+'' 反向查找选项：
+''   -e，--exclude <regexp> 从反向查找结果中排除与regexp表达式匹配的PTR记录，对无效主机名非常有用
+'' 输出选项：
+''   -o --output <file>     以XML格式输出，以便可以在MagicTree中导入（www.gremwell.com）
+'' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 例一: 0214.live 的dns 信息
+`root@kali:~# dnsenum 0214.live`
+
+'' -   0214.live   -----
+'' 
+'' 
+'' Host's addresses:
+'' __________________
+'' 
+'' 
+'' 
+'' Wildcard detection using: asgwqoghsdls
+'' _______________________________________
+'' 
+'' asgwqoghsdls.0214.live.                  5        IN    A        180.168.41.175
+'' 
+'' 
+'' !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'' 
+''  Wildcards detected, all subdomains will point to the same IP address
+''  Omitting results containing 180.168.41.175.
+''  Maybe you are using OpenDNS servers.
+'' 
+'' !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'' 
+'' 
+'' Name Servers:
+'' ______________
+'' 
+'' dns10.hichina.com.                       5        IN    A        140.205.228.24
+'' dns10.hichina.com.                       5        IN    A        140.205.81.24
+'' dns10.hichina.com.                       5        IN    A        42.120.221.24
+'' dns9.hichina.com.                        5        IN    A        140.205.228.14
+'' dns9.hichina.com.                        5        IN    A        42.120.221.14
+'' dns9.hichina.com.                        5        IN    A        140.205.81.14
+'' 
+'' 
+'' Mail (MX) Servers:
+'' ___________________
+'' 
+'' 
+
+
+
+
+### 例二: itr.cn 信息
+
+'' -   itr.cn   -----
+'' 
+'' 
+'' Host's addresses:
+'' __________________
+'' 
+'' itr.cn.                                  5        IN    A        54.238.196.244
+'' 
+'' 
+'' Name Servers:
+'' ______________
+'' 
+'' rick.ns.cloudflare.com.                  5        IN    A        173.245.59.139
+'' abby.ns.cloudflare.com.                  5        IN    A        173.245.58.100
+'' 
+'' 
+'' Mail (MX) Servers:
+'' ___________________
+'' 
+'' cnc.biz-email.net.                       5        IN    A        210.51.26.154
+'' cdn.corpemail.net.                       5        IN    A        222.73.234.229
+'' cdn.corpemail.net.                       5        IN    A        222.73.234.234
+'' cdn.corpemail.net.                       5        IN    A        222.73.234.236
+'' cdn.corp-email.cn.                       5        IN    A        222.73.234.229
+'' cdn.corp-email.cn.                       5        IN    A        222.73.234.236
+'' cdn.corp-email.cn.                       5        IN    A        222.73.234.234
+'' mail.biz-email.net.                      5        IN    A        222.73.234.229
+'' mail.biz-email.net.                      5        IN    A        222.73.234.236
+'' mail.biz-email.net.                      5        IN    A        222.73.234.234
+'' 
+'' 
+'' Trying Zone Transfers and getting Bind Versions:
+'' _________________________________________________
+'' 
+'' 
+'' Trying Zone Transfer for itr.cn on rick.ns.cloudflare.com ...
+'' AXFR record query failed: timed out
+'' 
+'' Trying Zone Transfer for itr.cn on abby.ns.cloudflare.com ...
+'' AXFR record query failed: no socket TCP[2400:cb00:2049:1:0:0:adf5:3a64] Network is unreachable
+'' 
+'' brute force file not specified, bay.
+'' root@kali:~#
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

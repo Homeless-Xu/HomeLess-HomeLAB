@@ -1,0 +1,1095 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 缓存 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 redis 简介
+
+    redis:  提供缓存和存储, 一般只用到缓存功能!!!
+
+    Redis、Memcached  两个都可以当缓存. 一般 Redis 用的多.
+
+    Redis 是内存数据库. 所有读写操作都是在内存中进行的. 性能非常非常高.
+
+    默认6379端口
+
+
+🔸 缓存适用场景
+    有些数据长时间不会发生变动，但是用户又访问特别频繁,我时候用缓存非常好.
+    比如网站的首页,访问特别频繁，广告更换也不会很频繁，所以缓存首页挺合适的
+
+
+🔸 如何让数据从缓存中取到
+    首先判断缓存中是否有该数据，
+        如果缓存中有数据，则直接返回缓存中的数据.
+        如果没有就从数据库中获取，数据库在返回给前台的同时进行缓存.下次就可以用缓存了.
+
+
+🔸 如何让缓存中的数据与数据库中的保持同步
+
+    如果使用redis做缓存的话，如果数据有变化的时候怎么让redis中的数据与数据库中的保持同步!
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 基础用法 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 安装:
+    源码编译安装 redis 4.0.1 (2017-07-29-14)
+
+    wget http://download.redis.io/releases/redis-4.0.1.tar.gz
+    tar xzf redis-4.0.1.tar.gz && cd redis-4.0.1 && make
+
+        👁‍🗨 软件安装目录 /root/redis-4.0.1/src
+
+
+
+🔸 启动 redis: /root/redis-4.0.1/src/redis-server
+    启动redis服务进程后，就可以使用测试客户端程序redis-cli和redis服务交互了。 比如：
+
+            _.-``__ ''-._
+        _.-``    `.  `_.  ''-._           Redis 4.0.1 (00000000/0) 64 bit
+    .-`` .-```.  ```\/    _.,_ ''-._
+    (    '      ,       .-`  | `,    )     Running in standalone mode
+    |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+    |    `-._   `._    /     _.-'    |     PID: 27689
+    `-._    `-._  `-./  _.-'    _.-'
+    |`-._`-._    `-.__.-'    _.-'_.-'|
+    |    `-._`-._        _.-'_.-'    |           http://redis.io
+    `-._    `-._`-.__.-'_.-'    _.-'
+    |`-._`-._    `-.__.-'    _.-'_.-'|
+    |    `-._`-._        _.-'_.-'    |
+    `-._    `-._`-.__.-'_.-'    _.-'
+        `-._    `-.__.-'    _.-'
+            `-._        _.-'
+                `-.__.-'
+
+
+🔸 关闭 redis：  
+    /root/redis-4.0.1/src/redis-cli shutdown
+    /root/redis-4.0.1/src/redis-cli -h 127.0.0.1 -p 6379 shutdown
+
+
+🔸 进入客户端: /root/redis-4.0.1/src/redis-cli
+    127.0.0.1:6379> set foo bar
+    OK
+    127.0.0.1:6379> get foo
+    "bar"
+    127.0.0.1:6379>
+
+
+🔸 启动判断：ps -ef | grep redis
+
+🔸 开机启动配置：
+    echo "/usr/local/bin/redis-server /etc/redis.conf" >> /etc/rc.local
+
+
+🔸 开放防火墙端口：
+    添加规则：iptables -I INPUT -p tcp -m tcp --dport 6379 -j ACCEPT
+    保存规则：service iptables save
+    重启：    service iptables restart
+    查看规则  iptables -L | grep 6379
+
+
+🔸 图形化Redis客户端管理软件
+    当然也有视图远程工具.Navicast 不支持redis的... 只能找别的软件了.
+    Redis Desktop Manager 就用这个! 
+    window 是免费使用的的, Mac/Linux 是收费的.
+    官方下载地址: https://redisdesktop.com/download
+    2017-07-29-15 最新版本 0.8.8
+
+
+🔸 Mac 安装 Redis Desktop Manager
+
+    • Mac 终端代理
+        最方便的方法是
+        Surge     菜单里选择「Copy Shell Export Command」，然后粘贴到终端里来打开代理。 终端就开启代理了.
+        Spechlite 菜单里选择「Copy Shell Export Command」，然后粘贴到终端里来打开代理。 终端就开启代理了.
+
+        测试: curl -i http://ip.cn
+        有信息就说明成功开启代理!!
+
+    • 用brew 安装
+        brew cask install Caskroom/cask/rdm
+        安装好后 mac app 程序里面就多了个 rdm的软件. 打开就能用了.
+
+
+🔸 redis 开启远程
+    Mac redis-cli 就可以远程服务器的redis:  redis-cli -h ip -p port
+    用上面安装的 rdm 软件也能远程到服务器.
+    前提是 redis 服务器开启远程访问功能,这个需要修改redis.conf 这个配置文件.
+
+    注意我们软件的安装位置下有个 conf的参考样本 vi /root/redis-4.0.1/redis.conf
+    默认是没有 /etc/redis.conf 配置文件的.
+    我们要自己新建.
+
+    vi /etc/redis.conf  > 添加行 >    bind 0.0.0.0 > 
+    指定配置文件 来启动 redis
+    /root/redis-4.0.1/src/redis-server /etc/redis.conf
+
+    然后去Mac 的客户端测试. 填服务器IP+端口. 就可以连上了.
+    接下来就要深入理解redis了. 至少要会用..
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸  Redis 配置文件  🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+vim /etc/redis.conf
+
+    daemonize      如果需要在后台运行，把该项改为yes
+    bind           绑定ip
+    port           监听端口，默认为6379 
+    timeout        设置客户端连接时的超时时间，单位为秒 
+    loglevel       日志等级:debug、verbose、notice、warning
+
+    Masteauth      主数据库连接需要的密码验证 
+    Requirepass    设置登陆时需要的使用的密码 
+
+    Maxmemory      设置redis能够使用的最大内存 
+
+    vm-enabled     是否开启虚拟内存支持
+    vm-max-memory  设置redis使用的最大虚拟内存大小
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸  数据迁移: Mysql ➜  Redis 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+https://www.oschina.net/translate/mysql-to-redis-in-one-step
+
+
+方法1:
+ 直接遍历Mysql 数据. 一条一条的写入到redis中.  速度非常慢.
+ 如果mysql查询输出的数据.  和 redis 输入的数据匹配.那么就省事很多了.
+ 也就是如果 Mysql 结构 和 redis 结构一样. 那么数据迁移非常块.
+
+
+
+
+从mysql搬一个大表到redis中，你会发现在提取、转换或是载入一行数据时，速度慢的让你难以忍受。
+这里我就要告诉一个让你解脱的小技巧。
+使用“管道输出”的方式把mysql命令行产生的内容直接传递给redis-cli，以绕过“中间件”的方式使两者在进行数据操作时达到最佳速度。
+
+
+Mysql到Redis的数据协议
+
+redis-cli命令行工具有一个批量插入模式，是专门为批量执行命令设计的。
+这第一步就是把Mysql查询的内容格式化成redis-cli可用的数据格式.
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Redis 缓存方案 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+缓存是各网站的标配.
+redis 很少用来真正做数据库. 而是用来缓存一些静态数据.一些不变/很少变的数据.
+
+缓存不变的数据简单. 
+但是缓存变化的数据就很麻烦了 
+
+redis 不能完全取代DB的存储. 最终数据还是要存入数据库的.存到硬盘进行持久化.
+而redis是在内存中的. 这就涉及到了 redis 和 db 同步问题.
+db 里面的数据怎么同步到 redis 缓存中.
+
+我在项目的解决方案是先修改Redis，然后异步修改DB，最后DB同步到Redis，因为我缓存的数据一致性要求很严格。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 网页缓存 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+参考网站:   http://redisinaction.com/preview/chapter2.html
+
+
+
+
+一般我们都用 模板语言来简化网页的生成.
+就像jekyll 用的 liquid模板.
+你只要写博客内容. 模板会自动把明文等
+
+网站里的有些网页是几乎不会变的.  如 about页面.
+这些页面就不需要动态生成. 减少服务器在生成内容上花费的时间.减少服务器负载.加快网页加载速度.
+
+所有标准的Python应用框架都提供了在处理请求之前或者之后添加层（layer）的能力，这些层通常被称为中间件（middleware）或者插件（plugin）。我们将创建一个这样的层来调用Redis缓存函数：对于一个不能被缓存的请求，函数将直接生成并返回页面；而对于可以被缓存的请求，函数首先会尝试从缓存里面取出并返回被缓存的页面，如果缓存页面不存在，那么函数会生成页面并将其缓存在Redis里面5分钟，最后再将页面返回给函数调用者。代码清单2-6展示了这个缓存函数。
+
+
+def cache_request(conn, request, callback):
+    # 对于不能被缓存的请求，直接调用回调函数。
+    if not can_cache(conn, request):
+        return callback(request)
+
+    # 将请求转换成一个简单的字符串键，方便之后进行查找。
+    page_key = 'cache:' + hash_request(request)
+    # 尝试查找被缓存的页面。
+    content = conn.get(page_key)
+
+    if not content:
+        # 如果页面还没有被缓存，那么生成页面。
+        content = callback(request)
+        # 将新生成的页面放到缓存里面。
+        conn.setex(page_key, content, 300)
+
+    # 返回页面。
+    return content
+
+
+
+代码清单2-6展示的缓存函数可以让网站在5分钟之内无需再为它们动态地生成视图页面。取决于网页的内容有多复杂，这一改动可以将包含大量数据的页面的延迟值从20到50毫秒降低至查询一次Redis所需的时间：查询本地Redis的延迟值通常低于1毫秒，而查询位于同一个数据中心的Redis的延迟值通常低于5毫秒。对于那些需要访问数据库的页面来说，这个缓存函数对于减少页面载入时间和降低数据库负载的作用会更加显著。
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Redis 基础命令 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 启动 redis:
+    /root/redis-4.0.1/src/redis-server /etc/redis.conf
+
+🔸 进入 CLI 客户端
+    /root/redis-4.0.1/src/redis-cli
+
+🔸 Mac 客户端远程连接
+    客户端方便查看数据用.
+    会发现有 16个空白数据库. db0-db15
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Redis VS MySQL 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+MySQL 是关系数据库.使用内存
+Redis 非关系数据库.使用硬盘
+
+MySQL 使用数据库. 每个数据库可以包含多个数据表.每个数据表含有多行.
+Redis 用字符串、列表、集合、散列、有序集合.来存储数据. 没有数据库/数据表的概念.
+
+
+
+
+Mysql 是先创建数据库 再创建数据表. 然后把数据写入数据表.
+redis 中的 redisDb 就是 mysql 中的数据库.
+redis 中的 dict 字典就是数据表. 字典保存了所有的数据.
+
+
+
+
+
+
+
+🔸 CLI 基础操作
+
+
+
+
+
+    redis> HSET book name "Redis in Action"
+    (integer) 1
+    ➜ book 里面添加数据
+    row key value 
+    1  name Redis in Action
+
+
+    redis> HSET book author "Josiah L. Carlson"
+    (integer) 1
+    ➜ book 里面添加数据
+    row  key      value 
+    1    name     Redis in Action
+    2    author   Josiah L. Carlson
+
+    redis> HSET book publisher "Manning"
+    (integer) 1
+    ➜ book 里面添加数据
+    row  key       value 
+    1    name      Redis in Action
+    2    author    Josiah L. Carlson
+    3    publisher Manning
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Redis 基础知识 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+Redis是一个键值存储仓库，经常被称为 NoSQL 数据库。
+键值存储仓库的本质是有能力按照一个键映射一个值的方式存储一些数据，然后你可以只通过这个键寻找到你之前通过这个键存储的值。
+我们可以使用命令SET将值『fido』存储在键『server:name』中：
+SET server:name "fido"
+Redis 将会把我们的数据永久存储。
+于是，我们可以假设这样询问 Redis 数据库：键 server:name 对应的值是什么？ 然后，Redis 会返回『fido』。
+
+GET server:name # => "fido"
+
+
+
+
+🔸 五种结构
+================================================================================
+
+
+汽车有不同的种类.跑车 越野车 对应不同的功能.
+Redis 也有 5种不同数据结构类型. 储存不同结构的数据
+    • STRING 字符串、整数、浮点数
+    • LIST   列表/数组: 每个元素都是一个 string 所有元素可以有相同的. 
+    • SET    列表/数组: 每个元素都是一个 string 所有元素都是独一无二的.
+    • HASH   散列: 包含键值对的无序列表
+    • ZSET   有序集合
+
+
+
+🔸 字符串 
+    只能储存一个字符串. 数据库中 键名必须不能重复.
+
+    ⦿ 字符串命令
+        DEL  删除键值对
+        SET  添加键值对
+        GET  获取键值对
+
+        • 添加数据
+            redis> SET message "hello world"
+            redis> SET message2 "Xu"
+            redis> SET message3 "Jian"
+            ➜ 在数据库中创建键值对: 
+                键为 message 值为"hello world" 
+                键为 message1 值为"Xu" 
+                键为 message2 值为"Jian" 
+        
+        • 获取数据
+            127.0.0.1:6379> get message
+            "hello world"
+            127.0.0.1:6379> get message2
+            "Xu"
+            127.0.0.1:6379> get message3
+            "Jian"
+                
+        • 删除数据
+            127.0.0.1:6379> del message3
+            (integer) 1
+            127.0.0.1:6379> get message3
+            (nil)
+
+
+
+
+🔸 列表
+    列表可以在键名内储存多个字符串.列表里面的数据是可以重复的. 类似数组.
+
+    ⦿ 列表命令
+        Redis列表还拥有从列表里面移除元素的命令. 暂时不深入.先了解下面的基础
+
+        RPUSH  给列表的右边添加数据. 
+        LRANGE 获取列表指定范围内的值.
+        LINDEX 获取列表指定位置的单个值
+        LOPO   从列表左边弹出(删除)一个值.并显示.
+
+
+
+    • 创建列表
+        redis> RPUSH xujian "x" "u" "."
+        (integer) 3
+        ➜ 在redis里创建了一个叫 alphabet的键. 
+        这个键是一个数组. 里面有多个元素: x、u、.
+        row value
+        1   a
+        2   b
+        3   c
+
+    • 获取列表数据,
+        需要指定范围; 0 -1 也就代表整个列表.
+        0  代表列表的最前一个元素.
+        -1 代表列表的最后一个元素.
+
+        127.0.0.1:6379> lrange xujian 0 -1
+        1) "x"
+        2) "u"
+        3) "."
+
+
+    • 获取列表中某个元素
+        127.0.0.1:6379> lindex xujian 0
+        "x"
+        127.0.0.1:6379> lindex xujian 1
+        "u"
+        127.0.0.1:6379> lindex xujian 2
+        "."
+        127.0.0.1:6379> lindex xujian 3
+        (nil)
+
+
+    • 列表尾部添加元素.
+        该命令会返回列表的当前长度.
+
+        127.0.0.1:6379> rpush xujian j
+        (integer) 4
+        127.0.0.1:6379> rpush xujian i
+        (integer) 5
+        127.0.0.1:6379> rpush xujian a
+        (integer) 6
+        127.0.0.1:6379> rpush xujian n
+        (integer) 7
+
+        127.0.0.1:6379>  lrange xujian 0 -1
+        1) "x"
+        2) "u"
+        3) "."
+        4) "j"
+        5) "i"
+        6) "a"
+        7) "n"
+
+
+    • 列表前端删除元素.
+
+        127.0.0.1:6379> lpop xujian
+        "x"
+        127.0.0.1:6379> lpop xujian
+        "u"
+        127.0.0.1:6379> lpop xujian
+        "."
+        127.0.0.1:6379> lrange xujian 0 -1
+        1) "j"
+        2) "i"
+        3) "a"
+        4) "n"
+
+
+
+🔸 集合
+    和列表一样.可以储存多个字符串. 
+    但是集合里面的字符串是不能重复的. 列表里面的字符串是可以重复的.
+
+    ⦿ 集合命令
+        SADD      添加元素到集合 
+        SMEMBERS  查看集合内容.
+        SISMEMBER 检测某元素是否在集合中.
+        SREM      如果某元素在集合中.那么删除这个元素.
+
+
+    • 添加数据到 jihe这个集合 
+        127.0.0.1:6379> sadd jihe item1
+        (integer) 1
+        127.0.0.1:6379> sadd jihe item2
+        (integer) 1
+        127.0.0.1:6379> sadd jihe item3
+        (integer) 1
+
+    • 查看 jihe 这个集合的内容
+        127.0.0.1:6379> smembers jihe
+        1) "item3"
+        2) "item1"
+        3) "item2"
+
+
+    • 检测某元素是否在集合中.
+        布尔值返回结果. 0 就是不存在. 1 就是存在.
+        127.0.0.1:6379> sismember jihe item3
+        (integer) 1
+        127.0.0.1:6379> sismember jihe item4
+        (integer) 0
+
+
+    • 删除集合中某元素(如果存在)
+        如有元素存在就显示1 删除成功.
+        如果元素不存在显示0 删除失败.
+        127.0.0.1:6379> srem jihe item4
+        (integer) 0
+        127.0.0.1:6379> srem jihe item3
+        (integer) 1
+        127.0.0.1:6379> smembers jihe
+        1) "item1"
+        2) "item2"
+
+
+
+
+🔸 散列
+    可以储存多个键值对! 不像set 就是一个键值对.
+    散列在很多方面就像是一个微缩版的Redis!!!
+    
+    ⦿ 散列命令
+        HSET    设置散列中的值
+        HDEL    删除散列中的值
+        HGET    获取指定散列中的值
+        HGETALL 获取所有散列中的值　
+
+
+
+    • 添加值
+        127.0.0.1:6379> hset myhash name1 xujian
+        (integer) 1
+        127.0.0.1:6379> hset myhash name2 qianwei
+        (integer) 1
+        127.0.0.1:6379> hset myhash name3 qianqian
+        (integer) 1
+
+
+    • 获取某个值
+        127.0.0.1:6379> hget myhash name1
+        "xujian"
+        127.0.0.1:6379> hget myhash name2
+        "qianwei"
+        127.0.0.1:6379> hget myhash name3
+        "qianqian"
+
+
+    • 获取所有值
+        注意 这里两个值是一对. 下面的意思是有 三对!
+        127.0.0.1:6379> hgetall myhash
+        1) "name1"
+        2) "xujian"
+        3) "name2"
+        4) "qianwei"
+        5) "name3"
+        6) "qianqian"
+
+    • 删除值
+        127.0.0.1:6379> hdel myhash name3
+        (integer) 1
+        127.0.0.1:6379> hget myhash name3
+        (nil)
+
+
+
+
+
+
+🔸 有序集合
+    和散列一样. 有序集合也是用于储存键值对的.  
+    有序集合中的每个键称为 成员 member. 每个成员都是独一无二的.
+    有序集合中的每个值称为 分值 score.  分值必须是浮点数. 
+
+    有序集合是Redis里面唯一既可以根据成员访问元素（这一点和散列一样），
+    又可以根据分值以及分值的排列顺序来访问元素的结构。
+
+    ⦿ 有序集合命令
+        ZADD          添加
+        ZRANGE        获取
+        ZRANGEBYSCORE 获取  
+        ZREM          如果有 删除
+
+
+
+    • 添加
+        127.0.0.1:6379> zadd orderjihe 219 xujian
+        (integer) 1
+        127.0.0.1:6379> zadd orderjihe 223 jiaqian
+        (integer) 1
+        127.0.0.1:6379> zadd orderjihe 606 aijuan
+        (integer) 1
+
+
+
+    • 获取元素(无排序) 
+        127.0.0.1:6379> zrange orderjihe 0 -1
+        1) "xujian"
+        2) "jiaqian"
+        3) "aijuan"
+
+        127.0.0.1:6379> zrange orderjihe 0 -1 withscores
+        1) "xujian"
+        2) "219"
+        3) "jiaqian"
+        4) "223"
+        5) "aijuan"
+        6) "606"
+
+
+    • 排序元素
+        127.0.0.1:6379> zrangebyscore orderjihe 0 1000 withscores
+        1) "xujian"
+        2) "219"
+        3) "jiaqian"
+        4) "223"
+        5) "aijuan"
+        6) "606"
+
+        127.0.0.1:6379> zrangebyscore orderjihe 0 250 withscores
+        1) "xujian"
+        2) "219"
+        3) "jiaqian"
+        4) "223"
+
+
+
+    • 删除元素
+        127.0.0.1:6379> zrem orderjihe xujian
+        (integer) 1
+        127.0.0.1:6379> zrange orderjihe 0 -1 withscores
+        1) "jiaqian"
+        2) "223"
+        3) "aijuan"
+        4) "606"
+
+
+
+
+
+
+
+🔸 原子性操作
+
+    数据库在写入的时候往往有这个问题.
+    比如两个客户端 同时像数据库写入数据.
+    客户端 A 写 x 的值为11
+    客户端 B 写 x 的值为12
+    那么x 的值到底是什么.  
+    要解决这个问题(数据一致性问题) 就需要知道 原子性操作.
+
+
+    ⦿ 一致性:
+        最常见的例子就是转帐.
+        例如 从账户A 转钱到 账户B.
+        如果账户A的钱减少了. 但是账户B的钱没有增加. 那么数据处于不一致状态.
+
+        数据库必须在一个事物内对A 和 B 账户进行操作.
+        才能保证全部执行成功.或者全部执行失败.
+        这就是事务的原子性.
+
+
+    原子: atom 本意不能被进一步分割的最小粒子.
+    原子操作: 不能被中断的一个/一系列操作
+
+
+    Redis 的 INCR 命令给 redis 提供了原子性操作.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Djangocms Redis 实例 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+django 个开源的缓存项目. 叫 django-redis. ★★★★★
+    项目中文文档: http://django-redis-chs.readthedocs.io/zh_CN/latest/
+
+DjangoCMS 也有自己的缓存设置. (非 redis 缓存)
+    英文文档: http://docs.django-cms.org/en/release-3.4.x/how_to/caching.html
+
+
+Django 缓存设置.
+    https://docs.djangoproject.com/en/dev/topics/cache/
+
+
+参考  http://www.maiziedu.com/wiki/django/code/
+
+
+
+
+
+🔸 配置缓存后端为redis
+加到那个文件中啊...  应该是 settings.py
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',    //先把BACKEND设为     RedisCache
+        'LOCATION': '127.0.0.1:6379',
+        'OPTIONS': {
+            'DB': 1,
+            'PASSWORD': 'yadayada',
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'PICKLE_VERSION': -1,
+        },
+    },
+}
+ 
+
+
+    ⦿ LOCATION
+
+        Redis 服务器信息，可以是 address/port，也可以是 unix 域套接字。
+        可配置单个string，或者是 strings 的列表。
+        //如果Redis 启动的时候是TCP协议的话，就可以配置address/port如果Redis服务启动的时候是unix socket的话，我们就需要配置成unix 域套接字。
+        示例：
+        1）127.0.0.1:6379    （IP地址和端口号）  # 普通的TCP连接
+        2）/path/to/socket                # Unix 域套接字连接
+        3）redis://[:password]@localhost:6379/0  （ [:password]代表它的可选项，后面还可以配置要使用的DB的number）        # 普通的TCP连接
+        4）rediss://[:password]@localhost:6379/0                 # SSL 封装的 TCP 连接
+        # http://redis.io/topics/encryption (redis加密的方法，可通过这个IP地址查看)
+        5）unix://[:password]@/path/to/socket.sock?db=0 (也可以指用password db的)   # Unix 域套接字连接
+        
+    ⦿ Database Number
+        设置存储空间， 可在 OPTIONS 和 LOCATION 中配置 ( Default DB: 1)
+        //让不同的缓存存储到不同的空间里面
+        redis://@localhost:6379/0
+        
+        CACHES = {
+            'default': {
+                'OPTIONS': {
+                    'DB': 1,
+                    ..
+                },
+                ...
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+    ⦿ Password
+        如果 Redis Server 设置了密码，则 CACHE 中也需要设置密码, 可在 OPTIONS 中配置，也可在 LOCATION 中配置
+        
+        CACHES = {
+            'default': {
+                'OPTIONS': {
+                    'PASSWORD': 'yadayada',
+                    ...
+                },
+                ...
+            }
+        }
+
+
+    ⦿ Master/Slave Setup
+        如果 Redis Server 配置了 Master/Slave，则可在 LOCATION 中配置多个 Redis Server。
+        Master: Read/Write，Slave: read-only，是Master的一个拷贝
+        CACHES = {
+            'default': {
+                'LOCATION': [
+                    '127.0.0.1:6379',  # Primary
+                    '127.0.0.1:6380',  # Secondary
+                    '127.0.0.1:6381',  # Secondary
+                ],
+                'OPTIONS': {
+                    'PASSWORD': 'yadayada',
+                    'MASTER_CACHE': '127.0.0.1:6379',
+                    ...
+                },
+                ...
+            }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Redis 数据库缓存 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+可以缓存网页. 也可以缓存数据库. 
+djangocms 的大部分数据都是从数据库获取的. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+layout: post
+title:  Redis
+tags: Misc
+categories: IT-Admin
+---
+
+Redis
+
+Redis REmote DIctionary Server  远程字典服务器
+
+Redis是一个开源、支持网络、基于内存、键值对 存储数据库.
+Redis通常将全部的数据存储在内存中。性能优势非常明显!!
+当然内存断电的问题: 将内存中的数据 异步写入硬盘.
+
+某人对 MySQL 性能感到失望. 就自创了 Redis 数据库.
+
+如今: Web 开发 最火热的内存数据库之一
+新浪 知乎 GitHub 等等 都使用 Redis.
+
+官网 (http://redis.io/)       GitHub 链接 (https://github.com/antirez/redis)
+
+安装: 没有外部依赖 安装非常简单.
+wget http://download.redis.io/releases/redis-3.0.7.tar.gz
+tar xzf redis-3.0.7.tar.gz
+cd redis-3.0.7
+make
+make test
+//进行测试! 是否安装成功.
+
+启动:
+src/redis-server
+
+Redis 以字典结构存储数据 允许其他应用通过 TCP 协议读写字典中内容.
+
+字典中的 键值 可以死字符串 和 其他数据类型.
+- 字符串类型
+- 散列类型
+- 列表类型
+- 集合类型
+- 有序集合类型
+
+这种结构 和 mysql 等关系型数据库的 二维表形式的存储结构有很大差异.
+
+
+可以设置 每个键 的 生存时间 Time To Live TTL.
+生存时间到期后 键会自动被删除.
+
+使用简单稳定:
+SQL 取得 posts 表内 id 为1的记录的 title 字段的值:
+select title from posts where id = 1 limit = 1
+
+Redis 
+hget post:1 title
+ 
+
+Redis 提供 100+ 命令 
+常用的 十几个 . 非常好记 .  比 SQL 语言简单多了.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+启动 和 停止 Redis
+了解下 redis 的可执行文件有哪些
+
+如果 安装的时候 make 之后  执行了make install 命令
+这些程序就会被 复制到 /usr/local/bin 目录内
+所以 在 命令行中 直接输入程序名称即可执行
+如: 终端 输入 redis-server  就能启动 redis
+当然 如果已经启动过 就会报错 说已经运行中,.
+---
+redis-server   redis 服务器
+redis-cli   redis 命令行客户端
+redis-benchmark  redis 性能测试工具
+redis-check-aof AOF 文件修复工具
+redis-check-dump RDB 文件检查工具
+redis-sentinel     sentinel 服务器.
+---
+
+ 最常使用: redis-server    服务器.
+redis-cli        自带的 redis 命令行 客户端 
+学习 redis 的重要工具.
+
+
+直接启动:
+redis-server
+默认使用 6379端口.
+可以用 —port 自定义端口如:
+redis-server --port 6380
+
+脚本启动(开机启动):
+
+  
+redis_init_script 
+//初始化脚本文件 在redis 源代码目录  utils 文件夹下
+ 
+首先 这个脚本 先复制到  /etc/init.d 目录下
+文件名 设置成 
+redis_ 端口号
+客户端 通过这个端口 连接 redis.
+
+- 修改脚本第六行 redisport 的变量值 改成你设置的端口号
+建立需要的文件夹. 
+/etc/redis     //存放 redis 的配置文件
+/var/redis/端口号  //存放 redis 的持久化文件(内存异步到硬盘的文件.)
+….
+
+停止 Redis
+强行终止 Redis 可能会导致数据丢失(内存数据同步到硬盘的时候)
+
+redis-cli shutdown
+或者  kill redis 进程 也可以.
+
+命令行客户端:
+redis-cli
+Redis Command Line Interface
+
+
+发送命令:
+一: 每条命令前 都加 redis-cli
+
+二: 直接运行 redis-cli 客户端  在里面输入命令
+
+
+启动 redis-cli
+redis-cli
+
+测试 客户端与服务器 连接是否正常 打开命令行客户端  输入 ping  返回 pong 就是连接正常.
+
+
+命令返回值: 比如查询某个数据要返回结果的.
+
+状态回复.   ok  / pong 等等 都是
+
+错误回复:  error / ERR  + 具体错误信息
+
+
+比如  wrongtype  表示 类型错误
+
+
+
+整数回复:
+1
+字符串回复
+
+请求值 不存在 nil
+
+
+
+
+配置:
+
+配置文件模板 在源代码根目录  redis.conf
+
+
+
+
+
+
+
+多数据库:
+Redis 提供了多个用来存储数据的字典. 可以指定数据存到哪个字典
+可以理解成 每个字典都是一个独立的数据库.
+
+默认支持16个数据库. 数据库名是 0-16  不支持 自定义数据库名称.
+
+客户端 默认连接 0 号数据库. 
+可以用 select 更换数据库
+如: 进入 命令行客户端 select 1   > 会提示 ok  就表示切换成功.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

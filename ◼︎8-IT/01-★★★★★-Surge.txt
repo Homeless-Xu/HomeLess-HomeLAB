@@ -1,0 +1,130 @@
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸Surge 翻墙🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+ 
+ 
+ 🔸 参考    
+ 
+        https://medium.com/@scomper/%E8%AE%A9%E4%BA%BA%E8%80%B3%E7%9B%AE%E4%B8%80%E6%96%B0%E7%9A%84-surge-mac-2-0-bb7cf735b1b8
+
+
+
+
+🔸 Surge 
+    30天试用. 正版50刀 一个设备...  100刀 5个设备.
+
+
+🔸 Surge 2.0
+    新增的 Surge Dashboard 控制台不仅能直观查看网络访问，还可以方便的控制网络访问。
+
+
+🔸 Surge 2.1.3 破解版! 
+    链接：http://pan.baidu.com/s/1eSAAZsA 密码：adne
+
+
+
+🔸 设置配置文件存储位置
+    下载 ➜ 拖刀程序文件夹 ➜ 打开运行 
+    ➜ Configuration 界面: 设置配置文件储存位置. 推荐 icloud. 
+
+
+🔸 打开设置配置文件存储位置
+    Mac 菜单栏 ➜ surge ➜ switch configuation ➜ show in finder .
+    默认就有个3个配置文件.
+    配置文件非常重要! 就像明明可以不走代理的国内视频网站. 用代理会非常卡! 
+    这些都是通过配置文件来设置的!我们下载一个 配置文件. 稍微修改下就能用!
+
+
+
+🔸 基础配置
+
+    ⦿ 参考  http://cloudstone.xin/2016/10/31/Mac-Surge-2-%E5%88%9D%E4%BD%93%E9%AA%8C/
+
+    ⦿  配置文件下载
+        初次建议试用别人的配置文件.
+        https://raw.githubusercontent.com/stoneChen/Surge-config/master/surge.conf
+        保存到 surge 配置文件夹里.
+
+
+
+🔸 修改配置文件
+    [Proxy] 下有几行就代表几个ss 服务器. 
+
+    HK = custom,abclite.cn,10000,rc4-md5,abclite.cn,https://github.com/stoneChen/Surge-config/raw/master/SSEncrypt.module
+        custom 不能改!是一个约定类型(ss协议)  最后一个长长的链接也不能改!  是ss模块下载地址
+        • abclite.cn,   ss 主机域名或者ip.
+        • 10000,        ss 主机端口 
+        • rc4-md5,      ss 主机加密方式
+        • abclite.cn,   ss 密码
+
+🔸 修改配置文件
+    修改 [proxy group]
+    把3个ss节点名字包含进去就可以.
+
+
+🔸AUTO-GROUP
+
+    AUTO-GROUP 通过测速来自动选择定义的线路，能最大限度的避免因个别线路故障或者过慢而影响使用。
+    当 Proxy 中选择使用 Auto Group 时，
+    Surge 会并发尝试通过该 Group 下所有的服务器去发起到目标 url 的请求，并根据最优结果选择哪个服务器将被使用。
+    默认间隔 600 秒后需要重新发起测试.
+
+
+
+
+🔸 我的修改例子
+
+    [Proxy]
+    🇭🇰 VPS1 = custom,23.105.192.96,1028,chacha20,pRySbS,https://github.com/stoneChen/Surge-config/raw/master/SSEncrypt.module
+    🇸🇬 VPS2 = custom,104.224.139.45,1028,chacha20,pRySbS,https://github.com/stoneChen/Surge-config/raw/master/SSEncrypt.module
+    🇯🇵 GCE = custom,35.194.128.92,1028,chacha20,pRySbS,https://github.com/stoneChen/Surge-config/raw/master/SSEncrypt.module
+
+    [Proxy Group]
+    Proxy = select,🇭🇰 VPS1,🇸🇬 VPS2,🇯🇵 JP,GCE
+
+
+
+
+🔸 应用配置
+    保存配置. 重新加载配置 
+
+
+
+🔸 启用代理.
+    打勾  set as system proxy 就可以
+    不能上网就重新加载下配置文件!!
+    我操... youtube . 明显快很多了!!
+    各种网站 明显翻墙快了很多!!
+
+
+
+
+
+🔸 Surge Dashboard 简介
+    Surge Mac 2.0 提供了更加直观的 Dashboard 界面，用来查看最近的访问、DNS 解析记录以及规则。
+
+    查看本地电脑的所有网络通信.比如哪个软件 几点几分 发送了多少数据. 发送到哪个网址.
+    这样你就可以看自己电脑是不是有异常进程在偷偷上传数据了!!
+    而且直接显示进程号码. 可以kill...
+
+    而且可以给某个网站 直接设置要走代理. 还是直接放过!
+
+
+🔸 Surge Dashboard 设置 
+    surge ➜ dashboard ➜ 选择 connect to local machine ➜ connect 
+
+
+
+
+
+
+🔸 Surge TUN 模式
+    Surge 2.1.0 (311) 增加了 TUN 模式，用来处理部分应用不走 HTTP、SOCK 代理的问题，
+    通过勾选菜单项中的「 Enhanced Mode」启用。
+    之前的 Surge，使用词典无法使用其中的维基百科进行查询、终端也无法走代理，
+    通常我们会选择再安装一个 Proxifier 来接管这些不走常规代理的应用，
+    Surge 支持 TUN 模式后这些问题就都解决了。
+
+
+    使用增强模式前必须先配置 dns-server 参数，因为启动 TUN 后不能获取到系统的 DNS 配置，不管是 TUN 全局模式还是部分模式 dns-server 参数都是必需的。
+
+    配置文件中如果不包含 enhanced-mode-by-rule 参数 ，菜单项中勾选 Enhanced Mode 就是全局模式，如果在配置中添加 enhanced-mode-by-rule = 1 就是 TUN 规则匹配模式，规则匹配模式中具体的规则后需要添加 enhanced-mode 参数。
+

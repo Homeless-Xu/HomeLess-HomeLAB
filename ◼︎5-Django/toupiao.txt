@@ -1,0 +1,1237 @@
+🔵 开发环境
+
+    Centos6 VPS服务器,并非本机! ssh到服务器.
+    服务器IP: 23.105.192.96
+    服务器域名: www.0214.help 
+    Django: 1.11.1
+    Python: 2.7
+    Myslq:  5.1
+
+
+🔸 创建 Mysql 数据库.
+
+      Name: djSiteDB、字符:utf8、Collation:utf8_bin
+      User: root
+      Password: .....
+
+
+🔸 创建项目: 
+    rm -R /home/djSite || cd /home && django-admin startproject djSite
+    👁‍🗨 || 不是 && ; &&: 前面命令执行成功才会继续执行后面命令. ||:不管前面命令是否成功都会执行后面命令
+
+    ⦿ 项目路径: /home/
+    ⦿ 项目名称: djSite
+
+
+🔸  settings.py mysql 数据库配置
+
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.sqlite3',
+                    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+                }
+            }
+
+            改成
+
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.mysql',
+                    'NAME': 'djSiteDB',
+                    'USER': 'root',
+                    'PASSWORD': 'xxxxxxxxxxxx',
+                    'HOST': '127.0.0.1',
+                    'PORT': '3306',
+                }
+            }
+
+
+    👁‍🗨 sed 一键修改命令: 
+        懒得vi编辑的话 可以用下面的命令. 
+        长了点.而且有些地方要改成你自己的.但是亲测有效的.
+
+        sed -i "s/django.db.backends.sqlite3/django.db.backends.mysql/g; s/'NAME': os.path.join(BASE_DIR, 'db.sqlite3')/'NAME': 'djSiteDB'/g" /home/djSite/djSite/settings.py &&  sed -i "/'NAME': 'djSiteDB'/a \ \n\t'USER': 'root',\n\t'PASSWORD': 'xujian0219',\n\t'HOST': '127.0.0.1',\n\t'PORT': '3306', " /home/djSite/djSite/settings.py
+
+
+        一键命令解析:
+
+
+        1. 修改 engine 行
+            sed -i "s/django.db.backends.sqlite3/django.db.backends.mysql/g" /home/djSite/djSite/settings.py
+
+
+        2. 修改: NAME 行
+            sed -i "s/'NAME': os.path.join(BASE_DIR, 'db.sqlite3')/'NAME': 'djSiteDB'/g" /home/djSite/djSite/settings.py
+
+        3. 用 分号; 结合上面两步骤
+            sed -i "s/django.db.backends.sqlite3/django.db.backends.mysql/g; s/'NAME': os.path.join(BASE_DIR, 'db.sqlite3')/'NAME': 'djSiteDB'/g" /home/djSite/djSite/settings.py
+
+
+        4. 在 'NAME': os.path.join(BASE_DIR, 'db.sqlite3') 行下面
+            添加user、password、host、port.4行! 
+
+          sed -i "/'NAME': 'djSiteDB'/a \ \n\t'USER': 'root',\n\t'PASSWORD': 'xujian0219',\n\t'HOST': '127.0.0.1',\n\t'PORT': '3306', " /home/djSite/djSite/settings.py
+
+            多行加回车键 \n 就可以了.注意要加制表符:\t! Python非常注意缩进的.
+            ❗️ 这里有个坑. 第一行是 `\ \n\t` 注意和别的行不同 加了斜杆+空格.原因未知
+            ❗️ 这里有个坑. 第一行是 `\ \n\t` 注意和别的行不同 加了斜杆+空格.原因未知
+            ❗️ 这里有个坑. 第一行是 `\ \n\t` 注意和别的行不同 加了斜杆+空格.原因未知
+
+
+        5. 用 && 结合 3.4两步
+        注意是先执行3 再支持4的 .到执行第四步的时候已经变成 'NAME': 'djSiteDB',
+
+        sed -i "s/django.db.backends.sqlite3/django.db.backends.mysql/g; s/'NAME': os.path.join(BASE_DIR, 'db.sqlite3')/'NAME': 'djSiteDB'/g" /home/djSite/djSite/settings.py &&  sed -i "/'NAME': 'djSiteDB'/a \ \n\t'USER': 'root',\n\t'PASSWORD': 'xujian0219',\n\t'HOST': '127.0.0.1',\n\t'PORT': '3306', " /home/djSite/djSite/settings.py
+
+
+        6. 查看结果
+        cat /home/djSite/djSite/settings.py
+
+
+
+
+
+🔸 开启服务器公网IP访问权限.
+
+    sudo vi /home/djSite/djSite/settings.py 
+        ALLOWED_HOSTS = [] 行改成:
+        ALLOWED_HOSTS = ["23.105.192.96", "www.0214.help"] 
+
+    👁‍🗨 sed 一键修改命令:
+      sed -i '/ALLOWED_HOSTS/c ALLOWED_HOSTS = ["23.105.192.96", "www.0214.help"] ' /home/djSite/djSite/settings.py
+
+          -i 是直接修改源文件.  测试的话可以用 -n ,等测试成功后再用-i
+          sed -i '/xxx/c yyy'  替换含有xxx的整行成yyy
+          你要用的话 直接改23.105.192.96 和 www.0214.help 成你自己的.
+
+
+🔸 启动开发服务器 & 浏览器打开: 23.105.192.96:8000
+
+    cd /home/djSite && python manage.py runserver 0.0.0.0:8000
+    需要在/home/djSite目录下运行. 因为需要用到manage.py
+
+    浏览器想要打开: 23.105.192.96:8000 
+    会有报错. 需要先设置下settings.py 里面的ALLOWED_HOSTS
+    也就是运行服务器上的那个IP/域名. 提供对外服务.
+    有些服务器是有多个公网IP地址的.
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+admin 后台
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 Admin 后台
+    现在 主页能进去了. 虽然没有什么内容.内容我们先不管.
+    我们先来看看管理后台. 23.105.192.96:8000/admin
+
+    想要登录后台.必须先建立后台账户.
+    要建立账户必须先建立数据库表来储存账户信息.
+    👁‍🗨 数据是存在数据库中的. 
+    只要你不删数据库.就算删除并重建djsite这个项目.之前建立的admin的账户信息还是存在数据库中的. 
+    也就是说 数据表只需要建立一次就可以了.
+    也就是说.只要能从数据库中获取对应数据. 你就可以正常登录 23.105.192.96:8000/admin 这个页面.
+
+
+    ⦿ 建立 数据库表
+        cd /home/djSite/ && python manage.py migrate
+
+        会出现一堆ok. 然后去23.105.192.96:8000/admin 就可以看到后台登录页面了.
+        下面就是创建 数据库管理员帐号了
+
+    ⦿ 创建登录帐号
+        python manage.py createsuperuser
+
+    ⦿ 登录 Admin管理页面
+        到这里 一个项目就算建立成功了.
+        接下来就是模板了.
+
+        正常的管理页面是可以编辑文档的.比如博客的文章. 
+        我们这个什么都没有.那是因为我们没有建立模板.
+
+        模板是什么. 拿博客文章来说. 
+        每篇文章都是由: 标题、内容、作者、创建时间、标签、分类 等等组成的 
+        这些都需要在数据库里先定义. 然后才可以创建文章.
+        下面就是有个模板的了.
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+模板
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+⦿ 创建投票模板
+    cd /home/djSite/ && python manage.py startapp polls && tree
+
+⦿ 目录结构
+    .
+    |-- djSite
+    |   |-- __init__.py
+    |   |-- __init__.pyc
+    |   |-- settings.py
+    |   |-- settings.pyc
+    |   |-- urls.py
+    |   |-- urls.pyc
+    |   |-- wsgi.py
+    |   `-- wsgi.pyc
+    |-- manage.py
+    `-- polls
+        |-- __init__.py
+        |-- admin.py
+        |-- apps.py
+        |-- migrations
+        |   `-- __init__.py
+        |-- models.py
+        |-- tests.py
+        `-- views.py
+
+
+
+🔸 settings.py 中启用polls模块.
+
+    vi /home/djSite/djSite/settings.py
+
+            INSTALLED_APPS = [
+              ......
+                'polls',                     INSTALLED_APPS中新增这一行来启用模块!
+            ]
+
+
+    👁‍🗨 一键命令
+      sed -i "/django.contrib.staticfiles/a \ \n    'polls'," /home/djSite/djSite/settings.py && cat /home/djSite/djSite/settings.py
+
+      加空行.  再加四个空格 来缩进.
+
+
+
+🔸 模块 HTML 内容修改
+    投票模块么. 肯定有一个网页来显示投票信息了, 编辑 views.py 就可以修改网页的显示内容
+
+    vi /home/djSite/polls/views.py
+    添加下面3行
+
+    from django.http import HttpResponse
+
+    def index(request):
+      return HttpResponse("Hello, world. You're at the polls index.")
+
+
+    👁‍🗨 一键命令
+    echo -e "from django.http import HttpResponse \n \ndef index(request):\n    return HttpResponse(\"Hello, world. You're at  the polls index.\")" > /home/djSite/polls/views.py
+
+    ❗️ 注意缩进. \t 制表符.到底是两空格 还是4个空格. 还是8个空格!! 很有关系的; 直接用空格来缩进.
+
+    👁‍🗨 动态查看文件(可选)
+      tail -20f /home/djSite/polls/views.py
+      动态查看文件尾部20行; 必须加f参数才会是动态的. 20是行数. 随意设置.
+      动态就是文件一被修改. 就能自动更新文档. 不用再去cat查看了. 对日志文件尤其有效.
+
+
+
+
+🔸 模块 HTML 网址配置
+    上面已经把网页内容搞定了(虽然只有一行文字: "Hello, world. You're at  the polls index.)
+    下面我们就要显示这个网页了.  网页当然需要网址了.
+    假设我们要把: 23.105.192.96:8000/polls 这个网址给上面的网页. 就需要配置 urls.py
+
+    新建的空白项目有个 urls.py  路径是/home/djSite/djSite/urls.py 这个是项目的核心 urls.py 配置文件.
+    但是一个项目.往往含有很多模块. 模块就应该是单独的! 应该和项目分离开来!!! 
+    所以每个模块都应该有自己独立的urls.py ; 我们就需要在模块下手动建立 urls.py 这个文件.
+    虽然也可以把 所有模块的url配置 写到项目核心 urls.py 中. 但是一旦模块多了. 你自己都搞不清楚那个路径对应那个模块. 这是不可接受的. 反正一句话.在每个模块下建立单独的urls.py文件.
+
+
+
+    ⦿ polls 下新建 urls.py
+
+    vi /home/djSite/polls/urls.py 全部内容改成如下:
+
+        from django.conf.urls import url            ➜ 不管
+        from . import views                         ➜ views 和 url 是对应的. 所以要引入当前模块的views
+                                                    ➜ . 就是当前文件夹的意思
+        urlpatterns = [
+            url(r'^$', views.index, name='index'),  ➜ 这个就是 urls.py 的核心了. 下面仔细讲解.
+        ]
+
+
+    ⦿ url(r'^$', views.index, name='index')
+          r'^$'        ➜ 正则式. 匹配网址.
+          views.index  ➜ 网址对应的网页. 匹配的网址就会显示这个网页的内容.
+                       ➜ views.index 中的 . 可以看成文件夹上下级关系. 如: views 文件夹里的 index 文件
+                       ➜ 在这里就是 views.py 文件中上一步新建的 index 类:  def index(request):
+          name='index' ➜ 别名. 无所谓
+
+
+    👁‍🗨 一键命令:
+        echo -e "from django.conf.urls import url \n\nfrom . import views\nurlpatterns = [\n    url(r'^$', views.index, name='index'),\n]" > /home/djSite/polls/urls.py
+
+    👁‍🗨 查看文件   tail -20f /home/djSite/polls/urls.py
+
+
+
+
+
+🔸 项目 urls.py 网址配置
+    现在还不能访问 23.105.192.96:8000/polls.
+    我们把 polls 模块里面的 urls.py 导入到项目核心 urls.py中后就可以访问了.
+
+
+   ⦿ vi /home/djSite/djSite/urls.py
+
+      默认设置: 
+
+          from django.conf.urls import url
+          from django.contrib import admin
+
+          urlpatterns = [
+              url(r'^admin/', admin.site.urls),
+          ]
+
+
+      改成如下:
+
+          from django.conf.urls import include, url    ➜ 新加了 include,
+          from django.contrib import admin
+
+          urlpatterns = [
+              url(r'^polls/', include('polls.urls')),  ➜ 新加了这行
+              url(r'^admin/', admin.site.urls),
+          ]
+
+
+    👁‍🗨 一键命令
+
+    sed -i "s/from django.conf.urls import url/from django.conf.urls import include, url/g" /home/djSite/djSite/urls.py && sed -i "/url(r'\^admin\/'/i \     url(r'^polls/', include('polls.urls'))," /home/djSite/djSite/urls.py
+
+
+        👁‍🗨 还是那个缩进的坑. /i后面必须加'\ ';  
+        tab 有时候是4个空格. 有时候是两个空格.有的时候是8个空格. 看设置的.很麻烦.
+         简单点 tab 直接用四个空格来替换. 所以这里是 '/i \    ' \左边一个空格,\右边1+4=5个空格.
+
+        1. from django.conf.urls import url ➜ from django.conf.urls import include, url
+            sed -i "s/from django.conf.urls import url/from django.conf.urls import include, url/g" /home/djSite/djSite/urls.py
+
+        2. url(r'^admin/'➜ 上方添加一行 ➜ url(r'^polls/', include('polls.urls')),
+            sed -n "/url(r'\^admin\/'/i \     url(r'^polls/', include('polls.urls'))," /home/djSite/djSite/urls.py
+
+        3. tail -20f /home/djSite/djSite/urls.py
+
+
+🔸 访问 23.105.192.96:8000/polls
+    现在就可以访问 这个网址了!  到这里差不多 django 入门了,接下去的就是深入了.
+    比如 网页的设计. 现在23.105.192.96:8000/polls 只有一行文字. 太low了...
+    比如 弄个博客模块. 来写博客!!!
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+进阶: 完善 投票模型:polls
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+🔸 模型简介
+    模型概念有点抽象. 举个例子吧.
+    博客: 很多文章组成; 文章由标题、内容、作者、发布时间、标签、分类 等等组成.
+
+    所有文章信息都是储存在数据库中的. 那么数据库是如何储存文章的呢!
+
+    好的博客网站有很多功能如: 
+        可以根据发布时间对文章排序.
+        可以根据标签 筛选出对应的文章
+        可以根据大类 筛选出对应标签和对应文章.
+
+    要实现这些功能. 就需要你建立模型了.这个要稍微了解点数据库知识.
+    你当然可以把整片文章都放到数据库表的一个字段中.
+
+    你也可以把 
+        所有文章的标题 都放在数据库表标题字段中.
+        所有文章的内容 都放在数据库表内容字段中.
+        所有文章的标签 都放在数据库表标签字段中.
+        所有文章的大类 都放在数据库表大类字段中.
+            然后你要访问某篇文章的时候. 把上面的数据结合起来就是一篇文章了.
+            这样的模型设计 就可以实现很多很多功能了.
+
+
+
+🔸 投票模型实例
+
+模型是关于你的苏剧的唯一的确定的来源.
+模型包含您正在储存的数据的基本字段和行为.
+我们的目标是在一个地方定义您的数据模型 然后自动的从中获取数据.
+
+
+如简单的投票软件中.  我们会创建两个模型:
+问题 question  和 选择 choice
+
+一个问题有一个问题内容 和问题发布时间.
+
+一个选择有选择的文本和投票计数器.
+每个选择都会和一个问题关联.
+这些概念通过简单的python类就可以表现出来.
+按照以下代码，编辑你的polls/models.py文件。
+
+
+cat /home/djSite/polls/models.py
+
+默认内容:
+    from __future__ import unicode_literals
+    from django.db import models
+
+添加下面6行: 
+  class Question(models.Model):                           ➜ 问题模型
+      question_text = models.CharField(max_length=200)    ➜ 问题内容
+      pub_date = models.DateTimeField('date published')   ➜ 问题发布时间
+
+  class Choice(models.Model):                                           ➜ 选择模型
+      question = models.ForeignKey(Question, on_delete=models.CASCADE)  ➜ 选择对应的问题
+      choice_text = models.CharField(max_length=200)                    ➜ 选择项的文本
+      votes = models.IntegerField(default=0)                            ➜ 计数器
+
+
+    ⦿ 代码解析
+        这些代码非常明确。
+        每个模型通过一个继承自django.db.models.Model的类来表示。
+        每个模型都有一些类变量，每个变量都表示模型中的数据库字段。
+
+        每个字段通过实例中的一个字段类表示，
+            CharField是字符字段，
+            DateTimeField是时间字段。这会告诉Django每个字段保存着什么类型的数据。
+
+        每个字段实例的名字（比如question_text和pub_date）是字段的对机器友好的格式的名字，你以后可以在你的Python代码中使用这个值，你的数据库也会用它作为列名称。
+
+        你可以使用（可选的）第一个位置参数作为指定的可读的名称。他可以用于Django的几个introspective（内省）部分，同时作为文档。如果没有提供，则Django将使用机器可读的名称作为名字。在这个例子中，我们只对Question.pub_date定义了一个名字。对于其他所有的字段都会默认使用自己的机器名作为名字。
+
+        有些字段类有一些必须的参数要填。举例，CharField要求你给出最大长度max_length。这不仅会用在数据库中，也会在验证中使用，后面我们会讲到。
+
+        一个字段也可以拥有很多可选的参数，比如我们可以看到，我们班votes的默认值设成了0。
+
+        最后一点，注意关系是由外键定义的。这告诉Django，每一个Choice都和只和一个问题相关。Django支持所有常见的数据库关系：多对一，多对多，一对一。
+
+
+
+
+
+    👁‍🗨 一键命令
+        echo -e "class Question(models.Model):\n    question_text = models.CharField(max_length=200)\n    pub_date = models.DateTimeField('date published')\n\nclass Choice(models.Model):\n    question = models.ForeignKey(Question, on_delete=models.CASCADE)\n    choice_text = models.CharField(max_length=200)\n    votes = models.IntegerField(default=0)\n" >> /home/djSite/polls/models.py
+
+
+
+
+
+
+
+🔸 激活模型..
+    之前已经做了这步. 也就是在 settings.py 的 installed_apps 下添加 'polls' 这行.
+    其实 'polls' = 'polls.apps.pollsConfig'  还是直接写 'polls' 来的简单.
+
+
+
+
+🔸 迁移简介
+
+    makemigrations 迁移的意思. 
+    models.py 模板改变后. 需要把改变的东西 同步 到数据库中. 所以就需要迁移..
+    类似git想要同步到服务器.就得先 提交版本: command.
+
+
+    ⦿ python manage.py makemigrations polls
+        告诉Django你已经对你的model做出了一些改变，并且你希望这些改变可以作为migration存储起来。
+        就好像git 的commond . 保存一个版本. 但是并不同步到服务器.
+
+            ➜  djSite python manage.py makemigrations polls
+            Migrations for 'polls':
+              polls/migrations/0001_initial.py
+                - Create model Choice
+                - Create model Question
+                - Add field question to choice
+
+
+
+    ⦿ python manage.py sqlmigrate polls 0001 (可选)
+        看上一步具体创建了什么东西! 
+
+            ➜  djSite python manage.py sqlmigrate polls 0001
+            BEGIN;
+            --
+            -- Create model Choice
+            --
+            CREATE TABLE `polls_choice` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `choice_text` varchar(200) NOT NULL, `votes` integer NOT NULL);
+            --
+            -- Create model Question
+            --
+            CREATE TABLE `polls_question` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `question_text` varchar(200) NOT NULL, `pub_date` datetime NOT NULL);
+            --
+            -- Add field question to choice
+            --
+            ALTER TABLE `polls_choice` ADD COLUMN `question_id` integer NOT NULL;
+            ALTER TABLE `polls_choice` ADD CONSTRAINT `polls_choice_question_id_c5b4b260_fk_polls_question_id` FOREIGN KEY (`question_id`) REFERENCES `polls_question` (`id`);
+            COMMIT;
+
+
+
+    ⦿ python manage.py migrate
+        同步更改到数据库. 
+        好比git 的push.
+
+
+    ⦿ 总结:
+        1. 更改你的模型（在 models.py 中）。
+        2. 运行 python manage.py makemigrations 来创建这些更改的迁移
+        3. 运行 python manage.py migrate        将这些更改应用于数据库。
+
+
+
+    迁移非常强大，他可以让你一边建设你的项目，一边慢慢地改变你的数据库，而且不用删除你的数据库或者表，或者创建一个新的。
+    它专门用于实时升级数据库，而不会丢失数据。
+
+    Django有单独的命令来制作和应用迁移的原因是因为您可以提交迁移到版本控制系统并将其发送到您的应用程序; 
+
+    简单理解 就像git. 只要你保存了某一版本后.你可以随意修改文件. 反正可以非常方便的恢复到之前保存的状态.
+
+
+
+
+
+
+
+
+🔸 迁移实例
+
+    python manage.py makemigrations polls
+        创建迁移(git提交版本)
+
+    python manage.py migrate
+        同步数据库 (git push: 同步本地到服务器)
+
+
+
+🔵 Django API
+    为什么要学API. 其实Django 是偏向后端的. 主要就是和API打交道. 如创建数据库啊. 创建变量.
+    然后前端用这些变量 就可以创建出网页了..... 好像是这样的.
+
+    ❗️❗️❗️API部分参考自: http://www.jianshu.com/p/fc049fd5e2a9
+    ❗️❗️❗️API部分参考自: http://www.jianshu.com/p/fc049fd5e2a9
+
+
+cd /home/djSite && python manage.py shell
+
+⦿ 数据库 API
+>>> from polls.models import Question, Choice
+  ➜ 导入新建的模型类
+
+>>> Question.objects.all()
+<QuerySet []>
+  ➜ 查看所有 Question, 会返回一个空的数组. 说明没有任何questions.
+  ➜ 下面我们来创建一个问题.   
+
+>>> from django.utils import timezone
+  ➜ 问题需要一个提问时间. 所以要先导入时区模块.来获得时间.
+
+>>> q = Question(question_text="What's new?", pub_date=timezone.now())
+  ➜ 定义一个问题; 问题是一个数组. 有两部分组成: 问题内容. 和问题发布时间.
+      👹 NameError: name 'timezone' is not defined
+        这里有可能报错. 那是因为你项目 settings.py里没有设置时区.
+        设置下时区然后退出  python manage.py shell 重新来一遍就可以了.
+        sudo vi /home/djSite/djSite/settings.py ➜  TIME_ZONE = 'UTC' 中的UTC改成  Asia/Shanghai
+
+        👁‍🗨 一键修改命令
+        sed -i "s/TIME_ZONE = 'UTC'/TIME_ZONE = 'Asia\/Shanghai'/g" /home/djSite/djSite/settings.py
+
+>>> q.save()
+  ➜ 保存问题到数据库! 上面只是创建.没有保存. 
+
+>>> q.id
+1L
+  ➜ 既然保存到数据库了. 而且这是第一个问题那么数据库表中的第一行. 也就是分配了 id=1
+  ➜ 有些数据库id 分配的是1 , 有效数据库分配的是 1L. 没啥区别.
+
+>>> q.question_text
+"What's new?"
+>>> q.pub_date
+datetime.datetime(2017, 6, 2, 3, 45, 57, 919271, tzinfo=<UTC>)
+  ➜ 从数据库中取出这个问题信息.
+
+
+>>> q.question_text = "what's up?"
+>>> q.save()
+>>> q.question_text
+"what's up?"
+  ➜ 还可以通过数据库来修改问题内容!
+
+
+>>> Question.objects.all()
+<QuerySet [<Question: Question object>]>
+  ➜ 显示数据库中的所有问题
+  👹 这个<> 完全看不懂啊..   这个问题可以通过编辑polls/models.py 中的问题模型来解决.
+  🔸添加 __str__()方法到Question和Choice 就可以了
+ 
+        vi /home/djSite/polls/models.py
+        整个文件改成如下(手动改吧. 注意缩进. 不提供一键脚本了): 
+
+        # -*- coding: utf-8 -*-
+        from __future__ import unicode_literals
+        from django.db import models
+        from django.utils.encoding import python_2_unicode_compatible     # support Python 2
+
+
+        # Create your models here.
+
+        @python_2_unicode_compatible      # support Python 2
+        class Question(models.Model):
+            question_text = models.CharField(max_length=200)
+            pub_date = models.DateTimeField('date published')
+
+            def __str__(self):
+                return self.question_text
+
+        @python_2_unicode_compatible     # support Python 2
+        class Choice(models.Model):
+            question = models.ForeignKey(Question, on_delete=models.CASCADE)
+            choice_text = models.CharField(max_length=200)
+            votes = models.IntegerField(default=0)
+
+            def __str__(self):
+                return self.choice_text
+
+
+       👁‍🗨 __str__()方法的添加是很重要的，不光是为了你自己处理交互提示的方便，也是因为对象的展示是通过Django的自动生成admin的。
+         注意上面的是普通Python方法，下面我们再添加一个自定义方法.
+
+    🔸 添加 自定义方法: was_published_recently
+
+      import datetime
+
+      from django.db import models
+      from django.utils import timezone
+
+      class Question(models.Model):
+          def was_published_recently(self):
+              return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+
+
+
+    🔸 polls/models.py 最终变成如下:
+
+        # -*- coding: utf-8 -*-
+        from __future__ import unicode_literals
+
+        import datetime
+        from django.db import models
+        from django.utils import timezone
+        from django.utils.encoding import python_2_unicode_compatible
+
+
+        # Create your models here.
+
+        @python_2_unicode_compatible
+        class Question(models.Model):
+            question_text = models.CharField(max_length=200)
+            pub_date = models.DateTimeField('date published')
+
+            def __str__(self):
+                return self.question_text
+
+            def was_published_recently(self):
+                return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+
+        @python_2_unicode_compatible
+        class Choice(models.Model):
+            question = models.ForeignKey(Question, on_delete=models.CASCADE)
+            choice_text = models.CharField(max_length=200)
+            votes = models.IntegerField(default=0)
+
+
+
+      👁‍🗨 保存这些更改并通过再次运行python manage.py shell启动一个新的Python shell：
+
+    🔸 再次运行 Python shell
+
+      >>> from polls.models import Question, Choice
+      >>> Question.objects.all()
+      <QuerySet [<Question: what's up?>]>
+        ➜ 现在 __str__() 就生效了.
+
+
+
+      >>> Question.objects.filter(id=1)
+      <QuerySet [<Question: what's up?>]>
+        ➜ Django 提供了非常多的API. 比如 filter 可以筛选内容.
+
+      >>> Question.objects.filter(question_text__startswith='what')
+      <QuerySet [<Question: what's up?>]>
+        ➜ 注意大小写.question_text__startswith='what' 不等于 question_text__startswith='What'
+
+
+      >>> from django.utils import timezone
+      >>> current_year = timezone.now().year
+      >>> Question.objects.get(pub_date__year=current_year)
+      <Question: what's up?>
+        ➜ 甚至还能按时间过滤, 这里就过滤出了 今年发起的提问
+
+
+      >>> Question.objects.get(id=2)
+        ➜ 根据ID查找问题.
+
+      >>> Question.objects.get(pk=1)
+      <Question: what's up?>
+        ➜ 查询 primary key 主键. 是最常用的. Django 提供了一个primary缩写 :pk 
+
+
+      >>> q = Question.objects.get(pk=1)
+      >>> q.was_published_recently()
+      True
+        ➜ 查询是当前问题否生效??
+
+
+    ⦿ 下面给问题添加多选!
+
+      >>> q = Question.objects.get(pk=1)
+        ➜ 定义 q 
+
+      >>> q.choice_set.all()
+      <QuerySet []>
+        ➜ 显示q这个问题的 所有选项. 我们没有设置过任何选项.所有现在是空的.
+
+
+      >>> q.choice_set.create(choice_text='Not much', votes=0)
+      <Choice: Not much>
+        ➜ 给q这个问题 添加第一个选项: Not much
+
+
+      >>> q.choice_set.create(choice_text='The sky', votes=0)
+      <Choice: The sky>
+        ➜ 给q这个问题 加第二个选项: The sky
+
+
+      >>> c = q.choice_set.create(choice_text='Just hacking again', votes=0)
+        ➜ 给q这个问题 加第三个选项: Just hacking again
+        ➜ 把q问题 关联到 c问题;  关联就是两个问题有联系.....
+
+      >>> c.question
+      <Question: What's up?>
+        ➜ 现在c问题 就等于q 问题了.
+
+      >>> q.choice_set.all()
+      <QuerySet [<Choice: Not much>, <Choice: The sky>, <Choice: Just hacking again>]>
+        ➜ 现在q问题下面就有三个选项了.
+      >>> q.choice_set.count()
+      3
+        ➜ q问题的选项数量
+
+
+      >>> Choice.objects.filter(question__pub_date__year=current_year)
+      <QuerySet [<Choice: Not much>, <Choice: The sky>, <Choice: Just hacking again>]>
+        ➜ 找出 所有pub_date 是今年的选项.
+        ➜ 双下划线 什么意思...
+
+      >>> c = q.choice_set.filter(choice_text__startswith='Just hacking')
+      >>> c.delete()
+        ➜ 删除一个提问.
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+Django 进阶: 博客搭建                   参考:https://www.dannysite.com/blog/235/
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+🔵 简介
+
+    博客是一个功能的集合. 是一个模块. 
+    博客完全可以在上面的 djSite项目下继续. 新建个模板就可以了.
+
+
+🔵 MVC & MTV
+
+    ⦿ MVC:
+        M：数据存取部分，由 django 数据库层处理；
+        V：选择显示哪些数据要显示以及怎样显示的部分，由视图和模板处理；
+        C：根据用户输入委派视图的部分，由 Django 框架根据 URLconf 设置，对给定 URL 调用适当的 Python 函数。
+
+
+    ⦿ MTV：
+        M 代表模型（Model）： 即数据存取层。该层处理与数据相关的所有事务：如何存取、如何验证有效性、包含哪些行为以及数据之间的关系等；
+        T 代表模板(Template)：即表现层。该层处理与表现相关的决定：如何在页面或其他类型文档中进行显示；
+        V 代表视图（View）：  即业务逻辑层。该层包含存取模型及调取恰当模板的相关逻辑。你可以把它看作模型与模板之间的桥梁。
+
+    ⦿ Django
+        Django 里更关注的是模型（Model）、模板（Template）和视图（Views），因此 Django 也被称为 MTV 框架。
+        框架: 就是把一个项目分成好几个部分.
+
+      ❗️下面这个模式在开发中至关重要，因此必须牢记在心并运用到实际开发过程中。
+          模型就是:Model    ➜ 构建数据库. 存储数据
+          模板就是:Template ➜ 把完整的 HTML 分成几部分. 要用的时候引入模板就可以. 如: head.html body.html footer.html
+          视图就是:view     ➜ 连接数据库和模板. 定义模板怎么从数据库获取数据,获取什么数据.
+          最后一个:url      ➜ 通过正则式匹配.把网址和 view里的网页对应起来.
+
+
+
+
+🔵 构想: 
+    想要实现什么. 想要达到怎样的效果.
+
+    博客: 标题、作者、正文、发布时间、分类、大类、星级、提问框.
+
+    博客列表呈现博客.
+    博客排序. 手动+时间倒序.
+    博客摘要! 
+    博客详情页面.
+
+
+
+    🔸 新增 myblog 模块: myblog
+          cd /home/djSite/ && python manage.py startapp myblog && ls
+
+    🔸 激活 myblog 模块:
+          就是去settings.py 把'myblog'加到 INSTALLED_APPS 里面去就可以了.
+          sed -i "/django.contrib.staticfiles/a \ \n    'myblog'," /home/djSite/djSite/settings.py && cat /home/djSite/djSite/settings.py
+
+          - 你的话把myblog 和 文件路径换掉就可以了
+
+
+
+🔵 建立模型 Model
+
+🔸 简介
+    要建立模型,首先要知道你想实现什么功能. 然后通过需求来建立模型, 这就是MVC中的M(model)层.决定了数据的存储.
+
+    模型层: 数据存储层. 处理和数据有关的所有事情.如: 如何存取、如何验证、包含哪些行为、以及数据之间的关系.
+
+    博客拥有标题、作者、正文及发布的时间等基本的元素。同时，一个博客还会隶属于一个分类，并可能包含一个或多个标签。博客也可以有一个或多个评论，评论中要记录评论者的称呼、邮箱以及评论内容；
+
+
+    从中可以看出：
+
+    直接与博客相关的模型应包含三个：博客、分类以及标签。
+
+    博客包含标题、作者、正文、发布时间等基础字段。
+
+    分类和标签则应有名称；
+
+    一个博客仅隶属于一个分类，反过来一个分类则可以包含多个博客，这是明显的一对多的关系，因此博客中应有一个外键关联至分类；
+
+    一个博客可能包含一个或多个标签，反过来一个标签页会包含多个博客，因此是多对多的关系；
+
+    还有一个评论模型来存储用户评论，并主动关联到博客上去。一个博客可以有一个或多个评论，但反过来评论只针对一篇博客，因此也是一对多的关系。
+
+
+    接下来我们可以以此建立对应的模型，最基础的代码如下：
+
+
+
+
+
+
+🔸 配置模型: Models.py
+
+    vi /home/djSite/myblog/models.py   添加下面. 自带的两个from 不去管它.
+    
+        class Category(models.Model):
+            name = models.CharField('名称', max_length=16)
+        # ➜ 建立分类; CharField 是字符类型字段;  字段长度;
+        
+
+        class Tag(models.Model):
+            name = models.CharField('名称', max_length=16)
+        # ➜ 建立标签; CharField 是字符类型字段;  字段长度;
+        
+        
+        class Blog(models.Model):
+            title = models.CharField('标题', max_length=32)               # ➜ 博客标题
+            author = models.CharField('作者', max_length=16)              # ➜ 博客作者 
+            content = models.TextField('正文')                            # ➜ 博客正文, TextField(文本框)字段类型; 无大小限制. 
+            created = models.DateTimeField('发布时间', auto_now_add=True) # ➜ 博客创建时间. 时间字段类型; 
+            category = models.ForeignKey(Category, verbose_name='分类')   # ➜ 博客 大类
+            tags = models.ManyToManyField(Tag, verbose_name='标签')       # ➜ 博客 标签
+        
+
+        class Comment(models.Model):
+            blog = models.ForeignKey(Blog, verbose_name='博客')            # ➜ 评论对应的博客
+            name = models.CharField('称呼', max_length=16)                 # ➜ 评论者名称
+            email = models.EmailField('邮箱')                              # ➜ 评论者邮箱
+            content = models.CharField('内容', max_length=140)             # ➜ 评论内容
+            created = models.DateTimeField('发布时间', auto_now_add=True)  # ➜ 评论时间
+
+
+
+
+🔸 同步模型到数据库
+    模型只是利用 Django 提供的 ORM 完成对实际表结构的映射，因此在完成模型定义后，我们需要将其真正同步到实际的数据库中去。
+    新版本的 Django 中，该操作需要分成两步.
+
+
+    ⦿ 版本保存:
+    python manage.py makemigrations myblog
+
+    ⦿ 真正同步:
+    python manage.py migrate
+
+        ➜  djSite python manage.py migrate
+        System check identified some issues:
+
+        WARNINGS:
+        ?: (mysql.W002) MySQL Strict Mode is not set for database connection 'default'
+          HINT: MySQL's Strict Mode fixes many data integrity problems in MySQL, such as data truncation upon insertion, by escalating warnings into errors. It is strongly recommended you activate it. See: https://docs.djangoproject.com/en/1.11/ref/databases/#mysql-sql-mode
+        Operations to perform:
+          Apply all migrations: admin, auth, contenttypes, myblog, polls, sessions
+        Running migrations:
+          Applying myblog.0001_initial... OK
+
+
+
+
+
+🔸 添加内容
+
+    既然存储博客的地方已经有了，现在是时候尝试往里面插入一些数据了，这也方便之后在实现功能之后进行测试。
+    传统的方式可以选择手动连接到数据库，写原生的 SQL 来完成该步骤。
+    当然还有一个更“酷”的方法就是利用 Django 内置的站点管理工具。
+
+
+    ⦿ 编辑 myblog/admin.py
+      要想让刚定义的模型在站点管理中展示，就需要在此将所需的模型显示的添加到 blog/admin.py 中.
+
+      添加下面两行: 
+          from .models import Category, Tag, Blog
+          admin.site.register([Category, Tag, Blog])
+
+      重新运行 runserver 开发服务器并用浏览器打开: 23.105.192.96:8000/admin/ 访问Admin管理后台.
+      应该能看到我们所期望的内容：  可以创建: blogs、categorys、tags.
+
+
+🔸 优化编辑.
+    admin 里面的编辑...  只有个输入框. 非常丑陋啊! 想要word那样华丽的编辑文章是不可能的.
+    很多网站/论坛发帖 都会有个编辑工具. 这就是富文本..
+    暂时不说. 反正可以优化的..
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 博客列表
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸 简介
+
+    MTV的M:模型部分差不多了,数据可以存储了.博客也可以创建了. 
+    但是怎么才能通过网页看到我们创建的博客呢! 比如所有博客的标题列表. 
+    你想看通过网页看所有博客的标题列表. 那必须先要有网页啊. 
+    一般的网站 肯定有非常多的网页的. 其实各种网页排版都差不多的.只是内容不一样而已.
+    如果不用模板. 那么每个网页 我们都得手动写完整的HTML源码. 我打字慢... 每个网页都这样肯定不行!
+    想偷懒就得用模板.模板这大小不好描述.大家有点概念就可以..
+
+
+
+    首先就是博客列表. 来呈现所有的博客啊..
+    需要有一个“博客列表”页来呈现发布的博客。博客要按发布时间的倒序来排列，每个博客都要包含标题、作者、分类、发布时间的显示（年-月-日 时:分）及节选的正文内容（前 100 个字）。点击单独的博客可以进入其详情页。
+    在实际的开发前，我们应能看到产品部门针对各页面所做的原型图，而 UI 部门也会遵循此完成设计图。因此我们就能清楚的知道页面中包含哪些元素、应如何摆放。但这里因为只是一个简单的演示，所以请允许我“索性随意发挥”了。
+
+
+
+🔸 流程
+
+    ➜ 视图: 从模型(数据库)中获取用户请求的数据. 传递给模板
+      ➜ 模板: 结合视图里的数据 生成 html 网页.
+        ➜ 网址: 给生成的html 一个网址.
+
+
+🔸 建立视图.
+
+    视图作用: 分析用户的请求 ➜ 从数据库中取出请求的内容 ➜ 把内容传递给模板.
+
+    🔅 vi /home/djSite/myblog/views.py  改成如下:
+
+          # -*- coding: utf-8 -*-
+          from __future__ import unicode_literals
+          from django.shortcuts import render
+          from .models import Blog          #➜ 引入 models.py 中定义的 Blog 
+          
+          def get_blogs(request):           #➜ 定义 get_blogs 获取博客函数.
+              ctx = {                       #➜  ctx 就是数据库将要返回的数据.
+                  'blogs': Blog.objects.all().order_by('-created')   #➜ 想知道到底返回什么数据.可以去 python manage.py shell 下输入命令查看.
+              }
+              return render(request, 'blog-list.html', ctx)  #➜ 返回给模板的数据.
+
+
+
+    ⦿ 'blogs': Blog.objects.all().order_by('-created')  分析:
+        想知道到底返回什么数据.可以去 python manage.py shell 下输入命令查看.
+
+        🔅 python manage.py shell 
+            ➜ 进入shell
+
+        >>> from myblog.models import Category, Tag, Blog, Comment
+            ➜ 导入模型(就是 models.py 里面的定义的 class)
+            ➜ 必须先导入模型后 才能获取改模型相关的数据.
+
+        >>> Blog.objects.all()
+        <QuerySet []>
+        ➜ 可以看到返回空. 也就是没有博客. 我们去admin后台随意创建两个文章再回来.
+
+
+
+
+
+    这里，我们使用了 Django 的 ORM 对博客数据进行查询，并依发布时间的倒序进行排列，然后将结果集（一个 QuerySet 对象）放在一个字典对象 ctx 的 blogs 中。
+    然后调用 render 方法来渲染模板，其第一个参数始终接收 request 对象，第二个参数是要渲染的模板文件，第三个参数则是可选的上下文参数。
+    注意观察视图函数的入参，其第一个参数一定是 request 对象，“这是一个不变的真理”。
+
+
+
+
+
+🔸 定义模板
+
+    现在就只剩下 T 层没有完成了。废话不多说，
+    在❗️❗️❗️项目目录下(不是模块目录下)❗️❗️❗️新建一个 Templates 文件夹，并在其中新增一个 blog-list.html 文件，这个文件的名字要和之前视图函数中 render 方法的入参中定义的相对应。 
+
+
+    cd /home/djSite/ && mkdir Templates && cd Templates && vi blog-list.html
+
+    然后打开并写入以下代码：
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Blogs</title>
+    <style>
+        .blog {
+            padding: 20px 0px;
+        }
+        .blog .info span {
+            padding-right: 10px;
+        }
+        .blog .summary {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+ 
+<div class="header">
+    <h1>My Blogs</h1>
+</div>
+ 
+{% for blog in blogs %}
+    <div class="blog">
+        <div class="title">
+            <a href="#"><h2>{{ blog.title }}</h2></a>
+        </div>
+        <div class="info">
+            <span class="category" style="color: #ff9900;">{{ blog.category.name }}</span>
+            <span class="author" style="color: #4a86e8">{{ blog.author }}</span>
+            <span class="created" style="color: #6aa84f">{{ blog.created|date:"Y-m-d H:i" }}</span>
+        </div>
+        <div class="summary">
+            {{ blog.content|truncatewords:100 }}
+        </div>
+    </div>
+{% endfor %}
+ 
+</body>
+</html>
+
+
+
+    正如你所看到的，我们作为上下文传入的参数在模板中可以以变量的形式直接访问。这里我们对 blogs 进行了一次 for 迭代，然后为每一篇博客生成一个 div 容器供其展示。在 div 内部又通过变量属性的访问来获取诸如博客标题、分类名称、作者、正文和发布时间等内容。注意这里用到了很多有意思的模板标签，这些都值得你去一步步挖掘。
+    另外，在博客标题上有一个 <a> 标签，其中的 href 属性只填写了一个固定的“#”。理论上来说，这里应该填入每篇博客对应的详情页链接，但因为到目前为止我们还没有实现出“博客详情”页，所以先这么临时处理，待之后再完善。
+
+
+
+
+🔸 配置 模块urls.py
+
+    现在，MTV 三层我们都已完成了，是时候验证一下到目前为止的成果。
+    不过在此之前还有一个很重要的工作就是为这个视图指定一个发现它的路径，这样用户才能通过在浏览器的地址栏中输入地址并正确访问到他。
+    这个重要的工作是由 URLConf 来帮助我们完成的。打开 myblog/urls.py 并在 urlpatterns 中增加一条：
+
+⦿ myblog模块下创建 urls.py 
+    🔅 vi /home/djSite/myblog/urls.py  改成: 
+
+        # -*- coding: utf-8 -*-
+        from django.conf.urls import url            #➜ 不管
+        from . import views                         #➜ views 和 url 是对应的. 所以要引入当前模块的views
+        from myblog.views import get_blogs          #➜ 导入尽量不要用.这个当然文件夹. 由于这个模块url是要导入到项目核心urls.py的. 尽量写绝对路径. 这里就是模块名.views; 至于导入的东西是所有views 还是某个关系不大好像. 
+
+        urlpatterns = [
+            url(r'^$', get_blogs, name='blog_get_blogs'), #➜ 博客的 文章列表页面
+        ]
+
+
+
+    ⦿ url(r'^$', get_blogs, name='blog_get_blogs'), 分析:
+        r'^$' ➜ 正则式 匹配网址.
+        get_blogs ➜ 匹配的网址 对应到模板文件夹下的 get_blogs.html网页.(模板文件夹下没有这个名字的网页)
+        name='blog_get_blogs' ➜ get_blogs.html 也可以叫 blog_get_blogs.html(模板文件夹下有这个名字的网页)
+
+
+
+
+🔸 配置 项目 urls.py
+    模块的urls.py 需要加入到项目urls.py 中才能生效.
+    vi /home/djSite/djSite/urls.py
+
+    urlpatterns = [
+        url(r'^polls/', include('polls.urls')),  #➜ 这个是 polls模块的 urls.py
+        url(r'^admin/', admin.site.urls),
+    ]
+
+    添加:
+        url(r'^$', include('myblog.urls')),  #➜ 这个是 myblog模块的 urls.py
+
+
+
+
+
+🔸 配置 模板
+
+
+这是 DEBUG 模式下（默认是开启的，通过 settings 中的 DEBUG 配置项来定义）的错误提示页，也就是传说中的 500 错误。在这种模式下，Django 会为我们打印出问题的根源所在：TemplateDoesNotExist。嗯？之前我们不是都定义好了的吗？为什么会说找不到呢？很简单，因为我们没有真正告诉 Django 应到哪里去寻找我们定义的模板文件。这需要在 settings 中的 TEMPLATES 配置项中声明。现在打开 myblog/settings.py 文件并将 TEMPLATES 配置项修改成如下这样：
+
+
+
+
+vi /home/djSite/djSite/settings.py
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['Templates/'],  这行改成这样. 写你自己的模板路径.. 这个路径是相对于模板的!我们写模板文件夹的名字就可以
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+
+
+
+
+
+🔸 浏览器访问 23.105.192.96:8000
+重启开发服务器并再次访问，这时应该能看到久违的效果了：My Blogs
+什么文章都没有 是因为你没创建什么文章.
+
+
+
+
+
+
+
+
+
+
+
+👹 Python2 配置文件如果含有中文 会报错.. but no encoding declared;
+只要把下面行.放文件顶部就可以了
+# -*- coding: utf-8 -*-
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+完善博客.
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸添加文章  23.105.192.96:8000/admin
+    ⦿ 文章1
+    标题 title1
+    作者 xujian
+    正文 1234567
+    分类: 添加: cate1 cate2
+    标签: 添加: tag1 tag2 
+
+    ⦿ 文章2
+
+    标题 title1
+    作者 jiaqian
+    正文 7654321
+    分类: 选择 cate2
+    标签: 选择
+
+
+
+🔸 查看博客列表 23.105.192.96:8000
+会发现多了两个文章出来.
+
+
+🔸 问题.
+添加标签/大类的时候. 不能正确显示名称.
+文章名称 也不能正常显示..
+
+🔸 vi /home/djSite/myblog/admin.py
+      1 # -*- coding: utf-8 -*-
+      2 from __future__ import unicode_literals
+      3
+      4 from django.contrib import admin
+      5
+      6 # Register your models here.
+      7
+      8
+      9 from .models import Category, Tag, Blog
+     10 admin.site.register([Category, Tag, Blog])
+     11
+
+
+     第九行: Admin管理后台需要从数据库中导入以下数据:Category, Tag, Blog
+     第十行: admin 首页进去要可以添加: Category, Tag, Blog
+
+现在的问题是添加blog的时候里面出错了. 这个肯定是模型设计的问题了 
+因为admin.py 只导入了 model.py 文件. 
+我们去看 vi /home/djSite/myblog/models.py 中看看 blog 是怎么定义的
+
+     28 class Blog(models.Model):
+     29     """
+     30     博客
+     31     """
+     32
+     33     title = models.CharField('标题', max_length=32)
+     34     author = models.CharField('作者', max_length=16)
+     35     content = models.TextField('正文')
+     36     created = models.DateTimeField('发布时间', auto_now_add=True)
+     37
+     38     category = models.ForeignKey(Category, verbose_name='分类')
+     39     tags = models.ManyToManyField(Tag, verbose_name='标签')
+
+
+title = models.CharField('标题', max_length=32)
+➜ 这里的标题 就是点击新增post的时候. 显示的文字.
+
+category = models.ForeignKey(Category, verbose_name='分类')
+➜ 这里有什么问题呢..
+
+
+
+
+
+
+
+
+
+
+

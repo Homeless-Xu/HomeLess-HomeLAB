@@ -1,0 +1,54 @@
+🔵 NFS 
+
+    NFS
+    Network File System
+    网络文件系统.
+
+    NFS 是Linux 支持的文件系统. 
+    通过NFS 可以操作本地盘一样操作网盘!
+
+
+
+    🔶 Windows 使用 NFS 
+
+    Linux 和 Linux 之间是可以直接使用 NFS的
+    但是 Windows 要连接 Linux 共享出来的 NFS 网盘就得安装客户端.
+    
+    win7 要挂载 NFS.. 就得安装 services for unix 这个软件. 也就是 SFU.
+    win7 的旗舰版 是自带这个软件的.  只要去 打开和关闭程序功能里面 开启NFS 就可以了.
+    win7 专业版 什么的是不自带的!!! 而且也不能安装 ???
+
+
+    services for unix  最近改名了..  SUA了..
+    Utilities and SDK for Subsystem for UNIX-based Applications in Windows Vista, Windows Vista SP1, and Windows Server 2008
+
+    https://www.microsoft.com/en-us/download/confirmation.aspx?id=2391
+
+
+
+🔵 Win7 下载 SUA   x  
+
+    http://www.microsoft.com/download/details.aspx?id=2391
+
+
+    🔶 看系统要求. 不支持 Win7 pro 和 Win7 home 的!!!!
+        Win7 旗舰版 是自带 SUA 的. 不用安装.
+        Win7 专业版 不自带 SUA 的. 就算手动下载 也安装不了的!!!!!
+        
+
+
+🔵 Win7 - NFS 第三方客户端
+
+
+🔶 收费  -  ProNFS and axeNFS 
+
+
+
+NFSAxe Omni-NFS
+
+
+
+🔶 免费 - Nekodrive
+
+cygwin has a NFS client and
+

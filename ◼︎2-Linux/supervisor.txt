@@ -1,0 +1,711 @@
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 开机启动 Supervisor ✔︎🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 精简例1 zabbix_server
+
+    ⦿  vim /etc/supervisord.conf 
+        确保  [include] 了 /etc/supervisor 里面的文件
+        files = /etc/supervisor/*.conf
+
+    ⦿  cd /etc/supervisor
+
+    ⦿  给每个启动程序新建单独配置文件.
+      vi /etc/supervisor/zabbix-server.conf
+
+        [program:zabbix-server]
+        directory= /       ; 这个参数好像不能省的.
+        command = /usr/local/zabbix-server/sbin/zabbix_server
+        autostart = true
+        startsecs = 5
+        autorestart = true
+        startretries = 3
+        user = root
+        redirect_stderr = true
+        stopasgroup=true
+
+
+    ⦿ 重载配置文件
+      systemctl daemon-reload && systemctl reload supervisord.service
+
+    ⦿ 重启 supervisor
+      systemctl restart supervisord.service
+
+    ⦿ 测试 
+      nmap -p 10051 127.0.0.1
+
+
+
+🔸 精简例2 zabbix-agent 
+
+    ⦿  cd /etc/supervisor
+
+    ⦿  给每个启动程序新建单独配置文件.
+      vi /etc/supervisor/zabbix-agent.conf
+
+    [program:zabbix-server]
+    directory= /
+    command = /usr/local/zabbix-server/sbin/zabbix_agentd
+    autostart = true
+    startsecs = 5
+    autorestart = true
+    startretries = 3
+    user = root
+    redirect_stderr = true
+    stopasgroup=true
+
+
+    ⦿ 重载配置文件
+      systemctl daemon-reload && systemctl reload supervisord.service
+
+    ⦿ 重启 supervisor
+      systemctl restart supervisord.service
+      现在不用启动 zabbix_agentd, supervisor会自动帮你启动的.
+
+    ⦿ 测试 
+      nmap -p 10051,10050 127.0.0.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸 Supervisor Centos7
+		❗️❗️❗️ Supervisor是一个用python写的进程管理程序，不仅仅可以用来管理进程，还可以用来做开机启动。❗️❗️❗️
+		❗️❗️❗️ Supervisor是一个用python写的进程管理程序，不仅仅可以用来管理进程，还可以用来做开机启动。❗️❗️❗️
+		❗️❗️❗️ Supervisor是一个用python写的进程管理程序，不仅仅可以用来管理进程，还可以用来做开机启动。❗️❗️❗️
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 开机启动 Supervisor✔︎🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+为了能够在机器启动之后自动启动supervisor，需要把supervisor进程配置进systemd，
+
+
+⦿ 安装 Supervisor   yum install supervisor -y
+⦿ 卸载 Supervisor   yum remove supervisor -y
+
+⦿ 修改 supervisord.service 实现开机自启
+  vi /usr/lib/systemd/system/supervisord.service
+
+# supervisord service for systemd (CentOS 7.0+)
+# by ET-CS (https://github.com/ET-CS)
+[Unit]
+Description=Supervisor daemon
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/supervisord -c /etc/supervisord.conf
+ExecStop=/usr/bin/supervisorctl $OPTIONS shutdown
+ExecReload=/usr/bin/supervisorctl $OPTIONS reload
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+⦿ 重新加载 supervisor
+  systemctl daemon-reload && systemctl reload supervisord.service
+
+⦿ 激活开机启动命令
+  systemctl enable supervisord.service
+
+⦿ 常用命令
+  systemctl status supervisord.service
+  systemctl start supervisord.service && systemctl status supervisord.service
+  systemctl stop supervisord.service && systemctl status supervisord.service
+
+⦿ 重启测试 是否自启
+  systemctl status supervisord.service
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Web 管理界面✔︎ 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+出于安全考虑，默认配置是没有开启web管理界面，
+需要修改supervisord.conf配置文件打开http访权限，将下面的配置：
+vim /etc/supervisord.conf
+
+
+;[inet_http_server]         ; inet (TCP) server disabled by default
+;port=127.0.0.1:9001        ; (ip_address:port specifier, *:port for all iface)
+;username=user              ; (default is no username (open server))
+;password=123               ; (default is no password (open server))
+
+修改成：
+
+[inet_http_server]         ; inet (TCP) server disabled by default
+port=0.0.0.0:9001          ; (ip_address:port specifier, *:port for all iface)
+username=user              ; (default is no username (open server))
+password=123               ; (default is no password (open server))
+
+
+
+  port：    绑定访问IP和端口，ip 要填写 0.0.0.0 这样别的电脑才能访问.
+  username：登录管理后台的用户名 
+  password：登录管理后台的密码
+
+
+
+
+⦿ 重载配置文件
+  systemctl daemon-reload && systemctl reload supervisord.service
+
+⦿ 重启 supervisor
+  systemctl restart supervisord.service && systemctl status supervisord.service
+
+⦿ 浏览器测试
+  23.105.192.96:9001 输入 user  123 登录
+
+
+
+
+🔸 Nginx
+
+⦿ 添加虚拟主机 
+  lnmp vhost add 
+  ================================================
+  Virtualhost infomation:
+  Your domain: sup.0214.help
+  Home Directory: /home/wwwroot/sup.0214.help
+  Rewrite: none
+  Enable log: no
+  Create database: no
+  Create ftp account: no
+  ================================================
+
+ cd /home/wwwroot && ls
+ cd /usr/local/nginx/conf/vhost && ls
+
+⦿ 配置虚拟主机
+vi /usr/local/nginx/conf/vhost/sup.0214.help.conf
+vi /usr/local/nginx/conf/vhost/sup1.0214.help.conf
+
+
+server {
+  listen 80;
+  server_name sup.0214.help;
+
+  location / {
+      proxy_pass         http://127.0.0.1:9001;
+  }
+}
+
+
+⦿ 配置默认配置文件
+  cat /usr/local/nginx/conf/nginx.conf
+
+    include vhost/sup.0214.help.conf;
+    include vhost/sup1.0214.help.conf;
+
+
+⦿ 重启nginx    sudo /etc/init.d/nginx restart
+⦿ 域名解析
+⦿ 浏览器测试   sup.0214.help 输入 user 123 就可以登录了
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵   例一: zabbix-server 开机自启 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+配置文件修改.
+
+
+🔸 运行
+  supervisord -c /etc/supervisord.conf   或  supervisord
+  默认是加载  /etc/supervisord.conf 这个配置文件的. 所以可以省略.
+
+
+🔸 program 配置
+
+上面我们已经把 supervisrod 运行起来了，现在可以添加我们要管理的进程的配置文件。
+可以把所有配置项都写到 supervisord.conf 文件里，但并不推荐这样做，
+而是通过 include 的方式把不同的程序（组）写到不同的配置文件里。
+为了举例，我们新建一个目录 /etc/supervisor/ 用于存放这些配置文件，
+相应的，把 /etc/supervisord.conf 里 include 部分的的配置修改一下，支持自定义路径：
+
+
+• 新建文件夹
+  mkdir /etc/supervisor
+
+
+• 修改 配置文件的 include 模块
+  vim /etc/supervisord.conf 
+    [include]
+    files = /etc/supervisor/*.conf
+
+
+
+
+
+• 新建配置文件
+cd /etc/supervisor/
+
+vi /etc/supervisor/zabbix-server.conf
+
+[program:zabbix-server]
+directory= /
+command = /usr/local/zabbix-server/sbin/zabbix_server
+autostart = true
+startsecs = 5
+autorestart = true
+startretries = 3
+user = root
+redirect_stderr = true
+stopasgroup=true
+
+
+
+⦿ 重载配置文件
+  systemctl daemon-reload && systemctl reload supervisord.service
+
+⦿ 重启 supervisor
+  systemctl stop supervisord.service
+  systemctl start supervisord.service
+  systemctl restart supervisord.service
+  
+  systemctl status supervisord.service
+
+
+⦿ 然后重启服务器测试...
+✘✘∙GCE ~ ➜ nmap -p 10051 127.0.0.1
+具体成功了额.....
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 实例二: SSR 开机自启 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+⦿ 新建配置文件
+
+• 新建文件夹 mkdir /etc/supervisor
+ 
+vi /etc/supervisor/SSR.conf
+
+[program:SSR]
+directory= /       ; 这个参数好像不能省的.
+command = sh /root/shadowsocksr/run.sh
+autostart = true
+startsecs = 5
+autorestart = true
+startretries = 3
+user = root
+redirect_stderr = true
+stopasgroup=true
+
+
+
+⦿ 重载配置文件
+  systemctl daemon-reload && systemctl reload supervisord.service
+
+⦿ 重启 supervisor
+  systemctl restart supervisord.service
+
+
+  systemctl stop supervisord.service
+  systemctl start supervisord.service  
+  systemctl status supervisord.service
+
+
+⦿ 然后重启服务器测试...
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  配置详解  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 配置文件详解     vim /etc/supervisord.conf
+
+[unix_http_server]
+file=/tmp/supervisor.sock   ; UNIX socket 文件，supervisorctl 会使用
+;chmod=0700                 ; socket 文件的 mode，默认是 0700
+;chown=nobody:nogroup       ; socket 文件的 owner，格式： uid:gid
+
+;[inet_http_server]         ; HTTP 服务器，提供 web 管理界面
+;port=127.0.0.1:9001        ; Web 管理后台运行的 IP 和端口，如果开放到公网，需要注意安全性
+;username=user              ; 登录管理后台的用户名
+;password=123               ; 登录管理后台的密码
+
+[supervisord]
+logfile=/tmp/supervisord.log ; 日志文件，默认是 $CWD/supervisord.log
+logfile_maxbytes=50MB        ; 日志文件大小，超出会 rotate，默认 50MB
+logfile_backups=10           ; 日志文件保留备份数量默认 10
+loglevel=info                ; 日志级别，默认 info，其它: debug,warn,trace
+pidfile=/tmp/supervisord.pid ; pid 文件
+nodaemon=false               ; 是否在前台启动，默认是 false，即以 daemon 的方式启动
+minfds=1024                  ; 可以打开的文件描述符的最小值，默认 1024
+minprocs=200                 ; 可以打开的进程数的最小值，默认 200
+
+; the below section must remain in the config file for RPC
+; (supervisorctl/web interface) to work, additional interfaces may be
+; added by defining them in separate rpcinterface: sections
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///tmp/supervisor.sock ; 通过 UNIX socket 连接 supervisord，路径与 unix_http_server 部分的 file 一致
+;serverurl=http://127.0.0.1:9001 ; 通过 HTTP 的方式连接 supervisord
+
+; 包含其他的配置文件
+[include]
+files = relative/directory/*.ini    ; 可以是 *.conf 或 *.ini
+
+
+
+
+
+
+
+
+
+[inet_http_server]         ;   supervisor 的 web 管理界面，这个 web 后台使用 Basic Auth 的方式进行身份认证。
+port=222.24.51.147:9001        ; 配置的 ip 地址和端口
+username=user              ;  用户名
+password=123               ; 密码
+ 
+；进程管理的配置，非常重要
+[program:php-fpm]   
+directory=/   ;进程运行前，会前切换到这个目录
+command=/usr/sbin/php-fpm ; 启动命令
+user=root
+stdout_logfile=/var/log/supervisor/%(program_name)s_access.log ; stdout 日志输出位置
+stderr_logfile=/var/log/supervisor/%(program_name)s_err.log ; stderr 日志输出位置
+autostart=true ; 在 supervisord 启动的时候自动启动
+autorestart=true ; 程序异常退出后自动重启
+startsecs=10 ; 启动 10 秒后没有异常退出，就当作已经正常启动
+ 
+;[include]                         ; 把所有的配置文件都放在 supervisord.conf 并不是个好主意，一旦管理的进程过多，就很麻烦。
+                                       ；所以一般都会 新建一个目录来专门放置进程的配置文件，然后通过 include 的方式来获取这些配置信息
+                                       ； 楼主写的是 files = /etc/supervisord/conf.d/*.conf 
+;files = relative/directory/*.ini
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  实例      🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+通过脚本 运行 zabbix-agent 
+
+systemctl start  zabbix-agent.service
+
+
+
+
+[program:nginx]      ；nginx 配置示例
+directory=/  
+command=/usr/sbin/nginx -c /etc/nginx/nginx.conf
+user=root
+stdout_logfile=/var/log/supervisor/%(program_name)s_access.log 
+stderr_logfile=/var/log/supervisor/%(program_name)s_err.log
+autostart=true 
+autorestart=true 
+startsecs=10 
+
+supervisor还要求管理的程序是非daemon程序，supervisord会帮你把它转成daemon程序，
+因此如果用supervisor来管理nginx的话，必须在nginx的配置文件里添加一行设置daemon off让nginx以非daemon方式启动。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+新建配置
+vi /etc/supervisor/test.conf
+
+
+[program:flume]
+directory = /export/flume/apache-flume-1.6.0-bin/
+command = nohup bin/flume-ng agent -c conf -f conf/flume.conf -n agent -Dflume.root.logger=INFO,console > /dev/null 2>&1 &
+autostart = true
+startsecs = 5
+autorestart = true
+startretries = 3
+user = root
+redirect_stderr = true
+stdout_logfile_maxbytes = 20MB
+stdout_logfile_backups = 10
+stdout_logfile = /export/flume/logs/sup_flume_stdout.log
+;IT will stop all processes including child process
+stopasgroup=true
+
+
+
+
+[program:usercenter]
+directory = /home/leon/projects/usercenter       ; 程序的启动目录
+command = gunicorn -c gunicorn.py wsgi:app         ; 启动命令，可以看出与手动在命令行启动的命令是一样的
+process_name=%(program_name)s       ; process_name expr (default %(program_name)s)
+numprocs=1           ; number of processes copies to start (def 1)
+autostart = true     ; 在 supervisord 启动的时候也自动启动
+startsecs = 1        ; 启动 1 秒后没有异常退出，就当作已经正常启动了
+autorestart = true   ; 程序异常退出后自动重启
+startretries = 3     ; 启动失败自动重试次数，默认是 3
+user = leon          ; 用哪个用户启动
+redirect_stderr = true          ; 把 stderr 重定向到 stdout，默认 false
+stdout_logfile_maxbytes = 20MB  ; stdout 日志文件大小，默认 50MB
+stdout_logfile_backups = 10     ; stdout 日志文件备份数
+; stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）
+stdout_logfile = /data/logs/usercenter_stdout.log
+;这一配置项的作用是：如果supervisord管理的进程px又产生了若干子进程，使用supervisorctl停止px进程，停止信号会传播给px产生的所有子进程，确保子进程也一起停止。这一配置项对希望停止所有进程的需求是非常有用的。
+stopasgroup=true
+
+; 可以通过 environment 来添加需要的环境变量，一种常见的用法是修改PYTHONPATH ;process environment additions      
+; environment=PYTHONPATH=$PYTHONPATH:/path/to/somewhere
+
+
+
+stopasgroup=true。这一配置项的作用是：如果supervisord管理的进程px又产生了若干子进程，使用supervisorctl停止px进程，停止信号会传播给px产生的所有子进程，确保子进程也一起停止。这一配置项对希望停止所有进程的需求是非常有用的。
+autostart=true。这一配置项的作用是：当启动supervisord的时候会将该配置项设置为true的所有进程自动启动。
+一份配置文件至少需要一个 [program:x]部分的配置，来告诉 supervisord 需要管理那个进程。[program:x]语法中的 x 表示 program name，会在客户端（supervisorctl 或 web 界面）显示，在 supervisorctl 中通过这个值来对程序进行 start、restart、stop 等操作。
+
+
+
+
+
+
+🔸 Supervisor 简介
+Supervisor 有两个主要的组成部分：
+
+supervisord，运行 Supervisor 时会启动一个进程 supervisord，它负责启动所管理的进程，并将所管理的进程作为自己的子进程来启动，而且可以在所管理的进程出现崩溃时自动重启。
+supervisorctl，是命令行管理工具，可以用来执行 stop、start、restart 等命令，来对这些子进程进行管理。
+
+
+
+
+
+
+
+【启动 supervisord】　　 supervisord -c /etc/supervisord.conf   或  supervisord
+【停止 supervisord】 supervisorctl shutdown
+【重新加载配置文件】  supervisorctl reload
+
+
+
+启动supervisord管理的所有进程
+supervisorctl start all
+停止supervisord管理的所有进程
+supervisorctl stop all
+启动supervisord管理的某一个特定进程
+supervisorctl start program-name // program-name为[program:xx]中的xx
+停止supervisord管理的某一个特定进程
+supervisorctl stop program-name  // program-name为[program:xx]中的xx
+重启所有进程或所有进程
+supervisorctl restart all // 重启所有supervisorctl reatart program-name // 重启某一进程，program-name为[program:xx]中的xx
+查看supervisord当前管理的所有进程的状态
+supervisorctl status
+
+
+
+
+🔸 supervisorctl
+
+使用 supervisorctl 客户端命令
+
+Supervisorctl 是 supervisord 的一个命令行客户端工具，启动时需要指定与 supervisord 使用同一份配置文件，否则与 supervisord 一样按照顺序查找配置文件
+
+supervisorctl -c /etc/supervisord.conf
+上面这个命令会进入 supervisorctl 的 shell 界面，然后可以执行不同的命令了：
+
+> status    # 查看程序状态
+> stop usercenter   # 关闭 usercenter 程序
+> start usercenter  # 启动 usercenter 程序
+> restart usercenter    # 重启 usercenter 程序
+> reread    ＃ 读取有更新（增加）的配置文件，不会启动新添加的程序
+> update    ＃ 重启配置文件修改过的程序
+上面这些命令都有相应的输出，除了进入 supervisorctl 的 shell 界面，等同于直接在 bash 终端运行：
+
+$ supervisorctl status
+$ supervisorctl stop usercenter
+$ supervisorctl start usercenter
+$ supervisorctl restart usercenter
+$ supervisorctl reread
+$ supervisorctl update
+
+
+
+
+
+
+
+
+
+2. 启动 
+supervisord -c /etc/supervisord.conf
+
+
+
+配置
+vim /etc/supervisord.conf
+
+在配置文件底部，配置include
+
+[include]
+files=/etc/supervisor/*.conf #若你本地无/etc/supervisor目录，请自建
+
+
+
+用supervisor管理进程，配置如下：
+
+cd /etc/supervisor
+vim ossfs.conf # 这里的文件名称自定义
+
+加入以下内容：
+
+; 设置进程的名称，使用 supervisorctl 来管理进程时需要使用该进程名
+[program:your_program_name] 
+command=python server.py --port=9000
+;numprocs=1                 ; 默认为1
+;process_name=%(program_name)s   ; 默认为 %(program_name)s，即 [program:x] 中的 x
+directory=/home/python/tornado_server ; 执行 command 之前，先切换到工作目录
+user=oxygen                 ; 使用 oxygen 用户来启动该进程
+; 程序崩溃时自动重启，重启次数是有限制的，默认为3次
+autorestart=true            
+redirect_stderr=true        ; 重定向输出的日志
+stdout_logfile = /var/log/supervisord/tornado_server.log
+loglevel=info
+
+
+
+
+
+这里是启动要配置的参数，请根据自己的项目自定义添加
+
+更改了supervisor配置文件，需要重启,运行以下指令
+supervisorctl reload
+
+
+4.supervisorctl的用法
+
+supervisord : 启动supervisor
+supervisorctl reload :修改完配置文件后重新启动supervisor
+supervisorctl status :查看supervisor监管的进程状态
+supervisorctl start 进程名 ：启动XXX进程
+supervisorctl stop 进程名 ：停止XXX进程
+supervisorctl stop all：停止全部进程，注：start、restart、stop都不会载入最新的配置文件。
+supervisorctl update：根据最新的配置文件，启动新配置或有改动的进程，配置没有改动的进程不会受影响而重启
+
+
+
+
+
+
+
+5.若不使用控制台来管理进程，用浏览器来管理，该如何配置？
+
+vim /etc/supervisord.conf
+
+配置 inet_http_server
+
+[inet_http_server]       
+port=127.0.0.1:9001     ; 服务器ip
+username=xxx        ;自定义
+password=xxx        ;自定义
+
+
+
+
+
+
+
+
+🔸 用 supervisor 实现开机自启.
+
+
+
+vi /etc/supervisord.conf
+
+
+[program:zabbix-agent]
+command=sh 11.sh
+directory=/home/
+
+
+
+

@@ -1,0 +1,338 @@
+比ss/ssr 小众. 但是速度是最快的.
+
+
+
+
+🔸 测速软件: iPerf
+测试两台主机之间的速度. 比网页测速靠谱很多.
+客户端和服务器都要安装 iPerf. 
+
+
+
+⦿ GCE 服务端
+
+    • 下载安装
+        wget https://iperf.fr/download/fedora/iperf3-3.1.3-1.fc24.x86_64.rpm
+
+        yum localinstall iperf3-3.1.3-1.fc24.x86_64.rpm -y
+
+    • 开启服务器端 
+        /usr/bin/iperf3 -s
+            默认端口为 5201，可使用 -p 参数修改
+            默认为前台运行，使用 -D 后台运行
+
+
+⦿ MAC 客户端 
+
+下载后是个文件.不是安装程序. 
+要cd 到下载文件夹. 执行命令来运行的.
+
+
+
+
+
+⦿ GCE 测试 
+
+✘✘∙𝒗 Desktop ./iperf3 -c 35.194.128.92
+Connecting to host 35.194.128.92, port 5201
+[  4] local 192.168.1.125 port 53539 connected to 35.194.128.92 port 5201
+[ ID] Interval           Transfer     Bandwidth
+[  4]   0.00-1.00   sec   133 KBytes  1.09 Mbits/sec
+[  4]   1.00-2.00   sec  28.9 KBytes   237 Kbits/sec
+[  4]   2.00-3.00   sec  42.6 KBytes   349 Kbits/sec
+[  4]   3.00-4.00   sec   103 KBytes   842 Kbits/sec
+[  4]   4.00-5.00   sec   269 KBytes  2.20 Mbits/sec
+[  4]   5.00-6.00   sec   571 KBytes  4.69 Mbits/sec
+[  4]   6.00-7.00   sec   436 KBytes  3.57 Mbits/sec
+[  4]   7.00-8.00   sec  1.00 MBytes  8.43 Mbits/sec
+[  4]   8.00-9.00   sec   745 KBytes  6.07 Mbits/sec
+[  4]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth
+[  4]   0.00-10.00  sec  3.28 MBytes  2.75 Mbits/sec                  sender
+[  4]   0.00-10.00  sec  2.94 MBytes  2.46 Mbits/sec                  receiver
+
+iperf Done.
+
+
+🔸 VPS1 测试 
+✘✘∙𝒗 Desktop ./iperf3 -c 23.105.192.96
+
+Connecting to host 23.105.192.96, port 5201
+[  4] local 192.168.1.125 port 53669 connected to 23.105.192.96 port 5201
+[ ID] Interval           Transfer     Bandwidth
+[  4]   0.00-1.00   sec   156 KBytes  1.28 Mbits/sec
+[  4]   1.00-2.00   sec   501 KBytes  4.11 Mbits/sec
+[  4]   2.00-3.00   sec  1.11 MBytes  9.33 Mbits/sec
+[  4]   3.00-4.00   sec   444 KBytes  3.64 Mbits/sec
+[  4]   4.00-5.00   sec   483 KBytes  3.95 Mbits/sec
+[  4]   5.00-6.00   sec  0.00 Bytes  0.00 bits/sec
+[  4]   6.00-7.00   sec   628 KBytes  5.16 Mbits/sec
+[  4]   7.00-8.00   sec   839 KBytes  6.85 Mbits/sec
+[  4]   8.00-9.01   sec   302 KBytes  2.47 Mbits/sec
+[  4]   9.01-10.00  sec  0.00 Bytes  0.00 bits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth
+[  4]   0.00-10.00  sec  4.39 MBytes  3.68 Mbits/sec                  sender
+[  4]   0.00-10.00  sec  4.33 MBytes  3.63 Mbits/sec                  receiver
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 v2ray 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+🔸 v2ray 服务端安装 
+
+    sudo su && bash <(curl -L -s https://install.direct/go.sh)
+
+    V2Ray 提供了一个在 Linux 中的自动化安装脚本。
+    此脚本会自动安装以下文件：
+    /usr/bin/v2ray/v2ray：V2Ray 程序；
+    /etc/v2ray/config.json：配置文件；
+
+    此脚本会配置自动运行脚本。自动运行脚本会在系统重启之后，自动运行 V2Ray。
+
+    运行脚本位于系统的以下位置：
+    /lib/systemd/system/v2ray.service: Systemd
+    /etc/init.d/v2ray: SysV
+
+
+
+🔸 uuid 生成
+    https://1024tools.com/uuid
+
+    随便生成一个.  e9a8e4ca-b165-43a9-b6d3-7f284b419c75
+
+    UUID是Universally Unique Identifier的缩写，唯一的机器生成的标识符。
+    大概就是一个全球都不会重复的字符串. 下面会用到.
+
+
+
+
+🔸 服务端设置.
+vi /etc/v2ray/config.json
+
+先更改带 ➜ 的行.
+然后必须去掉所有注释
+最后粘贴就可以了
+
+⦿ 配置示例:
+{
+  "port": 2190, // ➜ 通讯端口，客户端和服务端一致，自定
+  "log" : {
+    "access": "/var/log/v2ray/access.log", 
+    "error": "/var/log/v2ray/error.log",  
+    "loglevel": "warning"                  
+  },
+  "inbound": {
+    "protocol": "vmess",    
+    "settings": {
+      "clients": [
+        {
+          "id": "e9a8e4ca-b165-43a9-b6d3-7f284b419c75",  // ➜ UUID 网站随机生成一个
+          "alterId": 55,  // ➜ 这个自定，数字范围0-100，但要保证客户端和服务端一致
+          "level": 1      // ➜ 官方说明，0 共享VPS, 1 自用VPS
+        }
+      ]
+    }
+  },
+  "outbound": {
+    "protocol": "freedom",  
+    "settings": {}
+  },
+  "inboundDetour": [
+    {
+      "protocol": "shadowsocks",   // ➜ 此段为支持SS协议部分
+      "port": 1234, 
+      "settings": {
+        "method": "aes-128-cfb", // ➜ 加密协议支持aes-256-cfb, aes-128-cfb, chacha20 (V2Ray 1.9+), chacha20-ietf (V2Ray 1.9+)
+        "password": "v2ray",     // ➜ 设置密码
+        "udp": false             //是否支持UDP中转
+      }
+    }
+  ],
+  "outboundDetour": [
+    {
+      "protocol": "blackhole",  
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
+  "routing": {
+    "strategy": "rules",
+    "settings": {
+      "rules": [
+        {
+          "type": "field",  
+          "ip": [
+            "0.0.0.0/8",
+            "10.0.0.0/8",
+            "100.64.0.0/10",
+            "127.0.0.0/8",
+            "169.254.0.0/16",
+            "172.16.0.0/12",
+            "192.0.0.0/24",
+            "192.0.2.0/24",
+            "192.168.0.0/16",
+            "198.18.0.0/15",
+            "198.51.100.0/24",
+            "203.0.113.0/24",
+            "::1/128",
+            "fc00::/7",
+            "fe80::/10"
+          ],
+          "outboundTag": "blocked"
+        }
+      ]
+    }
+  }
+}
+
+
+
+
+
+
+⦿ 实际配置: 
+
+
+{
+  "port": 2190,
+  "log" : {
+    "access": "/var/log/v2ray/access.log", 
+    "error": "/var/log/v2ray/error.log",  
+    "loglevel": "warning"                  
+  },
+  "inbound": {
+    "protocol": "vmess",    
+    "settings": {
+      "clients": [
+        {
+          "id": "e9a8e4ca-b165-43a9-b6d3-7f284b419c75", 
+          "alterId": 55,
+          "level": 1 
+        }
+      ]
+    }
+  },
+  "outbound": {
+    "protocol": "freedom",  
+    "settings": {}
+  },
+  "inboundDetour": [
+    {
+      "protocol": "shadowsocks", 
+      "port": 1234, 
+      "settings": {
+        "method": "chacha20",
+        "password": "v2ray",
+        "udp": false
+      }
+    }
+  ],
+  "outboundDetour": [
+    {
+      "protocol": "blackhole",  
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
+  "routing": {
+    "strategy": "rules",
+    "settings": {
+      "rules": [
+        {
+          "type": "field",  
+          "ip": [
+            "0.0.0.0/8",
+            "10.0.0.0/8",
+            "100.64.0.0/10",
+            "127.0.0.0/8",
+            "169.254.0.0/16",
+            "172.16.0.0/12",
+            "192.0.0.0/24",
+            "192.0.2.0/24",
+            "192.168.0.0/16",
+            "198.18.0.0/15",
+            "198.51.100.0/24",
+            "203.0.113.0/24",
+            "::1/128",
+            "fc00::/7",
+            "fe80::/10"
+          ],
+          "outboundTag": "blocked"
+        }
+      ]
+    }
+  }
+}
+
+
+⦿ 服务端配置文件测试
+    sudo /usr/bin/v2ray/v2ray --test --config /etc/v2ray/config.json
+
+⦿ 启动服务端
+    sudo service v2ray start | stop | restart | status
+    /bin/systemctl start  v2ray.service
+    /bin/systemctl restart  v2ray.service
+
+⦿ 检测 服务端配置文件中的端口是否打开.
+    nmap -p 2190 127.0.0.1
+
+
+
+
+
+
+
+🔸 客户端配置：
+
+    经测试，上面的配置文件兼容Shadowsocks，所以可以两种方式使用V2Ray:
+
+    使用V2Ray自带带协议。需要V2Ray客户端后台启动才能运行。
+
+    使用Shadowsocks兼容协议，加密协议支持aes-256-cfb, aes-128-cfb, chacha20 (V2Ray 1.9+), chacha20-ietf (V2Ray 1.9+)加密算法。可以使用Surge/GoagentX/ShadowsocksX 运行。
+
+
+
+
+    Mac 有现成的客户端软件: v2rayX 
+    直接配置就可以. 只要填下面的参数进去.
+
+    address: 23.105.192.96:2190                     ➜ 服务器IP 和端口.
+    User ID: e9a8e4ca-b165-43a9-b6d3-7f284b419c75   ➜ 要和服务器一致.
+    alterld: 55          ➜ 这个自定，数字范围0-100，但要保证客户端和服务端一致
+    security: chacha20   ➜ 加密方式
+    remark :  vps1       ➜ 随便 配置名称而已.
+    Network: tcp 
+
+
+
+🔸 客户端测试
+    连不上啊..
+    nmap -p 2190 23.105.192.96
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

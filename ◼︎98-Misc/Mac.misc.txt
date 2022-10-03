@@ -1,0 +1,73 @@
+
+
+🔵 nginx Mac 
+
+Mac 自到Apache 的  (apachectl -V 查看)
+
+那么 apache / nginx 共存很简单. 改下端口就好了.
+
+
+🔸 Nginx 安装
+
+    brew 搜索软件   brew search nginx
+    brew 安装软件   brew install nginx
+    brew 卸载软件   brew uninstall nginx
+    brew 升级       sudo brew update
+    查看安装信息(如查看目录等)  sudo brew info nginx   
+    查看已经安装的软件  brew list
+
+
+🔸 Nginx 命令 
+
+  • 开启:  brew services start nginx
+      ==> Successfully started `nginx` (label: homebrew.mxcl.nginx)
+
+  • 停止:  brew services stop nginx
+      Stopping `nginx`... (might take a while)
+      ==> Successfully stopped `nginx` (label: homebrew.mxcl.nginx)
+
+  • 重启: brew services restart nginx
+      Stopping `nginx`... (might take a while)
+      ==> Successfully stopped `nginx` (label: homebrew.mxcl.nginx)
+      ==> Successfully started `nginx` (label: homebrew.mxcl.nginx)
+
+
+  启动后就可以 利用http://localhost:8080进行访问.
+
+
+
+🔸 Nginx 配置
+  查看软件安装情况用 brew info nginx 
+
+    根目录    Docroot is: /usr/local/var/www
+    配置文件  The default port has been set in /usr/local/etc/nginx/nginx.conf to 8080
+    加载配置  nginx will load all files in /usr/local/etc/nginx/servers/.
+
+
+nginx 运行的默认页面就是  /usr/local/var/www/index.html
+
+
+nginx虚拟主机. 
+无非就是一个nginx配置文件. + 一个网站文件夹. 然后就可以用浏览器访问网页了.
+
+我们去 /usr/local/etc/nginx/servers/ 下新建个 ss.conf
+
+
+  1 server {
+  2
+  3 listen 8888;
+  4 server_name localhost;
+  5 root /Users/v/Desktop/ss-panel/public
+  6 index index.php index.html
+  7
+  8
+  9 }
+
+然后重启..
+
+
+  🔸 mac 安装 composer
+
+    • 安装composer:   brew install composer
+    • 升级composer:   composer self-update / brew upgrade composer
+    • 使用composer:   composer xxx文件名.

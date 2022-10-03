@@ -1,0 +1,263 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 镜像服务 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 储备知识
+    镜像服务 (glance) 允许用户发现、注册和获取虚拟机镜像。
+
+
+
+🔸 准备
+    安装和配置镜像服务之前，你必须创建创建一个数据库、服务凭证和API端点。
+
+    ⦿ 创建数据库 
+        • 登录数据库.    mysql -u root -p
+        • 创建数据库：   CREATE DATABASE glance;
+        • 创建数据库用户.并给权限, 
+            GLANCE_DBPASS 是数据库用户 glance 的密码. 可以自己设置!
+            GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'GLANCE_DBPASS';
+            GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'GLANCE_DBPASS';
+        • 退出数据库:    exit;
+
+
+
+    ⦿ 配置 admin 环境:  source admin-openrc 
+        因为要执行一些特殊命令. 需要 admin 权限.  
+        要使用 admin, 就需要在环境变量中设置 admin的用户 密码 等等参数.
+        可以用 . admin-openrc 或 source admin-openrc 来快速设置环境变量.
+        这样不不需要 手动执行很多行类似 export OS_USERNAME=demo 这样的命令了
+
+
+    ⦿ 创建  glance user:
+        openstack user create --domain default --password-prompt glance
+            密码设置成 glance-passwd
+            +---------------------+----------------------------------+
+            | Field               | Value                            |
+            +---------------------+----------------------------------+
+            | domain_id           | default                          |
+            | enabled             | True                             |
+            | id                  | 59d8ba2128f34d9b8ce7d6abb7a86e94 |
+            | name                | glance                           |
+            | options             | {}                               |
+            | password_expires_at | None                             |
+            +---------------------+----------------------------------+
+
+    ⦿ 添加 admin 角色到 glance 用户和 service 项目上
+        openstack role add --project service --user glance admin
+
+
+    ⦿ 创建 glance 服务实体：
+        openstack service create --name glance --description "OpenStack Image" image
+            +-------------+----------------------------------+
+            | Field       | Value                            |
+            +-------------+----------------------------------+
+            | description | OpenStack Image                  |
+            | enabled     | True                             |
+            | id          | 0321823e7fec4ed4ade5d46d2d8ad89b |
+            | name        | glance                           |
+            | type        | image                            |
+            +-------------+----------------------------------+
+
+
+    ⦿ 创建镜像服务的 API 端点：
+
+        openstack endpoint create --region RegionOne image public http://controller:9292
+            +--------------+----------------------------------+
+            | Field        | Value                            |
+            +--------------+----------------------------------+
+            | enabled      | True                             |
+            | id           | 310d9e7506b64ba7bb23a691eca949a4 |
+            | interface    | public                           |
+            | region       | RegionOne                        |
+            | region_id    | RegionOne                        |
+            | service_id   | 0321823e7fec4ed4ade5d46d2d8ad89b |
+            | service_name | glance                           |
+            | service_type | image                            |
+            | url          | http://controller:9292           |
+            +--------------+----------------------------------+
+
+
+        openstack endpoint create --region RegionOne image internal http://controller:9292
+            +--------------+----------------------------------+
+            | Field        | Value                            |
+            +--------------+----------------------------------+
+            | enabled      | True                             |
+            | id           | 20c4986553ab4dbf9a1553c165be0d63 |
+            | interface    | internal                         |
+            | region       | RegionOne                        |
+            | region_id    | RegionOne                        |
+            | service_id   | 0321823e7fec4ed4ade5d46d2d8ad89b |
+            | service_name | glance                           |
+            | service_type | image                            |
+            | url          | http://controller:9292           |
+            +--------------+----------------------------------+
+
+
+
+        openstack endpoint create --region RegionOne image admin http://controller:9292
+            +--------------+----------------------------------+
+            | Field        | Value                            |
+            +--------------+----------------------------------+
+            | enabled      | True                             |
+            | id           | 43af1ba8e2f14e1489c3257b20dad47c |
+            | interface    | admin                            |
+            | region       | RegionOne                        |
+            | region_id    | RegionOne                        |
+            | service_id   | 0321823e7fec4ed4ade5d46d2d8ad89b |
+            | service_name | glance                           |
+            | service_type | image                            |
+            | url          | http://controller:9292           |
+            +--------------+----------------------------------+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸安装配置🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 glance 安装:    yum install openstack-glance -y
+    👹 python-networkx-core-1.10-1.el7.noarch: [Errno 256] No more mirrors to try.
+    如遇到 No more mirrors to try 报错可以用 yum clean metadata && yum clean all
+
+    再不行上 终端代理. 需要自己改IP. 和端口. 
+    export https_proxy=http://192.168.1.222:9090;export http_proxy=http://192.168.1.222:9090
+    .. 这就可以了. 诶. 国内的墙啊... 无语..
+
+
+🔸 glance 配置1:    vi /etc/glance/glance-api.conf
+    
+    • [database] 部分下添加一行: 用来配置数据库访问.
+        connection = mysql+pymysql://glance:GLANCE_DBPASS@controller/glance
+            GLANCE_DBPASS 改成你在数据库中给 glance 用户设置的密码.
+            vi 的话 可以用 :/[databse] 来查找文件. 快速定位行..
+
+
+    • [keystone_authtoken] 下添加
+        auth_uri = http://controller:5000
+        auth_url = http://controller:35357
+        memcached_servers = controller:11211
+        auth_type = password
+        project_domain_name = default
+        user_domain_name = default
+        project_name = service
+        username = glance
+        password = glance-passwd
+            将 password 参数值 替换为你为认证服务中你为 glance 用户选择的密码. 
+            我这里是 glance-passwd
+            [keystone_authtoken] 中注释或者删除其他选项. 只保留我们上面设置的.
+
+
+    • [paste_deploy] 下添加一行: 
+        flavor = keystone
+
+    • [glance_store] 下添加三行
+        stores = file,http
+        default_store = file
+        filesystem_store_datadir = /var/lib/glance/images/
+
+
+
+
+
+🔸 glance 配置2:    vi /etc/glance/glance-registry.conf
+
+    • [database]
+        connection = mysql+pymysql://glance:GLANCE_DBPASS@controller/glance
+            GLANCE_DBPASS 改成你在数据库中给 glance 用户设置的密码.
+
+
+    • [keystone_authtoken]
+        auth_uri = http://controller:5000
+        auth_url = http://controller:35357
+        memcached_servers = controller:11211
+        auth_type = password
+        project_domain_name = default
+        user_domain_name = default
+        project_name = service
+        username = glance
+        password = glance-passwd
+            将 password 参数值 替换为你为认证服务中你为 glance 用户选择的密码. 
+            [keystone_authtoken] 中注释或者删除其他选项. 只保留我们上面设置的.
+            ❗️ 第一行的 auth_uri  不是 auth_url 
+                URL 是 URI 的子集。
+                任何东西，只要能够唯一地标识出来，都可以说这个标识是 URI 。
+                如果这个标识是一个可获取到上述对象的路径，那么同时它也可以是一个 URL ；
+                但如果这个标识不提供获取到对象的路径，那么它就必然不是 URL 。 
+
+
+    • [paste_deploy]
+        flavor = keystone
+
+
+
+
+🔸 写入镜像服务数据库：该命令的的输出不用管!!
+    su -s /bin/sh -c "glance-manage db_sync" glance
+    
+
+🔸 镜像服务开机自启
+    systemctl enable openstack-glance-api.service openstack-glance-registry.service
+
+🔸 镜像服务启动
+    systemctl start openstack-glance-api.service openstack-glance-registry.service
+
+🔸 镜像服务重启
+    systemctl restart openstack-glance-api.service openstack-glance-registry.service
+
+🔸 镜像服务状态
+    systemctl status openstack-glance-api.service openstack-glance-registry.service
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸验证🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 废话:     下载个镜像来测试下 glance 是否正常.
+
+🔸 设置 admin 环境变量:   source admin-openrc
+
+🔸 下载镜像:  wget http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
+
+🔸 上传镜像到 image server; 
+    使用 QCOW2 磁盘格式; 使用 bare 容器格式;
+    设置公共可见: 所有项目都可以访问这个镜像：
+
+    openstack image create "cirros" \
+    --file cirros-0.3.5-x86_64-disk.img \
+    --disk-format qcow2 --container-format bare \
+    --public
+        +------------------+------------------------------------------------------+
+        | Field            | Value                                                |
+        +------------------+------------------------------------------------------+
+        | checksum         | f8ab98ff5e73ebab884d80c9dc9c7290                     |
+        | container_format | bare                                                 |
+        | created_at       | 2017-08-25T12:12:49Z                                 |
+        | disk_format      | qcow2                                                |
+        | file             | /v2/images/5f1ad43b-4e95-4d87-96da-4dcd0e51a66f/file |
+        | id               | 5f1ad43b-4e95-4d87-96da-4dcd0e51a66f                 |
+        | min_disk         | 0                                                    |
+        | min_ram          | 0                                                    |
+        | name             | cirros                                               |
+        | owner            | 48cbf0c9f5854d64aea5f260c7b7221e                     |
+        | protected        | False                                                |
+        | schema           | /v2/schemas/image                                    |
+        | size             | 13267968                                             |
+        | status           | active                                               |
+        | tags             |                                                      |
+        | updated_at       | 2017-08-25T12:12:51Z                                 |
+        | virtual_size     | None                                                 |
+        | visibility       | public                                               |
+        +------------------+------------------------------------------------------+
+            有时候会创建失败...  可以新建个项目看看. 
+            这个需要 admin 权限的.可以看出是认证服务的问题 还是 镜像服务的问题.
+            openstack project create --domain default --description "Test Project" test
+            如果可以创建的.. 说明.. 是镜像问题..
+
+
+
+
+
+🔸 查看镜像.
+    openstack image list
+    如果上传成功 就会有显示.
+    +--------------------------------------+--------+--------+
+    | ID                                   | Name   | Status |
+    +--------------------------------------+--------+--------+
+    | 5f1ad43b-4e95-4d87-96da-4dcd0e51a66f | cirros | active |
+    +--------------------------------------+--------+--------+
+

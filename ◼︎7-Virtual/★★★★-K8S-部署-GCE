@@ -1,0 +1,446 @@
+🔵 K8s介绍
+
+    🔶 Docker: 
+        是一个开源的引擎，
+        可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器
+
+    🔶 Kubernetes: 
+        是google开源的容器集群管理系统，
+        提供应用部署、维护、扩展机制等功能，
+        利用kubernetes能方便管理跨集群运行容器化的应用，
+        简称：k8s（k与s之间有8个字母）
+
+
+    🔶 Etcd: 
+        由CoreOS开发并维护的一个高可用的键值存储系统,
+        主要用于共享配置和服务发现
+
+    🔶 Flannel: 
+        Flannel是 CoreOS 团队针对 Kubernetes 设计的一个
+        覆盖网络（Overlay Network）工具，
+        其目的在于帮助每一个使用 Kuberentes 的主机拥有一个完整的子网
+
+
+
+🔵 硬件环境
+
+    虚拟机 CentOS7 ➜ k8s 主节点
+    虚拟机 CentOS7 ➜ k8s 从节点1, 从节点2
+
+    由三台服务器(CentOS 7.0)组成master集群,命名为m1，m2，m3，ip用m1 m2 m3来代替
+
+
+
+
+🔵 自动搭建...
+
+    https://segmentfault.com/a/1190000005345466
+
+
+
+
+
+🔵 参考 
+
+    ★★★★★ 官方文档(EN)    https://kubernetes.io/
+
+    ★★★★  中文社区  https://www.kubernetes.org.cn/
+
+
+
+🔵 K8S 简介
+
+    Kubernetes这个名字源自希腊语，意思是“舵手”，也是“管理者”，“治理者”等词的源头。
+    k8s是Kubernetes的简称. 用数字『8』替代中间的8个字母『ubernete』
+
+    Kubernetes 是 Google 开源的容器集群管理系统，其提供应用部署、维护、扩展机制等功能，
+    利用Kubernetes 能方便地管理跨机器运行容器化的应用。
+    如果你玩过Docker 就会知道想要给Docker 分配个固定IP也不是一个容易的事情.
+    而且每个Docker 默认是互相隔离的, 你要搭建集群. 需要把各个Docker 放到一个网络中.也需要花费不少心思!
+    用k8s 可以帮你解决这类问题! 极大的方便你管理! 如果你要和容器打交道,学这个真的非常有用的.
+
+    Kubernetes 可以在物理机或虚拟机上运行，且支持部署到 AWS，Azure，GCE 等多种公有云环境。
+
+    Kubernetes项目是Google在2014年启动的。Google 帮你踩了各种坑. 你只要用就好了!!! 
+    Kubernetes构建在Google公司十几年的大规模高负载生产系统运维经验之上，同时结合了社区中各项最佳设计和实践。
+
+
+
+🔵 K8S & OpenStack 
+
+    OpenStack 是私有云/企业云.  K8S 是容器集群管理系统.
+    两者一起使用 会有更好的效果.
+
+    在网络和存储方面 Openstack 比 k8s 更先进 更灵活.
+
+    k8s 专注于容器的编排, 它需要一整套基础设施资源. 
+    K8s 本身不具备处理基础资源的能力.
+
+    全球趋势正转向容器, OpenStack 将被逐步淘汰.
+
+
+
+🔸 Docker & Rocket 
+
+    大家肯定知道Docker, 但是很少听说过Rocker. 
+
+    CoreOS 是一家把Linux 容器化的创业公司. 最初为Docker 作出了巨大的贡献.
+    CoreOS 发现 Docker 在安全性、可组合性 等等不少方面存在缺陷.
+    也许是存在理念上的分歧, 所以CoreOS 自己推出了新的容器引擎: Rocket 
+    从技术论坛的反应来看.不少人是看好Rocket 的! 
+    至少有了竞争,对容器的发展绝对是好事.
+
+
+    CoreOS 在最近几年变得非常有名! 
+    他们公司开源的 ETCD 组件被广泛用于分布式计算的前沿技术中.
+    k8s、Mesos 等等这些著名的项目都在使用ETCD!
+
+    容器加上分布式 将会革新我们的基础架构! 从根源上影响企业的工作方式.
+    对IT/运维也有了新的要求, 这激素 DevOps.
+
+
+
+
+🔸 k8s 简介2 
+
+    k8s 能在集群中管理不同主机上的容器!
+
+    k8s 提供了很多机制来进行应用的部署,调度,更新,维护,伸缩.
+
+    k8s 能主动管理容器! 保证集群的状态不断的符合用户的期望.
+
+    k8s 支持 Docker 和 Rocket 
+
+
+    k8s 中, 所有的容器都运行在 pod 中.
+    一个机器能有多个 pod .
+    一个pod 容纳一个单独的容器; 或者容纳多个合作的容器.
+    pod 可以保证多个合作的容器 在同一个机器上. 这样就可以共享资源.
+
+    对于用户创建的每个pod, 系统会找一个健康运行 并且有足够的容量的机器! 然后启动容器.
+    如果容器启动失败, 容器会被kubelet 自动重启.
+
+    用户可以自己创建并管理pod, 一旦pod被创建好,系统会持续的监控它们的健康状态.也会健康pod所在的机器的健康状态.
+    如果一个pod 因为软件或者机器故障出现问题.
+    replication控制器会自动在健康的机器上创建一个新的pod,保证pod的高可用.
+
+    k8s 支持一种独特的网络模型. 
+    k8s 不会动态分配端口,而是让用户随意指定.
+    k8s 给每个pod分配了一个IP地址.
+
+    每一个k8s中的资源 如pod 都是通过一个 URI来识别的!
+
+
+
+
+
+🔸 创建Kubernetes集群
+
+    k8s 可以运行在多种平台!笔记本、服务器、各种云虚拟机...
+
+    如果你只是想试试k8s,那么用 基于Docker 的本地方案. 只能在单台机器上运行.
+    如果真要商业用. 那么就用托管服务, 也就是 Google AWS 这类的k8s集群服务.
+
+    GCE、AWS 都有现成的k8s 容器!  你只要运行就可以了.... 根本不用你安装..
+
+    由于国内的网络! 用Docker 你会疯的! 加上你自己的网速也不可能有服务器的网速.
+    还是强烈建议在GCE上搭建临时的k8s集群.
+    先不要急着创建k8s集群! 先来了解下基础知识会好很多!!
+
+
+
+
+🔵 ETCD
+
+    etcd 是一个 k8s 组件.
+    是一个高可用的 键值存储系统
+    主要用于共享配置、服务发现.
+    灵感来自 zookeeper,所以功能和zookeeper也有点类似. 算得上是后期之秀.
+
+    分布式系统,如何管理节点的状态一直是个难题.
+
+    etcd 作为一个高可用强一致性的服务发现存储仓库. 渐渐流行.
+
+    云计算时代. 
+    如何让服务快速透明的接入到集群中.
+    如何让共享配置信息快速被集群中的机器发现.
+    如何构建一套高可用 安全 易部署 以及响应快速的服务集群
+    etcd 就是解决这类问题的.
+
+
+    • 服务发现
+    在一个分布式集群中. 如何找到对方(服务)并建立连接.
+
+    • 消息发布/订阅
+
+    • 负载均衡
+
+    • 集群监控 / Leader 竞选
+
+    • ETCD vs Zookeeper 
+
+        一致性协议： ETCD使用[Raft]协议， ZK使用ZAB（类PAXOS协议），前者容易理解，方便工程实现；
+        运维方面：ETCD方便运维，ZK难以运维；
+        项目活跃度：ETCD社区与开发活跃，ZK已经快死了；
+        API：ETCD提供HTTP+JSON, gRPC接口，跨平台跨语言，ZK需要使用其客户端；
+        访问安全方面：ETCD支持HTTPS访问，ZK在这方面缺失；
+
+
+
+
+
+
+
+🔵 容器引擎
+
+    GCE 里面的 容器引擎是非常强大的! 
+    GCE 的容器引擎就是基于 k8s 构建出来的! 
+    GCE 的容器引擎有Google的顶尖工程师全面管理, 确保集群的高可用!高性能.
+
+    可伸缩--你自已调整集群资源; 如cpu、内存、甚至集群大小.
+
+    ⦿ 混合组网
+        通过谷歌的云端VPN. 使得你的集群 和你本地网络共存!
+        GCE上的集群,就像你Mac 本地的集群一样用!
+
+
+
+
+🔵 kubectl 
+kubectl 工具可以控制 k8s集群的管理器.
+可以检查集群资源, 创建 删除组件等等功能.
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 GCE k8s 容器 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+k8s 的部署是最麻烦的!  也没太大必要去手动部署! 
+用GCE的话,有各种现成的云端启动器, 就是已经帮你搭建好的各种环境! 你只要开机就行了!
+
+🔸 gcloud SDK
+    当然由于这个 k8s 是集群! 不是一个vps.
+    如果是单个vps. 你可以直接ssh进去.管理; 不同的vps 是相互隔离的!
+    但是这是集群! 集群里的电脑是要相互沟通的! 需要在一个网络下的! 
+    所以, 要连接GCE 上的k8s集群 用的不是SSH. 而是需要在你本地电脑安装 gcloud SDK,
+    安装好这个后. 你就可以直接在本地操作GCE. 自然也能连到GCE里面的集群了! 
+    有了SDK 你就可以把本地电脑 连到 GCE的集群里面! 
+    各种操作就像在内网一样!  这个功能是非常重要的!!
+
+
+🔸 Mac 安装 gcloud SDK 
+
+    # 安裝 gcloud SDK
+    $ curl https://sdk.cloud.google.com | bash
+
+
+🔸 安装 kubectl 
+
+    上面的命令不会安装 kubectl 组件. 这个命令之后要用到的! 
+    kubectl 是 SDK 的一个组件. 默认是不安装的.
+
+    去这个网站 https://cloud.google.com/sdk/docs/quickstart-mac-os-x
+    下载 google-cloud-sdk 的安装包并解压. 
+    运行安装脚本   ./google-cloud-sdk/install.sh
+    ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                  Components                                                 │
+    ├───────────────┬──────────────────────────────────────────────────────┬──────────────────────────┬───────────┤
+    │     Status    │                         Name                         │            ID            │    Size   │
+    ├───────────────┼──────────────────────────────────────────────────────┼──────────────────────────┼───────────┤
+    │ Not Installed │ App Engine Go Extensions                             │ app-engine-go            │  97.7 MiB │
+    │ Not Installed │ Cloud Bigtable Command Line Tool                     │ cbt                      │   4.0 MiB │
+    │ Not Installed │ Cloud Bigtable Emulator                              │ bigtable                 │   3.5 MiB │
+    │ Not Installed │ Cloud Datalab Command Line Tool                      │ datalab                  │   < 1 MiB │
+    │ Not Installed │ Cloud Datastore Emulator                             │ cloud-datastore-emulator │  15.4 MiB │
+    │ Not Installed │ Cloud Datastore Emulator (Legacy)                    │ gcd-emulator             │  38.1 MiB │
+    │ Not Installed │ Cloud Pub/Sub Emulator                               │ pubsub-emulator          │  33.2 MiB │
+    │ Not Installed │ Emulator Reverse Proxy                               │ emulator-reverse-proxy   │  14.5 MiB │
+    │ Not Installed │ Google Container Local Builder                       │ container-builder-local  │   3.7 MiB │
+    │ Not Installed │ Google Container Registry's Docker credential helper │ docker-credential-gcr    │   2.2 MiB │
+    │ Not Installed │ gcloud Alpha Commands                                │ alpha                    │   < 1 MiB │
+    │ Not Installed │ gcloud Beta Commands                                 │ beta                     │   < 1 MiB │
+    │ Not Installed │ gcloud app Java Extensions                           │ app-engine-java          │ 130.9 MiB │
+    │ Not Installed │ gcloud app PHP Extensions                            │ app-engine-php           │  21.9 MiB │
+    │ Not Installed │ gcloud app Python Extensions                         │ app-engine-python        │   6.3 MiB │
+    │ Not Installed │ kubectl                                              │ kubectl                  │  15.9 MiB │
+    │ Installed     │ BigQuery Command Line Tool                           │ bq                       │   < 1 MiB │
+    │ Installed     │ Cloud SDK Core Libraries                             │ core                     │   6.8 MiB │
+    │ Installed     │ Cloud Storage Command Line Tool                      │ gsutil                   │   3.0 MiB │
+    └───────────────┴──────────────────────────────────────────────────────┴──────────────────────────┴───────────┘
+    To install or remove components at your current SDK version [173.0.0], run:
+    $ gcloud components install COMPONENT_ID
+    $ gcloud components remove COMPONENT_ID
+
+
+    根据提示来 安装卸载额外组件.
+    我们要安装 kubectl 只要运行  gcloud components install kubectl
+
+    安装好 sdk. 以及 kubectl 后.  只要启动 k8s 集群. 就可以连接到k8s集群了.
+
+
+
+
+
+🔸 创建 k8s 集群 
+
+    GCE ➜ 启动器 ➜ Container Engine (容器引擎) ➜ 创建集群. 集群大小就是服务器数量! 
+
+
+🔸 连接 k8s 集群
+    
+    GCE ➜ 容器集群 ➜ 点击集群右边的 连接 ➜ 跳出两行命令. 复制到Mac 本地运行 
+    ➜ 然后就可以在Mac本地 用浏览器访问 http://localhost:8001/ui ➜ 这个就是k8s的管理界面!!
+
+
+🔵 使用
+    现在你就可以在 Mac 本地 用命令来操作k8s集群了!
+
+
+
+🔸 ✘✘∙𝒗 Desktop kubectl get --all-namespaces services   ➜  查看您的集群.
+
+    NAMESPACE     NAME                   CLUSTER-IP     EXTERNAL-IP   PORT(S)         AGE
+    default       kubernetes             10.11.240.1    <none>        443/TCP         3h
+    kube-system   default-http-backend   10.11.250.28   <nodes>       80:32023/TCP    3h
+    kube-system   heapster               10.11.250.59   <none>        80/TCP          3h
+    kube-system   kube-dns               10.11.240.10   <none>        53/UDP,53/TCP   3h
+    kube-system   kubernetes-dashboard   10.11.254.84   <none>        80/TCP          3h
+
+
+
+🔸 ✘✘∙𝒗 Desktop kubectl get --all-namespaces pods   ➜ 查看集群启动时创建的 pod 
+
+    NAMESPACE     NAME                                                  READY     STATUS    RESTARTS   AGE
+    kube-system   event-exporter-1421584133-3np41                       2/2       Running   0          3h
+    kube-system   fluentd-gcp-v2.0-6796q                                2/2       Running   0          3h
+    kube-system   fluentd-gcp-v2.0-rv450                                2/2       Running   0          3h
+    kube-system   fluentd-gcp-v2.0-z506s                                2/2       Running   0          3h
+    kube-system   heapster-v1.4.2-3460574887-vfq3s                      3/3       Running   0          3h
+    kube-system   kube-dns-3468831164-5s4t9                             3/3       Running   0          3h
+    kube-system   kube-dns-3468831164-b451h                             3/3       Running   0          3h
+    kube-system   kube-dns-autoscaler-244676396-ndbzl                   1/1       Running   0          3h
+    kube-system   kube-proxy-gke-cluster-1-default-pool-ad6c7f55-59kb   1/1       Running   0          3h
+    kube-system   kube-proxy-gke-cluster-1-default-pool-ad6c7f55-6qt6   1/1       Running   0          3h
+    kube-system   kube-proxy-gke-cluster-1-default-pool-ad6c7f55-kghl   1/1       Running   0          3h
+    kube-system   kubernetes-dashboard-1265873680-bsnt0                 1/1       Running   0          3h
+    kube-system   l7-default-backend-3623108927-ctzrz                   1/1       Running   0          3h
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+在GCE 上运行k8s 能让你对k8s有个大概的了解. 
+要深入了解,就必须先了解一些k8s 基础了.
+
+
+
+🔸 Pod 
+
+
+Pod: 一个pod 对应一个由相关容器和卷组成的容器组.
+
+
+
+
+
+
+
+
+🔸
+Label:  一个label 是一个被附加到资源上的键值对. 可以拿来做标签..
+
+
+service: 一个service 定义了访问pod的方式.
+就像当个固定的IP地址 和对应的 DNS 名之间的关系..
+
+
+volume:
+一个volume 是一个目录.
+
+namespace: 好比一个资源名字的前缀.
+帮助不同的项目/团队/客户 区分共享资源???
+
+
+
+
+
+
+🔸 节点
+主从节点都是节点, 在k8s里没必要分主从.
+
+
+
+🔸 网络
+
+k8s 给每个 pod 分配一个 IP地址.
+当然你首先要给 k8s 分配一个IP地址池.
+
+
+⦿ 建立拓扑网络
+如果你要手动搭建,那么这个网络也要自己配! 
+一般用 Flannel 来
+
+
+🔸 集群命名.
+kubectl 用集群名字来来访问集群, 所以集群名是不能重复的.
+
+
+
+🔸 所需软件
+
+• docker 
+• etcd 
+• k8s
+  kubelet
+  kube-proxy 
+  kube-apiserver
+  kube-controller-manager
+  kube-scheduler
+
+
+🔸 选择安装镜像
+    上面的软件可以直接运行在服务器上,
+    当然还是建议在容器中运行上面的软件! 一个软件一个容器. 那么就需要镜像了!
+    这些镜像谷歌都帮你准备好了. 可以直接下载的.
+
+    你可以使用Google Container Registry (GCR)上的镜像文件：
+
+    例如“gcr.io/google_containers/hyperkube:$TAG”。
+    这里的“TAG”是指最新的发行版本的标示。这个表示可以从最新发行说明找到。
+    确定$TAG和你使用的kubelet，kube-proxy的标签是一致的。
+    hyperkube是一个集成二进制运行文件
+    你可以使用“hyperkube kubelet ...”来启动kubelet ，用“hyperkube apiserver ...”运行apiserver， 等等。
+
+
+    对于etcd，你可以：
+    使用上Google Container Registry (GCR)的镜像，例如“gcr.io/google_containers/etcd:2.0.12”
+
+    我们建议你使用Kubernetes发行版本里提供的etcd版本。Kubernetes发行版本里的二进制运行文件只是和这个版本的etcd测试过。
+
+
+
+
+
+
+🔸 在节点上配置和安装基础软件
+    所有节点都需要安装 3个: 
+
+    • docker
+    • kubelet
+    • kube-proxy
+
+
+
+
+🔸 Docker 
+    对最低Docker版本的要求是随着kubelet的版本变化的。最新的稳定版本通常是个好选择。
+
+
+
+
+
+
+
+

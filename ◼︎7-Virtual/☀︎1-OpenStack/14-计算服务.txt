@@ -1,0 +1,247 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 计算服务 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 废话
+
+    OpenStack计算组件请求OpenStack Identity服务进行认证；
+    请求OpenStack Image服务提供磁盘镜像；
+    为OpenStack dashboard提供用户与管理员接口。
+    磁盘镜像访问限制在项目与用户上；
+    配额以每个项目进行设定（例如，每个项目下可以创建多少实例）。
+    OpenStack组件可以在标准硬件上水平大规模扩展，并且下载磁盘镜像启动虚拟机实例。
+
+
+🔸 数据库操作 .
+    查看数据库: show databases; 
+    删除数据库: drop database nova;
+    删除数据库: drop database nova_api;
+    删除数据库: drop database nova_cell0;
+
+
+🔸 cell map 是什么...
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸准备工作🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 数据库设置 
+    计算组件也需要单独创建数据库. 还是两个数据库.
+
+
+
+🔸 创建该服务的数据库和数据库管理账户
+    注意 nova_cell0 这个数据库. 官网教程没有! 不创建后面会报错!
+
+    • 登录数据库.              mysql -u root -ptoor
+    • 创建 nova_api 数据库：   CREATE DATABASE nova_api;
+    • 创建 nova     数据库：   CREATE DATABASE nova;
+    • 创建 nova_cell0 数据库： CREATE DATABASE nova_cell0; 
+
+    • 创建数据库用户.并给权限, 密码自己设置
+        GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
+        GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
+        GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
+        GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
+        GRANT ALL PRIVILEGES ON nova_cell0.* TO'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
+        GRANT ALL PRIVILEGES ON nova_cell0.* TO'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
+
+    • 退出数据库:    exit;
+
+
+
+
+🔸 admin 环境:    source admin-openrc
+
+
+
+🔸 创建nova用户、服务、API
+
+    ⦿ 创建 nova 用户：
+        openstack user create --domain default --password-prompt nova
+            设置密码: nova-passwd
+
+    ⦿ 给用户分配 admin 管理员角色：
+        openstack role add --project service --user nova admin
+
+
+    ⦿ 创建 nova 服务：
+        openstack service create --name nova --description "OpenStack Compute" compute
+
+    ⦿ 创建 Compute 服务 API ：
+        openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1
+        openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1
+        openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1
+
+
+
+
+🔸 创建placement用户、服务、API
+
+    ⦿ 创建placement 用户
+        openstack user create --domain default --password-prompt placement
+            设置密码: placement-passwd
+
+   ⦿ 给用户分配 admin 管理员角色
+        openstack role add --project service --user placement admin
+
+    ⦿ 创建placement 服务
+        openstack service create --name placement --description "Placement API" placement
+
+    ⦿ 创建 Placement API
+        openstack endpoint create --region RegionOne placement public http://controller:8778
+        openstack endpoint create --region RegionOne placement internal http://controller:8778
+        openstack endpoint create --region RegionOne placement admin http://controller:8778
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸安装配置🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 安装
+
+    yum install openstack-nova-api openstack-nova-conductor \
+    openstack-nova-console openstack-nova-novncproxy \
+    openstack-nova-scheduler openstack-nova-placement-api -y
+
+
+
+🔸 配置   vi /etc/nova/nova.conf
+
+    [DEFAULT] 
+    # 添加. 无需修改 
+    enabled_apis = osapi_compute,metadata
+
+    # RABBIT_PASS 改成环境配置.txt 里 消息队列 里设置的rabbitmq 密码
+    transport_url = rabbit://openstack:RABBIT_PASS@controller
+
+    # 添加行. 改成你服务器本地的管理接口的IP. 
+    my_ip = 192.168.1.112
+
+    # 下两行是防火墙设置. 使用网络服务中的防火墙. 而不是计算服务中的防火墙.
+    use_neutron = True
+    firewall_driver = nova.virt.firewall.NoopFirewallDriver
+
+
+
+    [api]
+    # 添加一行, 无需修改
+    auth_strategy = keystone
+
+    [api_database] 
+    # 添加 + 改你设置的 nova_api 用户的数据库密码.
+    connection = mysql+pymysql://nova:NOVA_DBPASS@controller/nova_api
+
+    [database] 
+    # 添加 + 填你nova的数据库密码.
+    connection = mysql+pymysql://nova:NOVA_DBPASS@controller/nova
+
+
+    [keystone_authtoken]
+    # 添加 + password的值改成你自己的 nova 用户的密码. 
+    auth_uri = http://controller:5000
+    auth_url = http://controller:35357
+    memcached_servers = controller:11211
+    auth_type = password
+    project_domain_name = default
+    user_domain_name = default
+    project_name = service
+    username = nova
+    password = nova-passwd
+
+
+
+    [vnc]
+    # 添加三行, 无需修改
+    # 配置VNC代理使用控制节点的管理接口IP地址.
+    enabled = true
+    vncserver_listen = $my_ip
+    vncserver_proxyclient_address = $my_ip
+
+
+
+    [glance]
+    # 配置镜像服务 API 的位置：
+    api_servers = http://controller:9292
+
+
+    [oslo_concurrency]
+    # 配置锁路径：
+    lock_path = /var/lib/nova/tmp
+
+
+    [placement]
+    # 需要修改密码   placement-passwd
+    # 配置 placement的 API
+    os_region_name = RegionOne
+    project_domain_name = Default
+    project_name = service
+    auth_type = password
+    user_domain_name = Default
+    auth_url = http://controller:35357/v3
+    username = placement
+    password =  placement-passwd
+
+
+
+
+🔸 vi /etc/httpd/conf.d/00-nova-placement-api.conf  
+    尾部添加 
+        <Directory /usr/bin>
+        <IfVersion >= 2.4>
+            Require all granted
+        </IfVersion>
+        <IfVersion < 2.4>
+            Order allow,deny
+            Allow from all
+        </IfVersion>
+        </Directory>
+
+
+🔸 apache 重启          systemctl restart httpd
+
+
+🔸 同步数据库.
+
+    ⦿ 同步 nova-api 数据库  su -s /bin/sh -c "nova-manage api_db sync" nova
+    ⦿ 同步 cell0    数据库  su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
+    ⦿                       su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova
+    ⦿ 同步 nova     数据库  su -s /bin/sh -c "nova-manage db sync" nova
+            ❌ ❌ ❌ ❌ ❌ ❌ ➜  未解决!  
+            👹 /usr/lib/python2.7/site-packages/pymysql/cursors.py:166: Warning: (1831, u'Duplicate index `block_device_mapping_instance_uuid_virtual_name_device_name_idx`. This is deprecated and will be disallowed in a future release.')
+            result = self._query(query)
+            /usr/lib/python2.7/site-packages/pymysql/cursors.py:166: Warning: (1831, u'Duplicate index `uniq_instances0uuid`. This is deprecated and will be disallowed in a future release.')
+            result = self._query(query)
+
+
+🔸 查看cell_v2所生成的UUID
+    nova-manage cell_v2 list_cells
+    +-------+--------------------------------------+
+    | Name  | UUID                                 |
+    +-------+--------------------------------------+
+    | cell1 | 109e1d4b-536a-40d0-83c6-5f121b82b650 |
+    | cell0 | 00000000-0000-0000-0000-000000000000 |
+    +-------+--------------------------------------+
+
+
+🔸 Nova 开机自启 
+    systemctl enable openstack-nova-api.service \
+    openstack-nova-consoleauth.service openstack-nova-scheduler.service \
+    openstack-nova-conductor.service openstack-nova-novncproxy.service
+
+
+🔸 Nova 启动 
+    systemctl start openstack-nova-api.service \
+    openstack-nova-consoleauth.service openstack-nova-scheduler.service \
+    openstack-nova-conductor.service openstack-nova-novncproxy.service
+
+
+🔸 Nova 状态 
+    systemctl status openstack-nova-api.service \
+    openstack-nova-consoleauth.service openstack-nova-scheduler.service \
+    openstack-nova-conductor.service openstack-nova-novncproxy.service
+
+
+

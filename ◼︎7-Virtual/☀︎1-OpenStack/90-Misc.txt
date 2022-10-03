@@ -1,0 +1,9 @@
+
+mkdir /opt/stack && cd /opt/stack && git clone https://git.openstack.org/openstack-dev/devstack && cd devstack
+
+    用ss 代理下载 速度非常块. 没代理可以
+    git clone https://git.openstack.org/openstack-dev/devstack  
+    改成 
+    git clone --depth=1 https://git.openstack.org/openstack-dev/devstack 
+    可以极大减少下载文件大小.
+

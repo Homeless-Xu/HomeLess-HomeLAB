@@ -1,0 +1,188 @@
+🔵 锁屏时间:  系统设置 ➜ 电源 ➜ blank screen: never
+
+🔵 root 自动登录: 
+			leafpad /etc/gdm3/daemon.conf
+				automaticloginenable = true 
+				automaticlogin = root   
+				两行前面的注释去掉. 然后强制重启: reboot -f
+
+
+🔵 开机启动自带的ssh功能.
+
+		ssh服务命令 : 二选一
+			/etc/init.d/ssh start / restart / status 
+			service ssh start / restart / status 
+
+		编辑配置文件. 允许 root 用密码登录 & 允许空密码登录.
+			vi /etc/ssh/sshd_config
+				1. 默认不许 空密码登录 !  	      改成 →       `PermitEmptyPasswords yes `
+				2. 默认 Root  不能用密码登录! 		改成 →       `PermitRootLogin yes` 
+		
+		重启服务.
+ 
+
+ 
+🔵 ssh 设置
+
+	客户端设置 ZSH:    `ssh root@172.19.16.164`
+		👹 连接错误: Connection refused ➜  Server 没有开启 ssh 服务.
+		
+		连不上可能之前连过一次. 系统重装了 那个什么秘钥就变了.
+		得去客户端. 删除相应 ip 的那行 再重新连.
+
+		顺便进行 证书登录吧..
+
+
+
+
+
+🔵 IP 设置.
+	网络设置成Nat. 
+	也就是vmware 会虚拟出一个网络.
+	本机给你分配 192.168.169.1
+	kali给你分配 192.168.169.130
+	你就可以用 192.168.169.130 来ssh了.
+
+
+
+
+🔵 rockyou 字典
+
+		🔸搜索并解压 rockyou 字典(Kali自带.)
+				打开资源管理器 ➜ 左上角 places 选择 computer ➜ 搜索 rockyou 会发现有个 rockyou.txt.gz 
+				选择这个文件 右键 ➜ open item location 打开文件所在位置 ➜ 再次选择文件 右键 ➜ extract to 解压到 
+				➜ 选择桌面 ➜ 解压出错...
+
+				用命令解压试试 .
+				cd /usr/share/wordlists/
+				gzip -d rockyou.txt.gz
+				可以...  解压出来的文件. 手动放到桌面去
+
+
+
+
+
+## VMware & Kali
+
+直接下载 vm 的镜像文件. 
+然后解压. 找到.vmx 后缀的 打自动用 vmware 打开了.
+默认账户 root 默认密码  toor
+
+
+
+# VM Tool 安装
+这个必须安装的. 
+不然关机得一两分钟. 安装后只要2秒.
+
+
+
+
+菜单栏 → install tool → 电桌面 多出个cd光盘 → 进去 → 找到.tar 的压缩包 → 右键 → 解压到桌面 →  打开终端 
+
+cd Desktop/ vmware-tools-distrib
+
+sudo ./vmware-install.pl -d
+
+注意：-d 假定您希望接受默认设置。如果不使用 -d，请按 Return 接受默认值或提供您自己的答案。
+1.  输入您的 Ubuntu 密码。
+2.  在 VMware Tools 安装完毕后重新启动 Ubuntu 虚拟机。
+
+
+
+
+
+
+# VM 远程桌面: RDP/VNC
+
+这里注意 不是SSH. 是带界面的远程.
+
+VM设置里 开启VNC 然后指定一个端口. 
+就能用 远程连接工具 如 jumpmydesktop 连接
+
+
+
+
+
+
+
+# VM SSH
+
+和正常的ssh 一样.
+唯一的区别就是IP.
+这个看你虚拟机的连接方式了.
+虚拟机里面 直接ifconfig 看IP 就可以了.
+
+
+1. 安装ssh 服务: 
+`apt-get install openssh-server`
+
+2. 开启ssh 服务: 
+`sudo /etc/init.d/ssh start`
+
+3. 更改配置文件 
+`vi /etc/ssh/sshd_config`
+	确保下面三行前面没有 # 号
+	port 22 
+	listenaddress 0.0.0.0
+	protocol 2
+
+4. 重启ssh 服务 
+`sudo /etc/init.d/ssh restart`
+
+5. 查看服务是否开启 
+`ps -le|grep sshd`
+
+
+6. ifconfig 查看虚拟机IP. 192.168.169.130
+
+7. ssh root@192.168.169.130
+
+8. 输入密码... toor 
+
+9. 密码不对!!!可能是不允root 登录 或者不许简单密码.
+回去 看 第三步的配置文件. 
+PermitRootLogin prohibit-password
+// root 登录 禁止用密码!!! 改成下面的就可以了.
+PermitRootLogin yes
+
+10. ssh root@192.168.169.130
+就登录进去了...
+
+
+
+
+
+
+
+# VM 无线网卡
+
+不管你用 NAT 还是桥接.
+虚拟机里永远是 有线连接的..
+
+虚拟机里要变成无线的. 只能外接网卡.
+
+推荐: ALFA 
+
+但是alfa 网卡一般只支持 10.7-10.9 系统...
+很少支持 10.12...
+
+
+
+
+
+
+
+
+# VM 快捷键
+
+
+退出全屏: ⌘ ⌃ F
+
+
+
+
+
+
+
+
+

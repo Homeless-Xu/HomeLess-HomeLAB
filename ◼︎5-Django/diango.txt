@@ -1,0 +1,1173 @@
+🔵 创建项目
+
+ 
+    🔸 创建一个名为my_blog的Django项目
+
+        🔅 django-admin.py startproject my_blog   # 会在当前文件夹下 建立一个 my_blog 文件夹.
+
+
+🔵 Django app
+　❗️❗️❗️ Django中的app 就是好比功能模块, 将不能功能放在不同的app中, 方便代码的复用
+  
+  🔸 建立模块: article
+
+      🔅 cd my_blog
+      🔅 sudo python manage.py startapp article
+      🔅 tree  现在让我们重新看一下整个项目的结构 
+
+          ├── article
+          │   ├── __init__.py
+          │   ├── admin.py
+          │   ├── apps.py
+          │   ├── migrations
+          │   │   └── __init__.py
+          │   ├── models.py
+          │   ├── tests.py
+          │   └── views.py
+          ├── manage.py
+          └── my_blog
+              ├── __init__.py
+              ├── __init__.pyc
+              ├── settings.py
+              ├── settings.pyc
+              ├── urls.py
+              └── wsgi.py
+      
+
+
+    🔸 配置模块: article
+
+        🔅 vi my_blog/settings.py  找到下面内容. 把新建的模块名添加进去, 这里的 40 行 就是新增的. 
+
+            33 INSTALLED_APPS = [
+            34     'django.contrib.admin',
+            35     'django.contrib.auth',
+            36     'django.contrib.contenttypes',
+            37     'django.contrib.sessions',
+            38     'django.contrib.messages',
+            39     'django.contrib.staticfiles',
+            40     'article'
+            41     ]
+
+
+
+
+
+🔵 运行程序
+    经过上面的配置后 就可以在本地看看我们建立的网站到底是什么样子的!
+
+    🔅 python manage.py runserver   #启动Django中的开发服务器
+
+            ✘✘∙𝒗 my_blog python manage.py runserver
+            Performing system checks...
+
+            System check identified no issues (0 silenced).
+
+            You have 13 unapplied migration(s). Your project may not work properly until y
+            ou apply the migrations for app(s): admin, auth, contenttypes, sessions.
+            Run 'python manage.py migrate' to apply them.
+
+            May 28, 2017 - 13:37:15
+            Django version 1.11.1, using settings 'my_blog.settings'
+            Starting development server at http://127.0.0.1:8000/
+            Quit the server with CONTROL-C.
+            [28/May/2017 13:37:24] "GET / HTTP/1.1" 200 1716
+            Not Found: /favicon.ico
+            [28/May/2017 13:37:24] "GET /favicon.ico HTTP/1.1" 404 1963
+
+
+    🔅  现在可以启动浏览器, 输入http://127.0.0.1:8000/ 
+        当出现 it worked! 说明你成功走出了第一步!
+
+
+
+
+
+🔵 项目结构详解
+    新建一个Django项目后.就自动建立了几个模块.
+
+
+          ├── article
+          │   ├── __init__.py
+          │   ├── admin.py        ➜ 网页后台!!! 少量的编辑就可以有很强大的后台.
+          │   ├── apps.py
+          │   ├── migrations
+          │   │   └── __init__.py
+          │   ├── models.py       ➜ 读写数据库
+          │   ├── tests.py
+          │   └── views.py        ➜  处理用户发出的请求,把结果输出到网页上.如登录后网页会显示用户名
+          ├── manage.py
+          └── my_blog
+              ├── __init__.py
+              ├── __init__.pyc
+              ├── settings.py     ➜ Django的配置文件
+              ├── settings.pyc
+              ├── urls.py         ➜  不同网址 对应不同的 网页文件
+              └── wsgi.py
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+下面我们来修改网页!!!!   我们不要默认的it works .而是要设计我们自己的网站
+
+先来说说 Djiango 原理.
+我觉得和 jekyll 差不多.. 都是运用模板!!!
+把html 分成好几部分. 到时候引用就可以了.方便.
+
+
+
+
+
+🔵 修改HTML 显示
+
+接着之前的 my_blog 项目操作.
+cd my_blog 项目.
+
+❗️ 注意 python 代码不能随便缩进的, 不然就报错!!!!!!!!!
+❗️ 注意 python 代码不能随便缩进的, 不然就报错!!!!!!!!!
+❗️ 注意 python 代码不能随便缩进的, 不然就报错!!!!!!!!!
+
+
+
+🔅 sudo vi article/views.py
+# -*- coding: utf-8 -*-
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse (u"欢迎光临")
+
+把整个文件改成上面这样. 
+第一行是编码申明.
+第二行是引入一个 httpresponse 模块. 可以向网页返回内容. 类似print 把结果显示在终端上. 只不过httpresponse是把内容显示到网页上!
+第三行: 定义一个 index 函数.  这个函数需要一个参数: request. 这是个特殊参数. 和网页发来的请求有关. 里面包含get/post 等等内容.  
+函数放回一个 httpresponse 对象. 这个对象可以显示文字到网页.
+
+那么我们访问上面网址才能看到刚才写的这个函数呢.  这就需要把网址和函数关联起来. 修改 urls.py 就可以了.
+
+🔅sudo vi my_blog/urls.py   全部内容改成
+
+from django.conf.urls import url
+from django.contrib import admin
+from article import views as my_blog_views     
+# new 从app(不是项目中)中导入 views. 改名成新变量: my_blog_views
+
+urlpatterns = [
+    url(r'^$', my_blog_views.index),           # new 👁‍🗨  my_blog_views.index  相当于 /index
+    url(r'^admin/', admin.site.urls),
+]
+
+
+
+
+🔅 python manage.py runserver
+👁‍🗨 如果报错.看原因.要么缩进. 要么语法.
+
+http://127.0.0.1:8000/  
+现在去浏览器看 网页就变成 欢迎光临 了.
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+下面就来设计博客了.  在centos6 的vps上搭建.
+Django是动态网站. 需要数据库.
+博客 就是文本和图片.  这些都储存在数据库中...
+
+数据库可以是新建的. 也可以用别人的 (带有别人的blog)
+
+教程:  https://andrew-liu.gitbooks.io/django-blog/content/dong_tai_url.html
+
+教程2: https://tutorial.djangogirls.org/zh/
+
+
+Django 有很多现成的模块!!!  比如后台页面. 有非常出色的模块. 你只要引用就可以了!!!
+❗️️❗️❗️ 极品模块集合 https://github.com/rosarior/awesome-django#admin-interface
+
+
+
+
+
+
+🔸 新建项目: 
+
+    🔅 django-admin startproject mysite .
+        # 最后的.是当前文件夹的意思. 该命令会建立一个 mysite文件夹 和 一个 manage.py 文件.
+        # manage.py 是一个帮助管理站点的脚本。在它的帮助下我们将能够在我们的计算机上启动一个 web 服务器，而无需安装任何东西。
+
+
+
+
+🔸 设置时区
+    sudo vi mysite/settings.py 
+    TIME_ZONE = 'xxx'   改成  TIME_ZONE = 'Asia/Shanghai'
+
+
+    文件尾部再加一行: 
+    我们还需要添加 (我们会找出在教程后面所提到的静态文件和 CSS文件) 静态文件的路径。 我们下拉到文件的最底部, 就是在STATIC_URL 条目的下面。添加新的一行内容为 STATIC_ROOT:
+
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+
+
+🔸 设置数据库
+
+    默认sqlite3.  
+    sqlite3 --version 查看服务器上是否安装了sqlite
+
+    sudo vi mysite/settings.py 
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+
+
+
+🔸 创建数据库.
+
+    python manage.py migrate
+    出现一堆ok 就成功了.
+
+
+🔸 启动开发网站服务器
+
+    python manage.py runserver
+    如果没有报错 就可以用 127.0.0.1:8000 访问网站了.
+    但是我们用的是vps. 是ssh上去的. 服务器没有图形界面.也没有浏览器
+
+    在本地 23.105.192.96:8000 看不到任何数据.
+
+    我们用 python manage.py runserver 0.0.0.0:8000 
+    就可以在本地用 23.105.192.96:8000 访问服务器上刚搭建的网站了.
+    访问还有点小问题: Invalid HTTP_HOST header: '23.105.192.96:8000'. You may need to add u'23.105.192.96' to ALLOWED_HOSTS.
+
+    应该是在 django的配置文件中设置的. 
+
+    sudo vi mysite/settings.py 
+    ALLOWED_HOSTS = [] 改成:
+    ALLOWED_HOSTS = ['23.105.192.96', 'www.0214.help'] 
+
+    现在用23.105.192.96:8000 或者 www.0214.help:8000 
+    都能正常出现django的默认网页 . 也就是 it worked! 
+
+
+
+
+
+
+
+🔸 创建应用程序
+python manage.py startapp blog
+
+配置应用程序:
+
+        🔅 vi mysite/settings.py  找到下面内容. 把新建的模块名添加进去, 这里的 40 行 就是新增的. 
+
+            33 INSTALLED_APPS = [
+            34     'django.contrib.admin',
+            35     'django.contrib.auth',
+            36     'django.contrib.contenttypes',
+            37     'django.contrib.sessions',
+            38     'django.contrib.messages',
+            39     'django.contrib.staticfiles',
+            40     'blog'
+            41     ]
+
+
+
+
+
+🔸 创建博客文章模型.
+vi blog/models.py 已有的不管.在尾部追加:
+
+
+from django.db import models
+from django.utils import timezone
+
+
+class Post(models.Model):
+    author = models.ForeignKey('auth.User')
+    title = models.CharField(max_length=200)
+    text = models.TextField()
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    published_date = models.DateTimeField(
+            blank=True, null=True)
+
+    def publish(self):
+        self.published_date = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return self.title
+
+
+
+
+
+
+🔸 数据库给模型创建数据表.
+上面只是创建模型结构. 真正的模型数据都是存在数据库中的.
+所以要先创建 模型对应的数据表.
+
+python manage.py makemigrations blog
+
+
+🔸 数据库迁移文件 ? migrate 迁移的意思.
+python manage.py migrate blog
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+Admin 管理后台.
+
+后台可以编辑删除博客!!!!  
+
+
+
+vi blog/admin.py 改成下面这样.
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.contrib import admin
+from .models import Post
+
+admin.site.register(Post)
+
+
+
+我们导入（包括）了前一章定义的Post模型。 为了让我们的模型在admin页面上可见，我们需要使用admin.site.register(Post)来注册模型.
+
+
+现在  23.105.192.96:8000/admin 就可以进入后台界面.
+为了登录需要一个超级用户.
+python manage.py createsuperuser
+输入用户名 xujian
+输入邮箱密码. 密码还必须是强密码. 字母数字的组合
+然后就可以登录了!!!!
+
+现在就可以创建博客文章了!!!!!!
+随便弄几篇文章. 保存.  现在还不能用网址看你的文章. 
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+❤️ Nginx + uWSGi + Django + mysql 部署:
+
+    🔵 相关基础知识
+
+        在前面的章节中我们使用 python manage.py runserver 就可以运行服务器. 也能进行外网访问. 
+        但是这时候运行的是 Django自带的精简版的web服务器. 功能非常有限! 只适用测试环境中使用。不能用于正式发布的服务.
+        所以我们需要一个可以稳定而持续的专业web服务器，比如apache, Nginx, lighttpd等，本文将以 Nginx 为例
+        但是专业的 web server 只适合由 html、css、js搭建而成的网站 ,适合我们用python 搭建的网站. 怎么办. 就需要 uWSGI 了.
+
+
+        🔸 uWSGI: 
+            uWSGI是一个应用服务器! 主要面向 web 服务.  
+            uWSGI具有跨平台(支持很多语言! 如python!!!)，高性能，低资源消耗，稳定性的优势。
+
+            虽然uWSGI本身就可以直接用来当Web服务器，但一般建议将其作为应用服务器配合Nginx一起使用，这样可以更好的发挥Nginx在Web端的强大功能。
+
+
+
+        🔸 守护进程:
+            想要脚本/进程持续运行. 就需要守护进程. 一般用 supervisor
+
+
+        🔸 Socket
+            电脑又叫计算机. 主要是用来计算的,这里的计算不仅仅指的是加减运算! 各种程序的运行 其实本质上也可以看成一种运算!
+            运算需要输入输出. 输入输出可以抽象为I/O 也就是 input output; 输入输出也可以理解为通信!!!
+
+            单个电脑里各种进程之间通信是通过读写文件来实现的. 
+            那么网络上不同的电脑互相通信又是怎么实现的呢: 答案就是 使用网络套接字 Socket.
+            Socket 用于不同计算机之间进行通信.   
+            Socket 是一个抽象层!  工作在应用层和传输层(TCP/UDP)之间!!!
+            Socket 接口是操作系统提供的.
+
+            我也不太懂. 看成一种和http 差不多的协议就可以了....
+
+
+
+
+    ️❗️❗️部署是最困难的部分.甚至有可能花费你几天时间.但是一旦搞定了.你的网站就上线了.真正运转在互联网中!
+    ️❗️❗️部署是最困难的部分.甚至有可能花费你几天时间.但是一旦搞定了.你的网站就上线了.真正运转在互联网中!
+    ️❗️❗️部署是最困难的部分.甚至有可能花费你几天时间.但是一旦搞定了.你的网站就上线了.真正运转在互联网中!
+
+
+
+    ❗️❗️原理: the web client <-> nginx <-> the socket <-> uwsgi <-> Django
+    nginx 和 uwsgi 是通过socket进行连接的!
+
+
+
+
+
+
+    🔵 流程简介: 
+
+        ➜ 初始设置: 安装Python、pip、nginx、uwsgi、Django; 配置防火墙 等等...
+        ➜ 创建Django项目 
+        ➜ 配置Django项目里的 uwsgi.ini 
+        ➜ 配置nginx.conf
+        ➜ 重启 uwsgi 和 nginx 
+
+
+
+
+    🔵 基本设置
+
+        🔸 安装 nginx
+        🔸 安装 uwsgi              sudo pip install uwsgi --upgrade
+        🔸 SELinux 设置为宽容模式  sudo setenforce 0
+        🔸 关闭防火墙或开放端口    sudo iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+
+
+
+    🔵 测试 Nginx
+
+        安装nginx过程中会新建一个虚拟主机: 如 www.0214.help
+        完成后，如果能正常打开http://www.0214.help，说明Nginx搭建成功.下面环节是通畅的：
+        the web client <-> the web server
+
+
+
+    🔵 uWSGi :
+        🔸 查看版本 uwsgi --version
+
+        🔸 uwsgi相关命令
+            启动uwsgi：   uwsgi --ini uwsgi.ini
+            停止uwsgi：   uwsgi --stop uwsgi.pid
+            重新加载配置：uwsgi --reload uwsgi.pid
+        
+        🔸 新建 hello world的wsgi应用. 并保存到 test.py 文件中
+        ❗️❗️❗️ python 必须注意缩进❗️❗️❗️
+            在django项目的根目录下创建test.py文件，添加源码如下(Python文件必须注意缩进)：
+            def application(env, start_response):
+                start_response('200 OK', [('Content-Type','text/html')])
+                return ["Hello World"] # python2
+                #return [b"Hello World"] # python3
+
+
+        🔸 运行 hello world的wsgi应用
+            🔅 uwsgi --http :8000 --wsgi-file test.py
+                ❗️ 这个命令必须在 test.py 的目录下运行.  不然uwsgi这个命令哪里去找test.py这个文件呢....
+                👁‍🗨 这个命令是否执行成功是要去浏览器看结果的! 终端会出现一堆东西 你不用理他!!!
+                👁‍🗨 http :8000:        这里使用http协议(可以用socket); 8000是端口(端口可自定义)
+                                        ❗️这里的: 千万注意! 前面其实省略了 0.0.0.0 也就是监听服务器所有IP. 这样不仅服务器自己用127.0.0.1:8000 能访问. 任意电脑用23.105.192.96:8000 也能访问.
+                👁‍🗨 wsgi-file test.py: 加载指定文件: test.py ; 这里改对应的文件名就可以了. 
+
+
+        🔸 浏览器测试: 23.105.192.96:8000 
+            打开 23.105.192.96:8000  浏览器上应该显示hello world
+                👁‍🗨 一定要能看到 hello world 才继续下面的步骤!!
+
+
+       
+        🔸 uwsgi 进阶
+                uwsgi --http :8000 --wsgi-file test.py   这个是最简单的命令. 其实还有很多可选参数如:
+                uwsgi --http :9090 --wsgi-file test.py --master --processes 4 --threads 2 --stats :9191
+                ️❗️❗️ 命令参数太多了，所以我们可以将参数写在配置文件里，启动uWSGI时指定配置文件即可。
+                    
+
+        🔵 uwsgi 配置文件简介
+
+                uwsgi 配置文件可以是键值对的格式，也可以是XML，YAML(ini)格式，本文以 ini 为例， 
+
+                让我们创建一个配置文件”uwsgi9090.ini”
+                配置文件路径随意. 最好么和 test.py 放一起.  本来就是一对么...
+                配置文件名: 最好写成uwsgi+端口号, 便于辨认..如:uwsgi3031.ini
+
+                [uwsgi]
+                 http=:8800
+                 wsgi-file=test.py
+     
+
+                ❗️❗️❗️ 然后就可以将启动命令简化为：uwsgi myapp.ini  等价于 uwsgi --http :8800 --wsgi-file test.py❗️❗️❗️
+                现在浏览器访问 23.105.192.96:3031 还是可以看到 hello world
+                这个例子只是帮你理解 uwsgi的配置文件. 下面我们来开始 结合uwsgi和nginx 来真正的部署!
+                
+
+        🔵  uwsgi 实际配置
+
+            🔸 http 改成 socket
+                👁‍🗨 uwsgi9090.ini 最好和 test.py 放一起.
+                由于Nginx 和 uWSGi 之间是通过Socket 进行通信的. 所以我们要把http改成socket
+
+                🔅 vi uwsgi3031.ini
+                    [uwsgi]
+                    socket    = :3031
+                    wsgi-file = test.py
+
+
+            🔸 配置Nginx
+                    - 找到默认Nginx 安装目录
+                        ❗️❗️❗️ 查ngrnx 安装路径:  ps aux | grep nginx . 就可以看出nginx安装路径
+                        nginx命令路径: /usr/local/nginx/sbin/nginx  ➜ 可以看出 实际安装路径就是 /usr/local/nginx
+                        配置路径: vi /usr/local/nginx/conf/nginx.conf
+
+
+
+                    - 备份并编辑 nginx 配置文件 修改server配置：
+                        👁‍🗨 这个是服务器ip访问对应的服务器网页. 域名对应的网页要去设置vhost 配置文件!
+                    
+                        🔅 cd /usr/local/nginx/conf && ls
+                        🔅 cp /usr/local/nginx/conf/nginx.conf /usr/local/nginx/conf/nginx.confBack
+                        🔅 vi /usr/local/nginx/conf/nginx.conf  将其中的根路径部分改成下面的为：
+
+
+                            location / {
+                                include uwsgi_params;
+                                uwsgi_pass 0.0.0.0:3031;
+                            }
+
+                            ❗️❗️❗️ 这段配置表明Nginx会将收到的所有请求都转发到”0.0.0.0:3031″端口上，即uWSGI服务器上。
+                            ❗️❗️❗️ 这个会导致 nginx的vhost失效.  23.105.192.96、www.0214.help、ss.0214.help、skill.0214.help 都会变成 hello world.
+
+                            ❗️❗️❗️ 原因在 include vhost/*.conf 这行!!!   
+                            nginx的配置文件 不是唯一的!!!   
+                            其实每个vhost 都会生成一个nginx 配置文件. 我们叫 vhost nginx 配置文件.
+                            在默认的nginx 可以用 include 导入其他地方放nginx 配置文件!!!  而且导入的配置文件优先级比较高!!!!
+                            我有三个vhost: www.0214.help、ss.0214.help、skill.0214.help
+                            所以vhost 下面有三个nginx配置文件分别是:  www.0214.help.conf、ss.0214.help.conf、skill.0214.help.conf
+
+                            ❗️❗️❗️如果你默认的配置文件中有  include vhost/*.conf 这行(一般在文件倒数第二行).
+                                    那么不管你默认nginx怎么配置. 都是安装 vhost的配置文件为准. 
+                                    也就是不管你怎么配置默认 nginx.conf  
+                                    www.0214.help   对应 www.0214.help.conf   里面配置的网站.
+                                    skill.0214.help 对应 skill.0214.help.conf 里面配置的网站.
+                                    ss.0214.help    对应 ss.0214.help.conf    里面配置的网站.
+
+                            ❗️❗️❗️如果你默认的配置文件中没  include 任何配置文件 
+                                    那么不管你vhost怎么配置. 都是按照默认配置文件为准. 我们这里 也就是所有入站请求都转到uwsgi里去  
+                                    www.0214.help   对应 uwsgi 运行的网站.
+                                    skill.0214.help 对应 uwsgi 运行的网站.
+                                    ss.0214.help    对应 uwsgi 运行的网站.
+
+                            ❗️❗️❗️如果你默认的配置文件 include 是这么设置的!
+                                    默认nginx 设置成 所有转到 uwsgi 然后再包含下面两个vhost的配置文件
+                                    include vhost/ss.0214.help.conf;
+                                    include vhost/skill.0214.help.conf;
+
+                                    那么
+                                    www.0214.help   对应 uwsgi 运行的网站.
+                                    skill.0214.help 对应 skill.0214.help.conf 里面配置的网站.
+                                    ss.0214.help    对应 ss.0214.help.conf    里面配置的网站.
+                                    这就是我想要的结果! 我就是这么设置的.
+                                    当然 你也可以选择先删除www.0214.help这个虚拟主机  然后用include vhost/*.conf 
+
+
+
+
+            🔸 重启Nginx:          /usr/local/nginx/sbin/nginx –s reload
+            🔸 启动uWSGI服务器：   uwsgi uwsgi9090.ini
+            
+            🔸 测试:               
+                浏览器访问 23.105.192.96 我们会再次看到”Hello World!”  
+                浏览器访问 www.0214.help 也变成 hello world了...
+                
+                到这里基本算部署成功了. 现在nginx 成功连接到uwsgi的测试程序. 下面只要把测试程序 改成Django程序就可以了.这个也很简单
+
+
+    🔵 搭建成功
+        cd到Django项目!
+        运行: uwsgi --socket :3031 --module mysite.wsgi
+        然后去浏览器 23.105.192.96 或者 www.0214.help 看 变成Django的网页了!!!!!
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+    🔵 测试Django 项目是否正常
+
+        🔅 python manage.py runserver 0.0.0.0:8000
+            然后浏览器 23.105.192.96:8000 看看是否显示it works.
+            如果没问题，使用uWSGI把project拉起来：
+
+
+
+🔵 增加nginx配置.
+
+    🔸 新建 uwsgi_params 文件:
+        新建或下载 uwsgi_params文件到项目文件夹下   👁‍🗨 这个文件 就叫:uwsgi_params 没有任何后缀!!!  
+        下载地址 https://github.com/nginx/nginx/blob/master/conf/uwsgi_params
+        下面是uwsgi_params文件内容
+
+uwsgi_param  QUERY_STRING       $query_string;
+uwsgi_param  REQUEST_METHOD     $request_method;
+uwsgi_param  CONTENT_TYPE       $content_type;
+uwsgi_param  CONTENT_LENGTH     $content_length;
+
+uwsgi_param  REQUEST_URI        $request_uri;
+uwsgi_param  PATH_INFO          $document_uri;
+uwsgi_param  DOCUMENT_ROOT      $document_root;
+uwsgi_param  SERVER_PROTOCOL    $server_protocol;
+uwsgi_param  REQUEST_SCHEME     $scheme;
+uwsgi_param  HTTPS              $https if_not_empty;
+
+uwsgi_param  REMOTE_ADDR        $remote_addr;
+uwsgi_param  REMOTE_PORT        $remote_port;
+uwsgi_param  SERVER_PORT        $server_port;
+uwsgi_param  SERVER_NAME        $server_name;
+
+
+
+
+
+
+
+🔵 URL
+
+部署好后. 首页就能用了 也就是 23.105.192.96:8000 
+下面我们来建立博客的第一个网页: 23.105.192.96:8000/admin
+
+URL 就是网址. 下面四个都是网址.都是不同的网址.
+23.105.192.96:8000 
+23.105.192.96:8000/admin 
+www.0214.help
+www.0214.help/admin 
+
+每个网页都要有自己的URL.  这样用户打开一个URL的时候. 服务器才知道要显示哪个网页给客户.
+所以需要对 url 和 网页 进行管理. 也就是一一对应.. 这就是 urls.py 的作用.
+❗️❗️❗️urls.py 作用: 匹配网址. 找到对应的网页
+❗️❗️❗️urls.py 作用: 匹配网址. 找到对应的网页
+❗️❗️❗️urls.py 作用: 匹配网址. 找到对应的网页
+
+
+vi mysite/urls.py
+urlpatterns = [
+    url(r'^admin/', include(admin.site.urls)),    
+]
+
+#[] 里面的 这个就是23.105.192.96:8000/admin 对应的url.
+这表示对于每一个以 admin 开头的 URL，Django 都会找到一个相对应的 view。 
+在这行代码中，我们包含了许多 admin URL 进来，所以这些 URL 不需要都被打包进这个小文件中。这使得代码更具可读性和简洁性。
+^admin/  ➜  ^ 正则式符号:表示文本的开始
+
+🔸 正则式 
+^ 表示文本的开始
+$ 表示文本的结束
+\d 表示数字
++ 表示前面的元素应该重复至少一次
+() 用来捕捉模式中的一部分
+
+
+现在，想象你有一个网站，其中有一个 URL 类似这样：http://www.mysite.com/post/12345/。其中 12345 是帖子的编号。
+
+为每一个帖子都写一个单独的视图是一件会让人恼火的事情。 用正则表达式，我们可以创建一种模式，用来匹配 URL 并提取出帖子编号：^post/(\d+)/$。 让我们一步一步将它分解，看看里面做了什么：
+
+^post/ 告诉 Django 在 URL 的开头匹配 post/ (后于 ^)
+(\d+) 表示 URL 中会有一个数（一位或者多位数字），并且我们想提取出这个数
+/ 告诉 Django 后面紧跟着一个 / 字符
+$ 表示 URL 的末尾，即以 /<1> 结尾的 URL 才会被匹配到
+
+
+
+
+
+🔸 urls.py 主文件
+
+    用 23.105.192.96:8000 表示博客首页.  并显示博客列表.
+
+    现在有两个urls.py 
+    为了保持文件简洁.  我们用 mysite/urls.py 为主.  
+
+    sudo vi mysite/urls.py  urlpatterns 改成如下:
+
+    urlpatterns = [
+        url(r'^admin/', include(admin.site.urls)),
+        url(r'', include('blog.urls')),  #这行是新增的!!!
+    ]
+
+    现在，Django 会把访问 'http://127.0.0.1:8000/' 的请求转到 blog.urls!!!
+    下面我们就来建立blog.urls 文件.
+
+
+
+🔸 blog.urls 文件
+
+    ❗️❗️❗️urls.py  :是匹配view的. view 不是网页! views.py :才是匹配html网页的! 
+    ❗️❗️❗️urls.py  :是匹配view的. view 不是网页! views.py :才是匹配html网页的! 
+    ❗️❗️❗️urls.py  :是匹配view的. view 不是网页! views.py :才是匹配html网页的! 
+
+    去app 目录下 这里也就是 blog 目录下 新建 urls.py 文件
+    🔅 vi blog/urls.py
+
+    from django.conf.urls import url
+    from . import views
+    urlpatterns = [
+        url(r'^$', views.post_list, name='post_list'),
+    ]
+
+    这个url的意思就是 网址如果不带任何后缀.那么就匹配 post_list 这个view.
+
+
+    现在会报错  没关系 因为我们还没建立post_list 这个view.
+    AttributeError: 'module' object has no attribute 'post_list'
+
+
+
+🔸 views
+    view 是存放应用逻辑的地方. 从模型中获取数据. 并把数据传递给模板.
+    所有视图都在 views.py中
+
+    🔅 vi blog/views.py 尾部添加两行
+    def post_list(request):
+        return render(request, 'blog/post_list.html', {})
+
+    意思就是post_list这个view 对应blog/post_list.html 这个网页!!!
+
+
+    刷新网页 出现另一个错误:TemplateDoesNotExist at /
+    也就是没有模板. 新建模板就可以了...
+    模板就是html 分成几部分...  
+
+
+🔸 模板
+    blog 文件夹下 建立 templates 文件夹. 然后在templates下面建立一个blog文件夹.
+    不要问为什么,反正文件夹结构就是 app名 ➜ templates ➜ app名 ➜ 具体模板   
+    blog
+    └───templates
+        └───blog
+            └───post_list.html
+
+    cd blog && mkdir templates && cd templates && mkdir blog && cd blog && vi post_list.html
+
+
+    然后在 templates/blog 下建立一个空白的 post_list.html
+    然后 ctrl+C 停止服务 . 重启服务. 再去23.105.192.96:8000 看到的就是一篇空白了. 
+    应为你的post_list.html 是空白的啊..
+    下面的工作 就是编辑 html了..
+
+
+🔸 post_list.html 模板内容.
+vi blog/templates/blog/post_list.html
+    👁‍🗨 这个html 就自己写了. 需要有html 基础. 最终网页看起来什么样子 就是html决定的.仅供参考...
+    👁‍🗨 这里涉及很多内容. 基本是前端的范围了. 有精力可以深入 自己写个博客主题!!!!!
+
+
+
+<h1>A heading</h1> -为你最重要的标题
+<h2>A sub-heading</h2> 为下一层级的标题！
+<h3>A sub-sub-heading</h3> ... 同样，直到 <h6>
+<em>text</em> 强调您的文本
+<strong>text</strong> 强烈强调您的文本
+<br /> 跳转到下一行（你不能放任何东西在br里面）
+<a href="https://djangogirls.org">link</a> 创建一个链接
+<ul><li>first item</li><li>second item</li></ul> 产生一个列表，就像这样！
+<div></div> 定义页面上的一个段
+
+
+
+<html>
+    <head>
+        <title>Django Girls blog</title>
+    </head>
+    <body>
+        <div>
+            <h1><a href="">Django Girls Blog</a></h1>
+        </div>
+
+        <div>
+            <p>published: 14.06.2014, 12:14</p>
+            <h2><a href="">My first post</a></h2>
+            <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+        </div>
+
+        <div>
+            <p>published: 14.06.2014, 12:14</p>
+            <h2><a href="">My second post</a></h2>
+            <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut f.</p>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+耶！ 但到目前为止，我们的模板永远只显示完全 相同的信息 — — 而我们早些时候谈到模板作为使我们能够以 相同的格式 显示 不同 的信息.
+我们想要的真正想要做的是的显示实际添加到我们Django admin里面的文章：这是我们接下来要做的。
+
+去23.105.192.96:8000/admin 里面随意添加几篇post.然后进行下面操作.
+
+
+
+
+🔵 配置 views 
+
+
+我们需要打开我们的 blog/views.py。到目前为止 post_list view 看起来像这样：
+
+from django.shortcuts import render
+
+def post_list(request):
+    return render(request, 'blog/post_list.html', {})
+还记得当我们谈论过导入在不同文件中编写的代码吗？ 现在是我们必须导入我们已经写在 models.py 里的模型的时候了。 我们将添加这行 from .models import Post，像这样：
+
+from django.shortcuts import render
+from .models import Post
+
+from 后面的点号意味着 当前目录 或 当前的应用程序。 因为 views.py 和 models.py 是在同一目录中，我们只需要使用 . 和 文件的名称（无 .py) 。 然后我们导入模型（Post).
+
+但接下来是什么呢？为了让实际的博客帖子从 Post 模型里获取，我们需要一种叫做 QuerySet的东西.
+
+
+
+
+🔵 Django 连数据库!!!
+文章都是储存在数据库中的!!!! Django项目必须连上数据库才能正常工作. 不然所有的模板数据是取不出来的.
+
+连接数据库需要 在Django 命令行下操作.
+
+
+🔸 Django shell
+python manage.py shell
+这个就可以进入 Django的交换控制台了. 有一些特殊的命令可以在这里使用. 
+当然这里也能用python的所有命令.
+
+
+首先让我们尝试显示所有我们的文章。你可以用下面的命令：
+
+>>> Post.objects.all()
+Traceback (most recent call last):
+      File "<console>", line 1, in <module>
+NameError: name 'Post' is not defined
+哎呀 ！出现了一个错误。它告诉我们没有文章。这是正确的 — — 我们忘了首先导入它 ！
+
+>>> from blog.models import Post
+这很简单： 我们从 blog.models 导入 Post 的模型。让我们试着再一次显示所有的帖子：
+
+>>> Post.objects.all()
+<QuerySet [<Post: my post title>, <Post: another post title>]>
+
+这是我们之前创建的文章的 list 列表！我们通过使用Django admin界面创建了这些文章。但是我们现在想通过Python来创建新的文章，那么我们应该如何做呢？
+
+
+>>> Post.objects.create(author=me, title='Sample title', text='Test')
+
+这里就会报错. 因为没有定义 me 
+NameError: name 'me' is not defined
+
+但是我们这里有一个遗漏的要素： me。我们需要传递 User 模型的实例作为作者。如何做到这一点？
+
+让我们首先导入用户模型：
+
+>>> from django.contrib.auth.models import User
+
+我们在数据库中有哪些用户？试试这个：
+
+>>> User.objects.all()
+<QuerySet [<User: xujian>]>
+
+这是一个我们之前创建的超级用户！让我们现在获取一个用户实例：
+
+me = User.objects.get(username='xujian')
+正如你所看到的，我们现在 get 一个 username 等于 'xujian' 的User 。简单吧！当然，你必须将其改为你所使用的用户名。
+
+现在我们终于可以创建我们的文章了:
+
+>>> Post.objects.create(author=me, title='Sample title', text='Test')
+
+哈哈！要检查是否有效吗？
+>>> Post.objects.all()
+就会发现 多了新加的文件了.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 QuerySet 查询集
+所以现在我们对已经发表并进行由 published_date排序的博客列表感兴趣，对吗？我们已经在 QuerySets 查询集一节里这么干过！
+
+Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+现在我们把这行代码插入 blog/views.py 文件，添加到函数 def post_list(request)里去
+现在的views.py 看起来应该是下面这样的.
+
+
+
+from django.shortcuts import render
+from django.utils import timezone
+from .models import Post
+
+def post_list(request):
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    return render(request, 'blog/post_list.html', {'posts': posts})   ❗️❗️❗️ 注意这行变了!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 Django模板
+
+模板很简单的. 
+之前在modules.py 里面定义了 一些如 post 
+在html 代码中 写 {{posts}}  就可以列出所有的post了!!  就这么简单.
+
+    <div>
+        <h1><a href="/">Django Girls Blog</a></h1>
+    </div>
+
+    {% for post in posts %}
+        <div>
+            <p>published: {{ post.published_date }}</p>
+            <h1><a href="">{{ post.title }}</a></h1>
+            <p>{{ post.text|linebreaksbr }}</p>
+        </div>
+    {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+🔸 网页 静态文件.
+    网页肯定需要 各种图片、icon、css、js 文件. 这些文件放哪里呢!!!!
+
+Django已经知道到何处找到内建“admin”应用的静态文件。现在我们只需要给我们的blog应用添加一些静态文件。
+
+我们在blog应用的目录下创建一个名为static的文件夹，创建后目录结构如下：
+
+    djangogirls
+    ├── blog
+    │   ├── migrations
+    │   └── static
+    └── mysite
+Django会自动找到你应用文件夹目录下所有名字叫“static”的文件夹，并能够使用其中的静态文件。
+
+
+
+
+你的第一个 CSS 文件！
+
+现在让我们创建一个 CSS 文件，为了在您的 web 页中添加你自己的风格。 在static 的目录下创建一个新的目录称为 css 。 然后，在这个 css 目录里创建一个新的文件，称为 blog.css 。 准备好了吗？
+
+
+
+
+
+
+
+
+
+❗️❗️❗️ 引入静态文件总结: 
+html 头部加入这行:    {% load staticfiles %}
+然后路径这么写: 
+css      <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+图片:    <img src="{% static 'icones/Appicon.webp' %}"   class="icon" > 
+
+实际文件路径: 
+    djangogirls
+    └─── blog
+         └─── static
+              └─── css
+                   └─── blog.css
+
+
+
+
+
+
+
+
+🔵 模板扩展
+模板有很多. head  body sidebar ...
+
+
+
+
+🔵 应用扩展
+
+
+
+
+🔵 表单
+我们最后一件关于我们的网站的事情就是创建一个漂亮的方式来增加和编辑博客文章。 Django的管理是很酷，但是它很难去自定义，变得更漂亮。 通过forms，我们可以拥有对我们界面绝对的权利—我们能够做几乎我们能想象到的所有事情！
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 Mysql 配置
+
+
+🔸 先安装python的mysql组件:  pip install MySQL-python
+
+🔸 创建数据库: Django
+    👁‍🗨 只要建立个数据库就行.不管你用什么办法. 
+    - 主要就是数据库名称(这里取名叫Django). 
+    - 默认字符集(千万记得用utf8);
+    - 还有个collation 选默认(utf8_bin)就行.
+
+    CLI登录方法: mysql -u root -p  
+
+
+🔸 配置Django settings.py
+
+    修改 Database 模块成下面的. 
+
+    - 修改 Name     成你新建的Mysql数据库名
+    - 修改 User     成你连数据库的名称
+    - 修改 Password 成你连数据库的密码.
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Django',
+        'USER': 'root',
+        'PASSWORD': 'xxxxxxxxxxxx',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+ }
+
+ 
+
+
+
+🔸 测试
+修改完后进入DOS进入项目目录下执行python manage.py shell命令启动交互界面
+输入下面两行代码验证数据库配置是否成功。没报错则成功！
+
+>>> from django.db import connection
+>>> cursor = connection.cursor()
+
+
+
+🔵 新建测试 APP
+然后就可以新建 app了. 一个项目可以含多个app. 
+app可以看成模块!!! 每个模块都有独立的 models、views 容易被移植和复用.
+
+
+python manage.py startapp products
+
+新建的app 估计肯定用的是 mysql了. 旧的app不清楚..  
+现在就可以安装之前的步骤.操作. 
+现在的数据 应该都存在 mysql里了. 
+随便新建几篇文章. 然后去数据库里面看看有没有内容就可以了.
+
+
+
+
+
+
+
+
+🔵 后台
+后台可以管理博客. 好看的后台非常重要...
+Python 有非常非常多现成的库!!!!  只要使用这些库 你就能设计出一个非常优秀的博客.
+虽然使用库 不能帮你提高技术. 但是一般的库都是开源的. 有需要的话 你可以研究人家的源码去.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

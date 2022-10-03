@@ -1,0 +1,86 @@
+
+
+
+
+
+
+
+下载地址 ???
+https://www.riskbasedsecurity.com/2016/08/the-shadow-brokers-lifting-the-shadows-of-the-nsas-equation-group/
+
+❗️❗️ 知乎事件分析:  https://www.zhihu.com/question/59760256
+https://www.zhihu.com/question/49658687
+
+8月19日：Shadow-Brokers所泄露文件的介绍、技术分析（上） http://bobao.360.cn/learning/detail/2970.html
+第二部分工具详解    https://www.easyaq.org/info/infoLink/970229833.shtml
+
+
+所以总结起来就是：
+
+Shadow Brokers这家黑客组织公布了NSA的一些黑客工具，“永恒之蓝”只是其中一个利用445端口进行攻击的工具，运营商已经对个人用户封掉445端口，但是教育网没有封，所以导致此病毒在高校爆发。
+
+
+
+泄露了两个压缩包，只有free-file的压缩包能解开，另外一个暂时没有密码(100W个比特币)：
+
+❗️❗️ 第一部分 下载地址   https://github.com/Xu-Jian/eqgrp-free-file
+❗️❗️ 第二部分下载  https://github.com/Xu-Jian/shadowbroker
+
+
+
+2. 北京时间 2017 年 4 月 8 日，“Shadow Brokers” 公布了保留部分的解压缩密码，有人将其解压缩后的上传到Github网站提供下载。
+
+3. 北京时间 2017 年 4 月 14 日晚，继上一次公开解压密码后，“Shadow Brokers” ，在推特上放出了第二波保留的部分文件，
+此次发现其中包括新的23个黑客工具。具体请参考：https://github.com/misterch0c/shadowbroker/blob/master/file-listing
+这些黑客工具被命名为OddJob，EasyBee，EternalRomance，FuzzBunch，EducatedScholar，EskimoRoll，EclipsedWing，EsteemAudit，EnglishMansDentist，MofConfig，ErraticGopher，EmphasisMine，EmeraldThread，EternalSynergy，EwokFrenzy，ZippyBeer，ExplodingCan，DoublePulsar等。
+
+
+
+
+
+
+$ ls -lah *.gpg
+-rw-rw-r--@ 1 noname  staff   128M  7 25 10:49 eqgrp-auction-file.tar.xz.gpg
+-rw-rw-r--@ 1 noname  staff   182M  7 25 10:50 eqgrp-free-file.tar.xz.gpg
+
+
+
+
+
+free-file的文件主要涉及的内容是针对防火墙的扫描器、漏洞利用框架等等:BLATSTING -- 穷举爆破EXPLOITS -- 漏洞利用代码OPS -- 攻击操作控制工具包SCRIPTS -- 脚本资源引用库TOOLS -- 辅助工具包(编码转换、IP格式转换、加密解密装换等等)
+
+
+大半年后的今天，再来看这个问题，感慨万千，身为“资深”从业人员，我们还是低估了黑产的胆子，以及高估了用户的意识，NSA工具曝光的余波，居然会这么巨大，估计当初谁也没能想到。事后来补充几点吧：1、国家级的信息武器库确实存在，而且威力巨大，一个已经曝光近一年的攻击工具仍然可以造成这么大范围的影响，可以想见，潜藏在水面下的庞大武器库对世界各国的国家安全将会构成多大的威胁。不仅如此，这些军用级的武器还可能会泄漏出来，成为黑产团队的利器，同样也会对普通的企业和个人造成致命的打击。
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+free 部分.
+
+针对防火墙的.
+
+从文件中所包含有”JETPLOW“,”BANANALEE“等文件名和文件夹关键字信息, 也与之前斯诺登所曝光的NSA网络攻击内部资料的防火墙(FIREWALL)章节内容所相符:
+
+(JETPLOW是专门针对Cisco PIX和ASA系列防火墙固件进行持久化植入的工具，可以将持久化控制软件BANANAGLEE植入到设备中)
+
+(BANANAGLEE可以认为是一个持续控制后门(Persistent Backdoor)攻击框架, 通过植入和篡改Cisco防火墙OS文件, 实现对Cisco防火墙入侵后的持续控制)
+
+    通过各安全研究人员对工具集当中攻击工具的成功验证, 基本上确定了这些数据包是从NSA有关联的方程式组织(Equation Group)泄露的可能性;
+
+
+
+
+
+
+
+
+

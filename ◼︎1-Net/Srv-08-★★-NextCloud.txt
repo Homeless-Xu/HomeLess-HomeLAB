@@ -1,0 +1,546 @@
+🔸 Apache 虚拟主机
+    参考  https://www.howtoing.com/how-to-set-up-apache-virtual-hosts-on-centos-7/
+
+
+    ⦿ Apache 原理.
+        首先匹配虚拟主机.  有虚拟主机存在 .就加载第一个虚拟主机.
+        所以你用服务器IP 去访问 104.224.139.45
+        默认加载的是 第一个虚拟主机目录下的 文件. 而不是 /var/www/index.html !!!
+
+    ⦿ 简介
+        ❗️❗️❗️❗️ apache 默认的根目录 是 cd /var/www/html ❗️❗️❗️❗️
+        ❗️❗️❗️❗️ apache 默认的根目录 是 cd /var/www/html ❗️❗️❗️❗️
+
+        apache 默认配置文件 是 vi /etc/httpd/conf/httpd.conf 
+
+        需要创建虚拟主机. 就得另外找一个文件夹, 还得新建个 .conf 配置文件.
+
+
+
+    ⦿ 创建目录
+        我们把虚拟主机的 更目录设置在 /var/www 下面.
+        sudo mkdir -p /var/www/example.com/public_html
+        sudo mkdir -p /var/www/example2.com/public_html
+
+    ⦿ 权限
+        但它们是由我们所拥有root用户。 如果我们希望我们普通用户能在我们的网页目录修改文件，我们可以改变与所有权chown ：
+
+        sudo chown -R $USER:$USER /var/www/example.com/public_html
+        sudo chown -R $USER:$USER /var/www/example2.com/public_html
+
+        在$USER变量将当前登录的，当您提交该命令的用户的价值。 通过这样做，我们的普通用户现在拥有public_html子目录，我们将存储我们的内容。
+
+        我们还应该修改我们的权限，以确保允许对一般Web目录以及其中的所有文件和文件夹进行读取访问，以便可以正确提供页面：
+
+        sudo chmod -R 755 /var/www
+
+
+        您的网络服务器现在应具有提供内容所需的权限，您的用户应该能够在相应的文件夹中创建内容。
+
+    ⦿ 站点1 演示页面
+    vi /var/www/example.com/public_html/index.html
+
+    <html>
+    <head>
+        <title>Welcome to Example.com!</title>
+    </head>
+    <body>
+        <h1>Success! The example.com virtual host is working!</h1>
+    </body>
+    </html>
+
+    ⦿ 站点2 演示页面
+    vi /var/www/example2.com/public_html/index.html
+
+    <html>
+    <head>
+        <title>Welcome to Example.com!</title>
+    </head>
+    <body>
+        <h1>Success! The example2.com virtual host is working!</h1>
+    </body>
+    </html>
+
+
+
+    ⦿ 创建虚拟主机文件.
+
+        sudo mkdir /etc/httpd/sites-available
+        sudo mkdir /etc/httpd/sites-enabled
+
+        sudo vi /etc/httpd/conf/httpd.conf
+        将此行添加到文件的末尾：
+        IncludeOptional sites-enabled/*.conf
+
+
+    ⦿ 创建第一个虚拟主机文件
+
+        sudo vi /etc/httpd/sites-available/example.com.conf
+
+<VirtualHost *:80>
+
+    ServerName www.0214.help
+    ServerAlias 0214.help
+    DocumentRoot /var/www/example.com/public_html
+    ErrorLog /var/www/example.com/error.log
+    CustomLog /var/www/example.com/requests.log combined
+</VirtualHost>
+
+
+    ⦿ 创建第二个虚拟主机文件
+
+        sudo vi /etc/httpd/sites-available/example2.com.conf
+
+        <VirtualHost *:80>
+            ServerName ss.0214.live
+            ServerAlias 0214.live
+            DocumentRoot /var/www/example2.com/public_html
+            ErrorLog /var/www/example2.com/error.log
+            CustomLog /var/www/example2.com/requests.log combined
+        </VirtualHost>
+
+
+
+    ⦿ 启用新的虚拟主机文件
+
+    sudo ln -s /etc/httpd/sites-available/example.com.conf /etc/httpd/sites-enabled/example.com.conf
+    sudo ln -s /etc/httpd/sites-available/example2.com.conf /etc/httpd/sites-enabled/example2.com.conf
+
+
+    ⦿ 重启 Apache
+        sudo apachectl restart
+
+    ⦿ 测试
+        www.0214.help  
+        ss.0214.help  
+
+
+
+
+
+
+🔸 Apache HTTPS
+
+    SSL 无法就是上传证书文件到服务器. 然后修改下站点配置文件
+    我们拿 www.0214.help 来测试.
+
+    确保 http://www.0214.help 能正常访问
+    站点目录是: /var/www/example.com/public_html/index.html
+    配置目录是: vi /etc/httpd/sites-available/example.com.conf
+
+
+        ⦿ 证书上传
+            • 阿里云下载 apache 对应的证书. 解压得到4个文件
+                xx.key、xx.pem、chain.pem、public.pem
+
+            • 服务器新建文件夹. 
+                mkdir /etc/httpd/conf/cert && cd /etc/httpd/conf/cert
+
+            • 上传所有证书到服务器cert文件夹
+                scp -P 2222 -r /Users/v/Desktop/213996185890463/* root@104.224.139.45:/etc/httpd/conf/cert
+
+
+    ⦿ 配置修改.
+        vi /etc/httpd/sites-available/example.com.conf
+
+    原先配置
+    <VirtualHost *:80>
+
+        ServerName www.0214.help
+        ServerAlias 0214.help
+        DocumentRoot /var/www/example.com/public_html
+        ErrorLog /var/www/example.com/error.log
+        CustomLog /var/www/example.com/requests.log combined
+    </VirtualHost>
+
+    追加:
+
+    <VirtualHost *:443>
+        ServerName www.0214.help:443
+        ServerAlias 0214.help
+        DocumentRoot /var/www/example.com/public_html
+        ErrorLog /var/www/example.com/error.log
+        CustomLog /var/www/example.com/requests.log combined
+
+        SSLProtocol all -SSLv2 -SSLv3
+
+        SSLCipherSuite HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM
+        SSLHonorCipherOrder on
+
+        SSLCertificateFile /etc/httpd/conf/cert/public.pem
+        SSLCertificateKeyFile /etc/httpd/conf/cert/213996185890463.key
+        SSLCertificateChainFile /etc/httpd/conf/cert/chain.pem
+
+    </VirtualHost>
+
+    ⦿ 测试   https://www.0214.help  然后就成功了....
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸 OpenSSL 简介
+
+    Openssl、mod_ssl是两个东西. 
+    安装了Openssl 不代表 安装了 mod_ssl.
+    Nginx 是默认可以使用ssl的.
+    Apache 就需要单独安装 mod_ssl 才能使用ssl.
+
+    ⦿ 操作系统是否安装 openssl:  openssl version 
+    ⦿ Apache  是否安装 mod_ssl:  httpd -M | grep ssl
+        参考文章  https://gxnotes.com/article/92224.html
+
+    ⦿ yum 安装 apache 的ssl 模块非常简单 yum install mod_ssl
+    ⦿ 编译安装 ssl模块... 不知道了... 自己谷歌..
+
+
+
+
+
+
+🔸 Nginx SSL 证书配置
+    ⦿ nginx 证书.
+    下载证书 得到两个文件 xx.key  xx.pem
+
+
+    nginx 安装目录(/usr/local/nginx/conf )下创建 cert 目录.  把两个文件传到 cert 目录下.
+
+cd /usr/local/nginx/conf && mkdir cert
+    ⦿ 配置 nginx.conf 的 https 模块
+    vi /usr/local/nginx/conf/nginx.conf 
+
+    默认是只有http 模块的. 
+    添加一个 server 就可以
+
+HTTPS server
+server {
+    listen 443;
+    server_name localhost;
+    ssl on;
+    root /home/wwwroot/default;
+    index index.html index.htm;
+    ssl_certificate   cert/213996185890463.pem;
+    ssl_certificate_key  cert/213996185890463.key;
+    ssl_session_timeout 5m;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+
+}
+
+
+    ⦿ 重启 Nginx。  service nginx restart
+
+
+    ⦿ 浏览器访问  https://www.0214.help
+
+        现在就可以了....
+        默认首页 就在 /home/wwwroot/default/index.html
+        就这么简单...
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸 NextCloud
+    国内的 seafile 不好用..
+    国外的 owncloud 被收购而且安装非常麻烦, 于是有了个新的  NextCloud.
+    官网: https://nextcloud.com/
+
+    ❗️❗️❗️ 安装教程 (EN) http://www.marksei.com/install-nextcloud-12-centos-7/
+    ❗️❗️❗️ 安装教程 (EN) http://www.marksei.com/install-nextcloud-12-centos-7/
+
+
+
+🔸 SSL 免费证书申请 
+
+    阿里云提供免费的的 ssl 证书..
+    免费的DV证书. 
+    ss.0214.help 算一个域名. 要申请一次证书
+    xx.0214.help 算另一个域名. 要另外再申请一次证书的!!
+
+    ⦿ 免费申请: https://common-buy.aliyun.com/?commodityCode=cas#/buy
+    ⦿ 查看证书: 管理控制台 ➜  安全(云盾) ➜ 证书服务 ➜ 
+    ⦿ 绑定域名: 0214.live
+    ⦿ 下载证书: 不同web服务器,下载不同的证书,有不同的操作.
+
+
+🔸 域名解析
+    服务器IP  104.224.139.45; 域名 0214.help
+
+    解析设置:
+
+        A  www      104.224.139.45
+        A  mail     104.224.139.45
+        A  skill    104.224.139.45
+        A  ss       104.224.139.45
+        A  blog     104.224.139.45
+        A  phpinfo  104.224.139.45
+        A  phpadmin 104.224.139.45
+        A  frp      104.224.139.45
+        A  zabbix   104.224.139.45
+        A  puppet   104.224.139.45
+        A  nextcloud 104.224.139.45
+        MX @        mail.0214.help
+
+
+
+
+🔸 NextCloud PHP 依赖安装
+
+    NextCloud 必须用 php 7+ 
+    php 7 又分两个小版本 7.0 和 7.1 .  
+    不同小版本安装命令有区别. 我们这里用的是 php 7.1
+    如果你用 php7.0 那么把下面的所有 php71w 改成 php70w
+
+    yum install epel-release
+    rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+    yum install httpd php71w php71w-dom php71w-mbstring php71w-gd php71w-pdo php71w-json php71w-xml php71w-zip php71w-curl php71w-mcrypt php71w-pear setroubleshoot-server
+
+
+
+
+🔸 数据库配置.
+    SQLite、MariaDB/MySQL、PostgreSQL 都可以. 建议 Mysql.
+
+    我们在LNMP环境中 已经安装了 mysql5.5+了.    
+    那么只要创建个 nextcloud 数据库 就可以了.
+    用户可以不新建.为了安全,最好是一个数据库用一个账户. 不要所有的数据库都用 root .
+
+    mysql -u root -p
+    CREATE DATABASE nextcloud;
+    CREATE USER 'nc_user'@'localhost' IDENTIFIED BY 'xujian0219';
+    GRANT ALL PRIVILEGES ON nextcloud.* TO 'nc_user'@'localhost';
+    FLUSH PRIVILEGES;
+
+
+
+
+🔸 Apache 安装.
+
+    网盘最好加密. 用https 安全很多.
+    我们的LNMP环境默认是没安装 apache的.
+    安装好apache后 /var 目录下才会多出个 www 目录.
+    apache apache 默认根目录是 /var/www/html
+    你把网站放根目录里面.是不需要配置 直接可以浏览器访问的.
+
+    我们要先安装apache, 然后安装 apache的ssl模块: mod_ssl 让apache 支持ssl 
+
+    ⦿ apache 安装:            yum install httpd -y
+    ⦿ 开机自启:               systemctl enable httpd.service
+    ⦿ apache 版本:            httpd -V 
+    ⦿ mod_ssl 模块安装:       yum install mod_ssl -y
+    ⦿ 是否安装 mod_ssl 模块:  httpd -M | grep ssl
+
+    ⦿ ❗️❗️❗️ 停止 Nginx       service nginx stop ❗️❗️❗️
+    ⦿ apache 修改默认端口( 防止和nginx冲突导致apache 启动失败 )
+        vi /etc/httpd/conf/httpd.conf
+        Listen 80 ➜ Listen 800
+
+    ⦿ 常用命令
+        状态: systemctl status httpd.service
+        开启: systemctl start httpd.service
+        停止: systemctl stop httpd.service
+        重启: systemctl restart httpd.service
+
+    ⦿ 测试:  104.224.139.45:800 ➜ 能出现apache测试页面就可以
+
+
+
+
+🔸 Apache 虚拟主机
+    我们把 nextapache 安装在 /var/www 文件夹下.
+
+    ⦿ 目录(NextCloud 安装)
+        cd /var/www 
+
+        curl -o nextcloud-12-latest.tar.bz2 https://download.nextcloud.com/server/releases/latest-12.tar.bz2
+
+        tar -xvjf nextcloud-12-latest.tar.bz2
+
+        mkdir nextcloud/data
+
+        chown -R apache:apache nextcloud
+        rm nextcloud-12-latest.tar.bz2
+
+
+    ⦿ 配置文件.
+        apache 默认自动加载 /etc/httpd/conf.d 文件夹下的 所有配置文件.
+        我们只要在这个文件夹下 建立 nextcloud.conf 就可以了
+
+           sudo vi /etc/httpd/conf.d/nextcloud.conf
+
+            <VirtualHost *:80>
+                ServerName nextcloud.0214.help
+                DocumentRoot /var/www/nextcloud
+            </VirtualHost>
+
+    ⦿ 重启 apache:   sudo apachectl restart
+
+    ⦿ 浏览器测试 nextcloud.0214.help  会有登录界面就可以了.
+    ⦿ 登录:  账户密码是 mysql 数据库的密码 
+
+
+
+🔸 Mac 客户端设置.
+
+    同步选择... 
+    server 把服务器文件同步到本地
+    local folder... 把本地文件上传到服务器..
+
+    软件安装好 默认带了几个测试文件的. 
+    本地的话 在 用户目录/nextcoud 上.
+    服务器  在...哪里...
+
+
+
+🔸 WebDAV
+    网页 左下角 死而后止 有个网址. 用这个就能登录.
+    http://nextcloud.0214.help/remote.php/webdav/
+
+
+
+
+
+
+
+🔸 插件!!
+https://apps.nextcloud.com/
+
+
+
+    老牌网盘,插件非常强大..
+    插件就是右上角设置里面的应用.
+
+
+    两步认证: Two Factor TOTP Provider 
+    启用后.就需要手机上的 离线验证码了. 类似谷歌..
+    因为开启了二步验证，在客户端直接使用帐号密码肯定无法登录了,需要再加个手机密码.
+
+    但是 设置应用密码 可以然你不用 输入两步验证码. ➜ 创建 
+    然后不同的客户端用不同的密码...
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 挂载谷歌网盘
+
+https://wenfan.cn/archives/2091.wen
+
+
+
+官方文档:
+
+https://docs.nextcloud.com/server/11/admin_manual/configuration_files/external_storage/google.html
+
+
+
+⦿ 
+资源管理 https://console.developers.google.com/cloud-resource-manager
+
+新建项目: cloudpan ➜ 创建
+
+
+
+⦿ 获取谷歌API
+访问: https://console.developers.google.com
+
+
+信息中心 ➜ 启用API ➜ 选择Drive API ➜ 启用 ➜ 
+启用API后 要创建一个凭据, 来获取 API ID 和 API key. 
+然后就可以用 API di 和 API key 连接NextCloud了.
+
+凭据 ➜ OAuth 同意屏幕 ➜ 随意写个 产品名称: CloudPan 其他忽略.保存
+
+凭据 ➜ 创建凭据 ➜ OAuth 客户端 ID ➜ 网页应用 ➜ 名称随意 
+
+➜ js 来源
+写网站根目录
+http://nextcloud.0214.help
+
+➜ 重定向URL 写域名 
+肯定是下面四个中的一个.. 可以多填几个..
+
+https://example.com/nextcloud/index.php/settings/personal/
+https://example.com/nextcloud/index.php/personal/
+https://example.com/nextcloud/index.php/settings/admin/externalstorages
+https://example.com/nextcloud/settings/admin/externalstorages
+
+
+
+http://nextcloud.0214.help/index.php/settings/personal/
+http://nextcloud.0214.help/index.php/personal/
+http://nextcloud.0214.help/index.php/settings/admin/externalstorages
+http://nextcloud.0214.help/settings/admin/externalstorages
+
+
+
+
+➜  创建
+
+1070610174415-ukp3ci83nkequ09ip3qj30c2asbu7bg3.apps.googleusercontent.com
+j2TkE8x8ndt_UV98qWpRd_Ea
+
+
+
+网域验证:
+
+
+
+
+
+
+
+
+
+
+
+必须去谷歌 创建一个项目.  
+
+https://console.developers.google.com/cloud-resource-manager?previousPage=%2F%3Fpli%3D1&pli=1
+
+
+
+项目名: NextCloud
+
+进入项目..
+
+
+
+
+⦿ 额外存储
+
+External storage support
+
+默认是关闭的!!1 fuck 要去 应用里面 手动开启.
+然后 首页 就多了个 外部存储....
+
+
+添加外部存储..
+
+
+
+🔸 HTTPS 设置.
+
+
+
+
+
+
+

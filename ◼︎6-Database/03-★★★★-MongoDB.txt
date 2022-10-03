@@ -1,0 +1,397 @@
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸安装配置🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 参考
+
+    ★★★★★  http://www.runoob.com/mongodb/mongodb-tutorial.html
+
+
+🔸 简介
+
+    Mongo支持丰富的查询表达式。查询指令使用JSON形式的标记，可轻易查询文档中内嵌的对象及数组。
+
+    适合大量文本的数据存储.
+        纽约时报，领先的在线新闻门户网站之一，使用MongoDB。
+        bit.ly, 一个基于Web的网址缩短服务，使用MongoDB的存储自己的数据。
+
+
+
+🔸 Mac 安装配置(不推荐)
+
+    ⦿ 安装: brew install mongodb
+        mongod --config /usr/local/etc/mongod.conf
+        🍺  /usr/local/Cellar/mongodb/3.4.7: 19 files, 281.9MB
+
+
+    ⦿ 修改环境变量
+        把mongodb/bin加入$PATH ，
+        echo "export MONGO_PATH=/usr/local/Cellar/mongodb/3.4.7/bin" >> ~/.zshrc
+        source ~/.zshrc
+        然后就能用 
+
+
+    ⦿ 创建数据库存储目录:  sudo mkdir -p /data/db
+
+    ❗️❗️ 下面一个是 mongod   一个是 mongo  注意拼写,就像httpd 一样.  ❗️❗️
+    ❗️❗️ 下面一个是 mongod   一个是 mongo  注意拼写,就像httpd 一样.  ❗️❗️
+        
+    ⦿ 启动mongodb服务端 sudo mongod
+        如果没设置环境路径 
+        需要cd 到 /usr/local/Cellar/mongodb/3.4.7/bin/  然后 sudo ./mongod
+        第一行就会显示 mongod 开启的端口 一般是 27017 .
+        现在 浏览器输入 http://127.0.0.1:27017/ 应该会有内容的.
+
+
+    ⦿ 运行: mongo 
+        启动之后就可以用 mongo命令了. 不过这里需要另外开终端窗口来执行.
+        启动之后才能用 mongo 命令连接到 mongo 服务器!
+        MongoDB shell version v3.4.7
+        connecting to: mongodb://127.0.0.1:27017
+        MongoDB server version: 3.4.7
+
+
+🔸 CentOS_7 x64 安装配置 
+
+    官方安装文档  https://docs.mongodb.com/master/tutorial/install-mongodb-on-red-hat/
+
+    ⦿ 安装方式: yum 或者 二进制编译安装.
+        用yum 的好处,方便管理. 如开机启动只要一个命令就好. 编译安装就麻烦点.
+
+    ⦿ 添加源
+        新建个文件. 粘贴内容就可以. 不用改.
+
+            vi /etc/yum.repos.d/mongodb-org-3.4.repo
+
+            [mongodb-org-3.4]
+            name=MongoDB Repository
+            baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
+            gpgcheck=1
+            enabled=1
+            gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
+
+    ⦿ yum 安装 
+        配置了源之后就可以用 yum 来安装 mongoDB 了.
+        sudo yum install -y mongodb-org
+
+    ⦿ yum 软件安装位置
+        安装软件后.常常会忘记安装路径. yum 是基于rpm的,可以用 rpm 命令来查找安装位置.
+            首先安装:        yum install hdf5
+            然后用 qa 参数:  rpm -qa|grep hdf5    ➜ 回车后输出  hdf5-1.8.7-1.el6.rf.x86_64 
+            最后用 ql 参数:  rpm -ql hdf5-1.8.7-1.el6.rf.x86_64
+
+            ✘✘∙GCE local ➜ rpm -qa|grep mongodb-org
+                mongodb-org-shell-3.4.7-1.el7.x86_64
+                mongodb-org-mongos-3.4.7-1.el7.x86_64
+                mongodb-org-tools-3.4.7-1.el7.x86_64
+                mongodb-org-server-3.4.7-1.el7.x86_64
+                mongodb-org-3.4.7-1.el7.x86_64
+
+
+            ✘✘∙GCE local ➜ rpm -ql mongodb-org-3.4.7-1.el7.x86_64
+            (contains no files)
+            啥情况.... 没出来安装路径啊..
+            ✘✘∙GCE local ➜ rpm -ql mongodb-org
+            (contains no files)
+            两个命令差不多的. 你知道软件名字可以直接用下面这种.
+
+
+        • RPM默认安装路径：
+            /etc	一些设置文件放置的目录如/etc/crontab
+            /usr/bin	一些可执行文件
+            /usr/lib	一些程序使用的动态函数库
+            /usr/share/doc	一些基本的软件使用手册与帮助文档
+            /usr/share/man	一些man page文件
+
+
+    ⦿ 创建数据库目录
+        MongoDB的数据存储在data目录的db目录下，你需要手动创建data目录，并在data目录中创建db目录。
+        mkdir -p /data/db
+
+
+    ⦿ 运行 MongoDB 服务
+
+    ⦿ 连接  MongoDB 服务器
+
+
+
+
+🔸 MongoDB Mac 图形化管理工具
+   
+    ⦿ 安装
+        很多工具,知名的也就两个: robomongo(robo 3t)、MongoHub
+        robo 3t 官方下载   https://robomongo.org/download
+        
+    ⦿ 使用
+        robo 主界面左上角电脑图标 ➜ Create ➜ 填写并保存 name; address; port ➜ connect 
+
+    ⦿ 使用        
+        GUI 图形界面里面的操作. 都会显示对应的 命令行代码.
+        玩下图形界面的同时能学习命令行.
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸基本概念🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 MongoDB 概念解析        
+
+    在mongodb中基本的概念是文档、集合、数据库.
+
+        SQL术语/概念	MongoDB术语/概念	解释/说明
+        database	   database	          数据库
+        table	       collection	      数据库表/集合
+        row	           document	          数据记录行/文档
+        column	       field	          数据字段/域
+        index	       index	          索引
+        table          joins	 	      表连接,MongoDB不支持
+        primary key	   primary key	      主键,MongoDB自动将_id字段设置为主键
+
+
+
+🔸  文档
+
+    文档是MongoDB的核心概念，
+    文档是一组键值(key-value)对, 多个键及其关联的值有序地放置在一起便是文档。
+
+    {"greenting" : "Hello,world!"}
+    这个对象只有一个键"greeting"，其对应的值"Hello,world!"
+
+    {"site":"www.runoob.com", "name":"菜鸟教程"}
+    这个对象有两个键: site 和 name . 分别有对应的值
+
+    MongoDB的文档不能有重复的键，例如下面的文档是非法的：
+    {"greeting":"Hello,world!","greeting":"Hello,mongoDB!"}
+
+
+🔸 集合
+
+    集合是一组文档。
+    如果说MongoDB中的文档类似于关系型数据库中的行，那么集合就如同表。
+
+    集合是无模式的。这意味着集合里面的文档可以是各式各样的.字符串/数值都可以混合
+
+    集合例子:
+    {"site":"www.baidu.com"}
+    {"site":"www.google.com","name":"Google"}
+    {"site":"www.runoob.com","name":"菜鸟教程","num":5}
+
+
+🔸 元数据
+    数据库的信息是存储在集合中。它们使用了系统的命名空间：
+        dbname.system.namespaces  列出所有名字空间。
+        dbname.system.indexes	  列出所有索引。
+        dbname.system.profile	  包含数据库概要(profile)信息。
+        dbname.system.users	      列出所有可访问数据库的用户。
+        dbname.local.sources	  包含复制对端（slave）的服务器信息和状态。
+
+
+🔸 MongoDB 数据类型
+
+    数据类型		     描述
+    String	            字符串。常用类型。
+    Integer	            整型数值。用于存储数值。
+    Boolean	            布尔值。用于存储布尔值（真/假）。
+    Double	            双精度浮点值。用于存储浮点值。
+    Arrays	            用于将数组或列表或多个值存储为一个键。
+    Object	            用于内嵌文档。
+    Null	            用于创建空值。
+    Date	            日期时间
+    Object ID	        对象 ID。用于创建文档的 ID。
+    Code	            代码类型。用于在文档中存储 JavaScript 代码。
+    Regular expression	正则表达式类型。用于存储正则表达式。
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸基本操作🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 MongoDB - 连接
+    你可以使用 MongoDB shell 来连接 MongoDB 服务器。你也可以使用 PHP 来连接 MongoDB。
+
+    ⦿ 标准语法：
+        mongo  [username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
+            • mongo                  必须项:  固定前缀. 
+            • username:password@     可选项:  登陆后面 /database 参数设置的数据库
+            • host1                  可选项:  指定了要连接服务器的地址.默认localhost
+            • portX                  可选项:  指定端口，默认为27017
+            • /database              可选项:  对应前面用户密码的数据库名称. 默认打开 test 数据库。
+
+    ⦿ 例: mongo                   连到本地的 默认数据库(test   数据库) mongo  不是 sudo mongod 
+    ⦿ 例: mongo localhost/testdb  连到本地的 指定数据库(testdb 数据库)
+
+
+🔸 查看当前数据库       db
+🔸 查看所有数据库       show dbs    
+🔸 创建数据库           use xx
+    如果数据库不存在，则创建数据库，否则切换到指定数据库.
+
+🔸 查看当前数据库所有集合       show tables;  show collections 
+    两个命令都可以. 用习惯mysql. 还是喜欢用tables....
+
+🔸 删除当前数据库某集合(site)        db.site.drop()
+
+🔸 删除数据库 
+    先进入要删除的数据库. 执行 db.dropDatabase() 就可以了.
+    show dbs ➜ use test ➜ db.dropDatabase() ➜ show dbs 就没有 test 这个数据库了
+
+
+🔸 插入文档/数据 insert() 
+    insert() 里面是文档. 文档的格式是 json 格式. 也就是 {xx,xx,xx,xx} 这样的格式
+
+    ⦿ 例1  
+        db.xx.insert({userid:"admin",password:"123456"})
+        首先要用 use 命令进入数据库! 插入数据的命令是在特定数据库里执行的
+        改命令会向xx的集合(如果该集合不存在会自动创建集合).然后插入一行文档.
+            • db       固定前缀! 不能改.
+            • xx       集合名, 对应mysql 中的表
+            • isert()  插入数据.
+            • {userid:"admin",password:"123456"}   是文档.对应mysql表中的行.
+
+    ⦿ 例2  
+        db.col.insert({
+            title: 'MongoDB 教程', 
+            description: 'MongoDB 是一个 Nosql 数据库',
+            by: '菜鸟教程',
+            url: 'http://www.runoob.com',
+            tags: ['mongodb', 'database', 'NoSQL'],
+            likes: 100
+        })
+
+
+🔸 删除文档/数据 remove()
+    db.col.remove({title: 'MongoDB 教程'})       删除所有匹配到的文档.
+    db.col.remove({title: 'MongoDB 教程'},1)     只删除第一个匹配
+    db.col.remove({})                            删除col集合下所有文档. 
+
+
+
+
+🔸 查看某集合文档   
+    语法:  db.文档名.find()
+      例:  db.xx.find()
+      例:  db.col.find()
+
+
+
+🔸 排序 sort()
+    db.xx.find().sort({"password":1})      1是升序,   按照 password 的值.进行升序排列,find() 表示排序所有文档
+    db.xx.find().sort({"password":-1})    -1是降序,   安装 password 的值.进行降序排列 
+
+
+
+
+🔸 更新文档: update()
+
+    ⦿ 先向xx集合插入多个文档方便测试
+        db.xx.insert({userid:"user1",password:"1"})
+        db.xx.insert({userid:"user2",password:"2"})
+        db.xx.insert({userid:"user2",password:"2"})
+
+        上面的命令是一次插入一条数据(文档). 其实可以一次插入多条数据(文档)
+        mongodb 支持 JavaScript语法的.
+        
+        for(let i=0;i<3; i++)db.xx.insert({x:i})
+        其实就是用了变量. 这个命令会向xx集合插入3个文档.分别是 x:0; x:1; x:2
+
+
+    ⦿ 查询当前集合  db.xx.find()
+        默认返回当前集合的所有文档. 
+        > db.xx.find()
+        { "_id" : ObjectId("59a67dff84cf55a6b9fd272b"), "userid" : "admin", "password" : "123456" }
+        { "_id" : ObjectId("59a683b897196371723aacb4"), "userid" : "user2", "password" : "2" }
+        { "_id" : ObjectId("59a683bc97196371723aacb5"), "userid" : "user3", "password" : "3" }
+        { "_id" : ObjectId("59a683c097196371723aacb6"), "userid" : "user1", "password" : "1" }
+        { "_id" : ObjectId("59a688ff97196371723aacb7"), "x" : 0 }
+        { "_id" : ObjectId("59a688ff97196371723aacb8"), "x" : 1 }
+        { "_id" : ObjectId("59a688ff97196371723aacb9"), "x" : 2 }
+
+
+    ⦿ 查询某个指定文档  db.xx.find({userid:"user1",password:"1"})
+        { "_id" : ObjectId("59a683c097196371723aacb6"), "userid" : "user1", "password" : "1" }        
+    
+    ⦿ 查询某个指定文档 db.xx.find({password:"1"})
+        { "_id" : ObjectId("59a683c097196371723aacb6"), "userid" : "user1", "password" : "1" }
+
+    ⦿ 查询某个指定文档 db.xx.find({userid:"user2"})
+        { "_id" : ObjectId("59a683b897196371723aacb4"), "userid" : "user2", "password" : "2" }
+        ❗️❗️ 注意, 查询必须是 一个键值对.  后面这种语法是错误的!! db.xx.find({"user2"}) ❗️❗️
+
+
+    ⦿ 查看当前集合内的文档数量  db.xx.find().count()  ➜ 会返回4. 也就是现在有4个文档
+
+
+    ⦿ 更新. 更新是建立在查找的基础上的. 
+        查找是  db.xx.find({password:"1"})
+
+        更新例1:  db.xx.update({password:"1"},{password:"11111"})
+            { "_id" : ObjectId("59a683c097196371723aacb6"), "userid" : "user1", "password" : "1" }
+            就变成了 .
+            { "_id" : ObjectId("59a683c097196371723aacb6"), "password" : "11111" }
+            虽然密码改了.但是 "userid" : "user1" 这个键值对被删了啊.
+
+
+        更新例2:  db.xx.update({"userid" : "user3"},{password:"3333"})
+            { "_id" : ObjectId("59a683bc97196371723aacb5"), "userid" : "user3", "password" : "3" }
+            就变成了 .
+            { "_id" : ObjectId("59a683bc97196371723aacb5"), "password" : "3333" }
+            我们这里查找的是 userid . 更改的是 password.
+            可以看成出 查找的是某文档内的一个键值对. 但是默认修改的确符合条件的整个文档.
+            我们可以设置只更新文档内的某个键值对. 而不影响文档内其他的键值对.
+            用 $set 这个部分更新操作符号就可以
+                • 全部更新语法: db.xx.update({匹配},{更新内容})
+                • 部分更新语法: db.xx.update({匹配},{$set:{更新内容}})
+
+        更新例3:  db.xx.update({"userid" : "user2"},{$set:{password:"22222"}})   
+            { "_id" : ObjectId("59a683b897196371723aacb4"), "userid" : "user2", "password" : "2" }
+            变成了
+            { "_id" : ObjectId("59a683b897196371723aacb4"), "userid" : "user2", "password" : "22222" }
+            因为我们用 $set{} 指定了更新 password 键值对. 所以 userid 键值对没被删除.
+            其实我们还可以添加键值对.
+
+        更新例4:  db.xx.update({"userid" : "admin"},{$set:{name:"xu.jian"}})   
+            { "_id" : ObjectId("59a67dff84cf55a6b9fd272b"), "userid" : "admin", "password" : "123456" }
+            变成了
+            { "_id" : ObjectId("59a67dff84cf55a6b9fd272b"), "userid" : "admin", "password" : "123456", "name" : "xu.jian" }
+            如果 $set{} 中的键值对在匹配出的文档中没有. 那么就会在文档内 新增键值对.
+
+
+
+
+
+
+
+🔸 索引 
+
+    索引通常能够极大的提高查询的效率，就像查字典一样,如果没有索引，
+    MongoDB在读取数据时必须扫描集合中的每个文件并选取那些符合查询条件的记录。
+    索引是特殊的数据结构，索引存储在一个易于遍历读取的数据集合中，索引是对数据库表中一列或多列的值进行排序的一种结构
+
+    ⦿ 创建索引
+
+
+
+
+
+🔸 其他命令
+
+    db.AddUser(username,password)           添加用户
+    db.removeUser(username)                 删除用户
+    db.createCollection(name,{size:3333,capped:333,max:88888})  创建一个数据集，相当于一个表
+    db.currentOp()                          取消当前库的当前操作
+    db.getReplicationInfo()                 获得重复的数据
+    db.test.find({id:10})                   返回test数据集ID=10的数据集
+    db.test.find({id:10}).count()           返回test数据集ID=10的数据总数
+    db.test.find({id:10}).limit(2)          返回test数据集ID=10的数据集从第二条开始的数据集
+    db.test.find({id:10}).skip(8)           返回test数据集ID=10的数据集从0到第八条的数据集
+    db.test.find({id:10}).limit(2).skip(8)  返回test数据集ID=1=的数据集从第二条到第八条的数据
+    db.test.find({id:10}).sort()            返回test数据集ID=10的排序数据集
+    db.test.findOne([query])                返回符合条件的一条数据
+    db.test.remove(query)                   在数据集中删除一条数据
+
+
+
+
+
+
+
+

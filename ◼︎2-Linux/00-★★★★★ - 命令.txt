@@ -1,0 +1,834 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵   CentOS 7 防火墙  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 Firewalld VS IPtables
+
+		Centos7 自带 firewalld 和 iptables .
+		但是iptables 太难用了. 所有默认就改成了 firewalld.
+		firewalld 在使用上 要比 iptables 人性化很多!!!
+		虽然默认用了 firewalld .但是底层还是靠iptables实现的.
+		所以个别iptables 命令还能使用如查看防火墙 iptables -L
+
+		❗️❗️ CentOS 7 默认使用firewalld. 别学 iptables 了, 直接学 firewalld ❗️❗️
+		❗️❗️ CentOS 7 默认使用firewalld. 别学 iptables 了, 直接学 firewalld ❗️❗️
+		❗️❗️ CentOS 7 默认使用firewalld. 别学 iptables 了, 直接学 firewalld ❗️❗️
+
+		❗️不明白“五张表五条链”,不明白TCP/IP协议也可以用 firewalls 实现大部分功能.❗️
+		❗️不明白“五张表五条链”,不明白TCP/IP协议也可以用 firewalls 实现大部分功能.❗️
+
+
+
+
+防火墙 FireWall iptable 
+    Ubuntu 默认关闭防火墙. 
+    iptables: 系统自带防火墙(复杂 难上手).
+    Uncomplicated Fire Wall(UFW):  iptable 的管理工具(使用简单).
+
+    安装 UFW :    sudo apt-get install ufw 
+    启用防火墙:　　sudo ufw enable 
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+
+
+🔸 chattr 修改文件额外权限
+    ⦿ 查看文件额外属性: lsattr filepath
+        在Linux系统里，文件有i选项则表示不得对其做任何的修改
+				目的是为了不让用户 修改、输出、移动重要文件!! 
+		
+		锁定文件用:   chattr +i filepath
+		解锁文件用:   chattr -i filepath
+
+    chattr -i /home/wwwroot/default/.user.ini  解锁文件.
+    chattr +i /home/wwwroot/default/.user.ini  锁定文件.
+
+
+		⦿ ❗️❗️ 让系统日志只能增加数据 ❗️❗️
+			chattr +a /var/log/messages，
+			让系统日志只能增加数据，而不能删除也不能修改数据。
+
+
+🔸 bash
+
+    sudo sh -c "echo 'something' >> /etc/privilegedfile"
+    sudo sh -c "echo_supervisord_conf > /etc/supervisord.conf"
+
+
+
+🔸 lsof
+	lsof  列出当前打开的文件.
+	linux 下所有东西都是文件. 端口也不例外.
+
+	lsof -i:80
+		如果端口被占用，则会返回相关信息，如果没被占用，则不返回任何信息。
+		-i 表示网络连接.
+		80 表示端口
+
+	sudo lsof -i -P | grep -i "listen"
+		查看所有进程监听的端口
+
+
+
+
+
+🔸 Django
+
+    ⦿ Django 版本查询方法一. 
+        (djcmsenv) ✘✘∙GCE mycms ➜ python
+        Python 2.7.5 (default, Nov  6 2016, 00:28:07)
+        [GCC 4.8.5 20150623 (Red Hat 4.8.5-11)] on linux2
+        Type "help", "copyright", "credits" or "license" for more information.
+        >>> import django
+        >>> django.VERSION
+        (1, 8, 18, 'final', 0)
+
+    ⦿ Django 版本查询方法2
+        转到 Django web 项目主目录并执行以下操作：
+        ./manage.py --version
+
+
+
+
+
+
+
+&
+jobs
+fb gb kill
+
+
+ls -l
+less
+head tail
+ln ln-s
+df
+
+
+
+基础网络管理:
+ip ifconfig 
+netstat ping traceroute
+
+
+
+基本命令 ✔︎ 
+clear (⌘K)  清空终端
+
+su  sudo  pwd
+
+cd: change directory 
+	cd /     cd .     cd ..   cd - (之前目录)
+
+mkdir -p /home/bird/testing/test1
+	-p：递归创建多层目录，即使指定目录存在也不报错。
+rm -rf  强制删除非空目录.(不然只能删除空目录)
+
+
+
+ls list: 目录清单
+	ls -l    → 现实详细信息
+	ls -a    → 显示所有文件 (包括隐藏文件)
+	ls -i    → 显示inode信息
+	ls -S    → size 按文件大小排列
+	ls -r    → 反序排序
+
+	ls -@l favicon-32x32.png
+	Mac ll 命令显示文件红色, @ 是额外权限的意思….**
+
+shutdown [选项] <now或关机时间>  
+	至指定时间正常结束所有进程并关闭或重启系统。    
+	ssh 远程关机 只有 root 可以进行.
+	定时关机 shutdown -h 1:30 
+	重启电脑 shutdown -r
+	取消操作 shutdown -c
+
+halt [选项]        
+	停止系统 & 不关电源.
+		-f：不调用shutdown结束进程，直接终止当前系统。    
+		-p：如果硬件支持，则在终止系统后关闭主机电源。
+		执行“poweroff”命令时默认与执行“halt -p”的作用相同。   
+poweroff  停止系统 & 关闭电源
+reboot [选项]
+	-f：不调用shutdown结束进程，直接重启当前系统。
+
+
+
+
+cat/tac     
+	cat filename 第一行开始到最后一行
+	tac filename 最后行开始到第一行
+		Mac 默认不支持tac 要手动安装.
+			brew install coreutils
+				这时候 就可以用 gtac 来实现 tac的功能了.
+				系统tac命令也是没人用的. 那就把 gtac 变成 tac 
+				以运行 tac 也就是运行 gtac了
+			ln -s /usr/local/bin/gtac /usr/local/bin/tac
+
+tar
+	tar -xvfz
+	tar -xvf
+
+touch    
+
+	head xx.txt    默认显示10行内容。
+	head -2 xx.txt	> 显示文件前两行
+	tail -5 xx.txt	> 显示尾5行 
+
+more xxx.txt   
+	→ 回车下一行，空格下一屏， b 上一屏，q 退出.
+	/yyy 匹配yyy内容.   n键: 下一个匹配项
+
+
+find
+	find ~ -name "xujian.zip"   find + 路径 +参数
+	find / -name httpd.conf
+
+
+chmod    → chmod -R 777 /dev
+chown    chgrp    umask
+cp       mv       rm       tar       mount
+who      whoami   
+vi       grep                  wc 
+
+uptime 系统启动时间 和工作负载.
+
+
+
+useradd  usermod  userdel  groupadd  groupmod groupdel
+	groupadd test           //增加一个test组
+	groupdel test2          //删除 组test2
+	groupmod -n test2  test	//将test组的名子改成test2
+	groups xujian           //当前登录用户xujian所在的组 groups，
+	cat /etc/group          //查看所有组 	
+
+
+
+df/fdisk 分区
+
+
+
+ps 
+
+	  top      kill     time uptime 
+ping     ftp      telnet   ssh     less
+
+
+	kill pid        杀进程用. 
+	kill -9 pid    -9 参数来强杀
+
+bc  简单的计算器.
+date 显示日期时间.
+cal 显示当月日历
+	cal 2009 显示09全年日历
+	cal 10 2009 显示09年 10月信息.
+
+
+
+
+echo
+echo : 在显示器上显示一段文字. 
+echo 极为常用.  打印变量的时候也常常用到.
+
+
+echo abc >> 1.txt
+把abc 追加到文件末尾
+
+
+文字输出：
+   \a 发出警告声；
+   \b 删除前一个字符；
+   \c 最后不加上换行符号；
+   \f 换行但光标仍旧停留在原来的位置；
+   \n 换行且光标移至行首；
+   \r 光标移至行首，但不换行；
+   \t 插入tab；
+   \v 与\f相同；
+   \\ 插入\字符；
+   \nnn 插入nnn（八进制）所代表的ASCII字符；
+–help 显示帮助
+–version 显示版本信息
+
+
+
+
+
+
+
+
+网络命令
+
+ping / traceroute / netstat / ftp / wget / ssh
+
+ping 发送icmp包. 给路由/主机 大部分都会回复. 
+
+traceroute. 
+显示所有经过的路由器的 名称/ip/往返时间.
+
+netstat 
+看本地网络信息. 多少网卡. 
+网卡是否启动 (是否UP)
+网卡是否有有效的IP地址
+netstat -r 会显示电脑本地的路由表!!!
+
+✘✘∙𝒗 ➜ netstat -r
+Routing tables
+
+Internet:
+Destination        Gateway            Flags        Refs      Use   Netif Expire
+default            101.92.192.1       UGSc          903        0     en0
+101.92.192/20      link#4             UCS             6        0     en0
+101.92.192.1/32    link#4             UCS             2        0     en0
+101.92.192.1       a0:f3:e4:97:b4:d1  UHLWIir       904        0     en0   1120
+101.92.206.42/32   link#4             UCS             1        0     en0
+101.92.206.77      link#4             UHLWIi          1        1     en0
+101.92.206.172     a0:f3:e4:97:b4:d1  UHLWIi          1        1     en0    659
+101.92.206.228     link#4             UHLWIi          1        1     en0
+101.92.207.157     link#4             UHLWIi          1        1     en0
+101.92.207.255     link#4             UHLWbI          1        9     en0
+127                localhost          UCS             1      369     lo0
+localhost          localhost          UH             13 30077264     lo0
+192.168.99         link#15            UC              3        0 vboxnet
+192.168.99.255     link#15            UHLWbI          1        9 vboxnet
+224.0.0/4          link#4             UmCS            3        0     en0
+224.0.0.251        1:0:5e:0:0:fb      UHmLWI          1        0     en0
+239.255.255.250    1:0:5e:7f:ff:fa    UHmLWI          1      140     en0
+255.255.255.255/32 link#4             UCS             1        0     en0
+
+Internet6:
+Destination        Gateway            Flags         Netif Expire
+default            fe80::%utun0       UGcI          utun0
+localhost          localhost          UHL             lo0
+
+wget 下载文件的...  非常有用. 脚本里经常用到
+
+
+查找文件
+简单方法: locate 通过名字来查找文件.
+复制方法:  find 在目录层次中搜索文件.
+
+locate. 默认搜索路径名数据库.这个数据库是每天更新的.不是实时更新的.
+
+
+
+
+AWK
+
+
+awk 是如何处理 每一笔记录的呢.
+
+
+awk特殊表达式: begin end
+begin end 作用是 给 程序赋予 初始状态 和 程序结束之后 一些稍微工作.
+
+任何Begin{} 内列出的操作 都会在 awk开始扫描之前执行.
+任何END{} 内列出的操作 都会在扫描完全部的输入之后执行.
+ 通常 begin 来显示变量和预置的变量.
+end 来输出最终的结构.
+
+
+
+
+
+
+
+取得活动网卡的IP
+
+ifconfig  会出来很长一段.很多是你不需要的. 
+我们要的 IP 只是 inet 字符后面的值.
+但是 网卡有很多张. 会出现很多 ip. 这就需要进一步刷选了. 
+由于激活的网卡都有个 广播地址: 也就是 broadcast
+
+
+1. ➜  Desktop ifconfig
+
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
+options=1203<RXCSUM,TXCSUM,TXSTATUS,SW_TIMESTAMP>
+inet 127.0.0.1 netmask 0xff000000
+inet6 ::1 prefixlen 128
+inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1
+nd6 options=201<PERFORMNUD,DAD>
+gif0: flags=8010<POINTOPOINT,MULTICAST> mtu 1280
+stf0: flags=0<> mtu 1280
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+ether 3c:15:c2:d6:0e:fa
+inet6 fe80::18bc:128a:4188:ee40%en0 prefixlen 64 secured scopeid 0x4
+inet 192.168.2.104 netmask 0xffffff00 broadcast 192.168.2.255
+nd6 options=201<PERFORMNUD,DAD>
+media: autoselect
+status: active
+en1: flags=963<UP,BROADCAST,SMART,RUNNING,PROMISC,SIMPLEX> mtu 1500
+options=60<TSO4,TSO6>
+ether 72:00:08:c9:9b:20
+media: autoselect <full-duplex>
+status: inactive
+en2: flags=963<UP,BROADCAST,SMART,RUNNING,PROMISC,SIMPLEX> mtu 1500
+options=60<TSO4,TSO6>
+ether 72:00:08:c9:9b:21
+media: autoselect <full-duplex>
+status: inactive
+
+
+1. ➜  Desktop ifconfig | grep 'inet'
+   inet 127.0.0.1 netmask 0xff000000
+   inet6 ::1 prefixlen 128
+   inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1
+   inet6 fe80::18bc:128a:4188:ee40%en0 prefixlen 64 secured scopeid 0x4
+   inet 192.168.2.104 netmask 0xffffff00 broadcast 192.168.2.255
+   inet6 fe80::4c39:12ff:fe19:6c27%awdl0 prefixlen 64 scopeid 0x9
+   inet6 fe80::aa87:a64c:5192:5a83%utun0 prefixlen 64 scopeid 0xa
+   inet6 fe80::60c1:4cd2:bbde:11c%utun1 prefixlen 64 scopeid 0xb
+   inet6 fd42:b6ca:ab00:e5fe:60c1:4cd2:bbde:11c prefixlen 64
+
+
+2. ➜  Desktop ifconfig | grep 'inet'| grep 'broadcast'
+   inet 192.168.2.104 netmask 0xffffff00 broadcast 192.168.2.255
+
+现在就刷选出来 活动的网卡了.
+我们只需要ip 和 广播地址的话 就要用 awk 来筛选字段了.
+
+1. ➜  Desktop ifconfig | grep 'inet'| grep 'broadcast'| awk '{print $2,$6}'
+192.168.2.104 192.168.2.255
+
+
+
+gcc  c源文件 编译成可执行的程序.
+time 执行某个目录需要花费的时间.  time ls　
+df命令: 磁盘使用情况 df -g; 以GB计
+passwd 修改密码
+
+
+whoami    当前用户信息
+logout    退出登录
+shutdown: 安全关闭系统
+halt:     直接关闭系统
+poweroff: 断电来关闭系统
+
+
+wc xxx.txt  统计文件行数 + 单词数 + 字符数: 
+
+
+设置权限 chmod +/—/=    读:r-4   写:w-2  执行x-1
+
+文件内容过多 需要分页: more / less  然后用 空格/b 来上下翻页.
+
+sort 文件排序...
+stat xxx.txt  文件索引信息
+
+nice 启动程序时候 指定优先级.
+renice 调整现有进程的优先级.
+vmstat 虚拟内存使用情况
+
+fdisk 磁盘分区工具..
+
+who
+who 系统登录人数.
+个人电脑: 一般都是个人使用.  一个电脑.一个用户
+服务器:   一般都是多人一起使用. 一个电脑多个用户
+who就是查看 谁登录了...
+'' ➜  sh who
+'' v        console  Mar 10 23:40
+'' v        ttys004  Mar 10 15:35
+'' 
+'' 大型服务器上有很多人在线一页显示不了.可用下面命令看人数:
+'' ➜  sh who | wc -l
+	''    2
+
+
+
+ip 
+查询   ip :    addr    查看ip 信息 加/删 ip :    sudo ip addr add 192.168.0.193/24 dev wlan0
+查看   ip :  ip addr  show wlan0 查看路由器   ip route show
+查看 一个ip的路由包 从哪里来的 ip route get 58.217.200.13 (百度的ip)
+
+网络接口类型:
+lo  本地回环接口
+eth(0-9)  以太网接口
+pppx 点对点 接口
+
+chmod
+ sudo chmod -R 777 /usr/local/mysql-5.7.11-osx10.9-x86\_64/data/
+data 文件夹 下  所有文件 及 子文件夹 都有777 权限.
+
+chmod o+x 
+
+u → user    文件所有者 
+g → group   文件所有者所在组
+o → others  所有其他用户
+a → all     所有用户.
+
+
+- - =   增加权限 去除权限  重新设置所有权限
+
+
+例子:
+chmod a+r file.
+
+
+
+
+打包程序 tar
+使用tar程序打出来的包我们常称为tar包，通常都是以.tar结尾的。
+生成tar包后，就可以用其它的程序来进行压缩了.
+
+tar命令基本用法： 
+　　tar命令的选项有很多(用man tar可以查看到)，但常用的就那么几个选项
+
+　　\# tar -cf all.tar \*.jpg 
+　　这条命令是将所有.jpg的文件打成一个名为all.tar的包。-c是表示产生新的包 ，-f指定包的文件名。 
+ 　　
+tar -rf all.tar \*.gif
+　　这条命令是将所有.gif的文件增加到all.tar的包里面去。-r是表示增加文件的意思。 
+
+tar -uf all.tar logo.gif
+　　这条命令是更新原来tar包all.tar中logo.gif文件，-u是表示更新文件的意思。 
+
+　　\# tar -tf all.tar 
+　　这条命令是列出all.tar包中所有文件，-t是列出文件的意思 
+
+　　\# tar -xf all.tar 
+　　这条命令是解出all.tar包中所有文件，-x是解开的意思 
+
+　　为了方便用户在打包解包的同时可以压缩或解压文件，tar提供了一种特殊的功能。
+ 这就是tar可以在打包或解包的同时调用其它的压缩程序，比如调用gzip、bzip2
+
+
+
+1) tar调用gzip 
+　　gzip是一个压缩程序， .gz结尾的文件就是gzip压缩的结果。
+  gzip 相对的解压程序是gunzip。 tar中使用-z这个参数来调用gzip。 
+　　\# tar -czf all.tar.gz \*.jpg 
+　　将所有.jpg的文件打成一个tar包，并用gzip压缩，包名为all.tar.gz 
+　　\# tar -xzf all.tar.gz 
+　　这条命令是将上面产生的包解开。 
+ 　　
+2) tar调用bzip2 
+　　bzip2是一个压缩能力更强的压缩程序，.bz2结尾。 
+  与bzip2相对的解压程序是bunzip2。tar中使用-j这个参数来调用gzip。
+
+　　\# tar -cjf all.tar.bz2 \*.jpg 
+　  将所有.jpg的文件打成一个tar包，并且将其用bzip2压缩，生成一个all.tar.bz2 文件
+　　\# tar -xjf all.tar.bz2 
+　　这条命令是将上面产生的包解开。 
+
+
+下面对于tar系列的压缩文 件作一个小结： 
+　　1)对于.tar结尾的文件 
+　　tar -xf all.tar 
+ 　
+　2)对于.gz结尾的文件 
+　　gzip -d all.gz 
+　　gunzip all.gz 
+ 　
+　3)对于.tgz或.tar.gz结尾的文件 
+　　tar -xzf all.tar.gz 
+　　tar -xzf all.tgz 
+ 　　
+4)对于.bz2结尾的文件 
+　　bzip2 -d all.bz2 
+　　bunzip2 all.bz2 
+　　5)对于tar.bz2结尾的文件 
+　　tar -xjf all.tar.bz2 
+ 　
+　　另外对于Window下的常见压缩文件.zip和.rar，Linux也有相应的方法来解压它 们： 
+1)对于.zip 
+　　linux下提供了zip和unzip程序，zip是压缩程序，unzip是解压程序。
+
+　　\# zip all.zip \*.jpg 
+　　这条命令是将所有.jpg的文件压缩成一个zip包 
+unzip all.zip
+　　这条命令是将all.zip中的所有文件解压出来 
+
+2)对于.rar 
+　　要在linux下处理.rar文件，需要安装RAR for Linux，可以从网上下载，RAR for Linux 不是免费的；
+可从http://www.rarsoft.com/download.htm下载RARfor Linux 3.2.0，  然后安装： 
+　　\# tar -xzpvf rarlinux-3.2.0.tar.gz 
+　　\# cd rar 
+　　\# make 
+　　这样就安装好了，安装后就有了rar和unrar这两个程序，
+rar是压缩程序，unrar 是解压程序。　
+
+tar 
+
+-c: 建立压缩档案 
+-x：解压 
+-t：查看内容 
+-r：向压缩归档文件末尾追加文件 
+-u：更新原压缩包中的文件 
+
+这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。 
+
+-z：有gzip属性的 
+-j：有bz2属性的 
+-Z：有compress属性的 
+-v：显示所有过程 
+-O：将文件解开到标准输出 
+
+下面的参数-f是必须的 
+-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。 
+tar -cf all.tar \*.jpg这条命令是将所有.jpg的文件打成一个名为all.tar的包。-c是表示产生新的包，-f指定包的文件名。
+tar -rf all.tar \*.gif
+这条命令是将所有.gif的文件增加到all.tar的包里面去。-r是表示增加文件的意思。 
+tar -uf all.tar logo.gif
+这条命令是更新原来tar包all.tar中logo.gif文件，-u是表示更新文件的意思。 
+tar -tf all.tar
+这条命令是列出all.tar包中所有文件，-t是列出文件的意思 
+tar -xf all.tar
+这条命令是解出all.tar包中所有文件，-x是解开的意思 
+压缩 
+tar –cvf jpg.tar \*.jpg //将目录里所有jpg文件打包成tar.jpg 
+tar –czf jpg.tar.gz \*.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用gzip压缩，生成一个gzip压缩过的包，命名为jpg.tar.gz 
+tar –cjf jpg.tar.bz2 \*.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用bzip2压缩，生成一个bzip2压缩过的包，命名为jpg.tar.bz2 
+tar –cZf jpg.tar.Z \*.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为jpg.tar.Z 
+rar a jpg.rar \*.jpg //rar格式的压缩，需要先下载rar for linux 
+zip jpg.zip \*.jpg //zip格式的压缩，需要先下载zip for linux 
+
+解压 
+tar –xvf file.tar //解压 tar包 
+tar -xzvf file.tar.gz //解压tar.gz 
+tar -xjvf file.tar.bz2 //解压 tar.bz2 
+tar –xZvf file.tar.Z //解压tar.Z 
+unrar e file.rar //解压rar 
+unzip file.zip //解压zip 
+
+总结 
+1、\*.tar 用 tar –xvf 解压 
+2、\*.gz 用 gzip -d或者gunzip 解压 
+3、*.tar.gz和*.tgz 用 tar –xzf 解压 
+4、\*.bz2 用 bzip2 -d或者用bunzip2 解压 
+5、\*.tar.bz2用tar –xjf 解压 
+6、\*.Z 用 uncompress 解压 
+7、\*.tar.Z 用tar –xZf 解压 
+8、\*.rar 用 unrar e解压 
+9、\*.zip 用 unzip 解压
+ 
+
+
+
+硬盘常识
+硬盘: 扇区 和 磁柱 组成.
+每个扇区 512 byte   第一个扇区 特别重要: 包含了
+- 主要启劢记录区(Master Boot Record, MBR):
+  如果按照多系统 这个 就很重要了.!!!
+  可以安装开机管理程序癿地方,有 446 bytes     - 分区表(partition table):记录整颗硬盘分区状态,有 64 bytes 
+
+硬盘分区 属于 高级格式化.
+低格,必须在 dos/或者 U盘启动 中 才行.
+
+老毛桃 → DiskGenius → LFORMAT 低级格式化
+Y → Low Level Current Device
+Y
+没严重问题的硬盘 不建议低格.会影响硬盘寿命
+
+
+硬盘分区表
+硬盘 
+	→ 有多个磁盘盘面, 每个盘面一个磁盘读取头. 
+		→ 盘面有很多磁柱 类似操场 有很多跑道. 
+			→ 磁柱(跑道250米)有很多扇区(sector,一米)组成 
+				→ 每个扇区 512 byte = 0.5kb
+
+磁头只选择跑道,靠磁盘旋转来读写数据.
+
+硬盘的 第一个扇区特别重要 记录重要信息:
+主要启动记录区 (master boot record MBR) 安装开机管理程序的地方  446 byte
+开机 读取这个区块内容 系统才能知道你的程序放在哪里 和 如何进行开机 
+如果安装多系统 :这个就非常非常重要而来
+
+
+分区表信息 (partition table ) 记录硬盘的分割状态 64 byte
+	只能容纳 4笔 分区记录. 分区最小单位是磁柱.
+	多个主要分区 primary
+	一个扩展分区 extended
+
+为什么要分区 : 增加效率. 
+	比如分区 c 的磁柱范围是 1-100 
+	当硬盘要读取c 盘里面数据的话 只会搜索1-100的磁柱  
+	不会搜索100以外的磁
+
+
+比如一个硬盘 4个区.
+	硬盘 /dev/hda
+	分区1/dev/hda1
+	分区2/dev/hda2
+	分区3/dev/hda3
+	分区4/dev/hda4
+
+:
+
+磁柱: cylinder (所有盘面):多个磁轨 垂直方向叠加起来的概念 就是磁柱.
+磁轨: track    (单个盘面): 磁头不动  磁盘转一圈 那个就是磁柱.
+
+
+盘面 一个圆圈.  最外面
+
+分区 partition
+
+一个硬盘 多个分区 
+	SATA硬盘1 /dev/sda
+	SATA硬盘2 /dev/sdb
+	usb   /dev/sdc
+
+
+
+
+
+
+fdisk & df
+分区 → 格式化 → 挂载
+
+fdisk              磁盘操作工具
+fdisk -l           所有硬盘信息 + 详细的分区信息
+fdisk -l /dev/sda  查具体某块硬盘的分区信息
+
+格式化 hda10 分区 为 ext3 文件系统:  mkfs -t external /dev/hd10
+
+挂载
+	mkdir /mnt/sda6
+	chmod 777 /mnt/sda6
+	mount /dev/sda6 /mnt/sda6
+
+
+
+硬盘使用情况(容量):     df -h
+
+
+
+fdisk -l
+
+Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sda1  *        2048 43960319 43958272   21G 83 Linux
+/dev/sda2       43962366 45926399  1964034  959M  5 Extended
+/dev/sda5       43962368 45926399  1964032  959M 82 Linux swap / Sol
+
+
+Device Boot      Start         End      Blocks   Id  System
+/dev/hda1   *           1         765     6144831    7  HPFS/NTFS
+/dev/hda2             766        2805    16386300    c  W95 FAT32 (LBA)
+/dev/hda3            2806        9729    55617030    5  Extended
+/dev/hda5            2806        3825     8193118+  83  Linux
+/dev/hda6            3826        5100    10241406   83  Linux
+/dev/hda7            5101        5198      787153+  82  Linux swap / Solaris
+/dev/hda8            5199        6657    11719386   83  Linux
+/dev/hda9            6658        7751     8787523+  83  Linux
+/dev/hda10           7752        9729    15888253+  83  Linux
+
+第一段: 固态硬盘 sda 的信息.
+第二段: 机械硬盘 hda 的信息.
+如果有 hdb 说明是 HD 硬盘接口的 第二块硬盘.
+
+
+Boot  有 * 的那个是 启动盘!!!  主系统是安装在那里的.
+sda1,sda2,sda5  前缀都是 sda , 都是 sda 硬盘的分区.
+hda1,hda2,hda3… 前缀都是 hda , 都是 hda 硬盘的分区.
+
+sda1 启动分区  一般很小 . 
+sda2
+sda3
+
+
+交换分区:
+	查看交换分区: swapon -s
+	/dev/sda5                  partition   982012  0   -1
+
+
+分区转成 swap 交换分区
+	mkswap /dev/sda6  创建此分区为 swap 交换分区
+	swapon /dev/sda6  加载交换分区
+	swapoff /dev/sda6 关闭交换分区
+
+
+mkfs 格式化磁盘命令
+
+格式化 是为了 创建文件系统.
+
+
+dh -f
+用硬盘之前  必须 分区. 格式化 . 挂载
+
+mkfs
+
+
+
+
+disk doesn’t contain a valid partition table'' 你还没分区!!!! 
+遇上最后那种 就会出现  上面这个报错信息. 意思是你还没分区.
+
+解决办法:
+给磁盘创建文件系统
+创建挂载点
+挂载
+
+挂载: 怎么看有没有挂载
+新分区 用  fdisk 格式化下. 新建文件系统.
+
+
+
+
+文件操作
+
+nl 显示癿时候,顺道输出行号! 
+more 一页一页癿显示档案内容
+less 不 more 类似,但是比 more 更好癿是,他可以往前翻页!
+head 叧看头几行
+tail 叧看尾巳几行 cat -n xxx  则每一行前面还会加上行号呦! 
+
+
+找文件
+which type    需要 root 进行搜索.  寻找可执行文件. 命令
+
+
+
+find 直接搜索硬盘 . 很慢.
+whereis locate  利用数据库查找  快
+
+
+
+
+
+
+
+🔸 配置 FQDN
+
+    FQDN Fully Qualified Domain Name 完全合格域名的缩写, 访问时将由DNS进行解析,得到IP.
+
+    FQDN = Hostname + DomainName
+
+    linux下查看方式：
+        hostname      查看主机名  cat /etc/hostname
+        hostname -f   查看FQDN
+        dnsdomainname 查看域
+
+    当我们申请了一个域名时，就可以使用这个域名来得到IP，但若这个域名下挂在很多主机如何？
+    我是不是得申请很多很多域名给每个主机？不需要，
+    域名即创建了一个域，就如命名空间，在这个命名空间下，其他主机都可以创建自己的名称。
+    这个名称就是通过以上公式得来。
+
+    举个例子，一个公司申请了域名comp.com，
+    这时候有一台主机名为web，则可以使用web.comp.com得到这个主机IP。
+    若还有两台提供邮件和OA服务的主机cmail，oa，则这时候可以用以下FQDN：
+    cmail.comp.com
+    oa.comp.com
+
+
+    GCE 的 FQDN 
+    gce.c.cloudpan-172312.internal
+
+
+    目的: 需要外网能解析到GCE IP.
+    gce 有点特别. 有两个IP . 一个外网一个内网.
+    我们看到的 其实是内网的 FQDN. 不是外网的.
+
+    ✘✘∙GCE tls ➜ cat /etc/hosts
+    127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+    ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+    10.140.0.2 gce.c.cloudpan-172312.internal gce  # Added by Google
+    169.254.169.254 metadata.google.internal  # Added by Google
+
+
+    反正只要 FQDN 能解析到GCE的IP就可以了.
+    我们直接修改客户端的hosts文件. 就可以了.

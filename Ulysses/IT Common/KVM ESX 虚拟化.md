@@ -1,0 +1,669 @@
+## KVM ESX 虚拟化
+[教程:][1]   虚拟化 云计算. 很火.
+
+VMware Workstation:  PC 常用虚拟机软件.
+VMware Sphere :      服务器虚拟化专业软件
+VMware 基于云的新一代数据中心虚拟化套件，提供了虚拟化基础架构、高可用性、集中管理、监控等一整套解决方案，
+
+## 虚拟化价值:
+
+1. 减少成本:服务器数量、电力、机房空间. 
+	2. 简化服务器部署.管理和维护.
+		3. 支持快速转移和备份.
+
+## 虚拟化分类: 两种  分 + 合** - 分: 性能过剩 
+	一台性能过剩的服务器,  
+	虚拟成好几台独立的虚拟服务器.
+
+	- 合:  性能不足
+		很多性能弱小的服务器,  
+		整成一个大的逻辑虚拟服务器. 
+		类似云计算.
+
+
+- 虚拟化厂家: VMware的ESXi 、Virtual的XEN
+
+- 关闭&挂起 区别:
+
+	都是退出 但是 挂起可以快速回复到挂起之前的状态!!!!
+
+
+
+所有虚拟平台都有个 管理程序. 这个程序 高于最基础的操作系统. 低于虚拟化系统.
+
+管理程序 通过底层的操作系统.管理每个虚拟资源的请求和 i/o 交互.
+
+
+## VPS 
+Virtual Privatr Server   虚拟 专用 服务器.
+一个物理服务器 分割成多个虚拟服务器服务器
+每个 VPS 可配置独立的 IP 
+独立的操作系统
+不同的 VPS 共享 CPU 内存 硬盘.
+
+
+
+## 企业 IT 虚拟化架构
+
+1. vSphere 数据中心:
+2. x86 虚拟化服务器 
+3. 存储器网络 和 阵列.
+4. IP 网络
+5. 管理服务器
+6. 桌面客户端.
+
+
+
+存储网络和阵列:  光纤通道 san 阵列.  等等
+
+存储阵列 通过网络 连到服务器 并在服务器之间共享.
+
+
+IP 网络: 每台服务器 可以有多个 物理网卡. 提供高带宽
+
+1. 服务器虚拟化
+	2. 存储虚拟化. 
+	3. 网络虚拟化. 
+	4. 工作负载管理.
+
+
+## ESXI 详解 ( vSphere、ESXI、vCenter、vClient )
+
+## 虚拟化构架: 
+至少包含两层软件:  
+- 虚拟化层 (ESXI) 
+- 管理层 (vCenter 或者 vClient )
+	1. vCenter 管理很多 ESXI.
+	2. vClient 管理一个 ESCI.
+
+## vSphere : 虚拟化软件套装.包含所有虚拟化软件.
+VM 公司的 一套服务器虚拟化解决方案 最新版本 6.0 
+
+- **ESXi:**     虚拟化层     核心组件
+	它可以将处理器、内存、存储器和资源虚拟化为多个虚拟机。
+	1. 是一个系统!!! 类似win7.  不是一个软件			
+		2. ESXI    创建多个 虚拟机.
+			3. vCenter 管理多个 ESXI
+			4. vClient 管理 vCenter 或者 单个ESXI.
+
+> 主机只有装了 ESXI 系统. vCenter、vClinet 才能进行连接
+
+- **vCenter**  *vSphere 平台的管理中心.*
+	发送数据给 ESXI 虚拟主机 ,  从 vClient 获取数据
+	不装 vCenter 也是可以的.但是少了很多高级功能!
+
+	1. 是一个 windows 软件. 简化虚拟机部署. 方便维护.
+		2. 集成 AD 域,增加了安全性. 能管理1000+ 虚拟机
+			2. 添加ESXI主机 & 实时监控硬件、网络 & 管理 & 故障报错
+			3. 动态分配资源.
+
+
+
+	- **vClient**  
+		管理 vCenter / ESXI 的软件. 3种方式
+		1. Clinet 客户端 
+			2. WEB 界面 
+				3. CLI 命令行客户端
+
+	- VMFS     针对ESXI虚拟机的 高性能群集 文件系统.
+
+	- vMotion: 数据中心内部的 虚拟机不断电迁移. 不能跨数据中心迁移.
+
+		*Storage vMotion
+		建立在VMotion的基础上，
+		可以快速的让虚拟机实时迁移到物理环境中。
+
+	- Virtual SMP
+		可使单一的虚拟机同时使用多个物理处理器。
+
+- vSphere High Availability (HA)
+	如果服务器出现故障，会在其他拥有多余容量的可用服务器上重新启动。
+
+- Distributed Resource Scheduler (DRS)
+	自动调度集群中各个ESX主机的资源，实现自动 负载均衡。
+
+- vSphere Fault Tolerance
+	  通过使用副本保护虚拟机，可以提供连续可用性。为虚拟机启用此功能后，即会创建原始或主虚拟机的辅助副本。在主虚拟机上完成的所有操作也会应用于辅助虚拟机。如果主虚拟机不可用，则辅助虚拟机将立即成为活动虚拟机。
+
+- vSphere Distributed Switch (VDS)
+	  虚拟交换机可以跨多个 ESXi 主机，使当前网络维护活动显著减少并提高网络容量。效率获得提升，可使虚拟机在跨多个主机进行迁移时确保其网络配置保持一致。
+
+- VMware Consolidated Backup (VCB)
+	  备份到一个专用物理服务器。备份您的虚拟机而不会对用户和应用程序造成中断。VMware Consolidated Backup 提供了集中式的备份工具，让您能够使用来自 VMware 合作伙伴的领先备份软件，保护您的虚拟机中的系统、应用程序和用户数据，同时减少虚拟化服务器上的负载。
+
+
+**虚拟软件关系图: ![]()
+
+
+
+## 虚拟机安装 ESXi . 
+1. 下载 esxi 6.0 的 iso 镜像.
+
+2. VM 新建虚拟机 & 安装 ESXI 
+	- 一路下一步进行默认安装. ….
+	- 中间要输入 root 的密码. 要复杂的密码
+	- 安装好之后   F2 进行网络配置. 配置静态 IP
+
+3. 下载 vClient.连ESXI服务器. 
+
+> ESXI 不能直接电源关机!!!!!   f12 键 正常关机.
+
+vSphere Web Client：
+支持在世界上任何位置通过任意浏览器管理 vSphere 的重要功能。
+
+
+vCenter 单点登录：
+用户只需登录一次，无需进一步的身份验证即可访问所有 vCenter Server 实例。
+
+
+## vmware Tool
+ESXI 上新建虚拟机 
+虚拟机上 安装 vmTool. 
+vCenter 才能控制 这个虚拟机
+
+
+
+## 网络存储    Network Storage
+1. 直连式存储   DAS : Direct Attached Storage
+2. 网络附加存储  NAS : Network Attached Storage
+3. 存储区域网   SAN :Storage Area Network
+4. iscsl 
+
+一般的网络存储 指的是  NAS 这个最熟悉.
+
+
+DAS:  硬盘 通过 scsi 接口 直接连服务器.
+
+NAS:  其实是: 一台网络文件服务器.
+这个服务器 直接连到网络上.   
+通过网络存储管理数据.
+
+缺点:
+1. 会受到网络上其他流量的影响.
+	2. 传输过程的 数据安全 问题.
+		3. 只能以文件的方式访问.  
+			不能和普通文件系统一样 直接访问物理数据块.  
+			会严重影响系统效率.
+		4. 比如 大型数据库就不能用 NAS
+
+
+SAN:
+- 独立于 TCP/IP 网络之外的 *一个专用网络*.
+	- 基于光纤网络. 交换机,机柜,服务器.都要光纤.
+	- 扩展性很强. 但是价格很贵.
+	- 一般的 SAN 有2-4Gb/s 的传输速率.
+	- 一般 SAN 采用 高端 RAID 阵列.
+	- SAN 的性能在 专业网络存储中是最好的.
+
+ISCSI:
+用 TCP 网络实现和 SAN 差不多的功能.
+需要 cpu 运算.增加系统性能开销
+存储还是收网络影响
+
+
+> SAN  是一种网络.  NAS 是一个专有的文件服务器.
+
+
+
+## vCenter  
+
+vClient 也能直接连 单台ESXI 主机.
+只是功能会少很多. 不能vMotion等操作，
+
+通常用vSphere Client或者web Client 来连接vCenter Server服务器
+对多台ESXi服务器的管理
+
+- vCenter Server是整个vSphere架构的核心控制台。
+- 必须通过其实现的功能有vm模板、权限控制、Vmotion、DRS、HA、FT、分布式vSwitch、Host Profiles等。
+- 日常我们维护，以及后续的vMotion,vDRS,HA,FT等功能，都将在这个图形化界面进行操作。
+- vCenter Server需要通过vSphere Client或者Web Client来管理。
+
+
+
+环境基本要求:
+- 64位系统 最好是 Win Server 2008 R2
+	- .net 3.5 sp1
+	- 网络有 AD  服务器.
+	- 网络有 DNS 服务器.
+
+vCenter 有三个部件:
+1. Single Sign On、
+	2. Inventory Service
+		3. vCenter Server。
+
+		> vCenter 需要用数据库 ,考虑安全性,以及性能. 
+		> 不建议把数据库和 vcenter 安装在一台服务器上.
+
+
+vCenter 基本单位: datacenter 数据中心. (一般 按照机房位置来划分)
+
+*Cluster 集群: 
+多台 ESXI 服务器组成的集群. 
+一般 一个机房内的电脑都会放入一个数据中心.
+
+*Host 主机
+host 一般指 esxi 主机 
+主机可以加入到 cluster 或者 datacenter 中
+
+*VM 虚拟机 *
+可以到 host 中和 cluster 中
+
+
+**添加 ESXi Host .
+
+vCenter 添加主机 →  输入 ESXi IP 用户名 密码. → 
+
+
+
+**NIC Team 
+把不同的网卡 集成到一个信道上, 用于增加速度. failover 负载均衡 ….
+
+
+
+
+
+
+## 虚拟网络:
+
+虚拟网络: 路由器 交换机 服务器物理网卡 → 虚拟交换机 (有很多虚拟端口) → 虚拟服务器.
+
+物理网络: 路由器 交换机 PC物理网卡  连接.
+
+vSphere 会虚拟出 交换机 给 ESX Host 来使用.
+
+虚拟服务器 用的是虚拟网络!!!,
+
+虚拟交换机: 
+- vSwitch 虚拟交换机.
+	- vNetworl 分布式虚拟交换机.
+
+
+vSwitch: 
+
+每个  ESX Host 都有一个 vSwitch
+
+虚拟机
+虚拟网卡
+虚拟端口 (类似交换机的很多口)
+标准虚拟交换机
+物理网卡
+物理交换机
+
+虚拟体系结构.
+
+
+ESXi 网络组成.
+
+物理网卡: esxi 中. 物理网卡名称都叫 vmnic.
+第一个网卡: vmnic0
+第二个网卡: vmnic1 ……
+
+安装完 ESXI 后, 默认会添加第一个网卡 . vmnic0
+vSphere 的高级功能 必须通过 多片网卡来实现.
+
+
+
+**虚拟交换机** 
+连接不通的虚拟机以及管理界面.
+vSwitch 由 ESXI 内核提供. 可以由一块或者多块 vmnic 组成.
+不同的 vSwitch 无法使用同一 vmnic.
+默认会安装第一台 虚拟交换机 vSwitch0 用于主控台.虚拟机联机等功能.
+
+
+
+
+
+
+
+
+
+通信端口 (组)  Port / Port Group
+提供 Serveice console,vmkernel , 虚拟端口,通信端口组功能
+ESX 所有网络操作.都是基于  port/port group 与 vmnic vswitch 之间
+
+
+
+
+
+vSwitch 配置
+
+vSwitch 虚拟出一个 或者 多个 虚拟交换: vSwitch
+vSwitch 提供多个虚拟端口 给虚拟机进行联网.
+vSwitch 通过 vsphere 服务器上的物理网卡与外部物理网络连接.
+
+在VMware vSphere Client管理esx的配置(configuration)--网络属性(Properties)中可以看到虚拟交换机的状况
+
+这里可以修改 虚拟交换机的端口. 最大支持 4088个....
+
+
+
+添加 删除 虚拟交换机的物理网卡.
+提供端口的交换机
+VMkernel: 连接 iSCSI 和 NFS 存储, 或者用来做 vMotion
+Serveice Console 服务控制台: 配置 IP 管理 ESX 主机.
+
+添加 vmkernel:
+
+vclient → 配置 → 网络 → 添加网络 → vmkernel →  使用 vSwitch0 → 下一步
+输入 名称(网络标签) vm console 随便取.
+
+配置 IP 以及网关.
+172.19.16.250
+255.255.255.0
+确定
+
+
+
+一块物理网卡 只能配到一个 vSwitch 上面
+
+
+
+## 分布式交换机: disributed switches
+可以横跨多个 esx host.
+使用 分布式交换机后
+多个 esx host 中的 vm
+如同连在同一个 vswitch 上一样.
+vm 可以在任意 esx host 之间迁移.
+
+
+总结：理解vSphere的网络结构是后续所有高级功能的关键，vSwitch标准交换机将同一ESX HOST上的不同VM连接在一起，而Distributed vSwitch则将不同ESX  HOST上的不同VM连接在同一个虚拟交换机上，使得这些VM在不同ESX HOST迁移时，就如同一直在同一vSwitch端口上一样。
+
+
+
+vsphere 高级功能的实现: 
+必须通过多物理网卡来实现 
+更重要的是 . 我们需要独立的共享存储.
+
+
+比如 普通电脑 资料都是在本机的.
+
+每台esx 主机 各自安装了一定的数量的 vm
+这些 vm 都保存在 独立存储中.
+任何一个 esx 主机死机. 就需要把那台死机主机中的vm 转移到其他 esx 主机中.
+由于 vm 文件是在共享的独立存储中的.
+只需要在别的主机. 配置下 cpu 内存.  
+就能接着运行. 这个就是 vMotion
+
+由于 独立储存价格昂贵. 一般 用 openfiler .
+Openfiler 一个免费的 NAS/iSCSI 的 SAN 服务器操作系统. 可以提供 Lan 主机独立存储系统.
+下载 iso 直接安装就好.
+
+
+vSphere vMotion，HA，DRS等高级功能的实现，必须使用多块网卡，并且需要一个或多个独立存储(多个存储用于存储的vMotion)。在实验环境或者要求不高的生产环境中，我们可以使用Openfiler软件要实现独立存储，当然也可以使用免费的NAS服务器 FreeNas，掌握了独立存储的配置，接下来我们就可以配置vMotion了。
+
+
+
+
+我们安装VMware vSphere 的目的就是在一台物理ESX主机上安装很多很多的虚拟机，我们可以通过VMware vSphere Client直接管理VMware vSphere服务器，也可以通过对VMware vCenter的管理来实现对VMware vSphere服务器的管理。本文中是通过VMware vCenter来安装虚拟机。
+
+
+
+## ESX 新建虚拟机
+存储中上传 虚拟机 镜像文件.
+
+1. vclient 连 vcenter
+2. 主页 → 数据存储 → 选择一个存储 datastore
+3. 浏览此数据存储 → 新加一个文件夹 → 将 iso 文件上载到数据存储.
+
+返回主界面. 新建虚拟机.
+
+
+##  克隆虚拟机.
+安装好一个 win 2003 虚拟机.  打好补丁. 安装好各种软件. 就可以把这个虚拟机 克隆成模板.
+
+
+esx 主机推荐 四个网卡
+物理访问、控制台、vmotion 等高级应用、连接独立存储.
+
+添加方法: 虚拟机设置. 硬件 添加. 连接方式 Bridge 即可.
+
+
+笔记本 安装两个虚拟机 
+ESX01   172.19.16.222
+ESX02  172.19.16.223
+
+
+
+
+
+
+
+
+## vCenter 安装
+
+vcenter 会自带简易版的 sql. 有必要的话.安装专业的数据库.
+
+
+
+
+创建 新 vcenter single 域
+vsphere.local
+administrator
+
+
+使用嵌入式数据库.
+
+安装;
+
+
+
+
+## 新建 ESX 主机.
+vclient 连接 vcenter
+安装好 esxi. esxi 和 vcenter 版本尽量相同.
+
+添加主机 一路下一步 完成配置. 
+虚拟机 右键  编辑设置 →  
+添加 移除 网卡等等配置.
+CD/DVD 驱动 → 选择 ISO 文件 (先上传到虚拟机存储里面.) 
+
+硬件服务器. 需要 bios 开启 VT 功能.
+
+
+添加两台esx虚拟机.
+
+
+vcenter 
+新建数据中心.
+新建集群
+添加 esx 主机到集群.
+添加 vmkernel  网络适配器. 并分配 ip
+
+
+
+esx 01 esx02 连接到独立存储.
+
+
+在 esx 01 上新建 win2003 虚拟机.
+
+
+
+
+## vmotion
+虚拟机迁移.
+
+建议俩台进行vMotion的ESX主机，要有一模一样的配置；另外网络配置也要在同一网段，vSwitch命名等都要相同，并且一定要安装vm tools。
+
+
+
+
+
+vmware HA
+![]()
+
+
+
+
+
+
+## vCenter 使用教程
+
+
+
+
+
+
+ESXI 低于一定的内存是开不起来的.
+
+esxi 上安好虚拟机后 在虚拟机上 安装 vmware tools.
+
+
+
+## vmware tools
+增强工具.
+增强 显卡 硬盘 同步主机和虚拟机的时间 等等的驱动程序.
+
+只有安装额 vm Tool;  才能 主机和虚拟机之间 文件共享.
+
+
+
+ 
+
+esxi 4.0   默认没有密码  账户名 root
+
+进 client 设置默认密码 
+
+
+
+vCenter 4.0 无法添加 ESXI 5.5 & 6 的主机!!
+
+
+
+
+
+
+
+
+## 虚拟化网络
+
+
+
+虚拟机  通过虚拟网络 vSwitch 来联网.
+vSwitch 通过 ESX 上的物理网卡 连网络.
+
+虚拟交换机: 大概就是 
+ESX服务器上有好几个网卡.
+ESX服务器上有好几个虚拟机.
+
+虚拟交换机 就是 把网卡 分配给虚拟机.
+比如 每个物理网卡 创建一个虚拟交换机. 
+这个虚拟交换机下接两台固定的虚拟机. 
+这两台虚拟机的所有流量 都会从这个网卡走.
+
+
+每个虚拟机 都有自己的虚拟网卡 virtual NIC
+每个虚拟网卡 都有自己的 Mac 和 ip
+
+
+vSwitch 相当于 虚拟的 二层 交换机.
+这个交换机 连接 虚拟网卡和物理网卡.
+
+
+*三种虚拟端口类型:
+1. 虚拟机端口组: 连接虚拟网络.
+
+	2. VmKernel 端口
+		VMotion、ISCSI/NFS网络、ESX 管理网络.
+		3. Service Console 端口
+			ESX Service Console 管理网络. 
+			vCenter、vClient 就是用这种口的
+
+
+虚拟交换功能:
+- 多网络管理: vlan
+	  数据中心不可能 只有一个网络的,
+	vSwitch 一样可以和物理交换机一样:
+	通过配置 Vlan 实现多网络并存.
+
+	- 流量控制:   vPort 中的流量策略
+	- 安全管理:   简单的网络安全管理
+	- 网卡绑定:   网络沉余 及 负载均衡
+
+
+
+VMware 建议 ESX 中的三种网络类型 最好配置不同的 Vlan.
+并使用不同的物理物理网卡.
+每个网络类型 至少关联2个网卡 实现故障沉余.(这个需要在 vSwitch 中进行配置)
+
+
+
+
+负载均衡:
+
+基于端口:vPort:  vSwitch 交换机上的一个端口
+
+基于 Mac
+
+基于 IP
+
+
+
+
+网络故障切换 检测.
+
+
+
+*ESXI 安装系统 CD 启动
+去 虚拟机 属性 → 选项 → 引导选项 → 强制执行 BIOS 设置 → 打钩.
+
+
+
+
+## vm Tool 安装
+装载 vmware tool cd 映像
+解压 这些内容.
+运行 程序
+
+1. 启动虚拟机
+2. root 账户登录系统
+3. vm 界面 → 安装 vm tool
+4. 进虚拟系统  打开桌面上的 cd
+5. 解压 文件. 
+6. 打开终端
+7. cd 到解压出来的文件夹.
+	sudo ./vmware-install.pl -d
+9. 重启虚拟机.
+
+
+
+
+
+重置虚拟机 = 强行重启 = 电源开关.
+重启     = 正常重启.
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1]:	http://andygao.blog.51cto.com/323260/544774
+

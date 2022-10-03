@@ -1,0 +1,80 @@
+高级功能:
+
+• wifi信息查看                           wifi    显示当前连接的wifi信息(本机/ip地址)
+• 淘宝搜索                                   tb+关键字   直接打开浏览器
+• safari 阅读列表                         save2read     谷歌当前页添加到
+• 浏览器互换                               tochrome/tosafari    当前页用谷歌或者safari 打开
+• Ping                                              ping  网站
+• Pocket 稍后阅读                       首先 要神器里面登陆pocket 会有个授权的 同意之后就正常用了
+                                                            Snippets 里面可以添加经常用的东西!!
+
+
+
+经典教程 (http://wellsnake.com/jekyll/update/2014/06/15/001/)
+
+
+Alfred杀手级功能:WorkFlows
+这个功能才是Alfred的核心功能，有了这个其它那些免费功能只能打打酱油了.
+
+WorkFlows的四个基本对象：trigger、keyword、action、output。
+
+Alfred通过将这四个基本对象合理connect便能实现各种高级功能。 就好像乐高玩具，我们可以通过各种零件组合在一起组装成各种有趣的形状。 可以夸张的说WorkFlows没有什么做不到只有你想不到的。
+
+
+
+查看例子:
+基本属性设置:
+添加例子:    Workflows → 左下角 “ + ”  → Examples → should i watch this movie.  双击图标 → 打开这个 workflow 的 基本属性设置
+
+Workflow Name名字 
+Description功能描述
+Category类型，有未分类的、工具类、互联网类、生产率类的 
+icon将图片拖进框内，为WorkFlows设置图标
+Bundle id为WorkFlows取一个唯一的可辨识的ID 
+Created by作者 Website主页 
+Readme如果还有其它的内容需要填写我们可以都填写在这里
+
+
+
+从例子功能描述中我们可以知道，
+这个WorkFlow的功能是通过关键字“movie”加上电影名字 
+然后系统会打开浏览器并分别
+从Youtube查询电影预告、
+从IMDB查询电影详细信息、
+从Rotten Tomatoes查询电影评分。
+除了基本设计外，我们下面来详细介绍这个WorkFlow的“组装”界面：
+
+左边是 input    右边是 action
+input: 
+keyword: 关键字 with space: 是否需要参数(空格)
+
+
+action:
+web search:  默认很多 选一个就好
+如果没有你想要的搜索: 那就要 自己建一个了   右上角 加号 选择 action 
+URL : 自定义查询网站+{query}  组成
+如果不知道搜索URL是多少，我们可以先使用一次网站的搜索功能然后就能在浏览器的地址栏上找到该网站的搜索地址了。还能设置将查询内容编码成UTF8格式、将查询内的空格变成＋号 → open url → 输入搜索网址 :必须要 带 http 的.  然后保存
+
+然后 keyword 右边中间 拉出一根先  连到你新建的 action 
+
+
+
+
+
+Browser: 浏览器选择
+
+
+
+Google Suggest:
+就是在每次输入查询内容时系统会列出一些候选的查询关键字供用户选择。
+
+详细教程链接:
+http://wellsnake.com/jekyll/update/2014/08/16/001/ (http://wellsnake.com/jekyll/update/2014/08/16/001/)
+
+高级功能:
+https://github.com/zhaocai/alfred2-top-workflow (https://github.com/zhaocai/alfred2-top-workflow)
+
+
+
+
+关于 程序名字  可以自己在 mac 的应用程序文件夹 直接改你喜欢的名字 

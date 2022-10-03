@@ -1,0 +1,1755 @@
+--⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️	
+-- ❗️❗️❗️❗️本块内容是对 苹果脚本跟我学这步书的总结!  入门必看. 绝对精品.❗️❗️❗️❗️
+-- ❗️❗️❗️❗️本块内容是对 苹果脚本跟我学这步书的总结!  入门必看. 绝对精品.❗️❗️❗️❗️
+-- ❗️❗️❗️❗️本块内容是对 苹果脚本跟我学这步书的总结!  入门必看. 绝对精品.❗️❗️❗️❗️
+--        下载链接: http://files.cnblogs.com/files/eileenleung/AppleScript.pdf	
+
+tell application "Messages"
+	
+	
+	-- 🔸基础知识
+	-- 两个--开头的都是单行注释. 多行注释用: (* 多行内容 *)
+	
+	
+	
+	-- 🔸提示音 ✔︎ 
+	-- beep
+	--     beep    发出 1  次系统提醒声音.  是JavaScript最短的脚本了. 就个单词.
+	--     beep 23 发出 23 次提醒.　　　
+	
+	
+	
+	--🔸 语言朗读 ✔︎
+	-- say "Welcome to my  AppleScript"
+	--     可以指定某人发言　　　	
+	
+	
+	-- 🔸打开文件夹 ✔︎
+	-- tell application "Finder"
+	--   empty the trash           ➜ 清空垃圾桶
+	--   open the startup disk   ➜ 用Finder打开启动磁盘　
+	-- end tell
+	
+	
+	
+	
+	
+	-- 🔸 设置/显示/获取 变量✔︎
+	--❗️ 变量名是用绿色显示的, 如果不是绿色说明你可能用了系统的保留字了. 　　　
+	
+	--	set x to "12"
+	--	set y to "34"
+	--	set z to x + y
+	--	display dialog x            ➜ 会显示 12
+	--	display dialog y            ➜ 会显示 34　　　　
+	--	display dialog z            ➜ 会显示 56 这里进行的是 数学运算
+	--     ➜ 注意数据类型. 数字和数字之间可以用加法. 但是字符串和字符串之间只能用(&符号)连接起来.　　　　　　　
+	
+	-- set A to "xu"
+	-- set B to "jian"
+	--   set name to A & "is" & B
+	--   这里name是紫色不是绿色.不是绿色就不是变量 可能是系统保留字. 所以要换个名字.如C　　
+	
+	--   set C to A + B
+	--     ➜ 这里A是变量. B也是变量. 中间用加号. 加号只能用在数字和数字之间. 用在字符串之间就会报错.
+	--     ➜ 想要连接两个字符串 就要用 & 符号. 而不是 + 符号了.　　　　　　　 　
+	
+	--   set C to A & B
+	--   display dialog C
+	--     ➜ 显示 xujian 你会发现这里没有空格隔开, 怎么添加空格呢　　　　　
+	
+	--   set D to A & " - " & B
+	--   display dialog D
+	--     ➜ 显示 xu - jian;这里变量A是字符串, - 是字符串, 变量B是字符串. 所有A和- 之间要用&. -和B之间也要用&　　　　　　　　　 　　　　　　
+	--     ➜ 如果 如果你想显示的内容中包含 " 双引号怎么办呢. 双引号是特殊符号. 需要特殊处理.
+	
+	--  set E to A & " hello, \"xx\". " & B
+	--  display dialog E
+	--     ➜ 显示 xu hello, "xx". jian　　
+	
+	--  get A
+	--    上面我们都是在一个弹出的对话框中 显示变量的. 不太方便. 其实可以李胤脚本编辑器下方的结果框来显示
+	--    ➜ 就会在下面的结果栏中显示"xu" 方便我们调试程序.　　　　
+	
+	
+	
+	
+	-- 🔸数组
+	-- set sexList to "what is your sex"
+	-- display dialog sexList buttons {"man", "woman", "unknow"}
+	
+	-- set numList to {"11", "22", "33", "a", "b", "c", "d"}
+	--   数组可以 查询、添加、删除、修改; 用序号代替元素. 从1开始. 不是0开始.第一个元素是11, 第三个元素是33 　
+	
+	--   get numList                 ➜ 查询 mylist 所有元素.显示到下方结果框中. 
+	--   get item 3 of numList   ➜ 查询 mylist 中的第三个元素.显示到下方结果框中. 显示33　　　　
+	--   get item -3 of numList  ➜ 查询 mylist 中的倒数第三个元素.显示到下方结果框中. 显示b
+	
+	--   set LastItem to the last item of numList
+	--   get LastItem  ➜ 把数组的最后一个元素赋值给变量 LastItem. 有时候很有用的. 不必知道数组的元素数量.　	
+	
+	--   set item 2 of myList to "66"   ➜ 修改第二个元素成66 . 现在数组里面的22就变成 66了	
+	
+	--   set numListPart to items 2 through 5 of numList  ➜ 取出numList中的 第二个到第五个元素.
+	--   get numListPart
+	
+	--   set reversednumList to reverse of numList   ➜ 逆序 numList 数组
+	--   get reversednumList                                  ➜ {"d", "c", "b", "a", "33", "22", "11"}	
+	
+	--   set numListLength to the length of numList  ➜ 获取数组的长度
+	--   get numListLength                                     ➜ 答案 7 
+	
+	-- set the end of numList to "e"  ➜ 数组末尾添加元素
+	-- get numList                           ➜    {"11", "22", "33", "a", "b", "c", "d", "e"}
+	
+	
+	
+	
+	
+	-- 🔸字符串 & 数组
+	--数字和数字 用 ✚ 号;  字符串和字符串用 & 号; 字符串和数组用什么呢.
+	
+	--set F to "heart"
+	--set G to {"ling", "ai", "juan"}
+	-- set H1 to F & G
+	-- get H1   ➜ 结果是字符串　"heartlingaijuan"
+	-- set H2 to G & F
+	-- get H2   ➜ 结果是数组　 {"ling", "ai", "juan", "heart"}
+	-- ➜ H1 和2 只是 顺序不同. H1 是字符串&数组. 结果就变成了字符串; H2是数组&字符串. 结果就变成了数组.
+	
+	-- ➜ 所以只是换了下位置. 得出完全不同的结果. 这不是我们想要的. 那么以后遇到这种情况就主动转换　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 
+	-- set H3 to (F as list) & G
+	-- get H3   ➜ 先把F变成数组. 然后就是数组&数组. 结果自然也是数组　  {"heart", "ling", "ai", "juan"}
+	-- set H4 to (G as string) & F
+	-- get H4   ➜ 先把G变成数字符串. 然后就是字符串&字符串. 结果自然也是字符串 "lingaijuanheart"
+	
+	-- set I to every character of "Hi there"    ➜ 把字符串变成数组. 每个字符变成一个元素.　　　　
+	-- 不需要get I 其实直接运行就会自动在结果栏目显示出结果.   {"H", "i", " ", "t", "h", "e", "r", "e"}
+	-- 当然 这个功能作用不大.一般用不到. 
+	
+	-- 一般把一个句子用某个分割标记把句子划分成单词. 也就是把字符串变成数组　　　　
+	-- 需要用到 applescript's item delimiters(分隔符的意思) 下面就是一个例子　　
+	-- set myString to "Hi Xu.Jian"
+	-- set AppleScript's text item delimiters to " "
+	-- set MyList to every text item of myString
+	-- get MyList -- ➜ 结果	{"Hi", "Xu.Jian"}
+	
+	-- 还可以把数组变成字符串, 同样需要用到 applescript's item delimiters(分隔符的意思) 　
+	-- set myList to {"x", "u", " ", "j", "i", "a", "n"}
+	-- set AppleScript's text item delimiters to "-"
+	-- set myName to myList as string
+	-- get myName  ➜ 结果变成  "x-u- -j-i-a-n"
+	
+	
+	
+	-- 🔸按钮
+	-- display dialog 可以自定义3个以内的按钮. 那么我们怎么知道客户按了哪个按钮呢. 不同的按钮有不同的处理方案的.
+	-- 其实你选项某个选择的时候. 下面的结果框里面是有东西显示的. 如{button returned:"yes"} 就代表对方按了yes这个按钮.　　　　　　　　　　　
+	
+	-- set dialogText to "你是男是女?"
+	-- set tempresult to display dialog dialogText buttons {"boy", "girl", "aliens"}
+	-- set theButtonPressed to button returned of tempresult
+	-- display dialog "你选择了:" & theButtonPressed
+	
+	-- 你可以记录对话框的选择. 当然也可以弹出文本框并接收用户输入的数据. 下面我们就来实现文本框内容的记录
+	-- 要使用文本框. 你必须提供一个字符串作为默认值. 这对喜欢键盘的用户非常方便.　　　　　　　　　　
+	-- set temp to display dialog "你欠我多少钱?" default answer "10K" buttons {"Later", "Next Year", "Now"}
+	-- ➜ 结果返回!!!不是数组.　{button returned:"立刻给你", text returned:"10K"}
+	-- ➜ 注意 返回的不是数组! 因为结果里面有双引号!!! 
+	-- ➜ 用户在这里进行了两次操作.一次是输入文本, 另一个是选择一个按钮. 
+	-- ➜ 取出文本值用 text returned ; 取出按钮值用 button returned;　　　　　　　 
+	-- set MoneyNumber to text returned of temp   ➜  10K　　　　
+	-- set WhenPayback to button red of temp ➜  "Next Year"
+	
+	
+	-- ❗️❗️❗️这么多命令不好记吧. apple 已经帮你写好了很多很多功能. 只要在空白处右键 选择某个功能. 稍微修改下就能用了❗️❗️❗️
+	-- ❗️❗️❗️这么多命令不好记吧. apple 已经帮你写好了很多很多功能. 只要在空白处右键 选择某个功能. 稍微修改下就能用了❗️❗️❗️
+	-- ❗️❗️❗️这么多命令不好记吧. apple 已经帮你写好了很多很多功能. 只要在空白处右键 选择某个功能. 稍微修改下就能用了❗️❗️❗️
+	-- 简而言之，没有必要去精确的记忆那些生成对话框的指令代码。脚本编辑程序已经为你准备好 了，你不用动键盘就可以把它们加入到你的脚本。
+	
+	
+	
+	
+	
+	-- 🔸条件语句
+	-- 73 = 30 ➜ 运行这个语句 会得到 false 的结果.
+	-- 30 = 30 ➜ 运行这个语句 会得到 true  的结果.　　　　　　　　
+	-- true 和 false 常用于 if then 命令: 满足某个条件才会执行后续语句. 
+	
+	-- if then 语法:
+	--   if true then
+	--     执行这里的语句
+	--   end if
+	
+	--   if false then
+	--     不执行这里的语句
+	--   end if　　
+	
+	-- ★ 我们要做的只是用 比较条件 替换语法中的 true/false
+	-- 比较运算符 可以用英语. 也可以用数学符号
+	-- 等于:    =  ➜ is　　　　　
+	-- 不等:   /=  ➜ is not  
+	-- 大于:    >  ➜ is greater than
+	-- 小于:    <  ➜ is less than
+	-- 大等:  >=  ➜ is greater than or equal to
+	-- 小等:  <=  ➜ is less than or equal to　　
+	-- 注意 输入/= 会自动变成 ≠; >= 自动变成 ≥; <=自动变成 ≤;　　
+	-- 例1
+	(*
+	set a to "22"
+	set b to "44"
+	
+	if a = b then
+		display dialog "a 等于 b"
+	end if
+	
+	if a ≠ b then
+		display dialog "a 不等于 b"
+	end if
+	*)
+	
+	
+	--例二
+	-- 会了条件语句 我们的对话框就可以更加高级了
+	(*
+	set displayText to "你是男是女 ?"
+	set ButtonVar to display dialog displayText buttons {"Boy", "Girl", "Unkonw"}
+	set ButtonPressed to button returned of ButtonVar
+	if ButtonPressed = "Boy" then
+		say "hello you are handsome"
+	end if
+	if ButtonPressed = "Girl" then
+		say "hello you are so beautiful"
+	end if
+	if ButtonPressed = "Unkonw" then
+		say " are you aliens "
+	end if
+	*)
+	
+	--
+	(*
+	set displayText to "你是男是女 ?"
+	set ButtonVar to display dialog displayText buttons {"Boy", "Girl", "Unkonw"}
+	set ButtonPressed to button returned of ButtonVar
+	if ButtonPressed = "Boy" then say "hello you are handsome"
+	if ButtonPressed = "Girl" then say "hello you are beautiful"
+	if ButtonPressed = "Unkonw" then say "hello you are aliens "
+	*)
+	
+	(*　　　　　　　　　　　
+	set displayText to "你是男是女 ?"
+	set ButtonVar to display dialog displayText buttons {"Boy", "Girl", "Unkonw"}
+	set ButtonPressed to button returned of ButtonVar
+	if ButtonPressed = "Boy" then
+		say "hello you are handsome"
+	else if ButtonPressed = "Girl" then
+		say "hello you are so beautiful"
+	else
+		say " are you aliens "
+	end if
+	*)
+	
+	-- 上下三个例子等价 
+	-- 可以用三个 if then end if 
+	-- 如果 if... then... 写在一行内 可以省略 end if　　
+	-- 也可以用 if then; else if then; else 　
+	
+	
+	
+	
+	-- ⦿ 字符串/数组 比较符
+	-- begins/start with       以ḣḣ开头 
+	-- ends with               以ḣḣ结尾 
+	-- is equal to             一致 
+	-- comes before            在⋯⋯之前 
+	-- comes after             在⋯⋯之前 
+	-- is in                   在⋯⋯之中　　　　
+	-- contains                包含
+	-- does not start with     不以ḣḣ开头 
+	-- does not contain        不以ḣḣ结尾 
+	-- is not in               不在ḣḣ之内
+	-- 如果你写的是“doesn’t”，它将被自动转换为“does not”。 
+	-- 如果你写的是“does not begin with”，它将被自动转换为“does not start with”。 
+	-- 比较运算符“comes before”和“comes after”对字符串逐字母比较. 区分大小写的! 最好大写和大写直接比较. 小写和小写之间比较. 尽量不要比较大写和小写...
+	-- if "a" comes before "b" then beep
+	
+	-- set aRecord to {name:"xu", sex:"boy"}
+	-- if name of aRecord is "xu" then display dialog "your name is xu"
+	
+	
+	
+	-- ⦿ 布尔 比较.
+	-- 对于数字.     运算结果也是数字.                运算符号有加减乘除等等.. 
+	-- 对于布尔数据. 运算结果只有真(true)、假(false). 运算符号只有 and or not 三个.
+	-- not true  就是 false
+	-- not false 就是 true　 　　　　　
+	
+	--	set x to not true     ➜ x = false
+	--	set y to not false    ➜ y = true
+	--	set z to true	       ➜ z = true
+	--	set a1 to (x and y)  ➜ a1 = false
+	--	set a2 to (x or y)   ➜ a2 = true
+	
+	-- 为什么要学这个. 有时候需要满足多个条件才执行某个命令时候就要用到这个.　
+	
+	
+	
+	
+	
+	-- 🔸 脚本排错
+	-- 苹果的脚本 一旦遇到错误变会停止运行. 一般有语法错误. 都能给你找出来. 但是语法检测不是万能的, 并不是所有的错误 applescript 都会进行提示的!!!　　
+	-- 或者有时候 你对脚本的结果 不确定 .这时候可以把不确定的代码放进 try ... end try　中.如
+	--	try
+	--  		...
+	--		beep
+	--        ...
+	--	end try
+	--	say "hoho"
+	-- 这时候 不管try里面的代码到底有没有执行. 最后那个say命令肯定会执行　　	
+	
+	
+	-- 再比如: 一个计算脚本. 把年折算成月
+	(*　　　　　　
+	set tempVar to display dialog "what is your age?" default answer "20"
+	set ageEntered to text returned of tempVar
+	set ageToMonth to ageEntered * 12
+	display dialog "you wasted ★" & ageToMonth & "★ Monthes in your life"
+	*)
+	-- ➜ 这段脚本当然是正常的. 但是一旦用户输入的不是数字.而是字符串. 这个脚本就出错了. 后面的所有代码都不会继续运行!
+	-- ➜ 所以你要考虑到这种情况. 那么就得重新设计代码 如:　　　　　　　　
+	(*
+	try
+		set tempVar to display dialog "what is your age?" default answer "20"
+		set ageEntered to text returned of tempVar
+		set ageToMonth to ageEntered * 12
+		display dialog "you wasted ★" & ageToMonth & "★ Monthes in your life"
+	on error
+		display dialog "你必须输入数字. 不能是字母或者汉字"
+	end try
+	*)
+	-- ➜ 现在这段代码还是不完美! 如果用户输入数字之外的内容 还是要重新运行这个脚本.这个问题等等解决.
+	-- ➜ 这里的出错信息是我们自己编的. 其实我们还可以把系统的报错信息显示出来. 往往系统报错信息更加有用!!
+	-- ➜ 错误信息是由 错误代码和错误描述 两部分组成的.  
+	-- ➜ 在on error　后面添加 the error_message 就可以把 错误描述赋值给 the error_message 这个变量　　　　　　　　　　　　　　　　　　　　　　
+	-- ➜ 在on error　后面添加 number the error_number　就可以把 错误代码赋值给 the error_number　 这个变量　　　　　　　　　　　　　　　　　　　　　　
+	(*
+	try
+		set tempVar to display dialog "what is your age?" default answer "20"
+		set ageEntered to text returned of tempVar
+		set ageToMonth to ageEntered * 12
+		display dialog "you wasted ★" & ageToMonth & "★ Monthes in your life"
+	on error the error_message number the error_number
+		display dialog "错误代码: " & the error_number & ". 错误信息: " & the error_message buttons {"ok"} default button 1
+	end try
+	*)
+	
+	
+	
+	
+	
+	-- 🔸 路径、文件夹、应用程序
+	
+	-- choose folder 
+	-- ➜ 输入上面命令 运行就会弹出 Finder 让你选一个文件夹. 
+	-- ➜ 选好文件夹后下方的结果栏目就会出现你路径  alias "219:Users:v:Desktop:Auto-Server:Auto-Misc:"
+	-- ➜ 分析这个路径: 硬盘名:文件夹:子文件夹:子文件... ; 你会发现用:作为分隔符的. 而不是常见的/
+	-- ➜ 选择文件夹在任何程序中都可以运行. 如果打开某文件就必须用到Finder程序了. 用 open file +文件名路径(需后缀)　　　　　　　　　　　　　　　　　　　　　　
+	(*
+	tell application "Finder"
+		open file "219:Users:v:Desktop:HHKB.jpg"
+	end tell
+	*)
+	-- ➜  替身.像上面那样用绝对路径. 一旦你hhkb图片移动位置了. 这命令就失效了. 用替身就能完美解决这个问题.
+	-- ➜ 首先给文件设置一个替身. 然后把文件移动到别的文件夹. 你会发现还能打开. 　　　　　　　　　　　　　　　
+	(*
+	tell application "Finder"
+		set thePath to alias "219:Users:v:Desktop:HHKB.jpg"
+		move file "219:Users:v:Desktop:HHKB.jpg" to "219:Users:v:Desktop:M"
+		open file thePath
+	end tell
+	*)
+	
+	
+	
+	
+	-- 🔸重复运行
+	(*
+	repeat 2 times
+		say "lili"
+	end repeat
+	*)
+	
+	(*
+	set repeatNumber to 3
+	repeat repeatNumber times
+		say "kali"
+	end repeat
+	*)
+	
+	(*
+	-- 还能让用户自定义重复次数.
+	set textDisplay to "How many times do you want to repeat?"
+	-- 输入框显示的文本内容
+	display dialog textDisplay default answer "2"
+	-- 输入框显示的默认值　　
+	set valueEntered to text returned of result
+	-- 获取用户输入的值　
+	try
+		set valueEntered to valueEntered as integer
+	end try
+	-- 如果用户输入的是带小数点的. 自动四舍五入成整数. 如1.9 会变成 2　　　　　　　　
+	-- 如果用户输入的是字符串 那就只能报错了　　　　　　　　　
+	if class of valueEntered is integer then
+		repeat valueEntered times
+			say "you are under arrest"
+		end repeat
+	else
+		display dialog "you should enter a valid number"
+	end if
+	*)
+	
+	-- 现在让我们用repeat来解决之前留下的一个坑. 也就是报错之后 只能重新运行脚本. 这样用户体验非常差.
+	-- 下面是基本思路. 
+	
+	-- 重复命令里面进行 if else 条件判断. 直到变量值变成true.　　　　　　　　　
+	(*
+	set xx to false
+	-- 首先给某个变量设置为false.  然后执行重复命令. 
+	repeat until xx is true
+	-- 重复命令里面的代码会一种重复.直到 变量变成true　　　　
+		if some test is passed then execute the following statement
+		set xx to true
+		-- 重复代码里 进行条件判断. 如果满足条件 那么就把变量设置成true. 也就是跳出循环的意思　　　　　　　　　　　　　　　
+	end repeat
+	*)
+	
+	-- 下面我们来改善之前的代码　　　　	
+	-- 首先想思路: 1. 弹出文本框. 然后进入重复循环, 如果用户输入字符串那么就一直循环. 直到用户输入数字　　　　　　　　　　　	
+	
+	
+	(*
+	set repeatCondition to false
+	repeat until repeatCondition is true
+	
+		set textDisplay to "How many times do you want to repeat?"
+		-- 输入框显示的文本内容
+		display dialog textDisplay default answer "2"
+		-- 输入框显示的默认值　
+		set valueEntered to text returned of result
+		-- 获取用户输入的值　		
+		
+		try
+			set valueEntered to valueEntered as integer
+		end try
+		-- 如果用户输入的是带小数点的. 自动四舍五入成整数. 如1.9 会变成 2　　　　　　　　
+		
+		-- 如果用户输入的是字符串 那就只能报错了　　　　　　　　　
+		if class of valueEntered is integer then
+			repeat valueEntered times
+				say "you are under arrest"
+			end repeat
+			set repeatCondition to true
+		else
+			display dialog "you should enter a valid number, not string"
+		end if
+		
+	end repeat
+	*)
+	
+	
+	(*
+	repeat with counter from 1 to 5
+		say "i eat" & counter & "cakes"
+	end repeat
+	-- 执行5次 12345
+	*)
+	
+	(*
+	repeat with counter from 1 to 5 by 2
+		say "i eat" & counter & "cakes"
+	end repeat
+	-- 执行3次.  1/3/5
+	*)
+	
+	
+	
+end tell
+
+
+-- 🔸 处理程序 / handler / 函数
+-- 脚本就应该易读易写. 减少重复工作. 这就需要用到函数. 也就是handler
+-- 先定义. 然后在脚本中引用就可以了. 如果要修改.只需要修改函数. 而不用一个个去找出来每个都修改一次.
+-- 最重要的是 函数可以快速的复制到别的脚本中使用.　　　　　　　　　　　　　　　　　　　　　　　
+-- 下面我们就来定义一个函数 并使用.
+-- 注意. 函数好像要定义在 tell ..end tell 外面的.
+(*
+on Function1()
+	display dialog "Don't do that" buttons {"OK"} default button "OK"
+end Function1
+
+Function()
+*)
+
+
+(*
+on Function1(textToDisplay)
+	display dialog textToDisplay buttons {"OK"} default button "OK"
+end Function1
+Function1("HI")
+Function1("XX")
+*)
+
+(*
+on Function1(textToDisplay)
+	display dialog textToDisplay buttons {"OK"} default button "OK"
+end Function1
+set someText to some item of {"Do it", "stop it"}
+Function1(someText)
+-- 这里会显示数组里面的 某个值. 不固定的 随机的....　　　　　　　　　　
+*)
+
+(*
+-- ⦿ 计算圆面积函数
+on circleArea(radius)
+	set area to pi * (radius ^ 2)
+end circleArea
+circleArea(3)
+*)
+(*
+-- ⦿ 计算圆面积和周长　　　　
+on circleCal(radius)
+	set area to pi * (radius ^ 2)
+	set CircleLength to 2 * pi * radius
+	return {area, CircleLength}
+end circleCal
+set circleProperties to circleCal(10)
+*)
+
+(*
+on ifOlder(a)
+	if a > 30 then
+		return "older"
+	end if
+	return "not older"
+end ifOlder
+set theAge to ifOlder(70)
+-- 一般结果里面显示的 都是最后一行代码的执行结果. 
+-- 如果我们想得到 非最后行代码的结果就得用return 　　　　
+*)
+
+(*
+on largest(a, b)
+	if a > b then
+		return a
+	end if
+	return b
+end largest
+set theLargest to largest(5, 3)
+*)
+
+(*
+-- ★ 你还可以专门一个文件 来存放 函数. 用的时候只要在脚本中引入就可以了.　
+--1. 新建文件名比如: function.scpt; 
+--2. 路径: 219:Users:v:Desktop:function.scpt
+--3. function.scpt 写好 FunctionA()、FunctionB().... 　　　　
+--4. 在脚本中的引用方法
+set functionFile to (load script "Users:v:Desktop:function.scpt")　　　　　　　　　
+tell functionFile
+	FunctionA()
+end tell	
+*)
+
+
+
+-- ★ 函数有个特殊的注意点
+-- 函数如果要在 tell模块中使用. 必须加上一个范围.
+(*
+on showProgress()
+	display dialog "job done"
+end showProgress
+tell application "Finder"
+	showProgress()
+end tell
+*)
+-- 上面这样是不行的. 必须是下面这样　加个of me. 意思就是要用的函数在本脚本中,而不是其他脚本文件中
+(*　　　　　　　　
+on showProgress()
+	display dialog "job done"
+end showProgress
+tell application "Finder"
+	showProgress() of me
+end tell
+*)
+
+
+
+
+-- ⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+-- 本书的总结就到此为止了.下面是我自己折腾的. Message 字典下的命令实例.　　　　　　　
+-- ⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+tell application "Messages"
+	
+	-- 运行messages 程序. 下面命令都是 messages 套件词典里的命令!!!
+	-- 该词典里面有所有Message程序能用的命令.反过来说,本脚本的所有命令都能在Message词典下找到! 
+	-- 只要会了这个套件. 别的套件也难不倒你.	词典分三部分: 左中右.
+	-- 左边是套件分类! 有: 标准命令套件、文本命令套件、信息命令套件、信息事件处理命令套件.
+	-- 套件符号说明:  指令(蓝色C) 、 对象(紫色C) 、 属性 (紫色P) 、 元素(黄色E)
+	-- 类包含了 “属性”（P图标）和 “元素”（E图标）
+	-- 类可以看成汽车; 属性就是零件 如发动机 门 窗.　元素可以看成 交通工具下的一种. 　　　　　　
+	-- 需要用元素 好像是 of 元素 这种语法
+	
+	-- 每个符号都有具体解释. 
+	--    黑色是关键字. 一个字母都不能有差.
+	--    冒号前面是 必须添加的参数类型.
+	--    冒号后面是 具体参数
+	
+	
+	-- 指令
+	-- 就是单纯的一个动作! 如:
+	--     打开文件 open file; 关闭文件 close file; 保存文件 save somefile 　
+	--    设置变量: set 变量名 to 新的变量
+	--   exists 布尔值. 是否存在 　  ???　
+	
+	
+	-- 对象: 
+	
+	
+	-- 属性:
+	
+	
+	
+	-- 元素:
+	--  元素就是被包含的意思.  
+	-- 语法: of + 元素名　　　　　
+	
+	
+	
+	--send 命令: 
+	--   是个动词. 一般用在命令的最前方. 可以发送信息/文件 给某人/某对话
+	--   send v : Sends a message or file to a buddy or to a chat.
+	--   send text or file
+	--	 to buddy or text chat  注意 这里既然提到了 buddy . 就需要去看buddy的具体用法.　
+	
+	--buddy 命令: 
+	--  某人的意思.  紫色C图标. 说明是一个类.类一般会有很多的属性. 和 元素.　
+	--  这个命令分三部分: elements + properties + responds to; 
+	--  元素 contained by application, services.     有元素也就是说可用 of + 元素名 这语法　　　　　　　　　
+	--  属性 id/service/name/handle/status/image.... 这里又涉及到了 service命令.
+	
+	-- service 命令: 哪种服务. 紫色C图标 也是类.
+	--  id
+	--  name
+	--  enabled
+	--  connection status
+	
+	-- 🔸实际命令解析 ✔︎
+	-- send "这里输入内容" to buddy "+86 18621923213" of service "E:xujian0219@126.com"
+	--   首先是 send text to buddy  ➜ text 文本内容 在这里就是 "这里输入内容"　　　　
+	--   然后是 buddy　 id            ➜ id    唯一标识符 在这里就是 "+86 18621923213" 
+	--   然后是 buddy of service 
+	--   最后是 service id             ➜ id    唯一标识符 在这里就是 "E:xujian0219@126.com" 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	-- 🔵 message 字典总结　　
+	
+	-- 🔸standard suite ✔︎
+	-- choose file                                                           -- ➜ 弹出Finder 文件选择框　　　　
+	-- choose folder                                                         -- ➜ 弹出Finder 文件夹选择框　　　　
+	-- open "219:Users:v:Desktop:HHKB.jpg"                                   -- ➜ 在message的输入框中 添加一张图片　　
+	-- open "219:Users:v:Desktop:Girl.jpg"                                   -- ➜ 在message的输入框中 添加一张图片
+	-- open {"219:Users:v:Desktop:HHKB.jpg", "219:Users:v:Desktop:Girl.jpg"} -- ➜ 在message的输入框中 添加两张图片
+	
+	-- set windowCount to number of window  -- ➜ ✔︎ message 窗口的数量. 一般都是1.不是会话数量　　　
+	-- window 1                             -- ➜ ✔︎ 显示第一个窗口的信息  window id 15336 of application "Messages"
+	-- window 2                             -- ➜ ✔︎ 显示第二个窗口的信息  window id 15354 of application "Messages"
+	-- exists window 1                      -- ➜ ✔︎ 是否有message窗口运行.　没有窗口不代表程序没有运行.　　
+	-- close window 1                       -- ➜ ✔︎ 关闭第一个窗口 = Ctrl + W　
+	-- quit                                 -- ➜ ✔︎ 直接退出信息程序
+	
+	-- 窗口可以有好几个. 会话 ➜ 右键: 在单独窗口显示会话. 这样才能创建多个窗口, message 窗口是没有名字的. 不要去管窗口名字了　　　　　　　　　　　
+	
+	
+	
+	
+	-- 🔸Message Suite ✔︎
+	
+	-- service 1 -- ➜ 出来第一个服务的ID.
+	
+	-- ⦿ 对话. 顺序是安装 从上到下来的. 而且有头像的排在最上方.
+	-- chat 1 -- ➜  text chat id "SMS;-;+8618321748697" of application "Messages"
+	-- chat 2 -- ➜  text chat id "iMessage;-;+8618721803898" of application "Messages"
+	-- chat 3 -- ➜  text chat id "iMessage;-;xujian0219@126.com" of application "Messages"
+	-- chat 4 -- ➜  text chat id "iMessage;-;+8618621923213" of application "Messages"
+	-- chat 5 -- ➜  text chat id "SMS;-;106550591118100" of application "Messages"
+	
+	-- ⦿ 服务名 & 服务类型　　　　　　　
+	-- set serviceid to get id of first service        -- ➜ ✔︎ 获取帐号设置里排序第一的 ID  ""9BFF0836-6B88-4D93-AC61-FA3837A8B3A7"
+	-- set serviceName1 to get name of first service   -- ➜ ✔︎ 获取帐号设置里排序第一的 服务名称  "E:xujian0219@126.com"
+	-- set serviceName2 to get name of second service  -- ➜ ✔︎ 获取帐号设置里排序第一的 服务名称　"xujian0219@126.com"
+	-- set serviceName3 to get name of third service   -- ➜ ✔︎ 获取帐号设置里排序第三的 服务名称  "Bonjour"
+	
+	-- set serviceTpye1 to get service type of first service  -- ➜  ✔︎ 获取服务类型 iMessage
+	-- set serviceTpye2 to get service type of second service -- ➜  ✔︎ 获取服务类型Jabber
+	-- set serviceTpye3 to get service type of third service -- ➜  ✔︎ 获取服务类型   Bonjour
+	
+	-- ⦿ 登入 登出
+	-- set serviceName1 to get name of first service
+	-- log out of service serviceName1                 -- ➜ ✔︎ 登出 iMessage . 登录可能需要手动输入密码...
+	-- ❗️名词用法 都是 动词+ of + 名称 + 属性. 如: log out + of + service + service 的属性(name = E:xujian0219@126.com)　
+	
+	
+	
+	-- 🔸 发送IM　✔︎
+	-- send "11" to buddy "+86 18621923213" of service "E:xujian0219@126.com"  -- ✔︎ 发送IM
+	
+	
+	-- set iMessageServiceName to name of 1st service whose name starts with "E:"
+	-- display dialog iMessageServiceName buttons {"OK"} default button "OK"
+	-- 这两个 imessage 有好几种选择的: imessage、谷歌、bonjure...　　　　　
+	
+	
+	
+	
+	
+	--🔸 get 用法 ✔︎
+	-- 语法: get every + 类名!!!  
+	-- 发现 只要是类 被application 包含的都能用get 取出数据　　　　	
+	-- 那么我们一个个查看message字典下 所有的类 也就是紫色正方形C图标的. 把contained by application.的都找出来.　　
+	(*
+	get every chat ------ ➜ contained by application, services.
+	get every window ----➜ contained by application.
+	get every document --➜ contained by application.
+	get every buddy ------➜ buddy  contained by application, services.
+	get every chat --------➜ chat  contained by application, services.
+	get every text chat -- ➜  text chat n [inh. chat] 这个意思估计是用法和 chat 一样　　
+	get every audio chat --➜ text chat n [inh. chat] 这个意思估计是用法和 chat 一样
+	get every video chat --➜ text chat n [inh. chat] 这个意思估计是用法和 chat 一样
+	get every service ----- ➜  contained by application.　　
+	get every authorization request
+	get every file transfer
+	*)
+	-- 最后我们来分析 get 语法: get v : Get the data for an object.	
+	-- object 应该就是对象了.  而且是属于 application 的对象　　
+	
+	
+	
+	
+	
+	-- 🔸 命令语法 
+	-- ❗️❗️❗️黑色加粗是关键字,一个字母都不能改;  如果有冒号:　冒号前面是 必须添加的参数类型; 冒号后面是 具体参数❗️❗️❗️
+	-- ❗️❗️❗️黑色加粗是关键字,一个字母都不能改;  如果有冒号:　冒号前面是 必须添加的参数类型; 冒号后面是 具体参数❗️❗️❗️
+	-- ❗️❗️❗️黑色加粗是关键字,一个字母都不能改;  如果有冒号:　冒号前面是 必须添加的参数类型; 冒号后面是 具体参数❗️❗️❗️
+	-- 比如: 
+	-- get specifier   -- ➜ get + 参数(可选) 
+	-- exists specifier : the object in question -- ➜ exists + 参数(必选) + 参数值
+	-- 看懂了这两个的区别. 我们就知道 exists 怎么用了　　　　　　
+	
+	
+	-- 🔸exists 用法　　
+	-- exists specifier : the object in question  可以看成这个命令 也是对 object 有效的
+	-- 也就是说 exists 也可以用上面get用法里的所有的类.　　　　　　　　　　　　　　　
+	-- exists window -- ➜  语法错误!! 字典解释里面有冒号. 所以必须添加参数.　　　　
+	-- exists window 1 -- ➜ 返回 true
+	-- exists window 5 -- ➜ 返回false　　
+	-- exists chat 1
+	
+	
+	-- 🔸 buddy
+	
+	-- get every buddy
+	(*	
+结果：buddy 完全不是通讯录没关系. 估计只要是mac收到过信息的号码.不管短信还是imessage都会储存在buddy中.　　　
+{
+buddy id "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7:+8618721803898"       of application "Messages", 
+buddy id "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7:e:xujian0219@126.com" of application "Messages", 
+buddy id "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7:+8618621923213"       of application "Messages", 
+buddy id "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7:+8618321748697"       of application "Messages", 
+buddy id "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7:+8618684681265"       of application "Messages", 
+buddy id "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7:xujian0219@126.com"   of application "Messages", 
+buddy id "BDB9E09E-F207-4D2C-93AC-DB4F0B857D8E:xujian0219@126.com"   of application "Messages", 
+buddy id "642C410A-D5FA-4EAD-9771-232BEE932D1F:v@xu-jian"            of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10655024036"          of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10690222409000661"    of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:1065502184021"        of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10690539610292255111" of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10016"                of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:95555"                of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:106906195500"         of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:106550200487740105"   of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:1065502523008226"     of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:106550200683100510"   of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:1065502070810118"     of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:106550591118100"      of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:+8610655516"          of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10690766286611"       of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:+8610655462"          of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:1065502004875626516"  of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:95188"                of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10655020208618"       of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:106907551313385"      of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10655810010"          of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:1069021703217"        of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:e:"                   of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:+8618321748697"       of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:1069030022251"        of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:+8615774609628"       of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:10655053291022625911" of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:106904129009966846"   of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:+8618684681265"       of application "Messages", 
+buddy id "21F911CC-FCA2-452A-8D61-7135F21F1C42:106550779112226"      of application "Messages"
+}
+*)
+	
+	
+	
+	
+	-- exists buddy "xu jian" -- ➜ ✔︎
+	
+	--	set serviceName1 to get name of first service
+	
+	get id of buddy "xu jian" -- ➜ "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7:e:xujian0219@126.com"
+	get service of buddy "xu jian" -- ➜ service id "9BFF0836-6B88-4D93-AC61-FA3837A8B3A7" of application "Messages"
+	get name of buddy "xu jian" --➜  "xu jian"
+	get first name of buddy "xu jian" -- ➜ xu
+	get last name of buddy "xu jian" -- ➜ jian
+	get status of buddy "xu jian" -- ➜ unknown
+	get status message of buddy "xu jian"
+	get idle time of buddy "xu jian"
+	get handle of buddy "xu jian" -- ➜ "e:xujian0219@126.com"
+	
+	
+	
+	
+	--❗️ 重点是不接受 手机号码啊..	
+	
+	
+	set serviceName to name of 1st service whose service type is iMessage
+	set theBuddy to buddy "+86 18621923213" of service serviceName
+	
+	--get handle of buddy theBuddy
+	-- send "12" to theBuddy
+	
+	
+	-- ⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+	-- 下面来看 message event handler suite 函数! 现成的函数.
+	--⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+	-- 函数 要看定义在哪的啊. 没有 路径...　　　　　　
+	
+	
+	-- on buddy became available theBuddy with descriptiond
+	
+	
+	--	/Users/v/Library/Application Scripts/com.apple.iChat
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+end tell
+
+-- get name of buddy "
+-- exists service 5
+-- ??invite targetNumber to text chat "
+--get status message of buddy "18621923213"
+-- service type iMessage enabled of buddy "+86 18621923213"
+--    set theBuddy to buddy "the receiver number here" of service "my service"
+
+-- send "Washer Done! :)" to theBuddy
+
+--   set targetService to 1st service whose service type = iMessage
+-- set targetBuddy to buddy targetBuddyPhone of targetService
+-- send targetMessage to targetBuddy
+
+
+
+
+
+-- 下面是 事件函数/处理器/handler 的用法..　　　
+using terms from application "Messages"
+	on buddy became unavailable "xu jian"
+		say "hello"
+	end buddy became unavailable
+end using terms from
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 简介:
+    个人 AppleScript 学习笔记. 带✔︎的亲测能用的.
+
+    学会applescript 甚至可以用xcode 制作出 mac app!!!
+
+
+
+
+
+
+🔸 AppleScript 简介
+
+        主要可以用脚本来控制苹果系统里的应用程序. 支持很多程序,但不支持所有的程序.
+        applescript → file → open directionary  里列出的程序就支持applescript.并且有详细的用法.
+
+        脚本可以看成语言. 都是用来表达东西的.
+        比如用脚本来iMessage只需要下面的三行脚本: 
+        tell application "Messages"
+        send "你要发送的内容" to buddy "+86 18621923213" of service "E:xujian0219@126.com"
+        end tell
+        首先发短信是 Messages 这个程序来负责的.
+        send to 就是一个命令. 一个动作.
+        buddy: 就是一个对象.  发给谁的!!
+        service: 就是一个属性. 用什么发送.这里用邮箱发送的就是imessage. 如果用短信发的就是普通的短信.
+
+
+🔸 AppleScript 脚本格式
+      AppleScript 有四种保存形式, 也就是有四种后缀 !!!  最常用的是脚本格式 .scpt
+
+    - 脚本     .scpt        ➜  只能使用苹果自带的脚本编辑器: Script Editor 
+    - 脚本包   .scptd       ➜  右键这个脚本包. 会显示包内容.也就是说这个包是有结构的
+    - 应用程序 .app         ➜  具有标准的 Cocoa 程序构架.带有图标.文件结构复杂
+    - 文本:    .applescript ➜  任何编辑器可编辑
+
+
+🔸 applescript 重点 
+        - 对象: boject
+        - 属性: property             颜色,长度,重量....
+        - 命令: command    一个动作. 告诉脚本做什么.
+
+
+
+
+❤️AppleScript 字典❤️
+        字典是最最重点的东西. 刚开始入门肯定不知道哪些程序可以使用哪些命令. 怎么用命令.
+
+        怎么写applescript 完全靠各自程序的字典.
+        比如 新建邮件吧 打开 mail 字典 
+        蓝色的是命令. 能直接写脚本里的.
+        但是没有找到 send啊.... 有个make.... 好像差不多的意思..
+        创建这个动作有了 , 那么创建什么呢 . 这就是名词.
+        看 mail 下的 紫色部分. 也就是属性了.
+        outgoing message..  这就是发邮件...  后面有详细的说明..
+        但是没有收件人啊.. 怎么办呢...
+        收件人在 message viewer中..
+
+
+
+        打开字典: applescript → file → open directionary 
+
+        左边是套件. 点击某套件会出现 二级标签/三级标签
+
+
+        套件包含 “指令”（圆形的C图标）和 “类” （方形的C图标），
+        类包含了 “属性”（P图标）和 “元素”（E图标）
+
+        黄色S → suit 套装
+        蓝色C → Command 命令
+        紫色C → Class 对象
+        紫色P  → Property 属性
+
+        黑色是关键字. 一个字母都不能有差.
+        冒号前面是 必须添加的参数类型.
+        冒号后面是 具体参数
+
+
+        ⦿ AppleScript Tips
+            - ESC 键可以自动补全命令.. 
+            - 编辑器空白区域右键. 快速创建常用代码.
+            - 脚本不区分大小写!!!! 
+            - 注释: 两 -- 开头的就是注释.
+
+
+        ⦿ 编辑器:
+            黑色粗体的是 脚本保留的关键字.
+            蓝色粗体的是command 命令
+            蓝色斜体的是属性/对象.
+
+
+
+
+
+
+
+🔵 AppleScript 基础知识
+
+
+
+
+    🔸 发出语言 ✔︎
+        say "Hi，Eat Dinner, i am eat Applescript"
+
+
+    🔸 条件判断 ✔︎
+        set haha to "hoho"  
+        if the haha is "hoho" then
+        say "yes"
+        end if
+
+
+    🔸 循环 ???
+
+        repeat with i in serviceList
+            if (service type of i as text) contains "iMessage" then
+                log enabled of i
+                set enabled of i to false
+            end if
+        end repeat
+
+
+
+    🔸 显示对话框 ✔︎
+        display dialog "不要这么拼了，预订美餐时间到了！" buttons {"好的", "我不定了"} 
+
+
+    🔸 提取对象中的元素 ?
+        every character of "一个字符串" --结果：{"一", "个", "字", "符", "串"}
+        characters of "A String" --结果：{"A", " ", "S", "t", "r", "i", "n", "g"}每个字符
+
+
+
+    🔸 替身 ✔︎
+        Alias.  就是一个指针. 指向一个文件. 
+        但是和win的快捷方式不一样. 替身的话 就算文件被移动了 替身还是能准确找到源文件的.
+
+        替身
+        比如桌面一个 hhkb 的图片文件.
+        你新建一个替身. 然后重命名成 xxx
+        在脚本里 极力推荐用替身. 而不是用文件.
+        因为文件会被移动. 替身始终会自动更新源文件的位置.
+
+        当然你替身的位置 一旦写进脚本里. 就不能改了.. 改了就找不到替身了.. 更不用说源文件了..
+
+
+
+
+    🔸 文件读取 ✔︎
+        set myFile to alias "Macintosh HD:Users:Nathan:Desktop:example.txt" 
+        read myFile
+
+    🔸 文件写入 ✔︎
+        打开文件 → 写入数据 → 关闭文件.
+
+        set aFile to alias "Macintosh HD:Users:Nathan:Desktop:example.txt" 
+        set fp to open for access aFile with write permission --打开文件 
+        write "abc" to fp --写入数据
+        close access fp --关闭文件
+
+
+    🔸 处理程序 handler
+        就像函数.  定义一次就可以随意使用. 而且方便修改.
+
+
+
+    🔸 如何按键
+        在Mac系统中有个叫“System Events”的App，AppleScript可以让它做按键或者点击鼠标的动作。
+        key down是按下某个按键不放，
+        key up是松开某个按键，
+        keystroke是点按一下某个按键。
+        这个是在 system event 字典里的.
+
+    🔸 如何点鼠标
+
+        click at
+        // 这需要 script editor 有权限: 系统设置 → security privacy → accessibility → script editor 打勾.
+        鼠标位置. 通过tab键 来实现.
+
+
+
+
+
+
+🔸 查询自己的imessae 是否开启.
+set myIMstatus to 1st service
+if the myIMstatus is true then 
+say "yes"
+else say "no"
+end if
+
+
+        set haha to "hoho"  
+        if the haha is "hoho" then
+        say "yes"
+        end if
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 iMessage 实例一:  imessage.scpt ✔︎
+
+-- 用imessage 给某人发消息.  需要对方的手机号码 和 邮箱.
+
+tell application "Messages"
+	-- get name of service of buddy "Xu"
+	-- 上面这个命令是查找某人对应的邮箱的. 由于imessage 必须要有个 邮箱地址才能发的.
+	-- 如果你不知道对方地址. 只知道对方名字 那就查查它邮箱吧.
+	
+	-- send "Text of Message" to buddy "Xu" of service "E:xujian0219@126.com"
+	-- 这个命令会用 短信发送.  而不是imessage
+	
+	send "Text of Message" to buddy "+86 18621923213" of service "E:xujian0219@126.com"
+	-- 这个命令才会用imessage 发信息　　　　　　　　　　
+end tell
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 iMessage 实例二: 用shell 脚本发送 imessage 信息 ✔︎
+
+    只需要 对方号码+短信内容
+
+    ⦿ Applescript 脚本创建
+
+        1. 打开mac的 script 编辑器 ➜ 粘贴下面代码(完全不需要修改) ➜ 文件保存为 xxx.scpt  
+        on run {targetBuddyPhone, targetMessage}
+            tell application "Messages"
+                set targetService to 1st service whose service type = iMessage
+                -- 设置本机的imessage为最优先的服务. 也就是默认服务.
+                set targetBuddy to buddy targetBuddyPhone of targetService
+                send targetMessage to targetBuddy
+            end tell
+        end run
+
+
+    ⦿ 用bash运行applescript脚本
+        osascript xxx.scpt 18621923213 "Hello there!"
+            osascript      ➜ 这个是用shell运行applescript的命令.  
+            xxx.scpt       ➜ 这个是applescript的脚本名称.该脚本需要两个参数: targetBuddyPhone, targetMessage
+            18621923213    ➜ 这个就是 targetBuddyPhone  也就是目标手机号码!!!
+            "Hello there!" ➜ 这个就是 targetMessage     也就是短信的具体内容.
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 实例 邮件发送系统日志 ✔︎
+
+
+tell application "Mail"
+	
+	set theSubject to "Subject" -- the subject
+	set theContent to "Content" -- the content
+	set theAddress to "xujian0219@126.com" -- the receiver 
+	set theSignatureName to "signature_name" -- the signature name
+	set theAttachmentFile to "219:var:log:system.log"
+	
+	set msg to make new outgoing message with properties {subject:theSubject, content:theContent, visible:true}
+	
+	tell msg to make new to recipient at end of every to recipient with properties {address:theAddress}
+	tell msg to make new attachment with properties {file name:theAttachmentFile as alias}
+	
+	
+	
+	send msg
+end tell
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 实例: 提醒定外卖 ✔︎
+
+on callmeican()
+	set meican_url to "https://meican.com" as string
+	tell application "Google Chrome"
+		open location meican_url
+		activate
+	end tell
+end callmeican
+
+display dialog "不要这么拼了，预订美餐时间到了！" buttons {"好的", "我不定了"} default button 1
+
+if the button returned of the result is "好的" then
+	-- action for 1st button goes here
+	callmeican()
+end if
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 实例 对话框 ✔︎
+
+
+-- display 弹框显示.
+--alert   粗体
+-- message .小文字显示.
+-- as  critical:非常重要的 黄色感叹号图标; information: 默认值; warning 和默认值看不出区别...
+-- buttons 设置按钮. 最多三个.
+-- default button 按钮默认值. 1/2/3 对应 buttons 里面设置的按钮.
+-- giving up after 几秒后自动关闭这个警告框. 只能是整数.不能是小数.
+
+-- display alert "Alert!!!" message "asdf" as critical buttons {"QW", "JXX", "YJQ"} default button 3 giving up after 1
+
+
+-- 对话框. 用户可以输入内容的!!!
+-- default answer 默认值.
+-- hidden answer 和密码一样.不显示明文.用实心原点代替.
+-- buttons　　
+-- default button
+-- with icon 对话框的图标  可以是  0/1/2  也可以是 stop/note/caution.  或者是自定义的.icns 图标文件
+-- giving up after 3 多久后自动关闭对话框.　　　　
+display dialog "您的性别" default answer "27" buttons {"Cancel", "人妖", "男/女"} default button 2 with title "我们的对话框" with icon stop giving up after 3 with hidden answer
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 实例 语言控制 ✔︎
+
+
+-- say, beep, display notification 都是在 standAdditions.osax 字典里 搜索下就出来了...
+
+--say "说话内容"
+-- using 嗓音种类: 可选值: system preferences → accessibility →  speech → 如: Fiona / Karen ..... 
+-- speakng rate　0-10000. 说话速度　　默认值:45　　　　　
+-- volume 0-1 .声音大小. 默认系统音量大小.　　　
+repeat 2 times
+	say "hello xujian" using "Fiona" speaking rate 200 volume 0.9
+end repeat
+
+-- repeat 重复的意思.
+
+
+-- beep 3 -- 系统提示音.后面跟次数. 系统设置 → sound → sound effects 选择一种声音!!!
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 实例 提取finder文件列表 ?????
+
+tell application "Finder"
+	every file of desktop --获得桌面上所有文件（List类型），其内容很详细
+	files of desktop --同上
+	
+	every folder of desktop --获得桌面上所有文件夹（List类型），其内容很详细
+	folders of desktop
+	name of every file of desktop --结果：获得桌面上所有文件名称（List类型）
+end tell
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 实例 新建多个文件夹 ???????
+
+tell application "Finder"
+	make new folder at desktop with properties {name:"Test"}
+	repeat with a from 1 to 3
+		make new folder at folder "Test" of desktop with properties {name:a as string}
+	end repeat
+end tell
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 音量控制 ?????
+
+--- I used to live below a couple who had a small child, so to avoid waking the baby, I automated my volume control.
+--- Change "10:00:00 pm" to a time of your choosing, and adjust the volume to your desired level (0 = off)
+--- could be useful for college students during class time or adults during meetings (and vice versa, etc)
+
+if time string of (current date) contains "10:00:00 PM" then
+	set volume 0
+else
+	set volume 4
+	repeat until time string of (current date) contains "10:00:00 PM"
+	end repeat
+end if
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 alfred  ???
+
+tell application "Alfred 3"
+	search "ff hello"
+end tell
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 finder 控制  ????
+
+tell application "Finder"
+	
+	-- empty the trash
+	-- 清空回收站
+	
+	--	quit
+	-- 退出Finder
+	
+	
+	--	open folder "219:Users:v:Desktop"
+	-- 打开文件夹	
+	
+	-- open file "219:Users:v:Desktop:HHKB"
+	-- 打开文件. 　　
+	
+	--set aliasPath to alias "219:Users:v:Desktop:HHKB alias"
+	set aliasPath to "219:Users:v:Desktop:HHKB"
+	open file aliasPath
+	-- 打开替身 (推荐用替身.而不是直接写文件路径)
+end tell
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 iterm  ?????
+
+-- iterm 官网教程 
+-- https://www.iterm2.com/documentation-scripting.html
+
+-- session 会话, 不同的终端对应不同的session. 同一个终端不同tab session也不同???
+
+
+
+-- 告诉 "Terminal" 做好准备
+-- 这里系统自带的Terminal 用的是 sh   iterm2用的是bash 两个命令有区别的..
+-- 看字典
+
+(*
+tell application "iTerm2"
+	do script ""
+	-- 启动当前应用
+	activate
+	-- 暴力设置第一个窗口作为接下来要执行操作的窗口
+	set win to window [0]
+	-- 设置当前的 Tab
+	set currentTab to selected tab of win
+	-- 在当前 Tab 中执行改变目录的操作（需修改到自己的 Hexo 所在路径）
+	do script "cd " in currentTab
+	-- 执行清除缓存的操作
+	do script "ls" in currentTab
+	-- 延迟一秒
+	delay 5
+	-- 执行生成并发布 Hexo 的操作
+	do script "ls" in currentTab
+end tell
+*)
+
+-- 这里软件的名字 按照字典里面的为准. 虽然应用程序里是 iterm2 但是字典里是 iterm.　　
+tell application "iTerm"
+	activate -- 激活当前程序.(终端不一定是有窗口的.你关掉最后一个终端窗口.这时候终端还是运行的.只是窗口数量是0.)
+	
+	-- 判断当前是否有窗口打开
+	if (count of windows) is 0 then
+		-- 没有的话，告诉 "System Events" 做好准备
+		tell application "System Events"
+			-- 模拟按键 Command + N 新建一个窗口
+			keystroke "n" using {command down}
+		end tell
+	else
+		activate
+	end if
+	
+	
+	-- 执行命令需要用 wrie text 而不是 do script　　　
+	
+	
+	tell the current window
+		activate current session
+		launch session "Default Session"
+		tell the last session
+			write text "cd ~/Downloads; clear; pwd"
+		end tell
+	end tell
+	
+	-- 暴力设置第一个窗口作为接下来要执行操作的窗口
+	-- set win to window [0]
+	
+	
+	
+	-- do shell script "ls /"
+	-- script "ll"
+	--create window with profile
+	--	write "ls"
+	
+end tell
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 iTunes  ?????
+
+tell application "iTunes"
+	-- run  启动iTunes
+	-- quit 退出iTunes
+	-- next track 下一首.
+	-- pause play  播放/暂停	
+end tell
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 misc ????
+
+
+(*
+-- 定义函数: on  　
+on Function1()
+	display dialog "don't do that"
+end Functon1
+Function1()
+*)
+
+
+(*
+-- 函数传入值
+on Function2(var1)
+	display dialog var1
+end Function2
+Function2("xxxx")
+*)
+
+
+
+-- 函数 输出值
+on circleArea(radius)
+	set area to pi * (radius ^ 2)
+	
+	if radius > 30 then
+		return area
+	end if
+	return "小于30的自己口算去"
+	
+end circleArea
+set areaCalculated to circleArea(13)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 AppleScript Message 套件
+
+🔸 send
+动词: 发送信息/文件 给某人/某对话
+
+🔸 service
+  名称: 当前系统可以登录的服务. 如imessage
+
+    id      ➜ 服务的 唯一标识
+    name    ➜ 在信息/系统设置/账户/下面列出的选项里的 描述部分如: iMessage、Google Talk、Bonjour.
+    enabled ➜ 服务是否开启.  布尔值.
+    connection status  ➜ 账户的状态. 如是否启用google talk、imessage...
+    status             ➜ 当前状态,启用不等于在线. 就是这个意思.
+    service type       ➜ 服务的种类?? (AIM/‌Bonjour/‌Jabber/‌iMessage, r/o) 
+
+    ⦿ 实例
+	      send "Text of Message" to buddy "+86 18621923213" of service "E:xujian0219@126.com"
+        "E:xujian0219@126.com" ➜ 这个就是ID
+
+
+
+
+
+🔸 Applescript ➜ Message ➜ Buddy
+
+contained by application, services.
+
+
+
+id: 服务名+名字?   AIM:JohnDoe007
+service .. 这个用户存在哪些服务..
+name: 用户名称. 前提是在通讯录中存在吧..
+handle: 用户的在线账户名?
+status: 当前状态.
+capabilities  容量??
+image: 用户头像么
+first name、last name、full name ➜ 通讯录中如果存在.
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+
+
+苹果推信优势：
+
+
+1、系统扫描有效用户进行群发，最高可达到100%的送达率，并提供送达报告；
+2、不在为寻找新客户头疼，节约宝贵资源，成功开拓新用户；
+3、iMessage短信模式针对苹果手机优质用户群，客户的素质及消费能力均高于普通手机用户；
+4、通过系统扫描选取活跃账号进行发送，针对性强，避免浪费推广资金；
+5、苹果推信不经过短信通道，不经过运营商拦截， 
+6、苹果推信字数限制小，最大可支持2000字符文本短信，并可发送文字、表情，链接；
+7、苹果推信最终呈现是以最直接的方式呈现在苹果手机桌面上，第一时间将信息有效传达；
+
+iMessage短信只会针对苹果用户，目的就是锁定这些消费能力更高的群体，让客户广告达到效果。
+系统扫描号码后会选取有效账号发送，针对性强，并提供送达报告，“最重要的是，我们走网络通道，不会被拦截。
+
+
+我们的Mac mini 是一款高配电脑，16G内存，4核i7处理器，足以应付所有发送任务，强大硬盘1T（1000G）容量。
+6个虚拟机，避免封号，同时对每个ID进行自动解锁设置，即使被封也能自动解锁。
+此款设备安装了定制版发送软件，运行通畅，稳定性强，配备了强大的处理器，运行速度更快，加装了自动解锁设置，从此再也不用担心被封ID了，自动分配任务后，轮换虚拟，让你弹无虚发，条条必达！联系电话：15925882535张小姐QQ 1015666500
+
+
+
+
+该公司向记者介绍说，推送的信息可以包含文字、图片、视频和网站链接等，而且字数无限，内容表现形式也很多样，包括插入各种EMOJI表情等。此外，“苹果推”还可以按照客户指定进行定向推送，在被指定的地区内实现8小时内推送1000万条信息，而且不会被运营商屏蔽。
+　　“我们可以保证99%以上的到达率。”对方向记者作出保证，“想想看，每小时可以推送100万使用苹果设备的高端客户。”
+　　对方还介绍说，他们推送的iMessage，可以直接出现在用户的桌面上，无论用户是在锁屏、上网还是游戏中，都会接收到信息，“所以，你不用担心推广效果，用户一定会看见你的信息。”
+　　在对方提供的业务清单中，记者看到，“可以指定地域投放，自主分配推送的城市和数量，操作灵活;指定时间段投放，最高每天发送量可达200万条;可信第三方URL统计和运营商来电统计验证真实效果……”
+　　记者称自己要做一个培训业务，需要做推广。对方则热情推荐，说可以在推送文本中添加培训的网站链接，而iMessage推送则免费，只有当用户点击了链接，进入了页面之后，才按照每次点击0.6元的价格进行收费。
+　　“点击链接的人，肯定都是对你的培训项目有兴趣的人，用户不点击，我们就不收费，你完全可以相信推广效果。”对方这样表示。
+　　而另外一家也是位于北京的科技公司给出的价格则是“10万条以下的价格是0.05元一条，10万条以上的价格则是0.035元一条。”
+　　调查
+　　3000元包服务器推一天?
+　　记者又以有产品要使用iMessage推广为由，与上海的一家推广公司进行了联系。在交谈中，对方竭力向记者介绍iMessage推广的各种好处。
+　　“针对你的情况，我认为你还是应该包下我们的服务器一天。”对方自称小路。他介绍说，根据他们的数据统计，仅仅在广州市，就有大约几十万个苹果手机的用户，如果使用按条收费的方式的话，那么推广成本会很大。
+　　“如果按条来收费，那么我们的价钱是3分钱一条，这样算下来，如果发送到大约50万的广州地区苹果用户手机上的话，那么就需要15000元。而如果采取服务器包日的方法的话，服务器从早上8点到晚上11点可以推大约50万到60万条的量，我们只收取3000块钱一天的费用。如果你觉得效果好，那么以后还可以多包几台服务器同时推送，那么推送的效果更好。”小路显得颇为客户考虑。此外，他还向记者保证推送的效果。
+　　“如果是包服务器的话，那么你可以随时看到服务器推送iMessage的情况，会有实时的数据让客户看到，保证效果，等于说在这一天内，这台服务器都是在为这一个客户服务。”
+　　他还透露，由于防止被限号，所以他们的服务器内都存有大量的AppleID，轮流上阵发送iMessage，“如果只有几个账号，肯定做不到每天那么大的发送量。”
+　　专家
+　　用软件实现账号获取和群发
+　　来自清华大学软件学院的赵心砚解释了如何使用iMessage进行推广。他解释说，群发iMessage主要需要攻破两个技术难点，一是iMessage账号的获取，另一个是实现iMessage的群发。而获取iMessage账号的方法主要是扫描手机号码，扫描可以使用代码自动扫描，也可以通过人工进行筛选：通过编写程序，使用Mac OS自带的iMessage客户端进行验证，过程类似于群发iMessage，如果发送后捕获到发送失败的则不是iMessage账号，还有一种方法则是用IOS系统中Message framework中的私有api(应用程序编程接口)，通过私有api来验证。
+　　在获取账号之后，实现群发就相对容易，一是通过iMessage客户端，另一个是通过程序来控制iMessage客户端进行发送。
+　　如何应对垃圾iMessage
+　　唯越狱安装第三方拦截软件?
+　　垃圾iMessage究竟能不能屏蔽?
+　　记者首先与运营商的客服热线进行联系，以投诉垃圾iMessage太多为名，希望对方能够给予重视和处理，但是得到的回复均是，目前尚没有好的办法。客服人员告诉记者，由于苹果iMessage垃圾短信并非以手机号码发送，所以在运营商环节还无法做到有效的屏蔽。
+　　其实，就在每台苹果设备的设置项里，就可以屏蔽掉垃圾iMessage，只要把短信中的“iMessage”关闭，那么手机就不能再发送或者接受任何iMessage，但是这样的做法等同于“同归于尽”，因为用户自己正常的iMessage功能也无法使用了。
+　　在与小路的对话中，他倒是在无意中提供了一个屏蔽iMessage垃圾的方法，那就是将手机越狱之后，安装第三方的拦截软件。只是这种做法，就看用户愿意不愿意了。
+　　对于日益泛滥的iMessage垃圾短信，苹果公司方面也有应对举措。苹果公司开通了iMessageSPAM信息举报邮箱，用户只需要将垃圾信息的相关资源发送到这个邮箱，苹果公司就可能根据发送记录采取限制账号的措施。
+
+
+
+
+
+
+
+
+
+
+
+🔸 imessage 送达状态
+已送达 返回1.
+未送达 返回2.
+已阅读 返回3     (看对方是否开启 发送已读回执...)
+
+
+
+
+
+
+
+🔸 iMessage 判断对方状态
+
+要么所有都用 imessage 发送. 发送失败就返回xx 发送成功就返回
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 思路.
+    可以用多种脚本语言. 如shell 中是可以用applescript + imessage 的.   
+    必要的地方用 applescript 如: 判断对方状态.  给对方发信息.
+    其他地方用python. 如从数据库取出手机号码. 取出信息. 循环. ....
+
+
+
+Detect imessage user in AppleScript
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

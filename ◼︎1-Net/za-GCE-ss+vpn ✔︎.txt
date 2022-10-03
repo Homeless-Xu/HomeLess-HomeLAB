@@ -1,0 +1,459 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+GCE 简介
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 基础配置 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+  ⦿ 基础配置
+    地区: asia-east1-a
+    cpu: 一个共享vcpu
+    内存: 0.6 G
+    硬盘: 10G ssd
+    系统: centos7 
+    防火墙: 允许http流量、允许https 流量.
+
+
+  ⦿ IP 设置.
+    默认是用动态IP的. 也就是IP会变. 所以必须设置静态ip
+    一个帐号 好像只能一个外部IP的. 
+    之前给某个实例设置过静态IP的话.需要先 释放该实例的静态IP.
+    网络 > 外部IP地址 > 类型 > 静态
+
+
+  ⦿ GCE 外部防火墙设置
+    网络 > 防火墙规则 > 创建规则 > 允许所有规则.
+
+
+  ⦿ 网页 SSH
+    可以使用自带的网页SSH 工具，进行搭建各种服务，非常方便。
+
+  🔸 SSH 密钥设置
+    先在mac 用ssh-keygen命令 生成一对密钥.   
+    公钥名 id_rsa.pub
+    公钥路径 ~/.ssh/id_rsa.pub
+    公钥内容 cat ~/.ssh/id_rsa.pub
+
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD4zh0AXPyIKlV+/TcBPIwJ4FoPxqEag3yRRonNWcGGQYLtizLKmiM4NqzLT6U13biHAD31qpwuHYeKwBPtTDGzJy5cFRBbmc2mIKJi+hoTCvyX5OGyb34+pU0FI5DWOOUA7VX7cAoNyIIclmsbh8IYerL/O4vpIOIDh18BLFHNWYqDMMVNm3tkkF+ztrErYoeV7eVy1SI0Hl8dgPXDuKWIoaFSbjtAbZgrQ+sWCApsj/AJGtjt7TFLGrPHSLlUS4C5RS57MGQQSqBPJ/i/EUqZjRn01h6rTcyn/6Hu3JjSWHaV+QZXXXGWAd7JR/w87ONMDvb/tzgCPYOqRBZVgign v@xu-jian.local
+
+    公钥内容 三部份组成
+    ssh-rsa  + key_value + 用户名
+
+    计算引擎 > 元数据 > SSH密钥 > 修改 > 粘贴公钥内容(3部分)到新框里. > 保存
+
+    测试 ssh v@35.189.183.108
+    这里注意 服务器用户名是v 而不是root.. 就是你生成密钥时候用的用户名
+
+    SSH 密钥只要设置一次就行的!!! 之后不管你重装实例. 都不需要再设置.
+    SSH 密钥只要设置一次就行的!!! 之后不管你重装实例. 都不需要再设置.
+    SSH 密钥只要设置一次就行的!!! 之后不管你重装实例. 都不需要再设置.
+
+
+🔸 root 登录
+  ❗️❗️ 默认只允许 ssh 密钥登录. sudo su 切换到root..❗️❗️
+  ❗️❗️ 默认只允许 ssh 密钥登录. sudo su 切换到root..❗️❗️
+  ❗️❗️ 默认只允许 ssh 密钥登录. sudo su 切换到root..❗️❗️
+
+
+先用 v 登录ssh . 然后 sudo su 命令 切换到root 用户.
+
+⦿ 编辑ssh配置
+  vi /etc/ssh/sshd_config
+    PermitRootLogin no              改成yes  这样就能用root登录.
+    PasswordAuthentication no       改成 yes 这样就能用密码登陆.
+
+⦿ 重启ssh服务         systemctl restart sshd.service  
+⦿ 给 root  设置密码   passwd root
+⦿ root 密码登录测速   ssh root@35.194.128.92
+
+⦿ root 密钥登录.  需要把mac的公钥上传到服务器的 /root/.ssh 目录下.
+之前v 是把公钥保存在/home/v/.ssh 下的.
+由于谷歌 是把数据添加到 元数据里的. 
+我们添加一个 ssh密钥. 复制v的内容. v@xu-jian.local 改成 root@xu-jian.local
+
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD4zh0AXPyIKlV+/TcBPIwJ4FoPxqEag3yRRonNWcGGQYLtizLKmiM4NqzLT6U13biHAD31qpwuHYeKwBPtTDGzJy5cFRBbmc2mIKJi+hoTCvyX5OGyb34+pU0FI5DWOOUA7VX7cAoNyIIclmsbh8IYerL/O4vpIOIDh18BLFHNWYqDMMVNm3tkkF+ztrErYoeV7eVy1SI0Hl8dgPXDuKWIoaFSbjtAbZgrQ+sWCApsj/AJGtjt7TFLGrPHSLlUS4C5RS57MGQQSqBPJ/i/EUqZjRn01h6rTcyn/6Hu3JjSWHaV+QZXXXGWAd7JR/w87ONMDvb/tzgCPYOqRBZVgign root@xu-jian.local
+
+现在root 就可以ssh 密钥登录了...
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 Mosh (ssh) 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 作用
+    用了 mosh 再也不会 ssh 超时端口了!!!
+    就像你用 ssh 安装lnmp脚本. 正常安装要一两个小时. 
+    用ssh 可能你十几分钟没操作就自动断开了. ssh 断开就会停止lnmp 脚本!!
+    自然你 lnmp 也就安装失败了.  虽然可以用 nohup 等等办法来后台运行
+    但是不方便. 用mosh 就不会有这种问题.
+
+    而且就算你网络完全断开了. 你的lnmp脚本 不会被中断! 会继续在服务器执行.
+    等你连上网络 mosh 会自动连接到服务器, 免得你再连一次ssh.
+
+🔸 安装
+  ❗️❗️ 需要客户端 和 服务器 同时安装 mosh ❗️❗️
+  ❗️❗️ 需要客户端 和 服务器 同时安装 mosh ❗️❗️
+  服务器只要安装就好了. 不需要手动开启 mosh 服务的.
+
+  ⦿ Mac OS安装: brew install mosh
+  ⦿ Centos安装: 🔅 yum install mosh -y
+  ⦿ 版本  查看: mosh --version
+
+🔸 端口
+  默认使用 60001-61000 之间的一个 udp端口.
+  GCE 外部防火墙 开启 udp:60001-61000 就可以了
+
+🔸 使用
+  和ssh 一样. 只要把ssh 换成 mosh 就可以了
+  mosh v@35.187.155.74
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Centos 基础设置 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 系统配置
+
+  ⦿ 切换到 root 用户    sudo su
+
+  ⦿ 系统更新            yum update -y
+  ⦿ Tree 目录工具       yum install tree -y
+  ⦿ GCC 编译必备.必装.  yum group install "Development Tools" -y
+
+  🔅🔅 
+yum update -y && yum install tree -y && yum group install "Development Tools" -y
+
+
+好慢啊.. fuck....... 
+
+
+🔸 ZSH
+
+  ⦿ zsh 安装 
+    yum install zsh -y && yum install git -y && yum install wget -y
+
+  ⦿ oh-my-zsh 安装
+    sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
+
+  ⦿ ZSH 提示符
+    vi ~/.zshrc 添加
+    PS1="%F{red}✘✘%F{black}∙%f%B%F{magenta}GCE%f%b %{$fg[cyan]%}%c%{$reset_color%} %{$reset_color%}${ret_status}"
+
+
+  ⦿ Autojump (zsh 插件)
+    git clone https://github.com/joelthelion/autojump.git && cd autojump && ./install.py && echo "[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] && source /root/.autojump/etc/profile.d/autojump.sh
+                                      autoload -U compinit && compinit -u" >> ~/.zshrc && cd .. && rm -R autojump
+
+
+
+  ⦿ 重连ssh 就生效了
+
+
+
+🔸 vim 设置
+ vi ~/.vimrc
+
+set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
+set enc=utf8
+set fencs=utf8,gbk,gb2312,gb18030
+
+:set nu
+set ts=4
+set expandtab
+set autoindent
+
+
+🔸 别名设置
+  🔅🔅
+  echo 'alias vi="vim"' >> ~/.zshrc && echo 'alias ls="ls -l"' >> ~/.zshrc && echo 'alias rm="rm -R"' >> ~/.zshrc && source ~/.zshrc
+
+
+
+🔸 HTOP 2.0 
+    最流行监控工具, 一般yum 安装的都是1+版本.如果要安装2+ 版本 需要配置源.
+    下面是 centos7 x64 安装 HTOP2.0 的方法.
+    epel-release-7-10 可能会失效. 自己等网页查看最新版
+
+    wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm
+    rpm -ihv epel-release-7-10.noarch.rpm 
+    yum install htop -y
+
+
+
+
+🔸 speedtest 测网速
+  ⦿ 安装  yum install python-pip -y && pip install speedtest-cli -y
+  ⦿ 使用  speedtest
+
+  发现下载70M 上传20M
+
+
+
+🔸 lsync 同步
+    Mac 如果想用 lsync 把 某个文件夹同步到服务器.
+    那么服务器是要安装 rsync 的.
+    Mac 则需要安装 lsyncd + rsync
+
+    🔅 yum install rsync
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 GCE ✔︎   BBR 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 资源
+
+❗️❗️参考文章  https://teddysun.com/489.html/comment-page-4 ❗️❗️
+❗️❗️参考文章  https://teddysun.com/489.html/comment-page-4 ❗️❗️
+❗️❗️参考文章  https://teddysun.com/489.html/comment-page-4 ❗️❗️
+
+
+  GCE 官方文档 (非常复杂.不建议看)
+    https://github.com/google/bbr/blob/master/Documentation/bbr-quick-start.md
+
+
+
+🔸 一键脚本 (👹 有问题)
+
+    ⦿ 安装
+      wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+      chmod +x bbr.sh
+      ./bbr.sh
+
+
+    ⦿ 重启服务器后执行下面两个命令
+      🔅 sudo su
+      🔅 mount -o remount rw / 
+      必须执行这步. 不然会有 read-only file system 报错.
+
+    ⦿ 测试
+      lsmod | grep bbr
+      返回值有 tcp_bbr 模块即说明bbr已启动。
+
+
+👹 脚本有问题... 
+  bbr 虽然开启了. 但是一堆问题...
+  nginx 开启自启动失败了.
+  mysql 居然挂了..
+  还有各种问题....  这么坑...
+
+还好 db.sql 还在.. 
+
+
+
+
+
+
+
+
+🔸 内核升级(3.10 ➜ 4.12)
+
+  ⦿ 安装最新内核
+    rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+    rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+    yum --enablerepo=elrepo-kernel install kernel-ml -y
+
+  🔅🔅
+    rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org && rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm && yum --enablerepo=elrepo-kernel install kernel-ml -y
+
+
+
+  ⦿ 查看当前内核  uname -r
+  ⦿ 查看所有内核  rpm -qa | grep kernel
+  ⦿ 更新 grub 系统引导文件并重启
+
+       egrep ^menuentry /etc/grub2.cfg | cut -f 2 -d \'
+       会列出一系列可用的 可引导的内核.
+
+    🔅 grub2-set-default 0 && reboot  
+       default 0表示第一个内核设置为默认运行, 选择最新内核就对了
+
+
+
+🔸 开启 BBR
+  ⦿ 查看当前内核. 确保是4.9+的内核版本  
+    uname -r  
+
+  ⦿ 列出所有已载入系统的模块。
+    执行 lsmod | grep bbr
+    现在结果中是没有 tcp_bbr 的
+
+
+  ⦿ 安装bbr 模块
+
+    sudo su
+    🔅 mount -o remount rw / 
+    必须执行这步. 不然会有 read-only file system 报错.
+
+    modprobe tcp_bbr
+    echo "tcp_bbr" >> /etc/modules-load.d/modules.conf
+    echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+
+    sysctl -p
+    保存生效
+
+  ⦿ 测试
+
+    sysctl net.ipv4.tcp_available_congestion_control
+    sysctl net.ipv4.tcp_congestion_control
+
+    执行两个命令. 如果结果有 bbr 就证明已经开启bbr了.
+    网速会有非常非常明显的提示... 
+
+👹 Centos7 安装bbr 之后.
+nds 就无法正常解析了   fuck....
+ping www.baidu.com 都不行了.
+✘✘∙GCE v ➜ ping www.google.com
+ping: www.google.com: Name or service not known
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  LNMP 1.4  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+1. mysql 版本   选 5.5
+2. 输入数据库密码  
+3. 启用InnoDB  选 y
+4. php   版本  选最新 7.1.5
+5. menory      不安装
+6. 按回车键 & 等好久 
+❗️❗️❗️  GCE   的ssd 需要 141 分钟 + ; 帮瓦工的ssd 只要 20  分钟... ❗️❗️❗️
+❗️❗️❗️  GCE   的ssd 需要 141 分钟 + ; 帮瓦工的ssd 只要 20  分钟... ❗️❗️❗️
+
+7. 安装好后 nginx 80端口开了.  mysql 3306端口也开了.
+
+
+wget -c http://soft.vpser.net/lnmp/lnmp1.4.tar.gz && tar zxf lnmp1.4.tar.gz && cd lnmp1.4 && ./install.sh lnmp
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+SS 个人版 搭建 (可选,ETA: 10min+ ) 
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 ss 搭建
+
+  ⦿ 脚本简介
+      四合一脚本(四种ss). http://www.f2ecoder.com/688.html
+      Shadowsocks-Python，(推荐) 
+      ShadowsocksR， 
+      Shadowsocks-Go， 
+      Shadowsocks-libev
+
+
+  ⦿ Shadowsocks-Python 安装
+
+      sudo yum update -y
+      sudo yum install wget -y
+
+      wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
+
+      chmod +x shadowsocks-all.sh
+
+      sudo ./shadowsocks-all.sh 2>&1 | tee shadowsocks-all.log
+      按1 选择 Shadowsocks-Python
+      输入密码: xujian
+      输入端口: 1111
+
+  ⦿ 安装完成提示
+      Congratulations, Shadowsocks-Python server install completed!
+      Your Server IP        :  35.......
+      Your Server Port      :  1111
+      Your Password         :  xujian
+      Your Encryption Method:  aes-256-cfb
+
+
+  ⦿ 启动 Shadowsocks-Python 服务：
+      /etc/init.d/shadowsocks-python start
+      /etc/init.d/shadowsocks-python stop
+      /etc/init.d/shadowsocks-python restart
+      /etc/init.d/shadowsocks-python status
+
+  ⦿ 开机启动
+    默认就是开机启动的....
+
+
+  ⦿ GCE 外部防火墙设置
+      这个不是centos的防火墙!  而是gce的防火墙!
+      默认GCE是组织所有连接到实例的数据的!!!
+      ss 客户端要 连接ss服务器的1111端口.
+      必须去网络 > 防火墙规则 > 添加一个规则 允许tcp:1111 
+
+  ⦿ Centos 内部防火墙设置
+      停止：systemctl stop firewalld
+
+  ⦿ 端口测试:
+      nmap -p1111 35.189.183.108  发现1111端口开了.
+
+  ⦿ ss 测试:
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  IPsec VPN 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 简介
+  vpn 这种应急的/临时的 可以用GCE
+  
+  PPTP 基于 GRE 隧道的， GCE 明确表示不支持. 用L2TP/IPsec吧.
+  PPTP 基于 GRE 隧道的， GCE 明确表示不支持. 用L2TP/IPsec吧.
+
+🔸 vpn 搭建
+  脚本说明  https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/README-zh.md
+  脚本说明  https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/README-zh.md
+  (里面有 Debian 等其他系统的安装说明)
+
+
+  ⦿ CentOS L2TP 安装脚本
+    🔅 wget https://git.io/vpnsetup-centos -O vpnsetup.sh && sudo sh vpnsetup.sh 
+
+  ⦿ 安装好后
+
+    Server IP: 35.194.128.92
+    IPsec PSK: 6ga2dgFJN97N9p5d
+    Username: vpnuser
+    Password: D8aZztkdr5x6u2we
+
+Server IP: 35.194.128.92
+IPsec PSK: q2i9pE5FahD6hsJt
+Username: vpnuser
+Password: L3eC9YKirnfv5Uyv
+
+
+
+  ⦿ gce 防火墙
+   ❗️❗️ GCE 有外部防火墙的! 必须为 VPN 打开 UDP 端口 500 和 4500 ❗️❗️
+   ❗️❗️ GCE 有外部防火墙的! 必须为 VPN 打开 UDP 端口 500 和 4500 ❗️❗️
+
+  ⦿ vpn 连接测试.
+    Mac 建议用 shimo 这个软件. 
+    添加的时候选择 ipsec 协议.
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 Mysql 远程访问 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+root 默认是只能在 127.0.0.1 和 ::1 上用的.
+由于 IPv6 的::1 我们用不到 直接把 ::1 改成% 
+root就可以在任何电脑进行远程mysql了.
+记得把下面的 -p 后面 改成你自己的数据库密码
+
+mysql -u root -p xujian0219 -e "UPDATE mysql.user SET host='%' WHERE host='::1';" 
+
+mysql -u root -p xujian0219 -e "flush privileges;"
+
+
+
+

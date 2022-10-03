@@ -1,0 +1,739 @@
+@: 1986-09-01-Firebase
+---
+layout: post
+title: Firebase
+tags: -APP
+categories: Tooles
+---
+
+[官方 中文 参考网站]
+
+## 简介:
+
+**免费的实时数据库 1GB/month!!!!!**
+**免费的存储 10GB/month**
+
+
+
+FireBase是一个用于构建移动应用、提供实时数据存储和同步、用户身份验证等功能的平台。
+因为是国外的东西，所有需要科学上网，请自备梯子。
+
+
+
+谷歌的 .
+
+Firebase给我最深的印象就是整合了后端框架，这大大改变了原有了软件过程
+
+以往软件开发:
+- 先要设计一个数据库，
+- 然后再搭一个服务器，
+- 最后在应用端进行开发
+
+现在:
+- 启动一个Firebase项目，
+- 挂上服务器，有必要还可以挂上第三方API，
+- 然后就可以进行开发了
+- 你只需要向Firebase抛后端代码，它就可以自动处理并返回你想要的数据
+
+
+
+
+
+
+
+
+
+
+## 三大功能
+
+
+
+### 功能一: 用户认证
+
+如果你构建一个APP，那么你要做一个用户认证系统.
+
+Firebase允许你用Email和密码连接到第三方，例如Facebook，Twitter等等。 
+你所要做的就是使用一个服务端的库来生成JSON Web标记和另一个开放标准，这样你就可以告诉Firebase谁是你的用户了
+
+
+
+
+
+
+
+### 功能二: 实时数据库
+
+Firebase用的是一个实时的NoSQL的JSON数据库，
+所有的数据都以JSON的形式存在于数据库里面，
+并且它们还为每个键值做映射(mapping)，
+它可以实现毫秒级的数据推送。
+还有一点就是客户端可以不和服务器交流直接去访问数据库
+
+
+
+
+### 功能三: 托管服务
+
+
+很典型的例子就是英国大选的时候，Sky News利用Firebase来同步大选的数据，这个应用每天都有几百万的访问量，而Firebase就得托管这些数据并同步给几百万的用户，更激动人心的是这个应用在数周之内就被开发出来并投入使用
+
+
+
+
+
+
+## 其他新功能
+### 手机离线支持(Mobile Offine Support)
+
+所有数据都会存在于你的磁盘上，而不仅仅是内存
+当你离线时，你的所有数据都会尽量保持最新
+当网络重新连接时，应用会马上进行重新同步，使你的数据保持最新
+当你重新开启应用时所有东西都会还原
+
+
+
+
+### 支持React Native(React Native Support)
+React Native是Facebook的一个开源库，并且Facebook有团队正在使用它
+而Firebase则是驱动React Native的后端，并可以完美协作
+React会在你的数据模型发生改变时更改你的UI，而Firebase则负责实时更新
+
+
+
+## Firebase-Auth设置✔︎
+
+
+提供很多种丹尼尔高亮方式. 免得用户再去注册账户的麻烦…
+
+
+## Github 验证
+
+
+控制面板 → 左边 Authentication → 提供商: github → 启用 → 设置客户端ID/密钥
+
+### 获取客户端ID+密钥
+
+去github 注册个 OAuth 应用就可以获得.
+[Github OAuth应用注册网址]
+
+注册时候 需要把 firebase github验证开启 弹出框下面的 网址 填写到 github 注册应用界面的 回调URL里.
+
+
+您可以将 GitHub 身份验证集成到您的应用中，
+**让您的用户可使用自己的 GitHub 帐户进行 Firebase 身份验证。**
+
+
+
+
+您可以将 GitHub 身份验证集成到您的应用中，让您的用户可使用自己的 GitHub 帐户进行 Firebase 身份验证。 您可以使用 Firebase SDK 实施登录流程，或者手动实施 GitHub OAuth 2.0 流程，并将得到的访问令牌传输至 Firebase，从而集成 GitHub 身份验证。
+
+
+
+
+## 登录网页设置
+
+你需要有个... 登录html页面啊.不然怎么登录..
+
+然后还要 有个数据库 不然用户信息存到哪...
+
+
+
+
+
+
+
+
+
+
+## Firebase-云消息设置✔︎
+
+## FCM 简介
+Firebase Cloud Messaging
+
+**一种跨平台(IOS/Andriod/Mac/Win/Linux...)的消息传递方案.**
+**可以免费且可靠的传递消息和通知**
+
+比如 有新邮件.你就可以提示用户..
+也可以给所有用户发送消息..
+
+
+
+
+
+
+
+
+## FCM 前提准备
+
+
+一个应用服务器（通过 HTTP 或 XMPP 协议与 FCM 交互）....
+一个客户端应用...
+
+
+
+
+
+
+
+## Firebase-存储功能✔︎
+
+
+
+### Storage
+
+
+应该是存文件的地方... 
+
+
+分好几块. web ios … 
+
+
+
+
+
+
+## Web Storage
+
+网页上 创建上传按钮. 然后可以上传下载文件...
+
+
+
+## 前提准备
+要求进行用户身份验证...
+
+公开/私有/用户/默认 几种设置....
+
+还是先进行 权限设置吧…
+
+
+
+
+
+## Firebase-托管功能✔︎
+
+[托管官方参考 CN]
+
+
+## Firebase Hosting 简介
+**生产级网络内容托管。**
+**托管的是静态资产: Html CSS JS 等等....**
+**所有内容都将通过 HTTPS 提供给用户.**
+**全球 CDN 提供支持**
+> 类似 github page 的免费托管….
+利用 Hosting，您仅需一条命令，即可快速简单地将网络应用和静态内容部署到全球内容交付网络 (CDN)。
+
+
+
+- 免费 1G    
+- 免费 10G/month 
+- 支持自定义域名
+
+
+
+## Firebase Hosting 工作原理
+
+
+Hosting 会给你提供一个 firebaseapp.com 的子域名
+
+通过使用Hosting 把电脑本地的项目文件夹 部署到 Firebase CLI 服务器
+
+它会把你网站部署到全球的CDN服务器上 还提供免费SSL. 以便用户快速安全的链接
+
+
+
+
+
+
+
+
+
+## 安装 Firebase CLI
+
+  1. 本地电脑先安装node Firebase CLI 基于 node.
+
+2. 用 NPM 安装 Firebase CLI
+	这工具安装 node 时会自动安装的
+	
+	`npm install -g firebase-tools`
+	
+	
+	*安装好CLI工具 就有了个新的 全局命令: Firebase了.*
+
+
+
+这个安装 会有个 错误
+`npm WARN deprecated node-uuid@1.4.7: use uuid module instead`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3. 终端输入 : `firebase login`
+	会生成一个 谷歌的登录网站. 点击转到浏览器上:
+	进行帐号登录 → 允许授权 → 成功...
+
+
+### 获取最新版本 Firebase CLI `npm install -g firebase-tools`
+
+
+
+
+
+## 项目目录
+
+
+比如 网站吧. 一般网站根目录 就是项目目录... 
+
+CLI 执行常见任务 都需要提供 项目目录.
+
+项目目录是含 firebase.json 配置文件的任何目录。
+且 firebase.json 通常与 README 和其他顶级文件放在一起。
+
+
+
+### 初始化项目目录
+
+**这里要先登出  再登录!!!!!!**
+firebase logout firebase login
+
+**而且经常会登录不了... 无解!!!!!!**
+
+
+
+
+
+
+- 先新建个文件夹.. 
+- 打开终端 cd到新建的文件夹 : 
+- `firebase init` 
+- 数据库 还是 hosting; 这里 按空格键 选后者.
+- 接下来 会让你选择关联的项目(firebase 网站上建立的项目). 用CLI命令时 所有的操作都会 在你关联的项目上生效...
+
+**这里注意啊 多账户用户 本地的谷歌帐号必须和网站上的帐号一样啊….**
+
+init 命令的最后一步要求您选择默认的 Firebase 项目。这会将目录与项目关联，以便从项目目录内运行项目特定的命令（如 firebase deploy）时，将使用正确的项目。 此外，您也可以利用同一目录关联多个项目（例如，暂存项目和生产项目）。
+
+
+这里有个东西 就是 init 执行完成会有 
+First, let's associate this project directory with a Firebase project.
+You can create multiple project aliases by running firebase use --add, 
+but for now we'll just set up a default project.
+
+
+这个是 项目别名的意思.
+
+您可以将多个 Firebase 项目与同一工作目录相关联。例如，您可能需要将一个 Firebase 项目用作暂存，另一个 Firebase 项目用作生产。通过使用不同的项目环境，您可以在部署至生产环境之前确认所做的更改。 Firebase 使用命令允许您在别名之间切换，并创建新别名。
+
+
+#### 添加项目别名
+在 Firebase 初始化期间选择项目时，系统将为您创建一个名为 default 的别名。 要创建新别名，请运行： `firebase use --add`
+
+
+
+### 清除当前别名
+`firebase use --clear`
+
+
+
+
+
+
+
+## CLI 常用管理命令
+
+'' login   对 Firebase 帐户进行身份验证。要求网络浏览器的访问权限。
+'' logout  注销 Firebase CLI。
+'' login:ci    生成使用身份验证令牌，供非交互式环境中使用。
+'' list    输出所有 Firebase 项目的列表。
+'' use 设置活动的 Firebase 项目，管理项目别名。
+'' open    快速打开浏览器以关联项目资源。
+'' init    在当前目录中设置新 Firebase 项目。此命令将在您的当前目录中创建 firebase.json 配置文件。
+'' help    
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Firebase实时数据库设置✔︎
+
+
+## 实时数据库服务 先决条件
+
+1. 在网页中 添加和配置 Firebase SDK
+
+2. head 里引入 firebase.js
+`<script src="https://www.gstatic.com/firebasejs/3.0.4/firebase.js"></script>`
+
+
+3. footer 里 jquery 后 添加 app.js 文件.(firebase 所有脚本都放这里统一管理)
+
+4. app.js  一开始就执行的函数. onready 函数..里面是具体的代码.
+
+ 5. firebase → 数据库 → 规则 → 测试的话 read和write:后面都改成 ”true” 这样才有权限修改读取数据库... 不然要验证..麻烦.
+
+
+
+
+### 官方Youtube 实例1
+作用: 修改 实时数据库里面的内容. 就能本地console 出修改的值..
+
+[https://www.youtube.com/watch?v=noB98K6A0TY]
+
+
+
+
+#### 实例详解 Value Events:
+
+
+**目的:  如何实时同步一些事件.**
+
+1. HTML 先加个标签并给上ID.  `<pre id=“Object”><pre>`
+
+2. 接下来所有 都在 app.js 里面执行了...
+
+
+21. 绑定HTML里面新建的元素. 用 getElementById (也可以用 jqiery )
+`const preObject = document.getElementById('Object')`
+
+const: 常量的意思. 把对象转变成常数对象: 利用condt 进行修饰的变量的值.在程序的任意位置不能再被修改.就像常数…
+
+
+
+
+22. 创建引用... 引用firebase 数据库里面的东西..
+`const  dbRefObject = firebase.database().ref().child('Object');`
+
+- firebase 应该是 firebase.js 里面定义的 就像$是jquery.js 里面定义的一样.
+- database()
+是一个函数吧. 就是连接数据库的意思.(这里数据库的帐号密码网址应该都是定义 配置 firebase的时候就写进去了.)
+- ref()
+把你带到数据库的根目录.
+- child()
+创建对象的一个子对象. 对象名字叫Object
+
+现在开始  我们就可以储存任何值了..
+
+23. on() → 同步一个字符串.
+**on() 实时同步函数**
+功能: 数据库里面一旦改变. 网页里面的数据也同步改变!!!!
+ 
+`dbRefObject.on('value', snap => console.log( snap.val())); `
+
+- 第一个参数: 事件类型
+事件类型: 你用什么方式 控制与实时数据库同步的级别.
+- 值事件:
+
+-  第二个参数: 回调函数 这里就是值. 一旦value 的值有改变 就执行这个回调函数
+这个回调函数用了 ES2015 的 =\> 箭头函数
+snap : 一个 数据快照
+这个snap 可以返回很多信息. 比如子对象的名称 等等….
+这里要输出值的话 就用 snap.val 
+
+
+24. on() → 同步一个对象.
+这个 就叫 状态同步
+数据库里面直接 创建对象.. 就会同步对象....
+如果数据库里面改了 这个对象里面某项. 会返回整个对象.而不是仅仅修改的那个.
+
+
+
+
+25. 把数据库的数据用JSON格式显示到 HTML 的pre 标签中(之前是console中的..)
+dbRefObject.on('value', snap =\> { 
+  preObject.innerText = JSON.stringify(snap.val(),null,3);
+});
+
+
+
+
+
+
+
+
+#### 实例详解 Child Events:
+child 事件有三个. `child_added  child_changed  child_removed` 
+- add    → 只有实时数据库中 有数据被添加时候才会执行.
+- chage  → 只有实时数据库中 有数据被修改时候才会执行.
+- remove → 只有实时数据库中 有数据被删除时候才会执行.
+
+
+**列表**  数据库格式:   名字: 值.    网页上只会显示值. 
+
+firebase数据库::
+hobbies:
+sleep: Sleep
+sex: Sex
+
+
+ 
+`HTML: <ul id=“list”><ul>`
+
+
+
+'' const ulList = document.getElementById('List');
+'' const dbRefList = firebase.database().ref().child('MyAssetes');
+'' dbRefList.on("child_added", snap => {
+'' const li = document.createElement('li');
+'' li.innerText = snap.val();
+'' li.id = snap.key;
+'' ulList.appendChild(li);
+'' });
+'' 
+'' dbRefList.on("child_removed", snap => {
+'' const liRemoved = document.getElementById(snap.key);
+'' liRemoved.remove();
+'' });
+'' 
+'' dbRefList.on("child_changed", snap => {
+'' const liChanged = document.getElementById(snap.key);
+'' liChanged.innerText = snap.val();
+'' });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 获取数据库 引用
+
+然后就可以在js中 用数据库了....
+
+
+
+您将通过 firebase.initializeApp() 初始化 SDK：
+
+
+'' 更新之后
+'' // Reference
+'' var key = ref.key;
+'' var rootRef = ref.root;
+'' var parentRef = ref.parent;
+'' 
+'' // Query
+'' var queryRef = query.ref;
+'' 
+'' // DataSnapshot
+'' ref.on("value", function(snapshot) {
+''   var dataRef = snapshot.ref;
+''   var dataKey = snapshot.key;
+'' });
+
+
+
+
+
+
+### 更新您的身份验证代码
+
+Firebase 身份验证功能此时存在于其自己的 firebase.auth() 服务之后，许多方法已重命名。 例如，下面是用 OAuth 提供程序对用户进行身份验证的方法：
+
+
+
+'' var auth = firebase.auth();
+'' 
+'' var provider = new firebase.auth.TwitterAuthProvider();
+'' auth.signInWithPopup(provider).then(function(result) {
+''   // User signed in!
+''   var uid = result.user.uid;
+'' }).catch(function(error) {
+''   // An error occurred
+'' });
+
+
+
+
+
+
+## 获取访问令牌
+
+'' var auth = firebase.auth();
+'' 
+'' var provider = new firebase.auth.GoogleAuthProvider();
+'' auth.signInWithPopup(provider).then(function(result) {
+''   var accessToken = result.credential.accessToken;
+'' });
+
+
+
+
+## 监控身份验证状态
+
+'' var auth = firebase.auth();
+'' 
+'' auth.onAuthStateChanged(function(user) {
+''   if (user) {
+'' // User signed in!
+'' var uid = user.uid;
+''   } else {
+'' // User logged out
+''   }
+'' });
+
+
+
+
+
+## 更新新重设密码模板
+
+如果您的应用允许用户用通过电子邮件与密码身份验证登录 方式登录，可能还向这些用户提供了重设密码的选项。
+您升级为新 SDK 后，这些重设密码电子邮件将使用在 Firebase 控制台指定的新模板。 请务必为满足应用需要更新这些模板。
+
+
+
+## Firebase新项目搭建✔︎
+
+[官网  → 免费开始试用 → 创建项目]
+
+
+
+主界面 → 将 Firebase 添加到您的网页应用  → 获取代码. → 代码放到HTML底部.其他脚本之前.(也就是这个脚本放最前面)
+
+
+
+
+
+
+
+
+
+
+
+
+
+@: 1986-09-01-jelyll-Firebase-实例
+---
+layout: post
+title: jelyll-Firebase-实例
+tags: Firebase
+categories: Tooles
+---
+
+
+1.  引入firebase.js + 验证脚本  到 index.html
+
+
+
+然后就看你要实现什么功能了..
+
+
+## 2. 连接数据库
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@: 1986-09-01-jelyll-Firebase-登录验证✔︎
+---
+layout: post
+title: jelyll-Firebase-登录验证✔︎
+tags: Firebase
+categories: Tooles
+---
+
+## Firebase 设置
+控制面板 → auth → 邮箱密码登录 开启.
+
+
+## HTML 部分
+''  <input id="txtEmail" type="email" placeholder="Email">
+''   <input id="txtPassword" type="password" placeholder="Password">
+''   <button id="btnSignUp" > Sign Up </button>
+''   <button id="btnLogin" > login </button>
+''   <button id="btnLogOut" style="display: none" > Log Out </button>
+
+
+
+
+
+
+## JS部分
+
+'' const textEmail = document.getElementById('txtEmail');
+'' const textPassword = document.getElementById('txtPassword');
+'' const btnLogin = document.getElementById('btnLogin');
+'' const btnSignUp = document.getElementById('btnSignUp');
+'' const btnLogOut = document.getElementById('btnLogOut');
+'' 
+'' btnLogin.addEventListener('click', e => {
+''   const email = txtEmail.value;
+''   const pass = txtPassword.value;
+''   const auth = firebase.auth();
+''   const promise = auth.signInWithEmailAndPassword (email,pass);
+''   promise.catch ( e => console.log(e.messgae));
+'' });
+'' 
+'' btnSignUp.addEventListener('click', e => {
+''   const email = txtEmail.value;
+''   const pass = txtPassword.value;
+''   const auth = firebase.auth();
+''   const promise = auth.createUserWithEmailAndPassword(email,pass);
+''   promise.catch ( e => console.log(e.messgae));
+'' });
+'' 
+'' btnLogOut.addEventListener('click', e=> {
+''   firebase.auth().signOut();
+'' })
+'' 
+'' firebase.auth().onAuthStateChanged(firebaseUser => {
+''   if(firebaseUser) { 
+'' console.log("成功登录"+firebaseUser);
+'' btnLogOut.classList.remove('hide');
+''   }else { 
+'' console.log('not logged in');
+'' btnLogOut.classList.add('hide');
+''   }
+'' })
+
+
+
+
+
+注册成功 就可以去 Firebase → Auth → 用户那里查看. 会列出来的...

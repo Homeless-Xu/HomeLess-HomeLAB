@@ -1,0 +1,1429 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 精简 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔸 
+postfix  发送邮件. SMTP 25  / SMTPS 465
+devocot  接收邮件. IMAP 143 / POP3 110
+
+
+
+
+🔸 端口 
+
+    nmap -p 25,465,110,143 127.0.0.1
+    nmap -p 25,465,110,143 23.105.192.96
+
+    netstat -antp |grep :25
+    netstat -antp |grep :110
+
+
+
+🔸 postfix
+    systemctl start  postfix.service
+    systemctl restart  postfix.service
+    systemctl status postfix.service
+
+🔸 dovecot
+    /bin/systemctl start  dovecot.service
+
+
+🔸 
+    /bin/systemctl start  saslauthd.service
+
+
+🔸 smtp 端口配置 
+    vim /etc/postfix/master.cf
+    vim /etc/services
+
+
+
+
+
+❤️ 25 / 465 smtps 端口
+    发送邮件由两个端口 25 和 465. 
+    25 是没有加密的. 465 是加密的.
+    绝大多数 vps会封 25端口. 和 465端口.
+
+这个不是你防火墙可以解决的....   只能换端口...
+
+
+
+
+🔸 开启 smtps 
+
+    ⦿ vi /etc/postfix/master.cf
+        28行的 smtps 去掉注释
+        smtps     inet  n       -       -       -       -       smtpd
+
+    ⦿ 重启 postfix
+        systemctl restart  postfix.service
+
+
+
+
+
+
+👹 25 端口问题
+    使用 25 端口 收发邮件都正常. 但是绝大多数vps 封25端口.
+    25 换成 2525端口. 发不正常 收正常...
+
+    邮件发送 和 路由器通信一样. 也是经过很多跳的.
+    各个邮件服务器之间是需要邮件转发!!!!   
+    别的邮件服务器要给你的邮件服务器发邮件 肯定要用到你的服务器的25端口. 这个设置是
+    你的邮件服务器要给其他邮件服务器发邮件 肯定要用到其他服务器的25端口. 
+
+    现在你的服务器的25端口被封了. 也就是说别的服务器不能给你发服务器发邮件.
+    但是其他服务器的25端口正常的. 也就是说你的服务器可以给其他服务器发邮件.
+    也就产生了. 改了 smtp的25端口后导致.能发 不能收!
+
+    但是现在好像我们发都发不了啊..
+
+So you have one set of rules/processing (defined in master.cf) for server-to-server communication (on port 25), and one set of rules/processing for user-to-server communication (on port 587, aka submission port).
+
+
+
+
+🔸 解决方案
+    原来的25端口不要去管他!  不要修改 也不要删除. 
+    我们用 465 这个 smtps 端口.
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵   🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+准备工作:
+    一个带固定IP的Linux 服务器 (这里是CentOS6) 
+    一个域名: www.0214.help
+
+
+❤️ 邮件服务器架构:
+
+🔵服务端:
+  
+    邮件服务器: 需要多个软件互相配合才能搭建一套完整的邮件服务器.
+    
+    📌 经典搭配: Postfix + devocot + cyrus-sasl(安全验证)
+        Postfix: 服务器上收发所有用户的邮件
+        devocot: 把服务器上收到邮件转发给某台电脑(某人)
+
+
+    🔸Sendmail、Postfix 传输邮件(发送和接收)
+            Postfix实现了email的接收、路由以及发送等的核心功能.但它同时也依赖第三方软件来完成其他的工作。
+            传输不包括保存. 把接收到的邮件保存到本地硬盘是 procmail 的事情.
+          
+    🔸Dovecot  邮件接收代理
+            和客户端交互. 把服务器上的邮件通过IMAP或POP3协议传输给客户端。
+
+    🔸cyrus-sasl
+        SASL Simple Authentication Security Layer
+        简单认证安全层,功能主要是用于SMTP认证。 
+        Cyrus SASL 是 SASL 的一个实现.
+
+        全世界范围内的SMTP服务器与日俱增，但是这些SMTP服务器都有一个与生俱来的缺点，那就是没有任何的认证机制。 
+            正是因为SMTP通讯过程缺乏认证机制，以及ip欺骗的容易实现，导致了以下两个方面的问题：
+            SMTP服务器无法确认SMTP客户机的合法性；
+            SMTP客户机也无法确认SMTP服务器的合法性。
+            从而也就导致了用户可以不经过认证就发送邮件，用户可以冒名发送邮件，以及垃圾邮件的泛滥。
+
+
+
+🔵 客户端
+
+        客户端 下载服务器上的邮件有两种方式: IMAP(143) 和 POP3(110)
+        客户端 发邮件只有一种方式: SMTP(25)
+
+        客户端收发邮件.其实本质上是通过服务器在帮你收发邮件.
+        客户端通过一个软件如Outlook 就可以连接到服务器.让服务器帮你发邮件.还可以从服务器下载收到的邮件.
+
+        📌 IMAP、POP3   ❗️❗️接收邮件的常用协议. 注意是接收.不是发送❗️❗️
+                IMAP: Internet Message Access Protocol
+                POP3: Post Office Protocol - Version 3
+
+                POP3 和 IMAP 是两种接收方式.
+                    📌 POP3 本地客户端把邮件从服务器下载下来!
+                            所有操作都在本地，不影响服务器上保存的邮件。
+
+                    📌 IMAP 本地客户端直接对服务器上的邮件进行管理操作!!!!
+                            IMAP的主要优势在于客户端的所有操作都与邮件服务器同步，用户体验更好。
+
+        📌 SMTP
+                SMTP(Simple Mail Transfer Protocol)是发送邮件的标准协议，
+
+
+
+❤️ 发送邮件流程:
+
+    本地客户端 Outlook. 想要发送一个邮件给 xx2610@gmail.com 这个人.
+    得先和邮件服务器上的 Postfix 通信. 让Postfix帮你发邮件. 这个通信就需要用到 SMTP 协议.(发送邮件的协议.)
+
+    xx2610@gmail.com 是个gmail邮箱.所有发给gmail.com后缀的邮件. 都是发给 gamil 邮箱服务器的.
+    我们需要知道 gmail.com 这个邮箱服务器的IP地址. 就需要通过DNS服务器查询 MX记录了.
+
+    有了对方的IP地址. 接下来就是  我的Postfix邮件服务器 和 gmail的Postfix邮件服务器 之间的通信了.
+    我的邮件服务器 要给 对方服务器发送邮件. 也是通过SMTP这个协议来的.
+
+    对方邮件服务器首先通过Postfix接收邮件.  
+    然后通过procmail 把邮件保存到服务器硬盘.默认保存路径: /var/spool/mail/username。
+
+    对方服务器的工作就差不多完成了.
+    接下来就是对方客户端 Outlook 的工作了.
+    Outlook 是有个时间设置的!!! 每隔几分钟就问一下服务器上的 Dovecot 有没有发给自己的邮件.
+    如果有的话. 下面就是 客户端Outlook 和 Dovecot 之间的通信了.
+    客户端可以选择用POP3协议. 每次下载服务器上的邮件. 本地删除了服务器上的邮件还是在的.
+    客户端如果选择用IMAP协议. 每次操作都会同步到服务器.本地删除了服务器上也就删除了.
+
+    大概流程就是这么简单....
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+❤️ 零: 服务器主机名设置
+
+         ❗️❗️❗️❗️❗️❗️主机名必须要改成 mail.0214.help ❗️❗️❗️❗️❗️❗️
+         ❗️❗️❗️❗️❗️❗️主机名必须要改成 mail.0214.help ❗️❗️❗️❗️❗️❗️
+
+    邮箱设置第一个要你填的就是hostname啊!! 这个就是服务器的主机名啊
+      
+      🔸 vps 控制面板中可以直接改.
+
+      🔸 或者手动修改 /etc/hosts 和 /etc/sysconfig/network 两个文件下相关配置即可。
+            ➜  ~ cat /etc/hosts
+            127.0.0.1 localhost.localdomain localhost
+            # Auto-generated hostname. Please do not remove this comment.
+            23.105.192.96 mail.0214.help  mail
+            ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+            ➜  ~ cat /etc/sysconfig/network
+            NETWORKING="yes"
+            GATEWAYDEV="venet0"
+            NETWORKING_IPV6="yes"
+            IPV6_DEFAULTDEV="venet0"
+            HOSTNAME="mail.0214.help"
+            ➜  ~ Timeout, server 23.105.192.96 not responding.
+
+
+
+
+❤️ 一: 域名解析:
+
+      🔸 添加A记录  把www.0214.help  绑定到 服务器IP: 23.105.192.96
+        A www 23.105.192.96
+        这个一般都已经设置过的. 主要就是下面两个.
+
+      🔸 添加A记录 把mail.0214.help 绑定到 服务器IP: 23.105.192.96
+        A mail 23.105.192.96
+            记录类型: A
+            主机记录: mail
+            记录值: ip地址
+
+      🔸 添加MX记录 
+        MX @ mail.0214.help
+            记录类型: MX
+            这里主机是@ 或者留空.
+            记录值是 mail.0214.help
+            // 其实这个记录值 就是第二个A记录里的 二级域名...
+
+
+        MX记录: Mail eXchange.
+        优先级: 数字越小优先级越高. 默认1 .
+
+        DNS 生效(扩散到全球)需要时间.
+            https://www.whatsmydns.net/#MX/www.0214.help    这个网站可以查看扩散情况
+            网址: 0214.help 、类型选择MX 搜索就可以了..
+            网站千万别写 www.0214.help 或者 mail.0214.help
+
+
+      🔸 看邮箱的域名解析是否正确.
+
+          🔅 dig 0214.help mx
+          ;; QUESTION SECTION:
+          ;0214.help.			IN	MX
+
+          ;; ANSWER SECTION:
+          0214.help.		300	IN	MX	1 mail.0214.help.
+          // 有这行出现就说明对了....
+
+
+
+
+❤️ 二: 卸载 Sendmail
+      // 一山不容二虎. 自带的sendmail 会影响postfix.
+    🔅 service sendmail status/start/stop    查看/启动/停止 sendmail
+    🔅 yum remove sendmail -y                卸载 sendmail 服务 (先停止)
+
+
+❤️ 三: 安装
+
+    安装 postfix、dovecot、procmail  🔅 yum -y install postfix dovecot procmail
+    安装 cycus-sasl                  🔅 yum -y install cyrus-sasl cyrus-imapd
+    查看是否安装cycus-sasl:  rpm -qa |grep cyrus-sasl
+
+
+
+❤️ 四: 修改默认邮件传输代理 MTA
+  🔅 alternatives --config mta    然后按回车就可以了.
+        ➜  ~ alternatives --config mta
+
+        There is 1 program that provides 'mta'.
+
+          Selection    Command
+        -----------------------------------------------
+        *+ 1           /usr/sbin/sendmail.postfix
+
+        Enter to keep the current selection[+], or type selection number:
+
+
+  🔅 alternatives --display mta  查看是否设置成功:
+        出现下面的就对了. 意思就是 mta 现在是手动设定的.不是自动的.
+        手动设置的路径是 xxx.postfix.
+        ➜  ~ alternatives --display mta
+        mta - status is manual.
+        link currently points to /usr/sbin/sendmail.postfix
+
+
+
+
+❤️ 五: 配置 Postfix   vi /etc/postfix/main.cf
+
+
+    🔸 75行: 取消注释，并设置你自己的
+    myhostname = mail.0214.help
+
+    🔸 83行: 取消注释，设置域名
+    mydomain = 0214.help
+    // 邮件服务器的域名.可以是真实的 也可以是虚构的..
+
+    🔸 99行: 取消注释.
+    myorigin = $mydomain
+    // 本机邮件发送时候 用的域名..
+
+    🔸 116行: 修改
+    inet_interfaces = all
+    // 默认只监听本地环回接口(localhost)， 改成 all 让Postfix监听整个互联网.
+
+    🔸 119行: 推荐ipv4，如果支持ipv6，则可以为all
+    inet_protocols = ipv4
+
+
+    🔸 164行: 修改
+    mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+    // 可以投递的网络.这台服务器是寄往这些网域的邮件的最终目的地
+    // 所有发邮件时使用代表本机的主机名必须在此列出，否则无法接收邮件。
+
+
+
+
+    🔸 264行: 取消注释，指定内网和本地的IP地址范围
+        mynetworks = 127.0.0.0/8, 10.0.0.0/8,01.92.192.0/20
+        这是获信任可以通过服务器来发放或转发邮件的 IP 地址。
+        当来自这些 IP 地址以外的用户尝试通过服务器发放邮件时，便会被拒绝。
+        这个就是你 本地电脑的网段了!!!
+          比如爱上海
+          IP是    101.92.200.133
+          掩码是:    255.255.240.0
+        就能算出本地的网段→ 101.92.192.0/20
+        把这个网断加到mynetworks里面就可以了
+
+        或者设置成 0.0.0.0/0 这个是整个互联网了. 我是没有测试过....
+
+
+    🔸 relay_domains =
+        可选.
+        这是本系统会把邮件转寄到的网域的清单。通过将它设置为空白，我们确保这台邮件服务器不会成为未受信任的网络的公开转发站。
+
+
+
+    🔸 419行: 取消注释，邮件保存目录
+    home_mailbox = Maildir/
+        它设置信箱相对用户根目录的路径，以及指定要采用的信箱格式。postfix 同时支持 Maildir 及 mbox 格式，    
+
+
+    🔸 571行: 添加
+smtpd_banner = $myhostname ESMTP
+
+# 添加到最后
+# 规定邮件最大尺寸为10M
+message_size_limit = 10485760
+# 规定收件箱最大容量为1G
+mailbox_size_limit = 1073741824
+# SMTP认证
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain = $myhostname
+smtpd_recipient_restrictions=permit_mynetworks,permit_auth_destination,permit_sasl_authenticated,reject
+
+
+
+
+
+❤️ 六: 配置dovecot    路径: /etc/dovecot/
+
+
+  🔸 vi /etc/dovecot/dovecot.conf
+      protocols = imap pop3     # 24行 协议用 pop3 和 imap 就可以了 指定可供用户访问邮件的协议.去掉注释.
+      listen = *                # 30行: * 代表所有ipv4; :: 代表所有IPv6
+      
+    
+
+  🔸 vi /etc/dovecot/conf.d/10-auth.conf
+      # 10行: 取消注释并修改
+      disable_plaintext_auth = no
+
+      # 100行: 
+      auth_mechanisms = plain login
+
+
+  🔸 vim /etc/dovecot/conf.d/10-mail.conf
+      # 30行: 取消注释并修改成
+      mail_location = maildir:~/Maildir
+
+
+  🔸 vim /etc/dovecot/conf.d/10-master.conf
+
+      # Postfix smtp-auth
+      #unix_listener /var/spool/postfix/private/auth {
+      #  mode = 0666
+      #}
+
+      95行 改成下面的:
+      unix_listener /var/spool/postfix/private/auth {
+                            mode = 0666 
+                            user = postfix 
+                            group = postfix
+    }
+
+
+
+
+
+
+
+❤️ 七: 配置sasl2
+
+    vim /etc/sysconfig/saslauthd
+    MECH=shadow  #指定以本地系统用户名认证
+
+
+    sudo vi /usr/lib64/sas12/smtpd.conf    
+    //64位系统 新建文件. 可能需要cd 到/usr/lib64/sas12/再创建.不然没权限.
+    sudo vim /usr/lib/sas12/smtpd.conf       
+    //32位系统 新建文件
+
+pwcheck_method: saslauthd
+mech_list: PLAIN LOGIN
+log_level:3
+
+
+
+
+
+
+❤️ 八:启动/停止 
+
+    启动 postfix ,dovecot ,saslauthd 服务
+        service postfix start
+        service dovecot start
+        service saslauthd start
+
+/bin/systemctl start  postfix.service
+/bin/systemctl start  dovecot.service
+/bin/systemctl start  saslauthd.service
+
+
+    停止 postfix ,dovecot ,saslauthd 服务
+        service postfix stop
+        service dovecot stop
+        service saslauthd stop
+
+
+    状态 postfix ,dovecot ,saslauthd 服务
+        service postfix status
+        service dovecot status
+        service saslauthd status
+
+
+        注意: centOS 7下将不再使用 service 来启动服务,而是跳转到 systemctl 指令下.
+        systemctl  start  dovecot、systemctl  start  postfix、systemctl  start  saslauthd
+
+
+
+        🔸 启动dovecot，使用如下命令：
+
+            /etc/init.d/dovecot start
+            chkconfig dovecot on
+            /etc/init.d/portreserve stop
+            chkconfig portreserve off
+
+            注意：上述命令中的portreserve服务相关的两行，
+            这个如果启动的话，你会发现系统重启后dovecot会无法启动，
+            这是因为portreserve占用了dovecot的端口，所以在此我们禁用portreserve服务
+
+
+
+❤️ 九: 创建帐号
+    // 注意服务器帐号 就是邮箱帐号!
+    // 当然为了安全你可以让帐号只能使用邮箱,而不能登录服务器
+
+    添加账户 xujian
+    🔅 useradd xujian
+
+    为帐号 xujian 创建密码
+    🔅 passwd xujian
+        xujianpasswd
+    创建好后就有了 xujian@0214.help 这个邮箱帐号了!!
+
+
+
+
+❤️ 十: 配置客户端:
+
+      hostname: mail.0214.help
+      username: xujian
+      // 这里注意 是 xujian 不是 xujian@0214.help
+      auth method: login
+      设置就那么几个选项 多试几次就可以了.
+      如果进去了, 那么就恭喜了. 几乎完成了.
+      下面发送接收下邮件就可以了.
+      注意你发出去的邮件 是不是到对方的垃圾邮件里就可以了.
+
+
+    ⦿ unibox 配置实例
+fullname xx 随便
+email address : xujian@0214.help
+
+➜ manual setup 
+    IMAP 设置:
+        hostname: mail.0214.help
+        username: xujian
+        password: xujianpass
+        connection : encryoted auto
+        auth method: login 
+        port:
+
+    SMTP 设置 
+
+        hostname: mail.0214.help
+        username: xujian
+        password: xujianpass
+        connection : unencrypted
+        auth method: login 
+        port:
+
+就成功了...
+设置 开启自启动,
+
+
+
+ 
+
+
+ 👹 端口更改
+
+
+🔸 vps 禁止 mail 
+
+    KiwiVM has detected an insecure SMTP relay on IP 23.105.192.96, which may result in large amounts of SPAM originating from your server.
+    To prevent this from happening, KiwiVM has blocked port 25 in your server by adding the following iptables rule:
+
+        iptables -I INPUT -p tcp --destination-port 25 -j DROP
+
+    You can fix this vulnerability by securing your SMTP daemon (or by removing it from your server).
+
+    Once this vulnerability is fixed, you may remove this iptables rule.
+
+
+    Yours truly,
+    KiwiVM vulnerability scanner
+
+    安全: 
+    对于发送大量垃圾邮件都是零容忍的，基本上vps会被封。
+    也有部分主机商直接屏蔽了25端口，需要开通需要提交一定金额的保证金等。
+    哪一天发现自己使用的vps被暂停使用，发现原因竟是发送垃圾邮件，如果自己并没有这样做，那估计是被黑了。
+
+
+🔸 解决方法
+    要么改端口. 要么关闭 mail 服务...
+    要么就修改服务器的 25端口.. 25 是 smtp端口.  发送邮件的.
+
+
+
+🔸 smtp 端口添加
+    发送邮件的是 postfix . 默认是25 端口. 但是一般vps都会封25端口.
+    那么我们就只能增加一个 2525端口.  这个端口有和25 一模一样的功能.
+
+
+⦿ vim /etc/postfix/master.cf
+    smtp      inet  n       -       n       -       -       smtpd  下添加一行
+    smtp2      inet  n       -       n       -       －     smtpd
+
+
+⦿ vim /etc/services
+    添加 55 56 两行
+
+   53 smtp            25/tcp          mail
+   54 smtp            25/udp          mail
+   55 smtp2           2525/tcp        mail2
+   56 smtp2           2525/udp        mail2
+
+
+
+
+保存后，reload不行，要restart postfix就应该能同时启动25和2626两个功能完全相同的端口。
+
+
+
+
+    ⦿ 重启postfix
+        service postfix restart
+        /bin/systemctl restart  postfix.service
+        systemctl status postfix.service
+
+    ⦿ 防火墙状态 
+        iptables -L
+        25被封无所谓. 2525 没封就行.
+
+
+    ⦿ Mac 客户端重新配置账户. smtp 那里填2525 就可以..
+
+    ⦿ 客户端收件测试
+        收不到啊...
+
+    ⦿ 客户端发件测试
+        发送.. 很慢!!  但是能收到..
+
+
+
+
+👹 邮箱 Debug 
+要么看服务器日志. 
+
+
+重启了 postfix 后，发现 /var/log/mail.info、/var/log/mail.err、/var/log/mail.warn 没有记录最新的postfix 日志
+
+邮件相关的日志主要有系统统一配置，而不管 smtp 是 postfix 还是 qmail 等，其他的客户端，都统统记录在上述3个文件中
+
+
+
+
+
+
+🔸 postfix 日志 
+cat /var/log/maillog
+发现这个文件权限是600 ..  我们用其他账户登录的邮箱. 当然没权限写日志了.
+chmod 664 /var/log/maillog
+
+
+没记录日志啊...  
+
+
+
+
+ 有命令的...
+
+
+
+
+👹 connection refused...
+
+服务器端口排除.
+
+nmap -p 25,110,143 127.0.0.1
+
+nmap -p 25,110,143 23.105.192.96
+
+
+netstat -antp |grep :25
+netstat -antp |grep :110
+
+
+
+ping mail.0214.help   
+居然到  vps2 去了...  域名解析有问题..
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+❤️ 问题排查 搭建过程总会遇到各种问题的. 下面是一些思路.
+
+
+  🔵 重启Postfix     service postfix restart
+
+  🔵 查 25 端口是否开启 
+    ➜  ~ netstat -antp |grep :25
+    tcp        0      0 127.0.0.1:25                0.0.0.0:*                   LISTEN      1021/master
+      看到没 25端口前面是 127.0.0.1 
+      说明只开放本地!!   变成 0.0.0.0 才是全球开放的.
+      
+      vi /etc/postfix/main.cf
+
+      inet_interfaces = all
+      inet_interfaces = localhost
+      搜索设置端口的参数. 发现居然有两个  inet_interfaces 设置. 
+      文件是按照从上往下来的. 最后的结构就是 inet_interfaces = localhost
+      删除 localhost行就好了.
+      然后再重启 postfix 
+      再看看25端口是不是正常了.
+      ➜  ~ netstat -antp |grep :25
+      tcp        0      0 0.0.0.0:25                  0.0.0.0:*                   LISTEN      1615/master
+      这下就正常了.
+
+
+
+  🔵查看 25,110,143 是否开启
+    
+    🔸 客户端扫描服务器端口 25 smtp  110 pop3  143 imap 是否开启:
+
+nmap -p 25,110,143 127.0.0.1
+
+      ✘✘∙𝒗 Desktop nmap -p 25,110,143 23.105.192.96
+
+      Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-04-06 15:45 CST
+      Nmap scan report for 23.105.192.96.16clouds.com (23.105.192.96)
+      Host is up (0.15s latency).
+      PORT    STATE    SERVICE
+      25/tcp  open     smtp
+      110/tcp filtered pop3
+      143/tcp filtered imap
+
+      🔸看到filtered 就去设置服务器的防火墙开放端口.
+      ➜  ~ iptables -A INPUT -p tcp --dport 110 -j ACCEPT
+      ➜  ~ iptables -A INPUT -p tcp --dport 143 -j ACCEPT
+
+
+      接着扫描:
+        ✘✘∙𝒗 Desktop nmap -p 25,110,143 23.105.192.96
+
+        Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-04-06 15:47 CST
+        Nmap scan report for 23.105.192.96.16clouds.com (23.105.192.96)
+        Host is up (0.22s latency).
+        PORT    STATE  SERVICE
+        25/tcp  open   smtp
+        110/tcp closed pop3
+        143/tcp closed imap
+
+        Nmap done: 1 IP address (1 host up) scanned in 0.59 seconds
+        发现 110.143 都没开... pop3 个 imap 都是下载邮件的.是Dovecot的事情.  估计Dovecot 服务没开. 
+      
+      🔸 开启是Dovecot服务    /etc/init.d/dovecot start
+
+        开完接着扫描 发现端口都开了.
+        ✘✘∙𝒗 Desktop nmap -p 25,110,143 23.105.192.96
+
+        Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-04-06 15:50 CST
+        Nmap scan report for 23.105.192.96.16clouds.com (23.105.192.96)
+        Host is up (0.21s latency).
+        PORT    STATE SERVICE
+        25/tcp  open  smtp
+        110/tcp open  pop3
+        143/tcp open  imap
+
+        Nmap done: 1 IP address (1 host up) scanned in 0.53 seconds
+
+
+
+
+
+  🔵 配置文件中 本地内网设置是否正确:
+      mynetworks = 127.0.0.0/8,10.0.0.0/8,101.92.192.0/20
+      
+  
+
+  🔵 全面扫描服务器端口
+
+      ✘✘∙𝒗 Desktop nmap 23.105.192.96
+
+      Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-04-05 14:23 CST
+      Nmap scan report for 23.105.192.96.16clouds.com (23.105.192.96)
+      Host is up (0.18s latency).
+      Not shown: 991 filtered ports
+      PORT     STATE SERVICE
+      80/tcp   open  http
+      110/tcp  open  pop3
+      143/tcp  open  imap
+      993/tcp  open  imaps
+      995/tcp  open  pop3s
+      1026/tcp open  LSA-or-nterm
+      1028/tcp open  unknown
+      2222/tcp open  EtherNetIP-1
+      3306/tcp open  mysql
+
+      =============
+      看看..  
+      pop3 110、pop3s 995
+      imap 143、imaps 993
+      这两个都是.... 客户端接收邮件的啊..
+
+      25端口都没开啊... 这个是发送邮件的....
+      关闭服务器防火墙试试
+
+      Host is up (0.21s latency).
+      Not shown: 979 closed ports
+      PORT     STATE    SERVICE
+      42/tcp   filtered nameserver
+      80/tcp   open     http
+      110/tcp  open     pop3
+      111/tcp  filtered rpcbind
+      135/tcp  filtered msrpc
+      139/tcp  filtered netbios-ssn
+      143/tcp  open     imap
+      445/tcp  filtered microsoft-ds
+      593/tcp  filtered http-rpc-epmap
+      993/tcp  open     imaps
+      995/tcp  open     pop3s
+      1025/tcp filtered NFS-or-IIS
+      1026/tcp open     LSA-or-nterm
+      1028/tcp open     unknown
+      1068/tcp filtered instl_bootc
+      1434/tcp filtered ms-sql-m
+      1723/tcp filtered pptp
+      2222/tcp open     EtherNetIP-1
+      3128/tcp filtered squid-http
+      3306/tcp open     mysql
+      4444/tcp filtered krb524
+
+      多了这么多...   还是没25啊..
+      25是什么.....
+      25 就是 ...邮件服务器 发邮件的端口. 也就是 postfix 没启动啊!!!
+
+      如果postfix启动了,但是没外网没发现25端口打开.
+      那就说明25端口 只对服务器本机有效.
+      也就是端口监听范围设置问题了.肯定是哪里设置了 localhost.导致只对本地有效.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+layout: post
+title: Mail Server
+tags: 
+categories: IT-Admin
+---
+
+Mail Server
+
+Postfix 邮件服务基础
+
+1 编译安装 + 服务控制 
+准备工作: 避免发生端口冲突,要将系统自带的 sendmail 服务停用.并关闭开机默认启动.
+由于 Postfix 是基于 sendmail, 建议保留 sendmail软件包,而不是直接卸载.
+rpm -qa | grep sendmail
+查看是否安装了 sendmail.
+
+/etc/init.d/sendmail start
+启动 sendmail
+/etc/init.d/sendmail stop
+停用 sendmail
+chkconfig — level 2345 sendmail off 
+设置2345级别不启动.
+
+Postfix 支持 SASL 认证.(需要安装 Cyrus-sasl)
+rpm -qa | grep cyrus
+查看有几个包
+
+安装 Sasl 系统自带(不一定完整)
+保证有如下几个包:
+cyrus-sasl-lib-2.1.22-5.el5_4.3 
+
+cyrus-sasl-md5-2.1.22-5.el5_4.3 
+cyrus-sasl-devel-2.1.22-5.el5_4.3 
+cyrus-sasl-sql-2.1.22-5.el5_4.3 
+cyrus-sasl-2.1.22-5.el5_4.3 
+cyrus-sasl-plain-2.1.22-5.el5_4.3 
+到此，环境已经搭好了，接下来就是配置问题了 
+
+缺少的话就安装 
+yum -y inatall cyrus-sasl-devel
+
+
+创建运行组/用户
+ 加强邮件服务器的权限控制
+需要创建专门的
+运行组账号. postfix 和 postdrop
+groupadd -g 1200 postdrop
+groupadd -g 1000 postfix
+
+用户账号 Postfix
+
+useradd -M -u 1000 -g postfix -G postdrop -s /sbin/nologin postfix
+
+
+
+
+postconf -a    显示下面就配置正确
+cyrus
+dovecot
+
+
+Postfix 服务控制
+
+邮件系统的控制 主要通过 /usr/sbin/postfix  命令进行
+结合 start stop check reload 实现 启动 停止 检查 重载 
+启动 Postfix start
+状态 Postfix status
+
+
+
+主要目录
+/etc/postfix/  postfix  主配置文件 各类脚本 查询表
+/usr/libexec/pistfix/ postfix 服务的 程序文件
+/var/spiool/postfix/    Postfix 服务的 邮件队列 相关子目录 
+incoming 传入 : 存放刚接收到的邮件
+Active  活动: 正在投递的邮件
+Deferred 推迟: 投递失败的邮件
+Hold 约束: 被阻止发送的邮件
+Corrupt错误: 存放不可写/不可读/ 等待分析的邮件.
+
+/usr/sbin Postfix 各种管理工具程序 文件名以 post 开头
+postalias 构造 修改和查询别名表
+postconf 显示和编辑 main.cf 配置文件
+Postfix 启动 停止 Postfix 服务 (要求 root 权限)
+postmap 构造 修改 查询 表文件
+postqueue 查看邮件队列
+postsuper 管理邮件队列 root 权限.
+
+主要配置文件
+main.cf    服务配置文件 
+master.cf   主程序 master 的配置文件 一般不需要修改.
+ 都在 /etc/Postfix/ 下
+
+
+main.cf 配置参数 近千个 
+
+Postconf 工具 可以辅助配置过程...
+postconf 列出当前 Postfix 服务器 启用 的 所有配置参数
+postconf -n  列出 使用非默认值的参数
+postconf -d 查看默认参数配置
+
+建议对 main.cf 进行适当简化 
+只保留 与默认配置不同的参数.
+
+
+
+
+日志文件
+/var/log/maillog
+
+邮件系统的基本构件
+
+ip 173.16.16.2/24
+邮件域: @benet.com
+主机名: mail.benet.com
+邮件账号: 本地系统用户
+域名服务器: 搭建 DNS 服务器 能够提供 benet.com 域 的 解析服务 
+并 为该域 添加到173.16.16.2 的 MX 邮件交换记录
+
+
+安装 bind 软件 用于 dns 解析服务
+
+yum -y install bind* 
+固定 ip
+ifconfig wlp3s0 192.168.1.111 
+然后重新 ssh 登录.
+
+
+配置 SMTP 发信服务
+
+编辑 main.cf
+
+inet_interfaces=173.16.16.2, 127.0.0.1
+// 监听服务的 ip 地址 默认是 all
+
+myhostname=mail.benet.com 
+// 邮件服务器的主机名
+
+myorigin=$mydomain
+// 邮件域
+
+mydestination=$mydomain,$myhostname
+// 外发邮件时 发件人地址中的邮件域
+
+home_mailbox=Mialdir/
+//允许投递到本地的目标邮件域
+
+
+
+vim /etc/postfix/main.cf
+设置邮件储存位置和格式
+
+
+
+重新加载服务
+Postfix reload
+
+创建邮箱账号
+
+
+telent
+
+例子
+xiaoqo@benet.com 发信人
+目的地 lisi@benet.com
+
+- telent mail.benet.com 25
+- mail from:xiaoqi@benet.com
+
+rcpt to:lisi@benet.com
+
+data
+ 告知 要发送的数据
+
+subject:a test mail
+//邮件标题
+dear lisi
+// 邮件正文
+this is a test mail by xiaoqi.. 
+单独的点号 表示正文结束
+quit 断开连接并退出.
+
+
+发送成功后 
+就能到 服务器 lisi 用户 主目录下查看
+新收到的邮件 保存在 maildir/new/ 目录下
+
+现在  只能在服务器上 查看收到的邮件
+要别的电脑 能收到邮件 需要进一步 配置 pop3 或者 imap 服务器
+
+现在就用到 Dovecot 出场了
+
+儲存檔案後離開文字編輯器, 然後設定 Dovecot 開機自動執行及重新啟動:
+
+systemctl enable dovecot
+systemctl start dovecot
+启动 dovecot
+
+systemctl status dovecot 查看状态
+
+
+
+
+启动 dovecot 服务  并监听状态
+dovecot 默认配置 监听 pop3 和 imap
+启动后 就能看到 143 110的 端口 开始监听了
+netstat -anpt | grep dovecot
+查看开启的端口.
+
+PoP3 接受邮件测试
+telnet  连接到 邮件服务器的110端口  输入 pop3 操作命令  测试过程:
+
+telnet mail.benet.com 110
+user lisi  // 指定用户名
+pass 123 指定登录密码
+list //查看邮件列表
+retr 1 查看第一封邮件
+
+
+
+
+
+
+
+
+newaliases
+service postfix restart
+service dovecot restart
+
+
+弄好之后 就能用第三方 软件  来 收发邮件了.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Linux 邮件系统: Postfix  / sendmail(难用)
+
+搭建组件:postfix + dovecot
+  
+Postfix:  邮件收发
+
+dovecot:  邮件管理 ( 上传、下载、删除等 )
+
+查看是否已经安装
+如果选择 CentOS 网络平台安装 是自带装好的.
+rpm -qa postfix
+
+安装 Postfix
+yum install postfix
+
+安装 dovecot
+yum install dovecot
+
+
+
+
+
+功能:
+smtp 认证套件: 
+pop3: imap
+邮件过滤 procmail
+
+配置 Postfix
+vi /etc/postfix/main.cf
+
+
+操作方法 浏览器 输入账号密码
+http://mail.example.com/webmail/webmail
+
+
+
+
+更换 源 → 阿里云
+1 备份
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+
+2 下载新的 CentOS-Base.repo
+到 /etc/yum.repos.d/
+
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
+3 运行 yum makecache 生成缓存
+
+
+
+
+Email
+看似容易,其实构成蛮复杂的.
+
+Outlook，Foxmail等都是用来收信和发信的，称之为MUA：Mail User Agent，邮件用户代理。
+
+Foxmail (MUA) 并非直接将邮件发送至收件人手中，而是通过MTA：Mail Transfer Agent，邮件传输代理代为传递，Sendmail和Postfix就是扮演MTA的角色。
+
+一封邮件从MUA发出后，可能通过一个或多个MTA传递，最终到达MDA：Mail Delivery Agent，邮件投递代理，邮件到达MDA后，就存放在某个文件或特殊的数据库里，我们将这个长期保存邮件的地方称之为邮箱。
+
+一旦邮件到达邮箱，就原地不动了，等用户再通过MUA将其取走，就是用Outlook，Foxmail等软件收信的过程。
+
+所以一封邮件的流程是：
+
+发件人：MUA --发送--> MTA -> 若干个MTA... -> MTA -> MDA <--收取-- MUA：收件人
+
+MUA到MTA，以及MTA到MTA之间使用的协议就是SMTP 邮件传输协议协议，
+而收邮件时，MUA到MDA之间使用的协议最常用的是POP3或IMAP。
+
+需要注意的是，专业邮件服务商都有大量的机器来为用户服务，所以通常MTA和MDA并不是同一台服务器，因此，在Outlook等软件里，我们需要分别填写SMTP发送服务器的地址和POP3接收服务器的地址。
+
+注意:专业邮件服务商都有大量的机器来为用户服务，所以通常MTA和MDA并不是同一台服务器，
+因此，在Outlook等软件里，我们需要分别填写SMTP发送服务器的地址和POP3接收服务器的地址。
+
+
+
+主流邮件系统简介:
+商业邮件系统:
+Exchange: Windows 最著名邮件服务器软件. 微软出品
+Notes/Domino: IBM 出品 跨平台 多用于 政府/银行.
+
+开源邮件系统:
+sendmail: Linux 平台 资质最老,稳定性好,安全性欠佳.
+Postfix: sendmail 的替代品. 采用模块化设计.多个组件.实现不同的功能.
+
+邮件系统简介:
+邮件是一整套系统,邮件收取 传递 都是不同组件实现的.
+
+DNS 服务器  邮件域的解析
+WEB 服务器  邮箱操作界面
+SASL 验证 smtp
+
+MTA 邮件传输代理 服务器软件 Mail Transfer Agent
+常说的邮箱服务器主要指的就是这个.
+接收员工需要发送的邮件 并将邮件传输给其他服务器的 MTA 程序. 
+Exchange、Sendmail、Postfix 
+
+MUA 邮件用户代理  客户端软件  Mail User Agent
+  为用户提供  发送、接收、管理电子邮件的界面.
+  
+  Windows 常用 MUA 软件: Outlook、Express、Foxmail
+  Linux   常用 MUA 软件: Thunderbird、Kmail、Evolution
+
+MDA 邮件分发代理  Mail Delivery Agent
+将邮件分到用户的邮箱目录.
+
+邮件通信协议:
+传输(发送+传输)、接收 由不同协议完成的.
+
+传输协议: SMTP (Simple Mail Transfer Protocol)    端口 25
+接收协议: POP3 / IMAP (功能比 POP3 强大)
+POP3  邮局协议 (Post Office Protocol)  端口110
+IMAP 互联网消息访问协议: (Internet Message Access Protocol)  端口143
+
+
+
+邮箱账户管理
+
+
+具体搭建:
+
+下面开始用Postfix搭建Linux下的邮件服务器。目标服务器是RedHat Enterprise Linux 4，
+
+首先需要停止Sendmail：
+
+/etc/init.d/sendmail stop
+
+并从启动组里移除：
+chkconfig sendmail off
+
+然后，通过rpm包安装Postfix：
+
+rpm -Uvh postfix-2.x.x.xxx.rpm
+
+配置 Posrfix
+只需修改  /etc/postfix/main.cf  其他配置文件可以直接使用默认设置。
+
+第一个需要修改的参数是myhostname，指向真正的域名，例如：
+
+myhostname = mail.example.com
+mydomain参数指向根域：
+
+mydomain = example.com
+myorigin和mydestination都可以指向mydomain：
+
+myorigin = $mydomain
+mydestination = $mydomain
+Postfix默认只监听本地地址，如果要与外界通信，就需要监听网卡的所有IP：
+
+inet_interfaces = all
+Postfix默认将子网内的机器设置为可信任机器，如果只信任本机，就设置为host：
+
+mynetworks_style = host
+配置哪些地址的邮件能够被Postfix转发，当然是mydomain的才能转发，否则其他人都可以用这台邮件服务器转发垃圾邮件了：
+
+relay_domains = $mydomain
+现在，Postfix已经基本配置完成，我们需要对邮件的发送进行控制：
+
+对于外域到本域的邮件，必须接收，否则，收不到任何来自外部的邮件；
+对于本域到外域的邮件，只允许从本机发出，否则，其他人通过伪造本域地址就可以向外域发信；
+对于外域到外域的邮件，直接拒绝，否则我们的邮件服务器就是Open Relay，将被视为垃圾邮件服务器。
+
+先设置发件人的规则：
+
+smtpd_sender_restrictions = permit_mynetworks, check_sender_access hash:/etc/postfix/sender_access, permit
+以上规则先判断是否是本域地址，如果是，允许，然后再从sender_access文件里检查发件人是否存在，拒绝存在的发件人，最后允许其他发件人。
+
+然后设置收件人规则：
+
+smtpd_recipient_restrictions = permit_mynetworks, check_recipient_access hash:/etc/postfix/recipient_access, reject
+以上规则先判断是否是本域地址，如果是，允许，然后再从recipient_access文件里检查收件人是否存在，允许存在的收件人，最后拒绝其他收件人。
+
+/etc/postfix/sender_access的内容：
+
+example.com REJECT
+目的是防止其他用户从外部以xxx@example.com身份发送邮件，但登录到本机再发送则不受影响，因为第一条规则permit_mynetworks允许本机登录用户发送邮件。
+
+/etc/postfix/recipient_access的内容：
+
+postmaster@example.com OK
+webmaster@example.com OK
+因此，外域只能发送给以上两个Email地址，其他任何地址都将被拒绝。但本机到本机发送不受影响。
+
+最后用postmap生成hash格式的文件：
+
+postmap sender_access
+postmap recipient_access
+启动Postfix：
+
+/etc/init.d/postfix start
+
+设置到启动组里：
+
+chkconfig postfix on
+现在就可以通过telnet来测试了：（红色是输入的命令）
+
+220 mail.example.com ESMTP Postfix
+
+helo localhost
+
+250 mail.example.com
+
+mail from:test@gmail.com
+
+250 Ok
+
+rcpt to:webmaster@example.com
+
+250 Ok
+
+data
+
+354 End data with<CR><LF>.<CR><LF>
+
+hello!!!!!!
+
+.
+
+250 Ok: queued as D68E41407D0
+
+mail from:test@gmail.com
+
+250 Ok
+
+rcpt to:haha@example.com
+
+554<haha@example.com>: Recipient address rejected: Access denied
+
+quit
+
+221 Bye
+
+如果配置了SMTP认证，就可以让用户远程发送时能通过认证后再发送邮件，目前还没有配置，准备继续研究后再配置。需要注意的是，配置SMTP认证后，设置规则应该是：
+
+外域->本域：不需认证，允许，否则将接受不到任何外部邮件；
+本域->外域：需要认证，否则拒绝。
+因为我们作为发送服务器的MTA和转发的MTA实际上是由一个MTA完成的，所以需要以上规则。对于大型邮件服务商，发送服务器的MTA和转发的MTA是分别部署的，例如，sina的发送服务器是smtp.sina.com，需要经过用户认证，而转发服务器是mx???.sina.com，不需要认证，否则无法转发邮件。
+
+最后不要忘了在DNS的MX记录中将域名mail.example.com添上。
+
+
+
+垃圾邮件:
+广告 病毒 
+
+
+安装垃圾邮件过滤软件 / 创建过滤器
+
+使用一次性邮箱
+
+邮箱名字设置复杂点 (有些人会猜测邮箱地址 来发送垃圾邮件  邮箱名字复杂就不容易被猜对)
+
+报告垃圾邮件.
+互联网服务提供商 (ISP) 都会禁止用户发送垃圾邮件
+
+
+基于邮件内容进行过滤
+
+垃圾邮件  有可能是用别人的电脑发垃圾邮件的  垃圾邮件制作者 不一定有僵尸电脑的合法控制器 垃圾邮件的格式 就不会很标准..  可以通过这个来过滤一部分垃圾邮件.
+
+反垃圾联盟:
+我们的黑名单采用的是DNS方式的实时黑名单技术，
+在Postfix中都使用RBL参数来配置。
+Postfix 2.x：直接在过滤条件中（如smtpd_client_restrictions ）使用reject_rbl_client来拒绝黑名单连接，可以用多个 reject_rbl_client 分隔，依次使用多个RBL：
+smtpd_client_restrictions =...
+reject_rbl_client cblless.anti-spam.org.cn,...
+如果您想先测试一下RBL服务是否工作正常，可以在reject_maps_rbl指令和reject_rbl_client指令前加上warning_if_reject来改变默认的拒绝动作为警告（警告信息会在邮件日志中看到）。等确认工作正常后再去掉警告指令。
+
+创建筛选器
+
+
+
+客户端
+邮件过滤方法?
+
+
+
+ 邮件发送认证:
+ 该技术要求用户在通过邮件服务器发送邮件时，必须先向邮件服务器提交自己的用户名和密码。
+ 服务器确认用户身份合法后，才进行发送，否则会拒绝用户的邮件发送请求。
+ 该技术可以保证通过该邮件服务器发送邮件的用户都是合法用户，
+ 防止邮件服务器被垃圾邮件制造者利用或者中继
+
+
+
+
+
+
+Exchange 邮件服务器
+
+Exchange邮件服务器，包括邮件系统规划、故障处理、反垃圾邮件、健康监控等。
+
+
+
+
+
+
+: Postfix  / sendmail(难用)
+Postfix 邮件传输代理 安装配置简单
+
+功能:
+smtp 认证套件: 
+pop3: imap
+邮件过滤 procmail
+
+配置 Postfix 
+/etc/postfix/main.cf
+
+
+操作方法 浏览器 输入账号密码
+http://mail.example.com/webmail/webmail
+
+
+
+
+更换 源 → 阿里云
+1 备份
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+
+2 下载新的 CentOS-Base.repo
+到 /etc/yum.repos.d/
+
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
+3 运行 yum makecache 生成缓存
+
+
+
+
+
+mac 固定域名 绑定动态 ip 方法
+
+1.  我们首先需要一个支持实时修改IP地址映射的DNS服务器；
+2.  我们还需要一个上传本地IP地址到远程DNS服务器的客户端程序。
+
+
+
+

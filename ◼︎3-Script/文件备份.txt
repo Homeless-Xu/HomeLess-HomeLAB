@@ -1,0 +1,52 @@
+Mac Shell 亲测实例
+使用方法: Ulysses → edit → copy as → plain text
+
+
+
+文件备份(rsync) ✔︎
+# 目的:  
+	# 备份Mac桌面指定文件夹.到icloud
+	# 可以用复制. 每次复制都是复制所有文件夹....
+	# 可以用rsync 可以实现本地/远程 增量备份. 推荐!!
+	# 基本语法：rsync options source destination
+		# rsync -zvr /var/opt/installation/inventory/ /root/temp
+			-z 开启压缩; -v 详情输出; -r 表示递归
+
+	# icloud 路径:  cd /Library/Mobile\ Documents/comapple~CloudDocs
+
+# 思路:
+	# icloud中建立DesktopBack文件夹. 之后每次执行脚本都判断有没有这个文件夹.
+	# 然后就是用 rsync 来增量备份了.
+
+
+# ↓rsyncBack.sh 脚本内容↓
+
+#!/bin/zsh
+	SourcePath='/Users/v/Desktop/sh/*'
+	DestinationPath='/Users/v/Library/Mobile Documents/comappleCloudDocs/DesktopBack/'
+rsync -v $SourcePath "$DestinationPath"
+	# 目的地路径中有空格 . 这个必须用双引号包起来!!!!
+	# 这样就备份好了!!! 至于自动定时备份.就看 plist的设置了....
+
+
+
+
+
+数据库备份 (未测)
+#!/bin/bash
+#mysql 数据库简单备份
+#1.定义数据连接目标库信息
+MY_USER="users"
+MY_PASS="abc123"
+MY_HOST="192.168.129.2"
+MY_denglu="-u $MY_USER -p$MY_PASS -h $MY_HOST"
+MY_DB1="test"
+#2.定义备份时目录，时间，文件名
+BF_DIR="/opt/mysql_bak"
+BF_CMD="/usr/local/mysql/bin/mysqldump/"
+BF_TIME='date +%Y%m%d-%H%M'
+NAME="$MY_DB1-$BF_TIME"
+#导出脚本 进行压缩
+$BF_CMD $MY_denglu --databases $MY_DB1 > $BF_DIR/test.sql
+
+

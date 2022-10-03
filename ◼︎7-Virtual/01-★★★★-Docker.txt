@@ -1,0 +1,394 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+❤️ Docker 简介
+
+    Docker :  轻量级虚拟机! 服务端(宿主) 和 客户端(容器).  服务端管理所有容器.
+    Docker 会给所有容器随机分配一个唯一的ID和名字. 根据这个ID/名字来操作对应的容器.
+    📌 所有ID 只需要记住前3位就可以. 如 IMAGE ID: 282c3d50dff4  只要写记住 282就可以了.
+
+    📌 已经停止容器里面的数据不会消失!!!  用 docker ps -a 显示.
+    删除容器(先停再删): ➜  docker stop ubuntu  ➜ docker rm ubuntu
+
+    镜像官网:    https://hub.docker.com/explore/
+    当然国内下载很慢!!! 最简单的上VPN!!!! vpn搭建看我的 vpn(ipsec).txt
+    如需vpn帐号发邮件 xx2610@gmail.com 我送你个.
+
+    
+
+🔵 新建虚拟机(容器)
+    语法: docker ✚ run ✚ -i(交互式) ✚ -t(临时终端) ✚  镜像名称 ✚ 想要执行的命令
+    不要折腾这个命令,有很多参数的. 你只要知道下面这个最常用的命令. 把镜像名换掉就可以了.
+    没新建一个新的虚拟机 就会分配一个新的容器ID, 容器ID经常会变.需要经常 docker ps 来查看容器ID.
+    📌 注意 docker run 和 docker start的区别!!一个是创建虚拟机. 一个是开启暂停中的虚拟机.
+
+
+    例: docker run -itd daocloud.io/library/centos:centos7 /bin/bash
+    例: docker run -itd a84 /bin/bash
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+❤️ 安装/配置 Docker  (Kali)
+
+      要安装Docker Kali系统必须是 64位的.
+      一键安装脚本: https://gist.github.com/apolloclark/f0e3974601346883c731
+          说说最后几步.
+          sudo service docker restart
+              重启之后.ssh就挂了...
+              22端口 拒绝连接... 估计是docker 干的事情.
+              nmap 127.0.0.1  居然一个端口都没开...
+              /etc/init.d/ssh status  服务没启动.
+              /etc/init.d/ssh start   启动服务就可以了.
+              问题是开机启动估计也挂了...
+              /etc/rc.local 文件里加入/etc/init.d/ssh start 这行就可以了.
+              注意好像要加到 最后一行的 exit 0 行前面.
+
+
+❤️ 安装/配置 Docker  (CentOS 7)
+
+      🔸 检查Linux内核版本:    uname -r  ➜  必须大于 2.6
+      🔸 检查Device Mapper是否安装: 
+            🔅ls -l /sys/class/misc/device-mapper
+            有信息输出就可以.
+                    如果没有检测到.需要安装device-mapper软件包:
+                    sudo yum install -y device-mapper
+            
+                    然后重新加载dm_mod内核模块:
+                    sudo modprobe dm_mod
+
+      🔸 安装docker:       sudo yum install docker
+          /var/run/yum.pid 已被锁定错误:网上统一的解决办法：
+          直接在终端运行 rm -f /var/run/yum.pid 将该文件删除，然后再次运行yum。
+
+      🔸 启动Docker:       systemctl start docker
+      🔸 升级系统 (必须):  sudo yum update
+      🔸 验证安装:         docker info
+      🔸 开机启动 (可选):  systemctl enable docker
+
+
+
+❤️ 安装/配置 Docker  (CentOS 6.9)
+        docker不支持32位系统的!!!!!!
+    http://www.voidcn.com/blog/kdchxue/article/p-5739914.html
+
+
+    🔵 EPEL 源
+        是一个软件源.为RHEL/CentOS提供他们默认不提供的软件包。要安装docker必须用EPEL软件库.
+
+        安装epel,centos6选6-8，5就选5-4
+        🔸32位系统选择：
+            rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+            rpm -ivh http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+        🔸64位系统选择：
+            rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+            rpm -ivh http://dl.fedoraproject.org/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm
+        🔸导入对应的key：
+            rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+            rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-5
+
+        🔸安装yum install yum-priorities
+
+            查看是否安装成功:  rpm -q epel-release
+            用yum repolist 查看是否有 epel.
+            EPEL已经在repo 后列出，并且显示提供了上万个软件包，所以EPEL 已经安装到你的CentOS了。
+            测试下 能不能安装: sudo yum install htop
+            重建缓存 yum makecache
+
+
+      🔸 安装docker:      sudo yum install docker-io
+            👹 No package docker-io available.
+            要么是你系统是32位的.  要么就是epel安装出错.
+            建议参考:    http://www.voidcn.com/blog/kdchxue/article/p-5739914.html
+
+      🔸 启动Docker:      sudo service docker start
+      🔸 开机启动 (可选): sudo chkconfig docker on  
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+
+
+
+❤️ Docker 网络简介
+    参考1: http://www.grdtechs.com/2017/03/07/docker-network-mgr/
+    参考2: http://www.infoq.com/cn/articles/docker-network-and-pipework-open-source-explanation-practice
+
+    Docker作为目前最火的轻量级容器技术，有很多令人称道的功能，如Docker的镜像管理。
+    然而，Docker同样有着很多不完善的地方，网络方面就是Docker比较薄弱的部分。
+    Docker自身的网络功能比较简单，不能满足很多复杂的应用场景。
+    因此，有很多开源项目用来改善Docker的网络功能，如pipework、weave、flannel等。
+    pipework是一个Docker网络配置工具，由200多行shell实现，方便易用。
+    我们用 pipework 来管理网络. pipework 是安装在 docker 宿主机器上的.不是某个Dcoker容器里的
+    
+    我们用pipework来管理网络.对宿主机有要求，需要宿主机有网桥，
+    centos: 可以使用yum install bridge-utils来安装网桥，
+    debian: 用 apt-get install bridge-utils 来安装网桥.
+    安装完成之后就可以用 brctl命令了. 如: brctl show 查看当前网桥.
+
+
+
+
+
+🔵 Docker 4种网络模式:   --net=bridge、--net=host、--net=container、--net=none
+
+    🔸bridge
+        bridge模式是Docker默认的网络设置，
+        此模式会为每一个容器分配Network Namespace、设置IP等，
+        并将一个主机上的所有Docker容器连接到一个虚拟网桥上。
+
+    🔸host 模式:
+        这个模式下的容器. 没有自己独立的 network namespace. 也就是没有独立的网络环境.
+        使用宿主的IP和端口.
+
+    🔸container 模式:--net=container:NAME_or_ID。
+        指定一个已有的容器. 共享该容器的IP和端口.
+        只是网络方面的共享. 其他文件系统、进程还是隔离的!!!
+
+    🔸none 模式:
+        docker 不给容器进行任何配置. 需要自己给容器添加网卡.配置IP.
+        想要使用固定IP地址. 就必须使用这个网络模式
+
+
+
+
+
+🔵 Docker 默认网络设置
+
+    docker服务启动时. 会在主机上创建一个名为docker0的虚拟网桥.
+    此主机上启动的容器都会有连接到这个虚拟网桥.
+    虚拟网桥工作方式 类似 交换机. 主机上所有的容器通过交换机连在一个二层网络中.
+
+    默认情况下，docker会使用 bridge网络模式为每一个启动的容器动态分配一个IP，
+    以172.17.0.1为网关，172.17.0.2,172.17.0.3依次类推作为容器的ip,
+    但是这个IP是HDCP自动分配的会变的. 所有我们就需要设置固定IP.
+    📌 要设置固定IP.就得自己进行网络配置!! 也就是在启动虚拟机的时候用 --net=none 这个网络模式。
+    📌 我们需要自己创建一个网桥bridge0. 而不是使用docker 默认的网桥:docker0
+    📌 我们要给brigde0 网桥配置一个IP网段.
+    📌 我们要 把docker 配置文件中的 默认网桥 改成 bridge0
+    📌 再给某个容器设置个固定的IP和网关 就可以了
+
+
+
+🔵 环境简介:
+    Mac ➜  VM里运行 Centos7 ➜ Centos7 里运行docker服务 ➜  利用docker 创建很多 centos的容器.
+
+    Mac 外网IP: 101.225.78.86
+
+    Mac     内网IP: 192.168.169.1
+    Kali    虚拟机 eth0: IP: 192.168.169.130   
+    Centos7 虚拟机 eth0: IP: 192.168.169.111
+        // 182.168.169 网段: vmware 自动分配的. 目的是为了 mac电脑和虚拟机之间进行交互.
+  
+    Centos7 虚拟机 docker0: IP: 172.17.0.1 
+        // Docker服务启动时会自动在宿主机创建一个docker0的虚拟网桥，
+        // 后续新创建的容器都会有个虚拟接口连接到这个网桥,
+
+
+    目的: 
+        在 Centos7 虚拟机里跑三个 docker容器.  
+        每个容器都需要一个固定的IP地址.
+        容器一: 192.168.169.200
+        容器一: 192.168.169.211
+        容器一: 192.168.169.222
+
+
+
+
+❤️ centos7 容器固定IP设置:
+
+🔸 安装好Docker
+
+🔸 安装网桥
+    yum install bridge-utils
+
+🔸 安装pipework
+    yum install git
+    git clone https://github.com/jpetazzo/pipework
+    cp ~/pipework/pipework /usr/local/bin/
+
+
+🔸 查看当前网桥(肯定有个 docker0的)     brctl show
+🔸 新建名为 bridge0 的虚拟网卡:         brctl addbr bridge0   
+🔸 给这个网卡设置网段:                  ip addr add 192.168.5.1/24 dev bridge0   
+🔸 开启这个网卡:                        ip link set dev bridge0 up
+🔸 停止docker服务                       systemctl stop  docker.service     
+🔸 编辑docker 配置文件                  vim /etc/sysconfig/docker         
+        目的就是把虚拟的桥接口由默认的docker0改为bridge0
+        将 OPTIONS='--selinux-enabled --log-driver=journald'
+      改为 OPTIONS='--selinux-enabled --log-driver=journald -b=bridge0'
+
+🔸 开启docker服务                       systemctl start  docker.service
+🔸 查看docker状态 确保正常开启          systemctl status  docker.service
+
+🔸 新建一个容器  docker run -itd centos7ifconfig /bin/bash
+🔸 进入容器  docker attach xxx
+🔸 安装常用软件如 ifconfig           yum install -y wget vim openssh-server openssh-clients net-tools
+🔸 用ifconfig 查看本容器ip  正常应该是192.168.5 的网段. 而不是 172.17.网段.
+🔸 这里 只是改好了网段.还没开始设置固定IP. 
+   这里如果开启了多个容器. 你再去 brctl show 就会看到 bridge0 后面有多个网卡了.
+   一个容器一个网卡. 所有的容器默认都连到 bridge0 这个网桥上.
+
+🔸 开始设置固定IP:
+🔸 用 --net=none 模式新建一个容器. 并用 --name 给这个容器设置一个名字:container1
+   docker run -itd --name=container1 --net=none centos7ifconfig /bin/bash
+
+🔸 给这个容器 一个固定IP
+   pipework bridge0 -i eth0 container1 192.168.5.33/24@192.168.5.1
+      bridge0      是网桥的名字.
+      container1   是容器的名字. 也就是你要给哪个容器设置IP.
+      192.168.5.33 是固定IP地址.
+      @192.168.5.1 是网关地址.
+
+🔸 进入容器 用ifconfig 查看是否生效. 并ping 外网试试能不能上网.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 DNS 配置(可选 未亲测.. 有VPN就是任性....)
+    如果我们用VPN. 那么DNS就不是问题. 只要你的容器能上网.就不需要这步.
+    
+    安装好docker 发现不能上网. 可能是dns的问题.
+    虽然启动时候可以用 --dns 参数来指定dns 但是太麻烦了.一定可以改默认dns的.
+
+    修改/etc/default/docker
+        DOCKER_NETWORK_OPTIONS="--dns=61.139.2.69"
+
+    修改/lib/systemd/system/docker.service
+        ...
+        [Service]
+        EnviornmentFile=-/etc/default/docker
+        ExecStart=/usr/bin/docker daemon -H fd:// $OPTIONS \
+                  $DOCKER_NETWORK_OPTIONS
+        ...
+
+    重启docker
+        systemctl daemon-reload
+        systemctl restart docker.service
+    
+    查看 docker 的启动命令是否生效
+        ps -ef | grep docker
+        root     ***     1  0 5月25 ?       00:02:23 /usr/bin/docker daemon -H fd:// --dns=61.139.2.69 --registry-mirror=***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+❤️  实战 SSH 配置
+
+    🔸 拉取 CentOS7 的Docker镜像
+            docker pull daocloud.io/library/centos:centos7
+                daocloud.io/library/centos表示镜像的名字
+                centos7表示镜像的版本，默认是latest，表示最新版
+                镜像只有70MB.很快的.
+
+
+    🔸 第一次启动镜像
+        docker images  ➜  查看本地镜像列表. 然后选择一个来启动.
+
+        docker run -h master --dns=61.139.2.69 -it daocloud.io/library/centos:centos7
+            // 这样就进入 centOS了!!!
+            // 这里有问题. ping ip可以 ping 网站就不行.. 换个dns试试...
+
+            -h	master	          指定hostname
+            --dns	61.139.2.69	  指定DNS，默认的是8.8.8.8,国内环境...
+            -it		              以交互模式启动
+
+    🔸 启动已保存容器(不是镜像)
+            docker ps -a
+            CONTAINER ID        IMAGE                                COMMAND          NAMES
+            9e6de4a652ea        xujian                               "bash"           cranky_mccarthy
+            37c0b2eb1490        xujian                               "/bin/bash"      reverent_noyce
+            96e03f352e26        daocloud.io/library/centos:centos7   "/bin/bash"      clever_poitras
+            8db11bc98ce7        hello-world                          "/hello"         quirky_pare
+            9d2919e1519e        hello-world                          "/hello"         compassionate_shockley
+
+                用镜像新建容器: docker run  ;  启动停止的容器: docker start
+                docker start 9e6
+                docker attach
+
+    🔸 安装 CentOS 需要的软件:
+          yum install -y wget vim openssh-server openssh-clients net-tools
+              拉取到本地的镜像是尽可能小的，所以很多命令都没有安装:
+                  📌openssh-server ➜ 安装sshd服务
+                  ssh -V ➜ 查看SSH版本
+                  openssh-clients : 安装ssh命令
+                  net-tools :       安装netstat, ifconfig等命令
+
+
+    📌📌 配置 SSH
+            参考网页    http://blog.csdn.net/molaifeng/article/details/51684086
+
+        🔸👹 启动ssh服务可能会报错!!
+                [root@9e6de4a652ea .ssh]# /usr/sbin/sshd
+                Could not load host key: /etc/ssh/ssh_host_rsa_key
+                Could not load host key: /etc/ssh/ssh_host_ecdsa_key
+                Could not load host key: /etc/ssh/ssh_host_ed25519_key
+
+                    找不到密钥:  那就手动生成密钥.几个报错就生成几个.
+                        ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+                        ssh-keygen -t rsa -f /etc/ssh/ssh_host_ecdsa_key
+                        ssh-keygen -t rsa -f /etc/ssh/ssh_host_ed25519_key
+
+        🔸 无密码登录ssh.
+            首先是虚拟机上执行ssh-keygen -t rsa，
+            敲三次回车，把/root/.ssh/id_rsa.pub里的内容拷到容器内authorized_keys中去  
+            这个上传公钥命令经常用的.不会自己看前面的教程去..
+            scp -r id_rsa.pub root@172.17.0.2:~/.ssh/
+            cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+        
+        🔸 开机启动SSH
+            要后台启动sshd需要执行如下命令 /usr/sbin/sshd -D &
+            容器是被docker管理的，无法使用一些系统命令，
+            所以我们 需要通过脚本来 开机启动 ssh.
+
+            ssh 是hadoop 必须的服务. 所以我们要设置启动容器就开启ssh.
+            由于容器中开启ssh 不能用常规的开机启动方法.所以我们要通过脚本来实现.
+            /usr/sbin/sshd -D & 这里不让ssh后台运行是为了保证容器不退出.
+
+            vim /root/run.sh      ➜ 新建脚本.下面两行是脚本内容
+            #!/bin/bash  
+            /usr/sbin/sshd -D  
+        
+            chmod +x /root/run.sh  ➜  给脚本执行权限.
+
+    
+        🔸 保存镜像
+            docker commit 9e6 sshd:centos6        ➜  以后就用这个镜像启动就不用重新配ssh了.是镜像不是容器!!!
+                就会多了个 叫ssh的 标记是centos6的.
+                root@kali:~# docker images
+                REPOSITORY           TAG         IMAGE ID            CREATED             SIZE
+                sshd                 centos6     d794f99dd271        2 minutes ago       335M
+
+        🔸 其他
+            exit      退出(停止)容器, 最好用 docker stop....
+            docker run sshd:centos6 /root/run.sh   ➜  用刚保存的新镜像新建容器: 并执行run.sh 脚本
+            然后 ssh root@172.17.0.2   就能连上了....
+
+

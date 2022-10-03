@@ -1,0 +1,401 @@
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 CentOS_7  虚拟网卡 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+🔸 参考 http://blog.csdn.net/ei__nino/article/details/7641183
+
+
+vpc 下的实例 默认只有一个网卡的.
+要外部IP
+要内部IP 
+
+
+
+🔸 
+添加网卡 和 修改网卡是不一样的!
+
+gce 默认两个网卡.  lo 和 eth0 
+既然是vps 那么网卡肯定是虚拟出来的. 
+也就是说我们自己也可以网卡的.
+
+
+网卡目录
+cd /etc/sysconfig/network-scripts/  下有 ifcfg-eth0  和 ifcfg-lo 两配置个文件. 
+这两个就像当前的网卡.我们要创建新网卡. 只要创建 ifcfg-开头的文件 就可以了
+
+vi /etc/sysconfig/network-scripts/ifcfg-net1
+
+DEVICE=net1                   # 网卡名
+HWADDR="00:0C:29:FD:FF:2A"    # mac 地址.可以随便编一个. 
+ONBOOT=yes                    # 开机启动网卡
+TYPE=Ethernet                 # 网卡种类. 有桥接bridge 
+BOOTPROTO=static              # 静态IP.
+IPADDR=192.168.1.11           # 
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+
+
+🔸 重启网络  service network restart
+
+🔸 查看日志  systemctl status network.service
+
+ ERROR    : [/etc/sysconfig/network-scripts/ifup-eth] Device net1 does not seem to be present, delaying initialization.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸准备工作🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+
+🔸 gce VPN搭建
+    创建VPN 服务器. 要连到GCE 的 VPC内网, 首先要连到 某个带公网IP的VPN中.
+    这样VPC 才能 连接到VPN服务器.  最终实现 本地电脑连到 vpc 网络.
+
+
+
+🔸 gce centos 7 搭建vpn 
+
+    一个命令就可以了.
+    wget https://git.io/vpnsetup-centos -O vpnsetup.sh && sudo sh vpnsetup.sh
+
+    Server IP: 35.194.128.92
+    IPsec PSK: PBqLJkzTs2d9koxb
+    Username: vpnuser
+    Password: Zj2JfNfKSGdYA4Ak
+
+
+
+
+
+🔸 配置vpc 
+
+
+
+
+
+🔸 GCE VPN 
+    虚拟专用网 (VPN) 可以让你本地电脑连接到 GCE 的内网.
+    使用 IKEv1 或者 IKEv2 协议建立 IPSec 连接.
+
+
+
+
+⦿ 创建vpn 
+    区域: asia-east1 
+    创建IP. 
+
+⦿ 配置隧道: 
+    远程对等IP  35.194.128.92
+    IKE 版本: IKEv21
+    共享密钥: 
+
+    远程网络IP 范围:   0.0.0.0/0
+
+
+这样就连上了 ??
+出现个 ip地址: 35.194.179.5 	
+还有个 远程对等IP地址: 35.194.128.92
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 VPC 虚拟网络 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+🔸 参考资源
+
+    AWS 官方简介:
+        http://docs.aws.amazon.com/zh_cn/AmazonVPC/latest/UserGuide/VPC_Introduction.html
+
+
+
+🔸 VPC 
+    Virtual Private Cloud (VPC) 虚拟私人网络 也就是 虚拟内网.
+    云服务的 重要技术之一!
+
+    公司的机房创建的是普通的内网. 有真正的交换机,路由器等等网络设备.
+    其实在公有云上也可以创建内网. 自定义网段划分、IP地址和路由策略等功能
+    这个技术就是VPC . 创建 VPC 网络不需要真正的交换机/路由器.
+
+
+🔸 VPC 作用 
+    • 在公有云上实现集群之间的内部通信.
+    • 隔离云上的其他服务器,保证服务器安全.
+    • IDC机房 可以通过 VPN 连接到 VPC 网络! 
+
+
+
+
+可以通过VPC提供的虚拟私有网关或成为VPN网关，然后把用户自己的数据中心或办公环境与AWS上的VPC环境进行连接，从而实现用户自己的内部网络通过VPN或Direct Connection（DX）与AWS上的VPC环境组成一个虚拟的私有网络环境。
+
+
+
+
+
+
+🔸 VPN 连接 VPC 
+私有网络VPC可以通过加密的VPN通道连接客户IDC，
+只需在VPC及用户IDC中设置VPN网关及对端网关即可。
+
+如果客户没有用 硬件VPN 设备,也可以使用开源软件在服务器上搭建对端网关。
+
+本文以在CentOS上安装ipsec-tools为例，介绍如何通过开源软件连接腾讯云VPC，建立混合云场景。π
+
+
+
+
+🔸 虚拟网关 
+其实 本地电脑是可以之间 VPN 到 VPC 整个网络的! 
+注意是 VPN 网络. 而不是 VPN 网络中的某台服务器.
+
+要实现这个功能 需要创建一个虚拟专用网关.
+创建路由表. 更新安全规则.
+
+
+
+
+虚拟私有网关: 云端的 vpn 集中器.
+客户网关: 
+
+
+
+🔸 VPN 路由.
+创建好 vpc 网络后.
+
+mac 需要连到 vpc . 的某个公网IP.
+
+
+
+
+
+🔸 VPN 网关 
+
+使用 Azure VPN 网关通过站点到站点 VPN 轻松将本地网络与 Azure 连接，
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 🔸虚拟网卡.
+    GCE 机器都是内网IP, 然后通过防火墙来中转流量.
+    所以 ipaddr 显示的是 内网IP. 却可以正常上网.
+
+    搭建Docker 等服务 需要创建虚拟网络. 实现Docker 虚拟机之间的互通.
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸网络储备🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+
+🔸 
+
+
+
+🔸 网络架构
+
+    有时候,一台服务器需要设置多个ip,但又不想添加多块网卡,那就需要设置虚拟网卡.
+    修改下网卡配置文件,重启网卡服务就好.
+
+
+
+🔸 当前网络 
+    ip addr 
+        两个网卡 .  lo  个 ens4 gce的内网IP.
+        我们要添加一个网卡. 给连接 openstack的各个节点.
+
+
+    虚拟网卡是 添加在实体网卡上的! ? 
+    所以需要一个..当前网卡 . 
+    ip addr 发现有个 ens4 网卡. 
+    我们给这个网卡 加一个虚拟网卡. 
+
+
+
+
+
+🔸 设置网络
+    总配置文件 vi /etc/network/interfaces 有 source /etc/network/interfaces.d/*.cfg
+    我们可以新建网卡配置文件 
+
+    #Not internet connected(used for OpenStack management)
+    # 这时一个 虚拟网卡 
+auto eth0
+iface ens4:1 inet static
+address 10.10.10.51
+netmask 255.255.255.0
+gateway 10.10.10.1
+
+
+🔸 重启网络服务:
+    service networking restart
+    sudo /etc/init.d/networking restart
+
+
+
+🔸 开启路由转发:
+
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
+sysctl -p
+
+🔸 这个不是网卡..   
+而是给某个网卡添加一个ip而已?
+
+
+
+
+
+
+
+🔸 IP 常用命令
+    CentOS7 不再是 ifconfig了 而是用了 ip命令.
+        • ip addr                    # 网卡信息;  ens33: 192.168.169.146/24 
+        • ip link set ens33 down     # 关闭网卡
+        • ip link set ens33 up       # 开启网卡;  state UP 表示网卡开启.
+
+        • ip addr del 192.168.169.146/24 dev ens33    # 删除网卡IP地址, 
+        • ip addr add 192.168.169.111/24 dev ens33    # 设置网卡IP地址,临时!重启后失效
+
+
+
+🔸 网卡配置文件夹
+    /etc/sysconfig/nerwork-scripts       
+    里有 ifcfg-ens33 这个网卡配置文件
+
+
+🔸 网卡参数
+    要长期设置静态IP 就要修改对应网卡配置文件了
+    要修改 ens33 这个网卡. 对应的配置文件就是  /etc/sysconfig/nerwork-scripts/ifcfg-ens33
+    要修改 lo 这个网卡. 对应的配置文件就是  /etc/sysconfig/nerwork-scripts/ifcfg-lo
+    要创建 net 这个网卡 就创建对应配置文件 /etc/sysconfig/nerwork-scripts/ifcfg-net 
+
+
+🔸 网卡配置参数简介
+        cat /etc/sysconfig/network-scripts/ifcfg-eth0
+
+        TYPE=Ethernet            #网卡类型
+        DEVICE=eth0              #网卡接口名称
+        ONBOOT=yes               #系统启动时是否自动加载
+        BOOTPROTO=static         #启用地址协议 --static:静态协议 --bootp协议 --dhcp协议
+        IPADDR=192.168.1.11      #网卡IP地址
+        NETMASK=255.255.255.0    #网卡网络地址
+        GATEWAY=192.168.1.1      #网卡网关地址
+        DNS1=10.203.104.41       #网卡DNS地址
+        HWADDR=00:0C:29:13:5D:74 #网卡设备MAC地址
+        BROADCAST=192.168.1.255  #网卡广播地址 
+
+
+
+
+🔸 VMware 网络环境
+
+    VMware在默认安装完成之后，会创建三个虚拟的网络环境：
+    可以在 Mac 终端用 ip addr 查看
+       • VMnet0 ：桥接网络   ➜  不提供 dhcp 
+       • VMnet1 ：Host-only  ➜  提供 dhcp
+       • VMnet8 ：NAT        ➜  提供 dhcp . Mac 实体机相对于一个 DHCP 路由器.
+            NAT表示VMWware内安装的虚拟机将会在一个子网中，
+            VMware通过网络地址转换，通过物理机的IP上网。
+            我们选择NAT方式实现静态IP地址配置。
+            默认就是这种上网方式. 也就是 VM 网络设置里的 share with my mac
+
+
+
+
+🔸 Mac VMware 关闭 DHCP .
+    为什么要关闭dhcp. 如果你要自己搭建 dhcp 服务器.那么就需要关闭M vmware 自带的dhcp.
+    一个网络内只能有一个 dhcp 服务器.
+    widnows 有设置 可以直接关闭dhcp . mac 只能手动改了
+
+    ⦿ 退出所有虚拟机, 退出 vmware 
+    ⦿ 进入相关目录  cd /Library/Preferences/VMware\ Fusion/
+    ⦿ 编辑文件 sudo vi /Library/Preferences/VMware\ Fusion/networking
+        answer VNET_8_DHCP yes  ➜ 改成 ➜ answer VNET_8_DHCP no
+
+
+🔸 相关文件.
+    要修改固定IP. 涉及到两个配置文件，分别是：
+
+    vi /etc/sysconfig/network    ➜ 设置 网关 
+    /etc/sysconfig/network-scripts/ifcfg-eth0  ➜ 设置IP/掩码...
+    /etc/resolv.conf
+
+
+
+
+NETWORKING=yes
+HOSTNAME=localhost.localdomain
+GATEWAY=192.168.169.1
+
+
+
+vi /etc/resolv.conf：
+nameserver 192.168.169.1
+
+
+
+
+
+🔸 判断IP类型 动态/静态
+    cat /etc/sysconfig/network-scripts/ifcfg-ens33
+    发现 Bootproto 是 dhcp . 也就是动态分配的.
+
+
+
+🔸 设置固定 IP
+    尽量别改网段,改IP就行了, 不要碰其他设置.
+    vi /etc/sysconfig/network-scripts/ifcfg-ens33
+        ⦿ 修: Bootproto="static" 
+        ⦿ 加
+IPADDR="192.168.169.11"    
+NETMASK="255.255.255.0"
+GATEWAY="192.168.169.1"
+DNS1="192.168.169.1"
+
+⦿  不能加 HWADDR .
+
+🔸 重启网络服务    service network restart
+🔸 重启查看IP      ip addr 
+🔸 Ping 本机测试   ping 127.0.0.1      ✔︎
+🔸 Ping 路由测试   ping 192.168.169.1  ✔︎
+🔸 Ping 外网测试   ping -c4 google.com ✗
+    ⦿ 查看路由 ip route 
+    ⦿ 原因未知... 应该个 vm 的网络设置有关 .这里还是不改了.用默认的DHCP吧.
+
+

@@ -1,0 +1,59 @@
+🔵 Brew 
+
+    搜索软件   brew search nginx
+    安装软件   brew install nginx
+    卸载软件   brew uninstall nginx
+    升级软件   sudo brew update
+    软件信息   sudo brew info nginx    (经常用到, 比如查看安装目录等) 
+    已装软件   brew list
+
+
+    ✘✘∙𝒗 VPS brew info nginx
+    nginx: stable 1.12.1 (bottled), devel 1.13.5, HEAD
+
+    /usr/local/Cellar/nginx/1.12.0_1 (23 files, 1MB) *
+
+    Docroot is: /usr/local/var/www
+
+    The default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that
+    nginx can run without sudo.
+
+    nginx will load all files in /usr/local/etc/nginx/servers/.
+
+    To have launchd start nginx now and restart at login:
+      brew services start nginx
+    Or, if you don't want/need a background service you can just run:
+      nginx
+
+
+    🔸 启动     brew services start nginx
+    🔸 关闭     sudo brew services stop nginx
+    🔸 停止     nginx -s stop
+    🔸 重载     nginx   nginx -s reload
+    🔸 访问     127.0.0.1:8080
+    🔸 配置     /usr/local/etc/nginx/nginx.conf
+    🔸 目录     Docroot is: /usr/local/var/www
+
+
+
+
+🔵 Misc 
+
+Mac下判断配置文件是否正确
+
+cd  /usr/local/nginx/sbin
+sudo ./nginx -t
+
+
+
+
+3、Mac下重启Nginx
+[code]cd /usr/local/nginx/sbinsudo ./nginx -s reload
+
+
+
+
+4、Mac下Nginx的关闭
+查询nginx主进程号：ps -ef|grep nginx
+[code]正常停止   sudo kill -QUIT 主进程号快速停止   sudo kill -TERM 主进程号
+

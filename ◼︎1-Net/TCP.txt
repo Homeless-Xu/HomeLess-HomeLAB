@@ -1,0 +1,240 @@
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵 tcp 几种状态:
+
+在TCP层，有个FLAGS字段标识：SYN, FIN, ACK, PSH, RST, URG.
+
+🔸 SYN表示建立连接，
+🔸 FIN表示关闭连接，
+🔸 ACK表示响应，
+🔸 PSH表示有 DATA数据传输，
+🔸 RST  一般是在FIN之后才会出现为RST=1的情况，表示的是连接重置。
+
+三次握手:  syn、syn+ack、ack
+四次挥手: 
+
+
+🔅 syn:  如果只是单个的一个SYN，它表示的只是建立连接。
+syn+ack 
+
+🔅 fin+ack 
+通常一筆資料，如果資料量比較大的話，都會分割成數個封包，以封包為單位來傳送，因此在發送端送出封包以後，接收端就必須把封包結合，才能還原成原始的傳送的資料。 
+那接收端該如何分辨封包資料的先後順序呢？如果順序錯誤，就不能把封包結合成跟原來一模一樣的資料了。 
+因此，封包必須要有編號，接收端才能知道封包的先後順序。 
+＞Sequence Number (seq) : 傳送的封包的序號 
+＞Acknowledge Number (ack) : 確認封包的序號 
+當資料傳送完畢時，接收端也必須告知對方已經完成或是要求終止連線。 
+而FIN就是完成或要求斷線
+
+
+
+
+
+
+一般地，当出现FIN包或RST包时，我们便认为客户端与服务器端断开了连接；
+而当出现SYN和SYN＋ACK包时，我们认为客户端与服务器建立了一个连接。
+
+
+
+
+RST
+
+
+但SYN与FIN是不会同时为1的，因为前者表示的是建立连接，而后者表示的是断开连接。
+
+
+其中，ACK是可能与SYN，FIN等同时使用的，比如SYN和ACK可能同时为1，它表示的就是建立连接之后的响应，
+
+
+TCP的几次握手就是通过这样的ACK表现出来的。
+
+
+
+
+PSH为1的情况，一般只出现在 DATA内容不为0的包中，也就是说PSH为1表示的是有真正的TCP数据包内容被传递。
+
+TCP的连接建立和连接关闭，都是通过请求－响应的模式完成的。
+
+概念补充-TCP三次握手：
+
+TCP(Transmission Control Protocol)传输控制协议
+
+TCP是主机对主机层的传输控制协议，提供可靠的连接服务，采用三次握手确认建立一个连接：
+
+位码即tcp标志位，有6种标示：SYN(synchronous建立联机) ACK(acknowledgement 确认) PSH(push传送) FIN(finish结束) RST(reset重置) URG(urgent紧急)Sequence number(顺序号码) Acknowledge number(确认号码)
+
+第一次握手：主机A发送位码为syn＝1，随机产生seq number=1234567的数据包到服务器，主机B由SYN=1知道，A要求建立联机；
+
+第二次握手：主机B收到请求后要确认联机信息，向A发送ack number=(主机A的seq+1)，syn=1，ack=1，随机产生seq=7654321的包；
+
+第三次握手：主机A收到后检查ack number是否正确，即第一次发送的seq number+1，以及位码ack是否为1，若正确，主机A会再发送ack number=(主机B的seq+1)，ack=1，主机B收到后确认seq值与ack=1则连接建立成功。
+
+完成三次握手，主机A与主机B开始传送数据。
+
+
+
+在TCP/IP协议中，TCP协议提供可靠的连接服务，采用三次握手建立一个连接。
+第一次握手：建立连接时，客户端发送syn包(syn=j)到服务器，并进入SYN_SEND状态，等待服务器确认；
+第二次握手：服务器收到syn包，必须确认客户的SYN（ack=j+1），同时自己也发送一个SYN包（syn=k），即SYN+ACK包，此时服务器进入SYN_RECV状态；
+
+第三次握手：客户端收到服务器的SYN＋ACK包，向服务器发送确认包ACK(ack=k+1)，此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手。完成三次握手，客户端与服务器开始传送数据.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+在内容显示过滤器上  ip.dst==23.105.192.96 然后开始抓包.
+
+发现只有三种包. 
+isakmp、tcp、icmp.
+
+
+
+🔵 isakmp 协议.
+
+ISAKMP：Internet Security Association and Key Management Protocol，Internet 
+安全关联和密钥管理协议
+
+一种协议框架，定义了有效负载的格式、实现密钥交换协议的机制以及SA协商。
+
+ 使用TCP和UDP的端口500，一般使用UDP。
+
+
+在互联网环境中进行通信，由于双方都无法直接接触对方，而且互联网本身是一个开放的环境，因而信息的安全性难以得到保障。
+一般情况下，当我们讨论网络安全的时候，至少要考虑这几个问题：信息加密、身份认证和数据的完整性。
+对于某些特殊的场景，可能还需要考虑访问控制和信息的不可否认性等问题。
+ 
+为了实现在互联网环境中进行安全通信，RFC2048定义了名为ISAKMP的安全框架。
+它结合了认证、密钥管理和安全关联的概念来在互联网上建立起安全的通信。
+
+在这个框架中，安全关联是指两个网络实体间共享的一组安全属性，比如加密算法和模式等。ISAKMP它的主要作用就是协商和管理安全关联，以及密钥。为了实现这一功能，ISAKMP定义了一系列的消息和过程。
+ 
+但是ISAKMP只是一个框架而已，它并不规定采用什么样的密钥交换算法，也不关注各个加密算法、认证算法和完整性算法的实现。这样做的好处在于，框架本身有很好的可扩展性。如果在将来的某一天，我们发现密钥交换算法存在漏洞或者某个加密算法不安全了，可以直接替换掉，而不破坏框架本身。当然，前提是框架本身必须具有很好的安全性。现在的ISAKMP框架已经可以很好的处理DOS、连接劫持和中间人攻击。
+ 
+从宏观上来看，ISAKMP主要做了三件事情：
+1.      SA协商
+2.      密钥交换
+3.      认证
+
+
+SA协商的目的是为了在通信双方间协商出一组双方都认可的安全参数。比如两端采用相同的加密算法和完整性算法。
+密钥交换的目的是为已经协商好的算法生成必要的密钥信息。
+认证的目的是鉴别对方的身份，保证自己不是在跟一个伪造的对象通信。
+ 
+这样，通过一系列的消息交互，通信的双方既鉴别了对方的身份，也保证了后继通信的安全性。
+
+
+
+
+
+🔵 icmp
+
+说起ICMP故障，大家肯定是熟悉不过的了。最常见的ping命令就是使用ICMP的。ICMP的全称是Internet Control Message Protocol（网间报文控制协议），它是IP不可分割的一部分，用来提供错误报告。一旦发现各种错误类型就将其返回原主机，基于ICMP的攻击方法也多种多样
+
+
+
+
+
+
+
+
+🔵 TCP 三种握手协议.
+
+三次握手. 四次挥手..
+
+握手过程: 本地:请求 (SYN) -- 服务器:应答(SYN + ACK) -- 本地:再次确认(ACK)
+
+这里多了个 psk + ack .
+去tcp ➜ flags 看: 发展 
+acknowledgment: set  ➜ 这个就是ack了.
+push: set     ➜ 这个就是 psk了
+
+
+
+
+
+
+syn
+psh ack
+
+ack          
+fin ack      结束
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+➜  ~ ping 211.161.244.118
+PING 211.161.244.118 (211.161.244.118) 56(84) bytes of data.
+^C
+--- 211.161.244.118 ping statistics ---
+96 packets transmitted, 0 received, 100% packet loss, time 95893ms
+
+服务器ping本机的外网IP 不通... 怎么办..
+防ping 不能代表什么.... 实际可用就像...
+
+
+
+
+
+
+Permitting ICMP Unreachable Messages
+
+As we've discussed previously in our overview of the PMTUD protocol, PMTUD relies heavily on ICMP unreachable messages to communicate the MTU of segments back to the fragmenting host. It is very common for security devices, such as firewalls, to deny ICMP unreachable messages, as they are commonly used in malicious scanning techniques by hackers. As such, care must be taken to ensure that all paths between PMTUD-enabled endpoint be checked to ensure that ICMP unreachables are indeed allowed to pass if PMTUD is to be the preferred message for fragmentation avoidance along the path.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+icmp : 显示 destination unreachable (port unreachanle )
+
+仔细分析这个包.

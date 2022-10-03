@@ -1,0 +1,12 @@
+
+	🔶 check 
+	
+	    iMAC ~ showmount -e 10.1.1.88
+	    Exports list on 10.1.1.88:
+	    /volume2/APP-ISO                    10.1.1.0/24
+	
+	
+	🔶 mount - nfs4
+	
+	    sudo mount -t nfs -o vers=4 <server-ip>:/server_dir /local_dir
+	    sudo mount -t nfs -o vers=4 10.1.1.88:/volume2/APP-ISO /Users/techark/Desktop/nfs

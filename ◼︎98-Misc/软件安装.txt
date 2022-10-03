@@ -1,0 +1,369 @@
+❤️ type 用法
+
+    type: 判断一个命令的类型 & 并判断出是内部还是外部指令
+
+    🔵 命令类型:
+        🔸 alias     别名.         type ls      ➜ ls is an alias for ls --color=tty
+        🔸 keyword   shell保留字   type for     ➜ for is a reserved word
+        🔸 builtin   内部命令      type cd      ➜ cd is a shell builtin
+        🔸 file      外部命令
+                                   type mysql   ➜ mysql is /usr/bin/mysql
+                                   type sqlite3 ➜ sqlite3 is /usr/local/bin/sqlite3
+                                   type python  ➜ python is /usr/local/python27/bin/python
+
+
+
+
+
+
+
+
+
+❤️ 基础知识:
+
+    我是通过下载官方的源文件. 然后编译安装的.
+    那么默认安装到哪里了呢!!!!!
+    一般都是在 /usr/local/bin 下面的.
+    不管你安装了多少个版本的Python. 都在这个目录下的.
+    这个路径不用死记硬背. 可以用 whereis 命令查.
+
+
+
+❤️ whereis 命令
+    查找文件命令: find、locate、whereis、which、type
+        虽然都是查找文件. 但是还是有区别的.
+        find 功能是最强大的.实时搜索.
+        whereis 只能用于程序名的搜索.搜索的是数据库(每天更新一次)所有不太准确.因为数据库没有更新...
+
+        首先我们要知道python 分两个大版本 python2 个 python3.
+        pyton2 下面有很多版本 2.6 2.7 等等...
+        python3 下面也有很多版本 3.0 3.6 等等..
+        多个Python版本情况下最好的情况是
+        输入python 执行python2.7
+        输入Python3 执行 python 3.6
+        不建议把 python 执行  python3.6.
+
+        ➜  ~ whereis python3
+        python3: 
+        /usr/local/bin/python3.6-config 
+        /usr/local/bin/python3.6 
+        /usr/local/bin/python3 
+        /usr/local/bin/python3.6m 
+        /usr/local/bin/python3.6m-config 
+        /usr/local/lib/python3.6
+
+        ➜  ~ whereis python2
+        python2: 
+        /usr/bin/python2.6 
+        /usr/bin/python2 
+        /usr/lib/python2.6 
+        /usr/local/bin/python2.7-config 
+        /usr/local/bin/python2.7 
+        /usr/local/bin/python2 
+        /usr/local/lib/python2.7 
+        /usr/include/python2.6
+
+        ➜  ~ whereis python
+        python: 
+        /usr/bin/python 
+        /usr/bin/python2.6 
+        /usr/lib/python2.6 
+        /usr/local/bin/python 
+        /usr/local/bin/python2.7-config 
+        /usr/local/bin/python3.6-config 
+        /usr/local/bin/python2.7 
+        /usr/local/bin/python3.6 
+        /usr/local/bin/python3.6m 
+        /usr/local/bin/python3.6m-config 
+        /usr/local/lib/python2.7 
+        /usr/local/lib/python3.6 
+        /usr/include/python2.6 
+        /usr/share/man/man1/python.1.gz
+
+
+    我们来分析下搜索出来的六个文件夹:
+      /usr/bin         binary 二进制; 这个文件夹放系统自带的命令. 也就是Python2.6
+      /usr/local/bin   local文件夹.区分额外装的命令和系统自带的命令.Python2.7 3.6 都在这里!!!
+      /usr/lib         系统自带的库文件 .lib后缀. 库文件就是很多命令都要用到的一些常用的功能.  
+      /usr/local/lib   类似/local/bin. 这里放额外的用户自己安装的库文件.
+      /usr/include     一般包含头文件目录.      不管
+      /usr/share/man   这是man手册              不管
+
+
+    Python 其实是个可执行的二进制文件. 
+    所以系统自带的python 是在/usr/bin 目录下.
+    用户安装的python 在/usr/local/bin 目录下.
+    现在你就该知道 我们自己安装的 python 到底安装在哪里了....
+
+
+
+
+
+
+
+❤️ ldd 命令
+    系统自带的一个shell脚本. 列出某个模块的所有相关路径. 
+    也就是执行某程序时候 需要用到哪些系统库!!!
+    一般用来解决 某程序不能运行的问题.  正好是我们需要的.
+
+    先来看我们现在遇到的问题: 
+    ➜  ~ python -V
+    python: error while loading shared libraries: libpython2.7.so.1.0: cannot open shared object file: No such file or directory
+
+    其实这里就已经给出大致的问题原因了.
+    至于详细的原因 我们用ldd 来查看.
+
+        ➜  ~ ldd /usr/local/bin/python
+          linux-gate.so.1 =>  (0xb76ea000)
+          libpython2.7.so.1.0 => not found
+          ...
+
+
+    找到问题了 libpython2.7.so.1.0 => not found
+    lib 是库的意思.
+    libpython2.7.so.1.0 应该是个库文件.
+    libpython2.7.so.1.0 => not found  也就是找不到 libpython2.7.so.1.0 这个库文件.
+
+    我们自己来找这个文件.
+    ➜  ~ whereis libpython2.7.so.1.0
+    libpython2.7.so.1: /usr/local/lib/libpython2.7.so.1.0
+
+    找到了把.. 系统找不到是系统的事情... 这个文件是有的.
+    那么系统是怎么找 libpython2.7.so.1.0 这个库文件的呢. 
+    系统查找 /etc/ld.so.conf  这个文件!!! 
+    这个文件里面是一些路径. 
+    如果其中一个路径 有 usr/local/lib
+    那么就能找到 /usr/local/lib/libpython2.7.so.1.0 这个库.
+
+    我们看看 这个文件里面到底是什么
+    ➜  ~ cat /etc/ld.so.conf
+    include ld.so.conf.d/*.conf
+    /lib
+    /usr/lib64
+    /usr/local/lib
+
+    有啊. 最后一行就是     /usr/local/lib 啊 . 那为什么还报错呢..
+    试试 🔅 ldconfig 这个命令.库管理工具. 刷新各目录内可用的共享库.
+    ldconfig通常在系统启动时运行，而当用户安装了一个新的动态链接库时，就需要手工运行这个命令。 
+
+
+    ➜  ~ ldd /usr/local/bin/python   发现正常了  
+    ➜  ~ python -V
+    Python 2.7.10                     也正常了...
+
+    弄了半天 输了个 ldconfig 就一切正常了....
+    是ldconfig  不是idconfig
+
+
+
+
+
+
+
+
+❤️ 问题: python-sqlite3  is not installed, Please install it first.
+
+
+🔅 sqlite3 ➜ --version 3.6.20
+实际sqlite3是可以用的.
+
+🔅 type sqlite3 ➜  sqlite3 is /usr/local/bin/sqlite3
+这个就是二进制文件路径. 类似windows的 .exe 文件
+就像windows. 其实是执行 各种 .exe文件的. 桌面只是个快捷方式.
+既然文件没问题. 那么为什么会报错呢.
+
+🔅 $PATH  输出的路径都在一起.不好看.我们直接用: 做分隔符来换行整齐输出
+    🔅 echo $PATH | tr : '\n'
+    /usr/src/Python-1.7.9/python
+    /usr/local/bin/sqlite3   ➜  这个就是sqlite3的环境路径.有说明环境路径正常的
+    /usr/bin/sqlite3
+    /usr/local
+    /usr/local/python27
+    /usr/local/python27/bin
+    /usr/local/python27/bin/python2.7
+    /usr/src
+    /root/.autojump/bin
+    /usr/lib/qt-3.3/bin
+    /usr/local/sbin
+    /usr/local/bin
+    /sbin
+    /bin
+    /usr/sbin
+    /usr/bin
+    /root/bin
+
+
+
+
+
+
+
+
+
+
+❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
+Python3 安装:
+
+
+
+Can't find a python executable of version 2.7 or above in PATH
+Install python 2.7+ before continue.
+Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it
+
+丫的 还是这个问题...
+不就是在环境路径中找不到 python2.7 么
+
+先看看环境路径
+
+ seafile-server-6.0.9 $PATH
+zsh: no such file or directory: 
+/root/.autojump/bin
+:/usr/lib/qt-3.3/bin
+:/usr/local/sbin
+:/usr/local/bin
+:/sbin
+:/bin
+:/usr/sbin
+:/usr/bin
+:/root/bin
+
+再来看看我们 python2.7 的路径
+➜  seafile-server-6.0.9 whereis python
+python: 
+/usr/src/Python-2.7.9/python 
+/usr/bin/python 
+/usr/bin/python2.6 
+/usr/lib/python2.6 
+/usr/include/python2.6 
+/usr/share/man/man1/python.1.gz
+
+发现2.7 是在 /usr/src/Python-2.7.9/python下的.. 正常应该是/usr/local/bin下的.
+❌❌❌❌❌❌❌❌❌
+最后发现这个环境路径是的!!1 不是这个路径 丫的.
+在 /usr/local/python27 下面.
+
+如果当前 python -V 能正常显示. 
+但是某些命令出问题.
+那么就去/etc/bin/  下 用ll 查看. 
+能找出python 的快捷方式.
+这个地址 很可能就是真实的 python2.7的路径.
+把这个路径加到 环境路径里就可以了.
+whereis 找出来的可能是安装包啊.  安装包!!!!!!!
+❌❌❌❌❌❌❌❌
+
+
+
+果然不在环境路径下.
+那就加把.
+怎么改环境路径呢..
+
+首先环境路径是个 shell 有关的.
+bash 有bash的环境路径.
+zsh 有zsh 的环境路径. 我们用的是zsh
+
+也就是修稿 ~/.zshrc
+
+
+准确的说就是给PATH增加一个值/usr/locar/new/bin。
+你只需要一行bash命令export PATH=$PATH:/usr/locar/new/bin。
+
+我们这就是:
+
+export PATH=$PATH:/usr/src
+再去看看 环境路径 肯定多了个... 这就好了
+这种方法只是临时的. 当前会话有效.
+
+要永久的:对电脑所有用户都有效:
+vi /etc/profile
+
+
+永久: 对当前用户有效:
+vi ~/.bash_profile
+修改PATH行,把/etc/apache/bin添加进去
+
+
+注意：想改变PATH，必须重新登陆才能生效，以下方法可以简化工作：
+
+
+
+
+
+给 Linux/Unix 系统增加环境变量，是使用 export 命令。
+
+为了永久性生效，则需要考虑加入到登录的 profile中。
+
+这个时候要考虑你当前使用的 shell,比如默认的 bash shell，则可编辑用户根目录下的隐藏文件 ./bash_profile
+
+对于zsh 而言，需要编辑 .zshrc 这个文件 vi ~/.zshrc
+
+
+export PATH=/usr/src/Python-2.7.9/python:$PATH 
+# 主要系统本来就有环境变量的.  export 只是加一条. 之前的还在的..
+
+
+
+你如果在仅在终端里设置的话，只是设置了临时的变量，重启以后就会失效。如果要长期有效的话，需要设置环境变量配置文件。1./etc/profile   （建议不修改这个文件 ） 全局（公有）配置，不管是哪个用户，登录时都会读取该文件。 2./etc/bashrc    （一般在这个文件中添加系统级环境变量） 全局（公有）配置，bash shell执行时，不管是何种方式，都会读取此文件。 我在这里加入mysqlstart、mysql和mysqladmin命令的别名，保证每一个用户都可以使用这3个命令。 3.~/.bash_profile  （一般在这个文件中添加用户级环境变量）（注：Linux 里面是 .bashrc 而 Mac 是 .bash_profile） 若bash shell是以login方式执行时，才会读取此文件。该文件仅仅执行一次具体可以参考下这里Mac osx 可设置环境变量的位置、查看和添加PATH环境变量建议将PYTHONPATH设置在bash_profile或者bashrc文件中
+
+
+
+
+
+
+然后重新连ssh
+再看环境路径 就对了.
+
+
+
+
+再看能不能启动.... seafile  还是不行啊..
+Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it
+
+重点就是这个了..
+也许是 python 自己的环境变量的设置问题..
+先进入python的交互环境
+
+import os
+print os.environ['HOME']
+
+ >>> 导入 os >>> 打印 os.environ
+
+ os.environ 是一个字典。尝试访问字典中不存在的键时，将引发 KeyError。
+ Get 方法只是返回无时不存在的键。有 PYTHONPATH 设置吗？您可以尝试的变量如路径，保证能存在？它并不返回有意义的值？
+
+
+PYTHONPATH 用于从外部 Python 向 Python (sys.path) 中添加新的搜索路径。
+烦死了  这么多环境路径..
+
+
+
+
+
+
+
+
+
+centos 6.2 默认没有安装sqlite-devel，所以要先安装sqlite-devel，再编译升级python，才可以使用sqlite3库。
+
+
+
+
+先安装sqlite-devel：
+
+yum install -y sqlite-devel
+2、之后编译安装python 2.7.2
+3.如果已经升级python则上一步只是重新编译，
+
+2
+3
+4
+5
+# python  
+Python 2.7.2 (default, Aug 1 2012, 14:37:32)  
+[GCC 4.4.6 20120305 (Red Hat 4.4.6-4)] on linux2  
+Type help, copyright,credits or license for more information.  
+>>> import sqlite3
+
+
+
+
+

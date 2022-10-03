@@ -1,0 +1,528 @@
+nginx 转发
+
+
+
+🔵 Nginx 正则式详解.
+
+^(.*)$   ➜ 匹配所有的路径 
+
+比如说 SSL 的验证网址是这样的.
+http://ss.0214.help/.well-known/acme-challenge/xxx
+那么 这个 URI 的 路径就是 /.well-known/acme-challenge/xxx 
+
+正则匹配测试网站:   http://tool.chinaz.com/regex
+把 http://ss.0214.help/.well-known/acme-challenge/xxx 输入进去.
+然后写 表达式 就可以出来结果.
+
+
+🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
+www.genesisfin.com
+好的的
+iiii
+源网站: ip....
+Nginx : 98.142.138.81
+
+
+1. nginx 代理...
+看那个....alpha... 配置..
+
+
+🔵 IP 
+
+VPS :  98.142.138.81
+Web :  123.59.55.246
+
+
+
+
+🔵 location 模块 规则 & 优先级
+
+
+语法:  rewrite 匹配模式 替换模式 [flag]
+
+例子:  rewrite ^(.*)$ https://$host$1 permanent;
+
+
+
+例子:  rewrite ^(.*)$ /index.php$1 last;
+
+^(.*)$ 为匹配模式
+
+/index.php$1为替换表达式
+
+last为修饰符flag
+
+
+
+🔶 修饰符
+
+last：表示当前的重写规则是最后的应用。在这条规则之后的新的URI被nginx处理并且查找一个location区段，后面的rewrite指令将被忽略。
+break:当前的重写规则被应用后，对于替换的URI不再重新搜索，后面的rewrite指令也将被忽略
+redirect:返回 302重定向，并且通过一个替代的URI作为location的头
+
+
+nginx 
+
+前缀匹配
+正则匹配
+
+
+
+
+
+
+🔶 location 匹配顺序:  
+
+
+location 匹配规则:  最大前缀.
+
+正则匹配是有顺序的!!!  只要匹配到第一个 就停止后面的匹配.
+
+
+🔶 
+
+
+
+🔶 Server Block 
+
+
+
+
+
+🔵 
+
+
+
+🔶 例子:
+
+server {
+    # ...
+    rewrite ^(/download/.*)/media/(\w+)\.?.*$ $1/mp3/$2.mp3 last;
+    rewrite ^(/download/.*)/audio/(\w+)\.?.*$ $1/mp3/$2.ra  last;
+    return  403;
+    # ...
+}
+
+🔶  语法:    rewrite regex replacement [flag];
+
+🔶  语法 简介
+
+    如果 ... regex 匹配到 URI.  
+    会使用 replacement 来替换 URI.
+
+    Rewrite 指令会根据在配置文件中出现的顺序依次执行.
+    可以用 flag 来终止 接下来的处理
+
+
+    二: 如果 replacement 以 http://  或者 https:// 或者 $scheme 开头. 
+    那么就停止处理. 执行重定向. 返回客户端.
+
+
+
+🔶 Nginx 变量
+
+2）如果regex匹配到URI，会使用replacement来替换URI；rewrite指令会根据在配置文件中出现的顺序依次执行，可以使用flag来终止接下来的处理。
+3）如果replacement以http://或者https://或者$scheme，则停止处理，执行重定向，返回到client。
+4）break 和last flag。
+last停止执行rewrite模块的指令，并根据rewirte规则重新发起请求。
+break停止执行rewrite模块的指令，继续执行块中剩余指令。
+
+
+
+
+
+🔶 Regex 正则式
+
+
+
+🔶 URL 
+
+
+
+🔶 flag: 
+
+⦿ last 停止执行 rewrite 模块指令. 根据 rewrite 规则重新发起请求.
+
+⦿ break 停止执行后面的 rewrite 模块指令.
+
+⦿ redirect   302 临时重定向.
+⦿ permanent  301 永久重定向.
+
+⦿ return : 中断请求. 返回http 状态码...
+⦿ set   初始化.设置一个变量..
+
+
+
+🔶 例子 
+
+原地址：goods.php?id=17
+
+重写后地址：goods-17-夏新N7.html
+
+rewrite ^(.*)/goods-(d+)-(.*).html $1/goods.php?id=$2 last;
+
+
+🔶 2)隐藏index.php
+
+location / {
+     if (!-e $request_filename)
+     {
+          rewrite ^(.*)$    /index.php$1 last;
+     }
+}
+
+原理：如果URL请求的文件不存在，则在这个地址前面加上index.php再重新匹配
+
+!-e是一个表达式，表示文件不存在，类似的还有：
+!-f表示是一个文件不存在
+!-d表示一个目录不存在
+
+$request_filename是nginx的变量，表示请求的文件，更多的nginx变量请查看 nginx模块核心变量
+
+正则表达式部分^(.*)$可以匹配所有URL ,$1表示分组1匹配的结果即()匹配的结果
+
+last表示本次匹配结束
+
+
+
+
+
+# 用户(https://web.0214.help) ➜ Nginx 中转服务(98.142.138.81) ➜ 真正web服务器.(123.59.55.246)
+# 要用 HTTPS 访问网站. 
+# 首先我们得配置 SSL 证书. 用免费的 Letsencrypt 绝对没错.
+# 要申请证书. 首先得 可以用 http://web.0214.help 正常范围网站.
+# 接下来证书申请过程中 会要求一个文件验证.
+# 就是要求可以用 http://web.0214.help/.well-known/acme-challenge/xxx.file 这样的网址访问一个验证文件.
+# 这个验证文件内容 证书申请过程中会给你. 你可以手动创建.
+# 至于这个文件 你是在 Nginx 服务器中创建. 还是在 真正的Web 服务器中创建. 看你 Nginx 的配置了.
+
+# 不太熟悉 Nginx 的就 直接去真正的后端服务器 找到网站根目录. 
+# 根目录下新建个隐藏的 .well-known/acme-challenge 文件夹; 在新建个验证文件.填上验证内容.
+# 然后自己用浏览器 访问这个验证文件看看. 可以访问的话.就可以通过验证.
+
+# 对Nginx 比较熟悉的 可以写个 Rewrite 正则匹配规则.
+# 把 http://web.0214.help/.well-known/acme-challenge 这个URL 绑定到 Nginx 服务器的某个文件夹上.
+# 然后你只要在 Nginx 的这个文件夹里面 新建验证文件. 填写验证内容 就可以了.
+# 如果以后需要证书自动续签的话. 就必须选择这种方法.
+
+# 现在我们 HTTP 能正常中转了. http://web.0214.help 
+# 下面来弄 Rewrite. 只要能能实现用 
+# http://web.0214.help/.well-known/acme-challenge/1.txt 方法Nginx 服务器上某个文件夹中的 1.txt文件即可
+
+
+# 首先我们不管中转. 我们直接访问 nginx 中转服务器上的某个网站.
+# https://www.0214.help/
+# 下面是原来的配置文件.
+
+server {
+    listen 443 ssl;
+    server_name  www.0214.help;
+
+    ssl_certificate /etc/letsencrypt/live/www.0214.help/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/www.0214.help/privkey.pem;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+}
+
+原来的网站根目录是 /usr/share/nginx/html
+现在我们到 服务器上新建个文件夹./usr/share/nginx/test/1.txt
+我们要实现 用 https://www.0214.help/tset/1.txt 可以访问.
+那么我们就得添加一个
+    location /test/ {
+        root   /usr/share/nginx/;
+    }
+然后当浏览器访问 www.0214.help/test/1.txt 的时候.
+就会匹配这个规则.  也就是 把网站根目录设置为 /usr/share/nginx/
+也就是把 /test/ 左边的 / (这个表示的是根目录!!!) 变成 /usr/share/nginx/
+然后再加上 test/  所以浏览器实际访问的是  /usr/share/nginx/ + test/1.txt
+关于这个路径调试 看Nginx日志就清楚了. 
+日志中会有 你真正访问的 地址的. 而不是浏览器中输入的地址.
+那么 接下来 就差那个把 test 文件夹改成..
+http://web.0214.help/.well-known/acme-challenge/xxx.file 
+就可以了!!!
+
+# mkdir -p /SSL-Auto-Verity/.well-known/acme-challenge/
+# Nginx 服务器 新建个文件夹. 然后放个验证文件 index.html 进去
+# 然后 Nginx 添加...下面的规则
+# 然后 浏览器访问    http://www.0214.help/.well-known/acme-challenge/index.html
+location /.well-known/acme-challenge/ {    root   /SSL-Auto-Verity/;    }
+
+
+
+🔵 证书生成的时候 配置  的 webroot .  
+sudo certbot certonly --webroot -w /SSL-Auto-Verity -d
+
+这个 webroot .直接设置成.. 验证的目录就可以了!!!...
+果然可以.... 
+然后..配置https
+
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/web.0214.help/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/web.0214.help/privkey.pem
+   Your cert will expire on 2018-08-02. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot
+   again. To non-interactively renew *all* of your certificates, run
+   "certbot renew"
+
+
+server {
+        listen 80;
+        server_name web.0214.help;
+        location / {
+            proxy_pass http://123.59.55.246:80/web/;
+            proxy_set_header Host $host:$server_port;
+            }
+    }
+
+server {
+
+    listen 443 ssl;
+    server_name  web.0214.help;
+
+    ssl_certificate /etc/letsencrypt/live/web.0214.help/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/web.0214.help/privkey.pem;
+
+    location / {
+        proxy_pass http://123.59.55.246:80/web/;
+        proxy_set_header Host $host:$server_port;
+        }
+}
+
+
+
+🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
+SSL 自动续签 完整流程
+
+🔶 域名解析   
+
+        ss.0214.help ➜ 98.142.138.81
+
+🔶 网站根目录及测试文件创建
+        
+        mkdir -p /nginx-ss.0214.help/
+        echo "<h1>Hello World-SS</h1>" > /nginx-ss.0214.help/index.html
+
+🔶 创建 nginx 配置文件.
+
+        conf.d 的文件路径自己修改.
+
+        vi /etc/nginx/conf.d/ss.0214.help.conf
+
+🔶 配置文件内容
+
+server {
+        listen 80;
+        server_name ss.0214.help;    
+        location / { root /nginx-ss.0214.help;   }
+    }
+
+
+🔶 配置文件 语法检测
+
+    nginx -t
+
+
+🔶 重载nginx 
+    
+    nginx -s reload
+
+
+🔶 80 网站测试
+
+
+🔶 证书目录配置
+mkdir /SSL-Auto-Verity
+
+
+🔶 生成证书!!! 
+    sudo certbot certonly --webroot -w /SSL-Auto-Verity -d ss.0214.help
+
+    sudo certbot certonly --webroot -w /SSL-Auto-Verity -d www.genesisfin.com
+
+    证书生成的目录 和 网站的目录是可以指定为不同的!!!!!!
+    证书生成的目录 和 网站的目录是可以指定为不同的!!!!!!
+    证书生成的目录 和 网站的目录是可以指定为不同的!!!!!!
+
+    为了统一管理证书. 可以在统一文件夹内 生成所有域名的证书!
+
+
+🔶 配置 https 
+
+server {
+    listen 443 ssl;
+    server_name  ss.0214.help;
+    location / { root /nginx-ss.0214.help;   }
+    ssl_certificate /etc/letsencrypt/live/ss.0214.help/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ss.0214.help/privkey.pem;
+}
+
+
+🔶 https 测试
+
+https://ss.0214.help/
+
+
+🔶 网站中转.
+现在 的网站是在 nginx 服务器本地的.
+但是 nginx 一般都是中转用的. 真正的网站是在别的服务器上的.
+
+
+🔶 80 443 端口中转.  ✔
+
+        # location / { root /nginx-ss.0214.help;   } 
+        # 改成 下面的就可以了.
+
+        location / {
+            proxy_pass http://123.59.55.246:80/web/;
+            proxy_set_header Host $host:$server_port;
+            }
+
+
+🔶 所有 80 强制跳转  443 ✔
+
+    rewrite ^(.*)$ https://$host$1 permanent;
+
+🔶 部分80 强制跳转 443
+
+    这里有个问题.  由于证书自动续签 的时候要访问 80端口的. 
+    这时候是不能强跳转整的. 不然会验证失败! 
+
+    想要排除某个网址 不跳转有两种方法.
+    一种是用 rewrite .
+    再增加个 rewrite 规则. 把新规则的优先级弄高一点就可以了.
+
+    其实还可以用 location 来实现.
+    首先用 location . 然后在 location 里面用 rewrite 功能.
+    这时候的 rewrite 就只会在 那个location 路面生效.
+
+    location / {    rewrite ^(.*) https://www.genesisfin.com permanent;  }
+
+    location / {    rewrite ^(.*) https://$host$1 permanent;  }
+    location /.well-known/acme-challenge/ {    root   /SSL-Auto-Verity;    }
+
+
+🔶 浏览器测试
+
+
+    http://ss.0214.help/.well-known/acme-challenge/index.html
+    看看是否 调整.
+
+    http://www.genesisfin.com/.well-known/acme-challenge/index.html
+
+
+    再看看
+    http://ss.0214.help 是否跳转
+
+
+🔶 SSL 自动续签
+
+
+🔶 certbot 恢复初始化.
+
+    KVM letsencrypt ➜ pwd
+    /etc/letsencrypt
+    KVM letsencrypt ➜ ll
+    total 28K
+    drwx------ 4 root root 4.0K May  1 08:58 accounts
+    drwx------ 3 root root 4.0K May  4 00:37 archive
+    drwxr-xr-x 2 root root 4.0K May  4 00:37 csr
+    drwx------ 2 root root 4.0K May  4 00:37 keys
+    drwx------ 6 root root 4.0K May  4 00:37 live
+    drwxr-xr-x 2 root root 4.0K May  4 00:37 renewal
+    drwxr-xr-x 5 root root 4.0K May  1 08:08 renewal-hooks
+
+    基本上所有的证书都在这个文件夹里面.
+    删除 renew 和 archive 下所有文件.
+    基本就恢复到初始化状态了.
+
+
+
+
+
+
+
+🔵 
+
+
+
+
+
+
+server {
+        listen 443 ssl;
+        server_name gfop.genesisfin.com;
+
+    ssl_certificate /etc/letsencrypt/live/gfop.genesisfin.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/gfop.genesisfin.com/privkey.pem;
+
+   allow 116.228.239.178;
+   deny all;
+
+    location / {
+        proxy_pass http://10.10.22.107:8080;
+        proxy_set_header Host $host:$server_port;
+        rewrite / https://gfop.genesisfin.com/gfop;
+        }
+
+    location /gfop/ {
+        proxy_pass http://10.10.22.107:8080;
+        }
+
+}
+
+
+🔵  SSL 申请限制..
+
+
+🔶 测试环境证书
+
+    我们默认使用的是生产环境的证书. 资源有限. 必须限制.
+    你要测试怎么办呢.有个测试环境的 !!! 这个限制会少很多!!!!
+    需要的自己搜索看看. 一般来说 生产环境的也够你折腾了.
+
+
+
+🔶 数量限制 (每周 20个 )
+
+    每个域名. 每周最多 20个证书!!! 达到上限就得等下周再申请了.
+
+    一个证书最多可以绑定 100个 子域名.
+
+    如果你有非常多的子域名要绑定证书.
+    那么可以把多个域名 绑定一个证书.
+    这样就可以 最多 2000 个域名都用上 https了..一般人足够了!!!
+
+
+🔶 重复限制 ( 每周 5个 )
+
+    比如你已经给 某个域名申请好证书了.  默认有效期是 3个月.  
+    如果你还是立刻给这个域名申请新的证书. 
+    那么...这个次数是有限制的!!!  
+    同一个子域名 每周最多重复申请 5个证书.
+    所以不要经常 更新证书. 有必要才更新. 免得到时候更新不了.
+
+
+🔶 申请失败次数 ( 每小时 5次 )
+
+    测试的时候.你申请证书失败的次数多了也不行. 每小时最多失败5次!!!
+    There is a Failed Validation limit of 5 failures per account, per hostname, per hour. 
+    This limit is higher on our staging environment, so you can use that environment to debug connectivity problems.
+
+
+🔶 其他限制
+
+    自己看官网..  
+
+
+
+
+
+
+
+

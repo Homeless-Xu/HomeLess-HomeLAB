@@ -1,0 +1,425 @@
+❤️ 
+
+service iptables stop
+service iptables start
+service iptables restart
+service iptables status
+
+
+禁止某端口:    iptables -A INPUT -p tcp --dport 21 -j DROP
+开放某端口:    iptables -A INPUT -p udp --dport 500 -j ACCEPT
+开连续端口  iptables -A INPUT -p tcp --dport 1025:1200 -j ACCEPT
+
+
+
+
+❤️ 简介
+
+    ❗️❗️❗️ Usage: iptables {start|stop|reload|restart|condrestart|status|panic|save} ❗️❗️❗️
+
+    之前是用 iptables -F 清空所有的防火墙来实现连接数据库的.
+    这个不太安全.下面我们来仔细介绍防火墙.
+
+    CentOS6 自带的是 iptables 防火墙. 我们介绍这个.
+    CentOS7 自带的是 firewall 防火墙.
+
+    iptables -V            查看iptables版本
+    whereis iptables       也可以查看iptables路径.
+    yum install iptables   如果没有安装就先安装iptables
+
+
+    防火墙好比门卫,主要是控制外来人员的 进入. 当然出去也可以控制.
+
+
+    常用规则: ✔︎ 
+        chkconfig iptables off         # 永久关闭防火墙
+        chkconfig iptables on          # 永久关闭后启用
+
+
+    防火墙原则: 
+    📌 最安全: 首先设定规则允许指定端口数据访问, 然后丢弃所有不在规则中的数据
+    📌 防火墙不是立刻生效的. 需要保存配置, 然后重启.
+       service iptables save && service iptables restart     #保存配置然后重启
+       好像不需要这步骤. 这个保存 服务器重启之后 好像会消失.....??????
+
+       📌📌📌📌 iptables -F 这些命令，重启就会失去作用。
+        要重启后有效.必须执行以下命令进行保存。 
+        /etc/rc.d/init.d/iptables save
+        当然你具体的规则.重启后还是在的.
+
+
+    📌📌 端口权限: 只进不出、只出不进、同时进出、不进不出
+
+    📌📌 每个数据包中都有来源端口 和 目的端口的.
+            你可以根据来源端口 来设置规则, 也可以根据目的端口来设置规则.
+            所以这里 就有 -dport 和 -sport.
+
+    -A INPUT -p tcp -m state --state NEW -m tcp --dport 7777 -j ACCEPT
+        -A INPUT:  🔸 到 INPUT 板块下添加一条规则.
+        -p tcp     🔸 匹配 TCP协议.
+        -dport:    🔸 匹配数据包中的目的端口
+        -j ACCEPT  🔸 匹配上面的所有规则就接收数据包.
+
+
+
+    localhost、127.0.0.1 区别:
+        🔸 localhost 是一个域名!!! 和网址一样.
+          默认是指向 127.0.0.1 这个IPv4的地址. 由于支持IPv6了.
+          现在还指向 [::1]     这个IPv6的地址
+
+          这个默认值是可以修改的!!! 虽然一般不用去改
+              windows 下 hosts 文件中.
+              Linux 下 /etc/hosts 文件中
+                      127.0.0.1    localhost  这个是默认值. ping localhost 就是ping 127.0.0.1
+                  192.068.206.1    localhost  如果改成这个. ping localhost 就是ping  192.068.206.1
+
+        🔸 127.0.0.1
+          电脑中有个特殊的虚拟网卡. loopback
+          Linux 下你用 ifconfig 查看本机网卡 发现肯定会有个 lo 名字的网卡.
+          ➜  ~ ifconfig
+          lo        Link encap:Local Loopback
+                    inet addr:127.0.0.1  Mask:255.0.0.0
+                    inet6 addr: ::1/128 Scope:Host
+                    UP LOOPBACK RUNNING  MTU:65536  Metric:1
+                    RX packets:880 errors:0 dropped:0 overruns:0 frame:0
+                    TX packets:880 errors:0 dropped:0 overruns:0 carrier:0
+                    collisions:0 txqueuelen:0
+                    RX bytes:64031 (62.5 KiB)  TX bytes:64031 (62.5 KiB)
+          这个 127.0.0.1 就是分配给这个 loopback 网卡的.
+          电脑系统是一台非常复杂的东西. 系统要正常运行 就需要这么一个虚拟网卡.  
+
+
+
+
+
+
+
+🔵 查看防火墙
+      
+    ➜  ~ iptables -L -n             n：显示IP地址和端口号
+    Chain INPUT (policy DROP)
+    target     prot opt source               destination
+    ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           tcp dpt:2222
+    ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0           icmp type 255
+    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:53
+    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:53
+
+    Chain FORWARD (policy ACCEPT)
+    target     prot opt source               destination
+
+    Chain OUTPUT (policy ACCEPT)
+    target     prot opt source               destination
+    ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0           icmp type 255
+    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:53
+    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp spt:53
+
+
+🔵 三种策略 & 默认策略
+
+    服务器可以接收数据、转发数据、发送数据. 对应下面三种策略 
+        ❗️ Chain INPUT   (policy DROP)    Drop:   该策略下 默认丢弃数据包.
+        ️❗️️ Chain FORWARD (policy ACCEPT)  ACCEPT: 该策略下 默认接收数据包.
+        ❗️ Chain OUTPUT  (policy ACCEPT)  ACCEPT: 该策略下 默认接收数据包.
+
+        默认值是可以改的!!!
+            iptables -P INPUT DROP
+            iptables -P FORWARD DROP
+            iptables -P OUTPUT DROP
+            这样做会屏蔽所有输入、输出网卡的数据包. 别试.知道就可以了.
+
+
+
+
+🔵 开/关/重启 防火墙.
+  
+    方法一: 通过文件. 需文件路径. 不推荐.    /etc/init.d/iptables restart
+    方法二: 通过服务. 需服务名. 推荐.        service iptables stop/start/restart 
+
+        其实用服务名方式重启本质就是用文件重启.
+        iptables 是个命令. 可以直接使用.
+        是因为环境变量里有很多目录, 其中一个目录就是 /etc/init.d/
+        系统允许任何命令首先会在环境变量下的所有目录都查一遍.
+        能查到就可以在任何目录直接使用某个命令
+        查不到就要在任何目录执行这个命令就需要 这个命令的绝对路径!!!
+
+        ➜  ~ /etc/init.d/iptables restart
+        iptables：将链设置为政策 ACCEPT：raw nat mangle filter     [确定]
+        iptables：清除防火墙规则：                                 [确定]
+        iptables：正在卸载模块：                                   [确定]
+        iptables：应用防火墙规则：                                 [确定]
+        ➜  ~ service iptables restart
+        iptables: Setting chains to policy ACCEPT: raw nat mangle f[  OK  ]
+        iptables: Flushing firewall rules:                         [  OK  ]
+        iptables: Unloading modules:                               [  OK  ]
+        iptables: Applying firewall rules:                         [  OK  ]
+
+
+
+
+
+🔵 清除所有规则
+      iptables -F 清除预设表filter中的所有规则链的规则 
+      尽量不要执行这个. 虽然这个能一下子删除所有规则.
+      当时.如果 你input的默认规则是 drop的话.
+      你执行了这个命令,按下回车后 就断开SSH了. 得重启服务器才能ssh
+      清空防火墙. 不是关闭防火墙. 清空的意思就是使用系统默认的防火墙规则.
+
+      防火墙默认原则就可以设置的,
+      一般来说. input 下的规则默认都是Drop. 
+      也就是丢弃所有想连到服务器的数据包. 
+
+
+
+🔵 允许环回(loopback)访问
+    iptables -A INPUT -i lo -j ACCEPT && iptables -A OUTPUT -o lo -j ACCEPT
+
+    这个规则非常重要. 一般情况必须开启.
+    主机有很多端口, 不同的端口之间需要交流.也就是传递数据.
+
+
+
+
+🔵 开关端口 ✔︎
+
+    iptables -A INPUT -p tcp --dport 22 -j ACCEPT          #允许访问服务器22端口
+    iptables -A INPUT -p tcp --dport 22 -j DROP            #拒绝访问服务器22端口
+
+    iptables -A INPUT -p tcp --dport 80 -j ACCEPT          # 允许访问80端口
+    iptables -A INPUT -p tcp -s 0/0 --dport 80 -j ACCEPT   # 允许所有ip访问80端口
+
+
+
+    # 1.允许HTTP连接：80端口
+    iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+    iptables -A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+
+    # 2.允许HTTPS连接：443端口
+    iptables -A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+    iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
+
+
+    允许出站DNS连接
+    iptables -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
+    iptables -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
+
+
+
+允许来自指定网络的MySQL连接请求
+你可能启用了MySQL服务，但只希望DBA与相关开发人员能够从内部网络（192.168.100.0/24）直接登录数据库：
+iptables -A INPUT -i eth0 -p tcp -s 192.168.100.0/24 --dport 3306 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 3306 -m state --state ESTABLISHED -j ACCEPT
+
+
+防止DoS攻击
+iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT
+
+
+
+
+
+    # 允许80端口返回数据
+    iptables -A OUTPUT  -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT 
+
+    # 允许内网ip访问所有端口. 192.168.1.0/24 改成你自己的网段.
+    iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT
+
+
+
+    # 允许已建立的或相关连的通行 
+    iptables -A INPUT -m state –state ESTABLISHED,RELATED -j ACCEPT 
+
+    #允许所有本机向外的访问 
+    iptables -A OUTPUT -j ACCEPT
+
+    #禁止其他未允许的规则访问 
+    iptables -A INPUT -j REJECT （注意：如果22端口未加入允许规则，SSH链接会直接断开。） 
+    iptables -A FORWARD -j REJECT 
+
+
+
+
+🔵 同时添加多个端口
+    🔸 连续端口
+        iptables -A INPUT -p tcp –dport 21:25 -j DROP
+
+
+    🔸 非连续端口  multiport参数
+        iptables -A INPUT -p tcp -m multiport --dports 21:25,135:139 -j DROP
+        iptables -A INPUT -p tcp -m multiport --dports 110,80,25,445,1863,5222 -j ACCEPT
+
+
+
+
+
+🔵 屏蔽IP: ✔︎
+
+    iptables -A INPUT -p tcp -s 192.168.1.2 -j DROP
+        在入站规则(INPUT)下, 添加一条规则.
+        指定数据包类型: TCP
+        指定来源IP:  也就是想要访问服务器的IP. 
+        设置是拒绝 还是 同意访问.
+
+
+    #屏蔽单个IP的命令是 
+    iptables -I INPUT -s 123.45.6.7 -j DROP 
+
+    #封整个段即从123.0.0.1到123.255.255.254的命令 
+    iptables -I INPUT -s 123.0.0.0/8 -j DROP 
+
+    #封IP段即从123.45.0.1到123.45.255.254的命令 
+    iptables -I INPUT -s 124.45.0.0/16 -j DROP 
+
+    #封IP段即从123.45.6.1到123.45.6.254的命令是 
+    iptables -I INPUT -s 123.45.6.0/24 -j DROP 
+
+
+
+
+
+🔵 删除某规则  ✔︎ 
+
+  🔅 iptables -D OUTPUT 4  删除OUTPUT 下面的第四条
+  🔅 iptables -D INPUT 4   删除INPUT下面的第四条
+
+        ➜  ~ service iptables status
+        ......
+        ......
+        Chain INPUT (policy DROP)
+        num  target     prot opt source               destination
+        1    ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           tcp dpt:2222
+        2    ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0           icmp type 255
+        3    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:53
+        4    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:53
+
+        Chain FORWARD (policy ACCEPT)
+        num  target     prot opt source               destination
+
+        Chain OUTPUT (policy ACCEPT)
+        num  target     prot opt source               destination
+        1    ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0           icmp type 255
+        2    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:53
+        3    ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp spt:53
+        4    ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           state NEW tcp dpt:80
+
+
+        先用 service iptables status 看序号.
+        input/forward/output 下面每条规则都有序号的. 删除是根据序号来删除的.
+        当然规则不多就直接数都是从1开始的. 规则多就用这个列出来看下序号.
+
+
+
+
+
+
+
+
+🔵 必开规则: SSH端口
+
+🔅 iptables -A INPUT -p tcp --dport 2222 -j ACCEPT        
+    SSH 端口. 默认22,我的是2222, 你的自行修改对应值.  这个是必须开的.不解释
+
+🔅 service iptables save && service iptables restart 
+    只开这一条防火墙. 保存重启防火墙.
+    看看是不是ping都ping不通服务器了.
+    也不能登录之前搭建好的 ss-panel网站了.
+    数据库也远程登录不了了..
+    
+
+🔵 允许 Ping
+    Ping 其实就是发送和接收 icmp 数据包.
+
+    🔅 iptables -A INPUT -p icmp --icmp-type any -j ACCEPT   
+    #允许icmp包进入
+    🔅 iptables -A OUTPUT -p icmp --icmp any -j ACCEPT       
+    #允许icmp包出去
+
+    🔅 service iptables save && service iptables restart 
+    客户端再去Ping 服务器试试 可以Ping了.
+    服务器Ping www.google.com  你会发现没反应.
+    服务器ping 8.8.8.8         你会发现这个正常.
+    为什么呢. 因为DNS服务器啊. 域名和IP是两个东西.
+    互联网是建立在IP基础上的. 所以可以直接用IP来互相访问.
+    但是你要用域名访问 就得查询DNS服务器了.
+    DNS服务器会告诉你 这个域名对应的是 哪个IP. 
+    哪怕你ping 的是域名. 其实系统底层原理还是ping的IP地址.
+    问题就出在这个DNS服务器. 
+    电脑要知道某个域名对应的是哪个IP. 必须问DNS服务器.
+    这就需要发送数据包给DNS服务器.DNS默认用53端口.
+    要ping域名 .开放53端口还不够.至少还要开放本地回环端口.
+
+
+
+
+
+
+
+
+
+
+
+🔵 最基础配置.
+
+    🔅 iptables -A INPUT -s localhost -d localhost -j ACCEPT    
+    #允许本地数据包进入
+    🔅 iptables -A OUTPUT -s localhost -d localhost -j ACCEPT   
+    #允许本地数据包出去
+
+
+    🔅 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT 
+    #允许已经建立和相关的数据包进入
+
+    🔅 iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT 
+    #允许已经建立和相关的数据包出去
+
+
+
+
+
+🔵 拒绝规则外请求
+    设置好 所有规则的最后. 应该拒绝所有规则以为的 请求.
+
+    # 除上面允许的规则，抛弃所有INPUT请求 
+    （注意：如果22端口未加入允许规则，SSH链接会直接断开。）
+    注意 防火墙设置是有顺序的.  这个应该放在最下面.
+    iptables -P INPUT DROP 
+
+    # 除上面允许的规则，抛弃所有FORWARD请求
+    iptables -P FORWARD DROP 
+
+    # 除上面允许的规则，抛弃所有OUTPUT请求
+    iptables -P OUTPUT DROP 
+
+
+
+
+
+
+
+参考教程:    http://lesca.me/archives/iptables-examples.html
+
+
+
+
+
+
+❤️ 我的个人配置.
+
+iptables -F     不需要保存.按下回车立马生效. 立马SSH不了!!
+    解决办法. 把INPUT的链路规则 设置为默认允许 然后保存 然后重启防火墙. 
+    iptables -P INPUT ACCEPT && service iptables save && service iptables restart
+    iptables -P INPUT DROP && service iptables save && service iptables restart
+
+
+iptables -A INPUT -i lo -j ACCEPT && iptables -A OUTPUT -o lo -j ACCEPT
+    允许回环访问.
+
+
+
+iptables -A INPUT -p tcp -m multiport --dports 80,443,2222,3306 -j ACCEPT
+允许80、443、2222、3306 访问
+
+
+iptables -A INPUT -p tcp --dport 1025:1050 -j ACCEPT
+这写是 SS服务器的帐号端口
+
+

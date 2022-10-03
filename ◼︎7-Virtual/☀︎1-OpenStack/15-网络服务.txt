@@ -1,0 +1,361 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 网络服务 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 废话
+    就像 GCE 有好多区域节点划分.
+    就像 GCE 可以创建自己的 VPC. 
+    就像 GCE 可以创建 实例组. 来配置集群.
+    这些都是依靠网络服务才能实现的.
+
+
+
+
+
+🔸 网络概念
+
+    OpenStack网络（neutron）管理OpenStack环境中所有虚拟网络基础设施（VNI），物理网络基础设施（PNI）的接入层。
+    OpenStack网络允许租户创建包括像 防火墙、负载均衡、VPN 等等这样的高级虚拟网络拓扑
+
+
+    网络服务提供网络，子网以及路由这些对象的抽象概念。
+
+
+    对于任意一个给定的网络都必须包含至少一个外部网络。
+    不像其他的网络那样，外部网络不仅仅是一个定义的虚拟网络。
+    相反，它代表了一种OpenStack安装之外的能从物理的，外部的网络访问的视图。
+    外部网络上的IP地址可供外部网络上的任意的物理设备所访问
+
+    外部网络之外，任何 Networking 设置拥有一个或多个内部网络。
+    这些软件定义的网络直接连接到虚拟机。仅仅在给定网络上的虚拟机，或那些在通过接口连接到相近路由的子网上的虚拟机，能直接访问连接到那个网络上的虚拟机。
+
+    如果外部网络想要访问实例或者相反实例想要访问外部网络，那么网络之间的路由就是必要的了。
+    每一个路由都配有一个网关用于连接到外部网络，以及一个或多个连接到内部网络的接口。
+    就像一个物理路由一样，子网可以访问同一个路由上其他子网中的机器，并且机器也可以访问路由的网关访问外部网络。
+
+    另外，你可以将外部网络的IP地址分配给内部网络的端口。不管什么时候一旦有连接连接到子网，那个连接被称作端口。你可以给实例的端口分配外部网络的IP地址。通过这种方式，外部网络上的实体可以访问实例.
+
+    网络服务同样支持安全组。安全组允许管理员在安全组中定义防火墙规则。
+    一个实例可以属于一个或多个安全组，网络为这个实例配置这些安全组中的规则，阻止或者开启端口，端口范围或者通信类型。
+
+    每一个Networking使用的插件都有其自有的概念。
+    虽然对操作VNI和OpenStack环境不是至关重要的，但理解这些概念能帮助你设置Networking。
+    所有的Networking安装使用了一个核心插件和一个安全组插件(或仅是空操作安全组插件)。
+    另外，防火墙即服务(FWaaS)和负载均衡即服务(LBaaS)插件是可用的。
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸准备🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+ 
+ 🔸 数据库 
+    mysql -u root -ptoor
+    CREATE DATABASE neutron;
+    GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'NEUTRON_DBPASS';
+    GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'NEUTRON_DBPASS';
+    exit;
+
+🔸 admin 环境:    source admin-openrc
+
+
+🔸 创建 neutron 用户、服务、API
+
+    ⦿ 创建 neutron 用户 
+        openstack user create --domain default --password-prompt neutron
+        设置密码: neutron-passwd
+
+    ⦿ 给 neutron 用户分配 admin 管理员角色：
+        openstack role add --project service --user neutron admin
+
+    ⦿ 创建 neutron 服务：
+        openstack service create --name neutron --description "OpenStack Networking" network
+
+    ⦿ 创建 neutron 服务 API ：
+        openstack endpoint create --region RegionOne network public http://controller:9696
+        openstack endpoint create --region RegionOne network internal http://controller:9696
+        openstack endpoint create --region RegionOne network admin http://controller:9696
+
+
+
+🔸 配置网络选项
+
+⦿ 简介 
+    您可以部署网络服务使用选项1和选项2两种架构中的一种来部署网络服务。
+    我们选择第一种.简单的.
+
+    选项1:
+        采用尽可能简单的架构进行部署，只支持实例连接到公有网络（外部网络）。
+        没有私有网络（个人网络），路由器以及浮动IP地址。
+        只有``admin``或者其他特权用户才可以管理公有网络
+
+    选项2
+        在选项1的基础上多了layer－3服务，支持实例连接到私有网络。
+        demo或者其他没有特权的用户可以管理自己的私有网络，包含连接公网和私网的路由器。
+        另外，浮动IP地址可以让实例使用私有网络连接到外部网络，例如互联网
+
+
+
+
+
+🔸 安装组件
+    yum install openstack-neutron openstack-neutron-ml2 openstack-neutron-linuxbridge ebtables -y
+
+
+🔸 配置 
+    Networking 服务器组件的配置包括数据库、认证机制、消息队列、拓扑变化通知和插件。
+
+    vi /etc/neutron/neutron.conf
+
+    ⦿ [DEFAULT]
+        # 启用ML2插件并禁用其他插件：
+        core_plugin = ml2
+        service_plugins =
+
+        # 自己改RABBIT的密码.
+        transport_url = rabbit://openstack:RABBIT_PASS@controller
+
+        # 无需修改
+        auth_strategy = keystone
+
+        # 无需修改
+        notify_nova_on_port_status_changes = true
+        notify_nova_on_port_data_changes = true
+
+    ⦿ [database]
+        # 自己改数据库密码.
+        connection = mysql+pymysql://neutron:NEUTRON_DBPASS@controller/neutron
+
+    ⦿ [oslo_concurrency]
+        lock_path = /var/lib/neutron/tmp
+
+    ⦿ [keystone_authtoken]
+        # 修改密码.
+        auth_uri = http://controller:5000
+        auth_url = http://controller:35357
+        memcached_servers = controller:11211
+        auth_type = password
+        project_domain_name = default
+        user_domain_name = default
+        project_name = service
+        username = neutron
+        password = neutron-passwd
+
+
+    ⦿ [nova]
+        # 修改 nove 的密码 
+        auth_url = http://controller:35357
+        auth_type = password
+        project_domain_name = default
+        user_domain_name = default
+        region_name = RegionOne
+        project_name = service
+        username = nova
+        password = nova-passwd
+
+
+
+
+
+🔸 配置 Modular Layer 2 (ML2) 插件
+    ML2插件使用Linuxbridge机制来为实例创建layer－2虚拟网络基础设施
+    vi /etc/neutron/plugins/ml2/ml2_conf.ini
+
+    ⦿ [ml2]
+        # 启用flat和VLAN网络：
+        # 在你配置完ML2插件之后，删除可能导致数据库不一致的 type_drivers 项的值
+        type_drivers = flat,vlan
+
+        # 禁用私有网络：
+        tenant_network_types =
+
+        # 启用Linuxbridge机制：
+        mechanism_drivers = linuxbridge
+
+        # 启用端口安全扩展驱动：
+        extension_drivers = port_security
+
+
+    ⦿ [ml2_type_flat]
+        # 配置公共虚拟网络为flat网络
+        flat_networks = provider
+
+
+    ⦿ [securitygroup]
+        # 启用 ipset 增加安全组规则的高效性：
+        enable_ipset = True
+
+
+
+
+🔸 配置Linuxbridge代理
+    Linuxbridge代理为实例建立layer－2虚拟网络并且处理安全组规则
+    vi /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+
+    ⦿ [linux_bridge]
+        #将公共虚拟网络和公共物理网络接口对应起来：
+        # PROVIDER_INTERFACE_NAME 改成虚拟机的外网网卡名 ip addr 查看. ens33
+        # 详情参考 https://docs.openstack.org/ocata/install-guide-rdo/environment-networking.html#environment-networking
+        physical_interface_mappings = provider:ens33
+
+    ⦿ [vxlan]
+        # 禁止VXLAN覆盖网络：
+        enable_vxlan = false
+
+    ⦿ [securitygroup]
+        # 启用安全组并配置防火墙驱动.
+        enable_security_group = true
+        firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+
+
+
+🔸 配置DHCP代理
+
+    vi /etc/neutron/dhcp_agent.ini
+    配置Linuxbridge驱动接口，DHCP驱动并启用隔离元数据，
+    这样在公共网络上的实例就可以通过网络来访问元数据
+
+    [DEFAULT]
+    interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
+    dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
+    enable_isolated_metadata = True
+
+
+
+
+🔸 配置元数据代理
+    例如：访问实例的凭证
+    vi /etc/neutron/metadata_agent.ini
+
+    [DEFAULT]
+    # 配置元数据主机以及共享密码：
+    # 用你为元数据代理设置的密码替换 METADATA_SECRET。
+    nova_metadata_ip = controller
+    metadata_proxy_shared_secret = METADATA_SECRET
+
+
+
+🔸 为计算节点配置网络服务
+
+    vi /etc/nova/nova.conf 
+
+    [neutron]
+    # 修改 NEUTRON_PASS
+    # 修改 METADATA_SECRET 
+    url = http://controller:9696
+    auth_url = http://controller:35357
+    auth_type = password
+    project_domain_name = default
+    user_domain_name = default
+    region_name = RegionOne
+    project_name = service
+    username = neutron
+    password = neutron-passwd
+    service_metadata_proxy = true
+    metadata_proxy_shared_secret = METADATA_SECRET
+
+
+
+🔸 完成安装
+
+⦿ 创建连接
+    # 网络服务初始化脚本需要一个超链接指向ML2插件配置文件
+    ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+
+
+⦿ 同步数据库：
+    su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+  --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+
+
+⦿ 重启计算API 服务：
+    systemctl restart openstack-nova-api.service
+
+
+
+
+🔸 网络服务开机启动
+    systemctl enable neutron-server.service \
+  neutron-linuxbridge-agent.service neutron-dhcp-agent.service \
+  neutron-metadata-agent.service
+
+🔸 启动网络服务
+    systemctl start neutron-server.service \
+  neutron-linuxbridge-agent.service neutron-dhcp-agent.service \
+  neutron-metadata-agent.service
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸安装和配置计算节点🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+上面是控制节点...  下面设置计算节点. .. 这也是为啥要两个虚拟机的原因.
+
+
+🔸 组件安装 
+    yum install openstack-neutron-linuxbridge ebtables ipset
+
+
+
+
+🔸 配置组件
+
+    vi /etc/neutron/neutron.conf
+
+    [DEFAULT]
+    ...
+    rpc_backend = rabbit
+
+    [oslo_messaging_rabbit]
+    ...
+    rabbit_host = controller
+    rabbit_userid = openstack
+    rabbit_password = RABBIT_PASS
+
+
+
+    [DEFAULT]
+    ...
+    auth_strategy = keystone
+
+    [keystone_authtoken]
+    ...
+    auth_uri = http://controller:5000
+    auth_url = http://controller:35357
+    memcached_servers = controller:11211
+    auth_type = password
+    project_domain_name = default
+    user_domain_name = default
+    project_name = service
+    username = neutron
+    password = NEUTRON_PASS
+
+
+    [oslo_concurrency]
+    ...
+    lock_path = /var/lib/neutron/tmp
+
+
+
+🔸 配置网络选项 未完成..
+
+https://docs.openstack.org/ocata/install-guide-rdo/neutron-compute-install.html
+......
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸验证🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+$ . admin-openrc
+
+
+🔸 列出加载的扩展来验证``neutron-server``进程是否正常启动：
+openstack extension list --network
+
+
+
+

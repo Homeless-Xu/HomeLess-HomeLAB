@@ -1,0 +1,613 @@
+VPN 非常不稳定,看墙的心情.. 没强烈需求别折腾... 有ss就够了...
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸IPsec  VPN Debian/Ubuntu🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 参考: https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/README-zh.md
+
+🔸 系统: bbb KVM GCE Ubuntu_17 
+
+🔸 安装: wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+
+
+        ================================================
+
+        IPsec VPN server is now ready for use!
+
+        Connect to your new VPN with these details:
+
+        Server IP: 104.199.132.210
+        IPsec PSK: fmaAEmgckAXqeqTL
+        Username: vpnuser
+        Password: qiU4kWpeYXCD5cgZ
+
+        Write these down. You'll need them to connect!
+
+        Important notes:   https://git.io/vpnnotes
+        Setup VPN clients: https://git.io/vpnclients
+
+        ================================================
+
+
+
+    你的 VPN 登录凭证将会被自动随机生成，并在安装完成后显示在屏幕上。
+    但是连接上vpn 你会发现不能翻墙.! 
+    你需要手动设置 所有流量都走 VPN!!
+
+
+
+🔸 Mac VPN 连接设置 
+    ⦿ 客户端配置详细参考
+        https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients-zh.md
+
+    ⦿ 新建 VPN 
+        L2TP over IPSec ; bbbVPN
+
+    ⦿ 配置 VPN
+        server address : 35.194.218.62
+        Account Name:   vpnuser
+        Authentication settingss : password        jAABrZd4f6DqeUib
+        Authentication settingss : shared Secret   HS6yYSukdAqasjWw
+
+    ⦿ 保存 apply 
+    ⦿ 连接 connect 
+
+    ⦿ 查看网段 : 192.168.42.10 
+
+
+🔸 修改 VPN 网段
+    详细参考: http://blog.csdn.net/lic95/article/details/48264933
+     
+     sudo vi /etc/xl2tpd/xl2tpd.conf
+        ip range = 10.140.0.21-10.140.0.100 
+        local ip = 10.140.0.20
+
+🔸 相关命令     
+    service ipsec start && service ipsec status
+    service ipsec stop && service ipsec status
+    service ipsec restart
+
+🔸 reboot 
+    脚本设置开机启动的. 不想研究各种启动命令. 直接重启
+
+🔸 连接测试
+    成功. 现在 mac 分配到的IP 就是 10.140.0.21 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IPSec VPN 安装
+    详情参考流程:   https://doub.io/vpnzy-3/
+
+🔵 一键脚本安装:
+
+    wget --no-check-certificate https://raw.githubusercontent.com/quericy/one-key-ikev2-vpn/master/one-key-ikev2.sh
+    chmod +x one-key-ikev2.sh
+    bash one-key-ikev2.sh
+
+🔵 安装过程:
+
+  选择vps类型（OpenVZ还是Xen、KVM），选错将无法成功连接，请务必核实服务器的类型。
+  这里必须选择对. 我是 openvz  也就是输入2 然后一路回车.
+  如果是谷歌的 gce 那么是kvm类型的
+
+
+🔵 安装结果 
+
+    # [Install Complete]
+    # Version:1.2.0
+    # There is the default login info of your IPSec/IkeV2 VPN Service
+    # UserName: myUserName
+    # PassWord: myUserPass
+    # PSK: myPSKkey
+    # you should change default username and password in /usr/local/etc/ipsec.secrets
+    # you cert: //my_key/ca.cert.pem
+    # you must copy the cert to the client and install it.
+
+
+🔵 下载服务器上的 /root/my_key/ca.cert.pem 证书到本地
+    并把 ca.cert.pem 改名成 .cer 后缀的 比如:  ca.cer
+
+🔵 Mac OS 设置
+    双击ca.cer 导入证书... 证书导入的位置是  system.
+    导入后 必须去 证书软件 找到对应证书(一般带红叉的那个就是.) ➜ 右键 ➜ 信息 ➜  信任 ➜  都信任.... 这样才行!!!
+
+
+🔵 Mac客户端配置
+
+    网络设置 ➜  添加 ➜  vpn ➜  ikev2 ➜ 
+        📌server address : 23.105.192.96         这里是你服务器的ip
+        📌remote id:       23.105.192.96         这里是你服务器的ip
+        📌authentication settings ➜ username    选择 username认证模式
+                  Username: 输入安装结果中的 username  
+                  password: 输入安装结果中的 passeord
+                  Apply ➜  connect 就连接上了!!!
+
+
+
+
+
+
+🔵 查看版本: 
+
+    ➜  ~ ipsec --version
+
+🔵 启动IPsec
+
+    ipsec start.
+    Starting strongSwan 5.5.1 IPsec [starter]...
+    no netkey IPsec stack detected
+    no KLIPS IPsec stack detected
+    no known IPsec stack detected, ignoring!
+
+这算开启还是不开启啊....
+
+
+
+🔵 查看进程是否开启.  ???
+    ➜  ~ ps -aux | grep IPsec
+
+
+
+👹 有时候能连. 有时候不能连.为什么.. 我们用 wireshark来分析.
+
+    服务器ip 23.105.192.96
+    ipsec 使用端口 UDP 500
+
+        1. wireshark: 设置显示过滤器: ip==23.105.192.96  ➜ 然后开始抓包.
+        2. 开始连接vpn; 等vpn连接失败后 停止抓包.
+        3. 分析数据包.
+        点击wiresark中的任何一个数据包. 左边有会出现一个虚线.
+        一般发送一个数据包. 对方就要回复一个数据包的.相对于一个聊天.
+        虚线就是找到那个聊天的收发者..
+
+        错误信息 wireshark 会用黑色来显示. 
+        我们这里就是:
+
+        👹 icmp destination unreachable (port unreachable)
+
+        既然是端口不可达. 那么就扫描服务器端口先.
+        🔸 扫描服务器的 500 upd端口.
+            ✘✘∙𝒗 vps sudo nmap -sU -p 500 23.105.192.96
+
+            Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-05-09 10:58 CST
+            Nmap scan report for mail.0214.help (23.105.192.96)
+            Host is up (0.18s latency).
+            PORT    STATE  SERVICE
+            500/udp closed isakmp
+
+            Nmap done: 1 IP address (1 host up) scanned in 0.50 seconds
+
+        端口确实没开. 要么是防火墙原因. 要么就是vpn服务没启动..
+        首先关闭服务器防火墙. service iptables stop
+        在 namp 500 udp端口. 还是没开.  那就是vpn服务本身的问题了.
+
+            ipsec start
+            再nmap下端口果然open了..
+            丫的 . 原来是服务器没有设置 开机启动vpn啊.
+            设置开机启动ipsec: vi /etc/rc.local  添加: ipsec start 
+
+        发现开启启动没用啊. top 没看到有charon的进程... 
+        google下. 原来加载 rc.local 文件的时候 环境路径的文件还没有加载!!! 
+        ❗️❗️❗️所以rc.local 里必须使用绝对路径!!!❗️❗️❗️
+        ❗️❗️❗️所以rc.local 里必须使用绝对路径!!!❗️❗️❗️
+        ❗️❗️❗️所以rc.local 里必须使用绝对路径!!!❗️❗️❗️
+        type ipsec 查看绝对路径. ipsec is /usr/local/sbin/ipsec
+        设置开机启动ipsec: vi /etc/rc.local  添加: /usr/local/sbin/ipsec start 
+
+        现在就好了!!!!
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+用kiwivm 自带的 一键安装openvpn功能...
+
+安装成功之后 就可以下载 openvpn keys.
+
+🔸 压缩包
+    vps 根证书 ca.crt
+    vps 密钥  ca.key
+    用户证书: client1.crt
+    用户私钥 client1.key
+    client1.csr 
+
+
+
+    然后再下载个 可以连接openvpn的工具.
+    mac 可以用 shimo 这个软件.
+
+    然后 解压证书. 里面有个 xxx.ovpn 后缀的文件.
+    这个文件用 shimo 打开就可以连接了....
+
+
+👹 连接不上...
+    MANAGEMENT: >STATE:1497535245,WAIT,
+
+    估计被运营商 block了..    估计只是block 1194 这个端口.
+    换端口试试...
+    服务器上 vi /etc/openvpn/server.conf  加一行 port 443
+    客户端的 .ovpn 里面  原来的1194 改成443 .
+    然后重启服务器的 openvpn service openvpn restart
+
+
+    现在发现能连上了. 但是接收到的数据... 只有一点点.. 总比没有好..
+    还是不行... 诶 ..... 防火墙太厉害了...
+
+不只是openvpn ipsec的vpn也被墙的... fuck...
+
+
+
+🔸 服务器配置.
+    openvpn 的配置目录:  /etc/openvpn/openvpn.conf
+
+    server 10.10.10.0 255.255.255.0
+    这个是连上vpn 后分配给你的ip地址. 也就是 dhcp服务器.
+
+
+🔸 开启 openvpn 服务
+    service openvpn start
+
+    可将此命令添加到/etc/rc.local使openvpn开机自启动
+
+
+
+
+
+
+
+
+
+
+  vpn服务器. pptp.
+
+
+🔵  检测
+
+  cat /dev/net/tun
+如果这条指令显示结果为下面的文本，则表明通过：
+cat: /dev/net/tun: File descriptor in bad state
+就能安装pptp。否则就只能考虑openvpn。
+
+
+
+🔵 安装ppp 和 iptables
+    yum install -y perl ppp iptables 
+
+
+安装 pptpd
+
+根据ppp 版本 选择对应的 pptpd
+ppp 2.4.4——————>pptpd 1.3.4
+ppp 2.4.5——————>pptpd 1.4.0
+
+查看 ppp 版本:
+yum list installed ppp
+我们是 2.4.5 所以选择 pptpd 1.4.0
+
+
+第一种安装pptpd的方法
+    是直接用yum安装，让电脑自动选择对应的版本：
+
+    先加入yum源：
+    rpm -Uvh http://poptop.sourceforge.net/yum/stable/rhel6/pptp-release-current.noarch.rpm
+
+    然后用yum安装pptpd：
+    yum install pptpd
+
+
+
+
+🔵 配置
+
+cp /etc/ppp/options.pptpd /etc/ppp/options.pptpd.bak
+先备份.
+
+
+vi /etc/ppp/options.pptpd
+添加下面两行就可以了
+ms-dns 8.8.8.8
+ms-dns 8.8.4.4
+
+
+
+
+
+cp /etc/ppp/chap-secrets   /etc/ppp/chap-secrets.bak
+vi /etc/ppp/chap-secrets
+
+xx pptpd oo *
+
+//格式: 帐号. 密码. 星号表示任何ip. 必须有.
+// xx 就是帐号  oo 就是密码.  改成你自己的就可以.
+// xj... xj
+
+
+
+
+
+cp /etc/pptpd.conf     /etc/pptpd.conf.bak
+vi /etc/pptpd.conf
+添加下面两行：
+localip 192.168.9.1
+remoteip 192.168.9.11-30 //表示vpn客户端获得ip的范围
+
+关键点：pptpd.conf这个配置文件必须保证最后是以空行结尾才行，否则会导致启动pptpd服务时
+
+
+
+
+
+
+vi /etc/sysctl.conf 
+//修改内核设置，使其支持转发
+将net.ipv4.ip_forward = 0 改成 net.ipv4.ip_forward = 1
+/sbin/sysctl -p
+
+
+第四步：启动pptp vpn服务和iptables
+/sbin/service pptpd start 
+service pptpd start
+
+
+
+启动iptables和nat转发功能，很关键的呀：
+
+/sbin/service iptables start 
+//启动iptables
+
+
+
+iptables -t nat -A POSTROUTING    -s 192.168.9.0/24 -j SNAT --to-source 23.105.192.96
+你需要将207.210.83.140替换成你的vps的公网ip地址，因为这里我写的是我的。
+
+
+/etc/init.d/iptables save 
+//保存iptables的转发规则
+/sbin/service iptables restart 
+//重新启动iptables
+
+
+
+最后一步：重启pptp vpn
+
+service pptpd restart
+
+
+
+
+
+#chkconfig pptpd on //开机启动pptp vpn服务
+#chkconfig iptables on //开机启动iptables
+
+
+
+Mac 连接pptp.
+Mac 10.12 没有pptp了.
+这个协议有安全问题...
+建议用.... l2tp 或者 openvpn.
+
+
+办法还是有的 安装 shimo 这个软件.
+输入ip. 帐号密码
+加密方式选择 无....
+
+
+前提是你pptp服务器搭建好了啊...
+
+
+
+连不上 .
+首先 nmap 查看服务器开发端口
+pptp用的...1723 端口.
+
+然后关闭服务器防火墙.
+
+
+
+
+A general error occured. Please get in contact with the support from Feingeist.
+
+出错...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  vpn服务器. pptp.
+
+
+🔵  检测
+
+  cat /dev/net/tun
+如果这条指令显示结果为下面的文本，则表明通过：
+cat: /dev/net/tun: File descriptor in bad state
+就能安装pptp。否则就只能考虑openvpn。
+
+
+
+🔵 安装ppp 和 iptables
+    yum install -y perl ppp iptables 
+
+
+安装 pptpd
+
+根据ppp 版本 选择对应的 pptpd
+ppp 2.4.4——————>pptpd 1.3.4
+ppp 2.4.5——————>pptpd 1.4.0
+
+查看 ppp 版本:
+yum list installed ppp
+我们是 2.4.5 所以选择 pptpd 1.4.0
+
+
+第一种安装pptpd的方法
+    是直接用yum安装，让电脑自动选择对应的版本：
+
+    先加入yum源：
+    rpm -Uvh http://poptop.sourceforge.net/yum/stable/rhel6/pptp-release-current.noarch.rpm
+
+    然后用yum安装pptpd：
+    yum install pptpd
+
+
+
+
+🔵 配置
+
+cp /etc/ppp/options.pptpd /etc/ppp/options.pptpd.bak
+先备份.
+
+
+vi /etc/ppp/options.pptpd
+添加下面两行就可以了
+ms-dns 8.8.8.8
+ms-dns 8.8.4.4
+
+
+
+
+
+cp /etc/ppp/chap-secrets   /etc/ppp/chap-secrets.bak
+vi /etc/ppp/chap-secrets
+
+xx pptpd oo *
+
+//格式: 帐号. 密码. 星号表示任何ip. 必须有.
+// xx 就是帐号  oo 就是密码.  改成你自己的就可以.
+// xj... xj
+
+
+
+
+
+cp /etc/pptpd.conf     /etc/pptpd.conf.bak
+vi /etc/pptpd.conf
+添加下面两行：
+localip 192.168.9.1
+remoteip 192.168.9.11-30 //表示vpn客户端获得ip的范围
+
+关键点：pptpd.conf这个配置文件必须保证最后是以空行结尾才行，否则会导致启动pptpd服务时
+
+
+
+
+
+
+vi /etc/sysctl.conf 
+//修改内核设置，使其支持转发
+将net.ipv4.ip_forward = 0 改成 net.ipv4.ip_forward = 1
+/sbin/sysctl -p
+
+
+第四步：启动pptp vpn服务和iptables
+/sbin/service pptpd start 
+service pptpd start
+
+
+
+启动iptables和nat转发功能，很关键的呀：
+
+/sbin/service iptables start 
+//启动iptables
+
+
+
+iptables -t nat -A POSTROUTING    -s 192.168.9.0/24 -j SNAT --to-source 23.105.192.96
+你需要将207.210.83.140替换成你的vps的公网ip地址，因为这里我写的是我的。
+
+
+/etc/init.d/iptables save 
+//保存iptables的转发规则
+/sbin/service iptables restart 
+//重新启动iptables
+
+
+
+最后一步：重启pptp vpn
+
+service pptpd restart
+
+
+
+
+
+#chkconfig pptpd on //开机启动pptp vpn服务
+#chkconfig iptables on //开机启动iptables
+
+
+
+Mac 连接pptp.
+Mac 10.12 没有pptp了.
+这个协议有安全问题...
+建议用.... l2tp 或者 openvpn.
+
+
+办法还是有的 安装 shimo 这个软件.
+输入ip. 帐号密码
+加密方式选择 无....
+
+
+前提是你pptp服务器搭建好了啊...
+
+
+
+连不上 .
+首先 nmap 查看服务器开发端口
+pptp用的...1723 端口.
+
+然后关闭服务器防火墙.
+
+
+
+
+A general error occured. Please get in contact with the support from Feingeist.
+
+出错...
+
+
+
+
+
+
+
+
+

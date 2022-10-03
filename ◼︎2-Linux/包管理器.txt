@@ -1,0 +1,725 @@
+## 文件预览插件
+
+有些 插件 可以让 Mac 上的文件预览更有效，比如语法高亮、markdown 渲染、json 预览等 等。
+
+ brew cask install qlcolorcode 
+ brew cask install qlstephen 
+ brew cask install qlmarkdown 
+ brew cask install quicklook-json 
+ brew cask install qlprettypatch 
+ brew cask install quicklook-csv 
+ brew cask install betterzipql 
+ brew cask install webpquicklook 
+ brew cask install suspicious-package
+
+
+
+
+## 问题: not linked
+
+'' brew install npm
+**Warning: node-7.5.0 already installed, it's just not linked.**
+
+
+
+## 办法1: 完全卸载&重新安装 💯
+
+1. 清理 brew 的link
+	brew cleanup
+	
+	
+	➜  \~ brew cleanup
+	Warning: Skipping aria2: most recent version 1.31.0 not installed
+	Warning: Skipping cmake: most recent version 3.7.2 not installed
+	Warning: Skipping josegonzalez/php/composer: most recent version 1.3.2 not installed
+	Warning: Skipping doxygen: most recent version 1.8.13 not installed
+	Warning: Skipping freetype: most recent version 2.7.1 not installed
+	Warning: Skipping git: most recent version 2.11.1 not installed
+	Removing: /usr/local/Cellar/icu4c/57.1... (265 files, 65.0M)
+	Warning: Skipping imagemagick: most recent version 7.0.4-7 not installed
+	Warning: Skipping libevent: most recent version 2.1.8 not installed
+	Warning: Skipping libpng: most recent version 1.6.28 not installed
+	Warning: Skipping libtiff: most recent version 4.0.7\_2 not installed
+	Warning: Skipping libxml2: most recent version 2.9.4\_2 not installed
+	Warning: Skipping libyaml: most recent version 0.1.7 not installed
+	Warning: Skipping mysql: most recent version 5.7.17 not installed
+	Warning: Skipping nvm: most recent version 0.33.0 not installed
+	Warning: Skipping openssl: most recent version 1.0.2k not installed
+	Warning: Skipping josegonzalez/php/php55: most recent version 5.5.38\_11 not installed
+	Warning: Skipping josegonzalez/php/php55-intl: most recent version 5.5.38\_2 not installed
+	Warning: Skipping josegonzalez/php/php71: most recent version 7.1.1\_12 not installed
+	Warning: Skipping josegonzalez/php/php71-xdebug: most recent version 2.5.0 not installed
+	Warning: Skipping python: most recent version 2.7.13 not installed
+	Warning: Skipping readline: most recent version 7.0.1 not installed
+	Warning: Skipping ruby: most recent version 2.4.0 not installed
+	Warning: Skipping sqlite: most recent version 3.16.2 not installed
+	Warning: Skipping thefuck: most recent version 3.14 not installed
+	Warning: Skipping tmux: most recent version 2.3\_3 not installed
+	Warning: Skipping vim: most recent version 8.0.0311 not installed
+	Warning: Skipping xz: most recent version 5.2.3 not installed
+	Warning: Skipping zsh: most recent version 5.3.1 not installed
+	Removing: /Users/v/Library/Caches/Homebrew/freetype-2.7.sierra.bottle.tar.gz... (806.5K)
+	Removing: /Users/v/Library/Caches/Homebrew/go-1.7.3.sierra.bottle.tar.gz.incomplete... (120K)
+	Removing: /Users/v/Library/Caches/Homebrew/go-1.7.3.tar.gz... (13.5M)
+	Removing: /Users/v/Library/Caches/Homebrew/imagemagick-6.9.6-5.sierra.bottle.tar.gz... (8.4M)
+	Removing: /Users/v/Library/Caches/Homebrew/libpng-1.6.25.sierra.bottle.tar.gz... (436.4K)
+	Removing: /Users/v/Library/Caches/Homebrew/libpng-1.6.26.sierra.bottle.tar.gz... (438.6K)
+	Removing: /Users/v/Library/Caches/Homebrew/libtiff-4.0.7.sierra.bottle.tar.gz... (1M)
+	Removing: /Users/v/Library/Caches/Homebrew/openssl-1.0.2i.sierra.bottle.1.tar.gz... (3.6M)
+	Removing: /Users/v/Library/Caches/Homebrew/openssl-1.0.2j.sierra.bottle.tar.gz... (3.6M)
+	Removing: /Users/v/Library/Caches/Homebrew/php71-7.1.0-rc.3\_8.sierra.bottle.tar.gz... (11.6M)
+	Removing: /Users/v/Library/Caches/Homebrew/php71-xdebug-2.4.0.tgz... (258.6K)
+	Removing: /Users/v/Library/Caches/Homebrew/readline-7.0.tar.gz... (2.8M)
+	Removing: /Users/v/Library/Caches/Homebrew/sqlite-3.15.1.tar.gz... (2.4M)
+	Removing: /Users/v/Library/Caches/Homebrew/xz-5.2.2.sierra.bottle.tar.gz... (449.3K)
+	Removing: /Users/v/Library/Logs/Homebrew/gmp... (68B)
+	Removing: /Users/v/Library/Logs/Homebrew/go... (104B)
+	Removing: /Users/v/Library/Logs/Homebrew/mysql... (1.2K)
+	Removing: /Users/v/Library/Logs/Homebrew/nvm... (68B)
+	Removing: /Users/v/Library/Logs/Homebrew/openssl... (68B)
+	Removing: /Users/v/Library/Logs/Homebrew/php71-xdebug... (6 files, 270.2K)
+	Removing: /Users/v/Library/Logs/Homebrew/pkg-config... (8 files, 1016.9K)
+	Removing: /Users/v/Library/Logs/Homebrew/python... (68B)
+	Removing: /Users/v/Library/Logs/Homebrew/readline... (6 files, 499K)
+	Removing: /Users/v/Library/Logs/Homebrew/sqlite... (6 files, 201.2K)
+	==\> This operation has freed approximately 116.3M of disk space.
+
+
+
+2. 删除node 文件 完全卸载node 和 npm
+
+卸载方法1
+'' sudo rm -rf /usr/local/bin/npm /usr/local/share/man/man1/node* /usr/local/lib/dtrace/node.d /.npm /.node-gyp /opt/local/bin/node opt/local/include/node /opt/local/lib/node_modules
+
+卸载方法2
+'' sudo rm -rf /usr/local/{lib/node{,/.npm,_modules},bin,share/man}/{npm*,node*,man1/node*}
+
+
+卸载方法3: (选这个把. 之前用brew安装node的...)
+
+'' ➜  ~ brew uninstall node
+'' Error: Refusing to uninstall /usr/local/Cellar/node/7.5.0
+'' because it is required by yarn 0.19.1, which is currently installed.
+'' You can override this and force removal with:
+''   brew uninstall --ignore-dependencies node
+
+问题找到了... 估计是新安装的 yarn 惹的祸...
+yarn 不是啥好东西 直接卸载:
+
+
+'' ➜  ~ brew uninstall yarn
+'' Uninstalling /usr/local/Cellar/yarn/0.19.1... (4,803 files, 17.7M)
+'' ➜  ~ yarn -V
+'' zsh: command not found: yarn
+'' ➜  ~ npm
+'' zsh: command not found: npm
+'' ➜  ~ node -v
+'' v7.5.0
+'' ➜  ~ brew uninstall node
+'' Uninstalling /usr/local/Cellar/node/7.5.0... (3,146 files, 39M)
+'' ➜  ~ node -v
+'' zsh: command not found: node
+'' ➜  ~ brew install node
+'' Updating Homebrew...
+'' ==> Downloading https://homebrew.bintray.com/bottles/node-7.5.0.sierra.bottle.tar.gz
+'' Already downloaded: /Users/v/Library/Caches/Homebrew/node-7.5.0.sierra.bottle.tar.gz
+'' ==> Pouring node-7.5.0.sierra.bottle.tar.gz
+'' ==> Using the sandbox
+'' Warning: The post-install step did not complete successfully
+'' You can try again using brew postinstall node
+'' ==> Caveats
+'' Please note by default only English locale support is provided. If you need
+'' full locale support you should either rebuild with full icu:
+''   brew reinstall node --with-full-icu
+'' or add full icu data at runtime following:
+''   https://github.com/nodejs/node/wiki/Intl#using-and-customizing-the-small-icu-build
+'' 
+'' Bash completion has been installed to:
+''   /usr/local/etc/bash_completion.d
+'' ==> Summary
+'' 🍺  /usr/local/Cellar/node/7.5.0: 3,146 files, 39M
+'' ➜  ~ npm -v
+'' zsh: command not found: npm
+'' ➜  ~ node -v
+'' v7.5.0
+'' ➜  ~
+'' ➜  ~ cnpm -v
+'' 4.3.2
+'' ➜  ~
+
+丫的  为什么还是内有 npm 呢  是不是 cnpm 的原因啊..
+操 就是淘宝的 npm 改了名字.... 变成 cnpm了...
+以后只能用 cnpm了...
+
+
+
+
+
+
+
+
+## 办法2: 修复 (为测试)
+
+### 第一次: brew doctor
+**注意所有的 Warming **
+
+'' ➜  ~ brew doctor
+'' Please note that these warnings are just used to help the Homebrew maintainers
+'' with debugging if you file an issue. If everything you use Homebrew for is
+'' working fine: please don't worry and just ignore them. Thanks!
+'' 
+'' Warning: The filesystem on / appears to be case-sensitive.
+'' The default macOS filesystem is case-insensitive. Please report any apparent problems.
+'' 
+'' Warning: Unbrewed header files were found in /usr/local/include.
+'' If you didn't put them there on purpose they could cause problems when
+'' building Homebrew formulae, and may need to be deleted.
+'' 
+'' Unexpected header files:
+''   /usr/local/include/node/android-ifaddrs.h
+''   /usr/local/include/node/ares.h
+''   /usr/local/include/node/ares_build.h
+''   /usr/local/include/node/ares_rules.h
+''   /usr/local/include/node/ares_version.h
+''   /usr/local/include/node/libplatform/libplatform.h
+''   /usr/local/include/node/libplatform/v8-tracing.h
+''   /usr/local/include/node/nameser.h
+''   /usr/local/include/node/node.h
+''   /usr/local/include/node/node_buffer.h
+''   /usr/local/include/node/node_object_wrap.h
+''   /usr/local/include/node/node_version.h
+''   /usr/local/include/node/openssl/aes.h
+''   /usr/local/include/node/openssl/archs/BSD-x86/opensslconf.h
+''   /usr/local/include/node/openssl/archs/BSD-x86_64/opensslconf.h
+''   /usr/local/include/node/openssl/archs/VC-WIN32/opensslconf.h
+''   /usr/local/include/node/openssl/archs/VC-WIN64A/opensslconf.h
+''   /usr/local/include/node/openssl/archs/aix-gcc/opensslconf.h
+''   /usr/local/include/node/openssl/archs/aix64-gcc/opensslconf.h
+''   /usr/local/include/node/openssl/archs/darwin-i386-cc/opensslconf.h
+''   /usr/local/include/node/openssl/archs/darwin64-x86_64-cc/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux-aarch64/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux-armv4/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux-elf/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux-ppc/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux-ppc64/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux-x32/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux-x86_64/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux32-s390x/opensslconf.h
+''   /usr/local/include/node/openssl/archs/linux64-s390x/opensslconf.h
+''   /usr/local/include/node/openssl/archs/solaris-x86-gcc/opensslconf.h
+''   /usr/local/include/node/openssl/archs/solaris64-x86_64-gcc/opensslconf.h
+''   /usr/local/include/node/openssl/asn1.h
+''   /usr/local/include/node/openssl/asn1_mac.h
+''   /usr/local/include/node/openssl/asn1t.h
+''   /usr/local/include/node/openssl/bio.h
+''   /usr/local/include/node/openssl/blowfish.h
+''   /usr/local/include/node/openssl/bn.h
+''   /usr/local/include/node/openssl/buffer.h
+''   /usr/local/include/node/openssl/camellia.h
+''   /usr/local/include/node/openssl/cast.h
+''   /usr/local/include/node/openssl/cmac.h
+''   /usr/local/include/node/openssl/cms.h
+''   /usr/local/include/node/openssl/comp.h
+''   /usr/local/include/node/openssl/conf.h
+''   /usr/local/include/node/openssl/conf_api.h
+''   /usr/local/include/node/openssl/crypto.h
+''   /usr/local/include/node/openssl/des.h
+''   /usr/local/include/node/openssl/des_old.h
+''   /usr/local/include/node/openssl/dh.h
+''   /usr/local/include/node/openssl/dsa.h
+''   /usr/local/include/node/openssl/dso.h
+''   /usr/local/include/node/openssl/dtls1.h
+''   /usr/local/include/node/openssl/e_os2.h
+''   /usr/local/include/node/openssl/ebcdic.h
+''   /usr/local/include/node/openssl/ec.h
+''   /usr/local/include/node/openssl/ecdh.h
+''   /usr/local/include/node/openssl/ecdsa.h
+''   /usr/local/include/node/openssl/engine.h
+''   /usr/local/include/node/openssl/err.h
+''   /usr/local/include/node/openssl/evp.h
+''   /usr/local/include/node/openssl/hmac.h
+''   /usr/local/include/node/openssl/idea.h
+''   /usr/local/include/node/openssl/krb5_asn.h
+''   /usr/local/include/node/openssl/kssl.h
+''   /usr/local/include/node/openssl/lhash.h
+''   /usr/local/include/node/openssl/md4.h
+''   /usr/local/include/node/openssl/md5.h
+''   /usr/local/include/node/openssl/mdc2.h
+''   /usr/local/include/node/openssl/modes.h
+''   /usr/local/include/node/openssl/obj_mac.h
+''   /usr/local/include/node/openssl/objects.h
+''   /usr/local/include/node/openssl/ocsp.h
+''   /usr/local/include/node/openssl/opensslconf.h
+''   /usr/local/include/node/openssl/opensslv.h
+''   /usr/local/include/node/openssl/ossl_typ.h
+''   /usr/local/include/node/openssl/pem.h
+''   /usr/local/include/node/openssl/pem2.h
+''   /usr/local/include/node/openssl/pkcs12.h
+''   /usr/local/include/node/openssl/pkcs7.h
+''   /usr/local/include/node/openssl/pqueue.h
+''   /usr/local/include/node/openssl/rand.h
+''   /usr/local/include/node/openssl/rc2.h
+''   /usr/local/include/node/openssl/rc4.h
+''   /usr/local/include/node/openssl/ripemd.h
+''   /usr/local/include/node/openssl/rsa.h
+''   /usr/local/include/node/openssl/safestack.h
+''   /usr/local/include/node/openssl/seed.h
+''   /usr/local/include/node/openssl/sha.h
+''   /usr/local/include/node/openssl/srp.h
+''   /usr/local/include/node/openssl/srtp.h
+''   /usr/local/include/node/openssl/ssl.h
+''   /usr/local/include/node/openssl/ssl2.h
+''   /usr/local/include/node/openssl/ssl23.h
+''   /usr/local/include/node/openssl/ssl3.h
+''   /usr/local/include/node/openssl/stack.h
+''   /usr/local/include/node/openssl/symhacks.h
+''   /usr/local/include/node/openssl/tls1.h
+''   /usr/local/include/node/openssl/ts.h
+''   /usr/local/include/node/openssl/txt_db.h
+''   /usr/local/include/node/openssl/ui.h
+''   /usr/local/include/node/openssl/ui_compat.h
+''   /usr/local/include/node/openssl/whrlpool.h
+''   /usr/local/include/node/openssl/x509.h
+''   /usr/local/include/node/openssl/x509_vfy.h
+''   /usr/local/include/node/openssl/x509v3.h
+''   /usr/local/include/node/pthread-barrier.h
+''   /usr/local/include/node/stdint-msvc2008.h
+''   /usr/local/include/node/tree.h
+''   /usr/local/include/node/uv-aix.h
+''   /usr/local/include/node/uv-bsd.h
+''   /usr/local/include/node/uv-darwin.h
+''   /usr/local/include/node/uv-errno.h
+''   /usr/local/include/node/uv-linux.h
+''   /usr/local/include/node/uv-os390.h
+''   /usr/local/include/node/uv-sunos.h
+''   /usr/local/include/node/uv-threadpool.h
+''   /usr/local/include/node/uv-unix.h
+''   /usr/local/include/node/uv-version.h
+''   /usr/local/include/node/uv-win.h
+''   /usr/local/include/node/uv.h
+''   /usr/local/include/node/v8-debug.h
+''   /usr/local/include/node/v8-experimental.h
+''   /usr/local/include/node/v8-platform.h
+''   /usr/local/include/node/v8-profiler.h
+''   /usr/local/include/node/v8-testing.h
+''   /usr/local/include/node/v8-util.h
+''   /usr/local/include/node/v8-version.h
+''   /usr/local/include/node/v8.h
+''   /usr/local/include/node/v8config.h
+''   /usr/local/include/node/zconf.h
+''   /usr/local/include/node/zlib.h
+'' 
+'' Warning: You have unlinked kegs in your Cellar
+'' Leaving kegs unlinked can lead to build-trouble and cause brews that depend on
+'' those kegs to fail to run properly once built. Run brew link on these:
+''   node
+''   php55
+'' 
+'' Warning: Your Xcode (8.0) is outdated.
+'' Please update to Xcode 8.2 (or delete it).
+'' Xcode can be updated from the App Store.
+'' 
+'' 
+'' Warning: Broken symlinks were found. Remove them with brew prune:
+''   /usr/local/bin/apm
+''   /usr/local/bin/atom
+''   /usr/local/bin/npm
+'' ➜  ~
+
+
+
+
+#### warm 1
+'' Warning: The filesystem on / appears to be case-sensitive.
+'' The default macOS filesystem is case-insensitive. Please report any apparent problems.
+
+不管 系统大小写问题. 有可能是开机加密了磁盘的原因.
+
+
+
+#### warm 2
+'' Warning: Unbrewed header files were found in /usr/local/include.
+'' If you didn't put them there on purpose they could cause problems when
+'' building Homebrew formulae, and may need to be deleted.
+'' .....
+
+#### warm 3
+'' Warning: Your Xcode (8.0) is outdated.
+'' Please update to Xcode 8.2 (or delete it).
+'' Xcode can be updated from the App Store.
+
+xcode... 升级了就好了.. 和问题无关.
+
+
+#### warm 4
+'' Warning: You have unlinked kegs in your Cellar
+'' Leaving kegs unlinked can lead to build-trouble and cause brews that depend on
+'' those kegs to fail to run properly once built. Run brew link on these:
+''   node
+''   php55
+
+这个就是本 问题的所在了   unlinked .
+按照提示 终端 运行  brew link node
+'' ➜  ~ brew link node
+'' Linking /usr/local/Cellar/node/7.5.0...
+'' Error: Could not symlink bin/node
+'' Target /usr/local/bin/node
+'' already exists. You may want to remove it:
+''   rm '/usr/local/bin/node'
+'' 
+'' To force the link and overwrite all conflicting files:
+''   brew link --overwrite node
+'' 
+'' To list all files that would be deleted:
+''   brew link --overwrite --dry-run node
+
+
+显示 node 应该已经链接了. 但是npm 有可能是node 的子链接什么的. 强制重新弄一遍试试.
+'' ➜  ~ node -v
+'' v7.2.0
+'' ➜  ~ brew link --overwrite node
+'' Linking /usr/local/Cellar/node/7.5.0... 140 symlinks created
+'' ➜  ~ node -v
+'' v7.5.0
+'' ➜  ~
+
+操 居然变成 7.5 了 也无所谓.
+
+'' ➜  ~ npm -v
+'' zsh: command not found: npm
+用npm 还是不行的
+
+
+
+
+
+
+
+### 第二次: brew doctor
+'' ➜  ~ brew doctor
+'' Please note that these warnings are just used to help the Homebrew maintainers
+'' with debugging if you file an issue. If everything you use Homebrew for is
+'' working fine: please don't worry and just ignore them. Thanks!
+'' 
+'' Warning: The filesystem on / appears to be case-sensitive.
+'' The default macOS filesystem is case-insensitive. Please report any apparent problems.
+'' 
+'' Warning: You have unlinked kegs in your Cellar
+'' Leaving kegs unlinked can lead to build-trouble and cause brews that depend on
+'' those kegs to fail to run properly once built. Run brew link on these:
+''   php55
+'' 
+'' Warning: Your Xcode (8.0) is outdated.
+'' Please update to Xcode 8.2 (or delete it).
+'' Xcode can be updated from the App Store.
+'' 
+'' 
+'' Warning: Broken symlinks were found. Remove them with brew prune:
+''   /usr/local/bin/apm
+''   /usr/local/bin/atom
+''   /usr/local/bin/npm
+
+
+多出一个 warning 来了.   最后那个. 
+
+#### brew prune (修剪)
+'' ➜  ~ brew prune
+'' Pruned 3 symbolic links and 15 directories from /usr/local
+
+npm -v 还是没反应
+
+
+
+### 第三次: brew doctor
+'' ➜  ~ brew doctor
+'' Please note that these warnings are just used to help the Homebrew maintainers
+'' with debugging if you file an issue. If everything you use Homebrew for is
+'' working fine: please don't worry and just ignore them. Thanks!
+'' 
+'' Warning: The filesystem on / appears to be case-sensitive.
+'' The default macOS filesystem is case-insensitive. Please report any apparent problems.
+'' 
+'' Warning: You have unlinked kegs in your Cellar
+'' Leaving kegs unlinked can lead to build-trouble and cause brews that depend on
+'' those kegs to fail to run properly once built. Run brew link on these:
+''   php55
+'' 
+'' Warning: Your Xcode (8.0) is outdated.
+'' Please update to Xcode 8.2 (or delete it).
+'' Xcode can be updated from the App Store.
+
+已经安装了 php7 了 php5 不管. 出问题再说.
+xcode... 应该也不是问题.
+大小写也不是...
+没办法了 安装下 npm 试试.
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+@: 1986-03-03-NPM-CNPM✔︎
+---
+layout: post
+title:  NPM/CNPM
+tags: 包管理器
+categories: Tooles
+---
+
+
+NPM 生成的入口文件是 package.json
+
+
+## package.json 示例
+
+
+'' {
+''   "name": "example",
+''   "version": "1.0.0",
+''   "description": "This is an example project",
+''   "keywords": [
+'' "example"
+''   ],
+''   "main": "lib/index.js",
+''   "scripts": {
+'' "dev": "webpack --config webpack.dev.config.js",
+'' "build": "webpack --config webpack.prod.config.js",
+'' "lint": "eslint src",
+'' "test": "mocha *.test.js",
+'' "docs": "gitbook build",
+'' "clean": "rm -rf ./dist",
+''   },
+''   "dependencies": {
+''   },
+''   "author": "xxx",
+''   "repository": {
+'' "type": "git",
+'' "url": "https://github.com/xxx/xxx.git"
+''   },
+''   "license": "MIT"
+'' }
+
+
+
+
+
+
+
+
+## NPM
+
+- 随 node.js 一起安装的包管理工具. 能解决 nodejs 代码部署上的很多问题.
+
+#### NPM 使用场景:
+- 允许用户从npm 服务器 下载别人编写的第三方包到本地使用.
+- 允许用户从npm 服务器下载并安装别人编写的命令程序到本地使用.
+- 允许用户将自己编写的包 或者命令程序 上传到npm 服务器供别人使用.
+
+
+#### NPM 安装模块:
+`npm install express`   (常用的 node.js web框架 ) 
+
+安装好之后 express 包就放在工程目录下的 node—modules 目录中. 代码中 只要通过 require('express') 引入这个模块就可以使用. `var express = require("express")` 
+
+#### NPM 常用命令:
+- `npm install express`    // 本地安装(默认). 需要通过require() 来引入本地安装的包.
+- `npm install express -g` // 全局安装 . 无序引入.直接使用就可以......
+
+- 卸载模块: `npm uninstall express`
+- 更新模块: `npm update express`  
+- 搜索模块: `npm search express`  
+- 查看帮助: `npm help `
+- 详细帮助: `npm help command`
+- 更新本地包: `npm update packagename `
+- 更新全局包: `npm update packagename -g `
+
+
+
+*全局安装包位置:* 安装好时有提示. /usr/local/lib/nodemodules/express
+*Node安装目录:* 用`which node` 查看 .  一般 /usr/local/bin/node 
+查看所有全局安装模块:  `npm ls -g`
+
+
+#### 淘宝 NPM
+官方镜像很慢.推荐用淘宝的. cnpm 支持gzip压缩 替代 npm
+
+`npm install -g cnpm --registry=https://registry.npm.taobao.org`
+`cnpm install name`
+
+---
+
+
+
+
+
+npm install 慢/无响应还是国内墙的问题.
+
+运行 `npm config set registry https://registry.npm.taobao.org `
+
+就可以了..
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+@: 1986-03-04-Apt-get✔︎
+---
+layout: post
+title: Apt-get
+tags: 包管理器
+categories: Tooles
+---
+
+## Apt-get  update / upgrade / dist-upgrade
+
+apt-get update       更新软件列表.
+apt-get upgrade      软件系统
+apt-get dist-upgrade 内核升级
+
+> apt-get install fcitx-table-wbpy ttf-wqy-microhei ttf-wqy-zenhei  #拼音五笔
+> apt-get install ibus ibus-pinyin                                  #经典的ibus
+> apt-get install fcitx fcitx-googlepinyin                          #fcitx拼音
+reboot 重启之后即可！
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+@: 1986-03-06-Gem✔︎
+---
+layout: post
+title: Gem tags: 包管理器
+categories: Tooles
+---
+
+国内，由于防火长城对Amazon S3的封锁，可能需要更换软件源才能正常使用Gem进行安装。
+
+**Gem** Ruby 下的包管理器. 类似于 apk-get 或者 mac 下的 homebrew.
+Gem 可以生成 Gemfile 文件
+
+
+
+## 包管理器 简介
+各种包管理器就是帮你安装管理软件的.
+
+- Win: qq软件管家, 360软件管家...
+- Mac: appstore, homeBrew ...
+- Linux: apt-get, yum, npm, gem
+
+
+## RubyGems 简介
+
+Ruby 的一个包管理器.
+jekyll 是ruby写的,安装发布jekyll主题可以用这个管理器.(非必要...)
+
+
+
+## Gem 命令:
+
+
+### 查看 gem版本
+'' gem -v
+
+### 列出可用的 gem
+'' gem list --remote
+
+### 搜索 gem
+'' gem search STRING --remote
+
+### 安装 gem
+'' gem install mygem
+
+### 卸载 gem
+'' gem uninstall mygem
+ 
+### 下载但不安装 gem
+'' gem fetch mygem
+
+### 列出已安装 gem
+'' gem list --local
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+@: 1986-03-02-Grunt✔︎
+---
+layout: post
+title: Grunt
+tags: 包管理器
+categories: Tooles
+---
+
+
+
+Grunt和 Grunt 插件是通过 npm 安装并管理的， npm是 Node.js 的包管理器。
+
+
+## Grunt CLI 安装
+
+`npm install -g grunt-cli`
+
+
+
+## 新建Grunt 项目
+
+Grunt 项目 需要两个文件:`package.json` 和 `Gruntfile`
+
+### package.json 文件
+项目根目录中. 与 Gruntfile 同一目录.
+这个文件中 可以列出项目依赖的grunt 插件.
+
+在项目中 运行 npm install 会依据package.json文件中列出的每个依赖来自动安装适当版本的依赖.
+
+#### 创建 package.json 方式:
+
+- 大部分 grunt-init 模版都会自动创建特定于项目的package.json文件。
+- npm init命令会创建一个基本的package.json文件。
+- 复制下面的案例，并根据需要做扩充，参考此说明.
+	{
+	  "name": "my-project-name",
+	  "version": "0.1.0",
+	  "devDependencies": {
+	"grunt": "\~0.4.5",
+	"grunt-contrib-jshint": "\~0.10.0",
+	"grunt-contrib-nodeunit": "\~0.4.1",
+	"grunt-contrib-uglify": "\~0.5.0"
+	  }
+	}
+
+### Gruntfile 文件
+Gruntfile.js / Gruntfile.coffee  (CoffeeScript 文件)
+项目根目录中，和package.json文件在同一目录层级，并和项目源码一起加入源码管理器。
+
+用来配置或者定义任务.并加载Grunt插件.
+
+
+## Gruntfile 组成
+
+• "wrapper" 函数
+• 项目与任务配置
+• 加载grunt插件和任务
+• 自定义任务
+
+
+
+
+
+
+
+## 安装Grunt 和 grunt插件
+
+
+
+已经存在 package.json 文件中 添加 grunt 最简单的方式:
+`npm install <module> --save-dev`
+此命令不光安装了\<module\>，还会自动将其添加到devDependencies 配置段中，遵循tilde version range格式。
+

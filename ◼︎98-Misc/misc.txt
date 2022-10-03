@@ -1,0 +1,657 @@
+
+
+
+虚拟主机:
+没有域名可以跳过.
+
+
+
+数据库配置:
+
+先GitHub 下载ss-panel 最新面板文件. dowload zip 就可以了.
+然后解压  里面有5个sql文件.
+
+想办法连到vps上的数据库. 用这几个文件.来建立数据库.
+就会建立一个数据库 + 5个表.
+
+
+
+
+
+
+
+
+
+
+安装路径:
+    find / -name nginx.conf
+    find / -name php.ini
+    find / -name my.cnf
+    find / -name httpd.conf
+    这种方法会找出好几个文件. 要稍微判断下哪个是.
+
+    [root@localhost ~]# find / -name nginx.conf
+    /root/lnmp1.4/conf/nginx.conf
+    /root/lnmp1.4/lnmp1.3-full/conf/nginx.conf
+    /usr/local/nginx/conf/nginx.conf
+    [root@localhost ~]#
+
+
+
+
+
+❤️ PHP操作命令.
+
+service php-fpm restart //重新启动php
+chkconfig php-fpm on //设置php开机启动
+
+
+
+
+chattr +i .user.ini
+会让你删除不了文件. 先
+chattr -i .user.ini
+再删除.
+
+
+
+
+
+
+
+
+
+
+
+
+
+❤️ VPS 基本信息.
+看内存:  free -m
+
+📌 磁盘IO测试: 
+    [root@localhost ~]🔅 dd if=/dev/zero of=test bs=64k count=4k oflag=dsync
+    记录了4096+0 的读入
+    记录了4096+0 的写出
+    268435456字节(268 MB)已复制，0.612572 秒，438 MB/秒
+
+    [root@localhost ~]🔅 dd if=/dev/zero of=test bs=8k count=256k conv=fdatasync
+    记录了262144+0 的读入
+    记录了262144+0 的写出
+    2147483648字节(2.1 GB)已复制，8.78009 秒，245 MB/秒
+
+
+📌 网速: 上传/下载/ping
+
+服务器下载速度: 
+    或者用一键测试脚本来测试下载等速度,直接运行就可以了:
+    🔅 wget freevps.us/downloads/bench.sh -O - -o /dev/null | bash
+
+    下载个文件到服务器试试就能知道下载速度是多少.
+        [root@localhost ~]🔅 wget https://cachefly.cachefly.net/100mb.test
+        --2017-04-01 08:51:36--  https://cachefly.cachefly.net/100mb.test
+        正在解析主机 cachefly.cachefly.net... 205.234.175.175
+        正在连接 cachefly.cachefly.net|205.234.175.175|:443... 已连接。
+        已发出 HTTP 请求，正在等待回应... 200 OK
+        长度：104857600 (100M) [application/octet-stream]
+        正在保存至: “100mb.test”
+
+        100%[====================================>] 104,857,600 79.9M/s   in 1.3s
+
+        2017-04-01 08:51:37 (79.9 MB/s) - 已保存 “100mb.test” [104857600/104857600])
+
+
+📌 服务器出口速度: 也就是我们从服务器上下载文件的速度.
+
+
+
+
+
+
+
+
+📌 Ping 值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+❤️  搭建 & 配置 SS
+
+帮瓦工的控制台里就可以快捷的安装ss. 这步就不说了
+安装ss 看这个教程 http://www.jianshu.com/p/36e55c289d65
+我们从 安装好后开始说.也就是进行ss配置.
+
+
+📌 配置
+  vi /etc/shadowsocks.json
+  会自动建立一个空白文件.
+  这个就是 ss 的主要配置文件.
+  帐号、密码、端口、加密方式 都是这里修改的.
+
+  复制下面的模板 稍微修改下就可以了.
+  {
+  "server":"0.0.0.0",
+  "local_address": "127.0.0.1",
+  "local_port":1080,
+  "port_password":{
+    "443":"mima12345",
+    "6666":"mima12345"
+  },
+  "timeout":600,
+  "method":"aes-256-cfb"
+  }
+
+  Server:         自己服务器的公网IP地址
+  Port_password:  端口(1-65535) 推荐443;  后面是密码.
+  method          加密方式. 
+
+
+📌 启动/暂停服务
+
+    前台启动:  可以看到详细的日志.
+        ssserver -c /etc/shadowsocks.json
+
+    后台启动:  
+        开始：ssserver -c /etc/shadowsocks.json -d start
+        结束：ssserver -c /etc/shadowsocks.json -d stop
+        有问题 就先stop 在start. 
+
+
+📌 设置开机启动
+    vi /etc/rc.local，
+    将里面的最后带有ssserver的删除（双击字母d），
+    加入ssserver -c /etc/shadowsocks.json -d start,
+    再wq保存退出。
+
+查看当前版本: sslocal --version
+
+
+
+
+
+
+ss 免费服务网站. 流量用不掉. 那就分享出去.
+管理帐号 你需要一个 用户管理面板: ss panerl
+
+
+
+
+ss 编辑PAC 网址规则.
+有时候访问某个网站. 用pac 发现打不开. 
+有懒得去开全局.
+这时候就可以 用pac了.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+❤️ 本地 SS 客户端
+可选值:
+Surge 神器. 收费几百块.但是确实是最好的.最稳定最快的.
+SpechtLite: Surge阉割版本.免费,配置稍麻烦 比其他客户端快很多!!!!
+Shadowsocks  最常见了. 不怎么好, 但是配置简单.
+
+
+
+📌 Spechtlite 教程: (Mac OS)
+
+    1. open profile folder 
+      .yaml后缀的文件就是配置文件.
+      你可以给一个配置文件 设置一个帐号.
+      也可以给一个配置文件下设置多个帐号.
+      我们选一对一的.
+
+    apdpter 建议一个文件一个帐号.没用的adapter删除. 
+    - id: adapter1
+        type: ss
+        host: hk02-14.ssv7.net
+        port: 23192
+        method: AES-256-CFB
+        password: subWfpPAbchP
+
+    2. Speed adapter 
+      指定的延迟时间可以指定用那个帐号
+    在设置的 delay （单位毫秒）后发送请求，
+    哪个节点率先响应，那网络请求就走哪个节点，
+
+    3. 重启软件  选择一个配置文件就可以了.也简单的.
+
+
+
+
+    软件使用:
+    Set as system proxy ：设置为系统代理，正常使用必须打开；
+    Allow Clients From Lan ：局域网内分享代理，别人也能用你电脑翻墙
+    Use dev channel ：接受测试版本推送；
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+是一个网页服务器， 性能高.多进程模式
+
+启动后 会有 一个 master 和 多个 worker 进程
+master 管理 worker 
+
+
+
+
+它能反向代理HTTP, HTTPS, SMTP, POP3, IMAP的协议链接，以及一个负载均衡器和一个HTTP缓存
+
+版本: nginx -v
+
+相较于Apache、lighttpd具有占有内存少，稳定性高等优势。
+
+整体采用模块化设计是nginx的一个重大特点，甚至http服务器核心功能也是一个模块。要注意的是：nginx的模块是静态的，添加和删除模块都要对nginx进行重新编译，这一点与Apache的动态模块完全不同。
+
+
+其特点是占有内存少，并发能力强，事实上nginx的并发能力确实在同类型的网页服务器中表现较好，中国大陆使用nginx网站用户有：百度、新浪、网易、腾讯等。
+
+
+
+
+
+
+
+
+?????
+🔸??????  vim /etc/dovecot/conf.d/10-ssl.conf
+  ssl = no
+  //禁用ssl认证:
+
+
+posfix使用方法
+/etc/rc.d/init.d/postfix start/stop/status/restart
+Dovecot使用方法
+/etc/rc.d/init.d/dovecot start/stop/status/restart
+服务端日志目录：
+cat /var/log/maillog
+
+
+
+
+
+
+
+
+===============
+
+域伪装。
+这是为了解决邮件地址采用用户名@域名这个问题的。
+通过myorigin选项配置伪装地址： postconf -e "myorigin = $mydomain"
+
+
+
+配置SSL
+如果不配置ssl的话，邮件在网络上通过明文传输，安全性极低，所以ssl是非常有必要的
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+ns 名称服务记录  也用0214.help   得到两个 dns....
+mx 邮件交换记录 用0214.help 查: → mail.0214.help
+
+
+
+
+
+MX 邮件服务器记录
+NS 名字服务器记录
+PTR 反向记录
+
+
+
+
+
+查询dns 记录
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+A 地址记录(Ipv4)
+AAAA 地址记录（Ipv6）
+CNAME 别名记录
+HINFO 硬件配置记录，包括CPU、操作系统信息
+ISDN 域名对应的ISDN号码
+MB 存放指定邮箱的服务器
+MG 邮件组记录
+MINFO 邮件组和邮箱的信息记录
+MR 改名的邮箱记录
+MX 邮件服务器记录
+NS 名字服务器记录
+PTR 反向记录
+RP 负责人记录
+SRV TCP服务器信息记录
+TXT 域名对应的文本信息
+
+比如你要查询tool.chinaz.com的A记录,那在命令符提示窗口输入：nslookup -qt=a tool.chinaz.com 则可以查到相应的记录
+如何使用指定DNS服务器查询?
+语法为 nslookup -qt=类型 目标域名 指定的DNS服务器IP或域名
+例子：nslookup -qt=A tool.chinaz.com 8.8.8.8
+
+
+
+比如 mail.itr.cn
+这是邮箱. 一般直接查 itr.cn 的mx记录 
+
+✘✘∙𝒗 Desktop nslookup -qt=MX itr.cn
+*** Invalid option: qt=MX
+Server:		202.96.209.5
+Address:	202.96.209.5#53
+
+Non-authoritative answer:
+Name:	itr.cn
+Address: 54.238.196.244
+
+
+扫描 ip
+✘✘∙𝒗 Desktop nmap 54.238.196.244
+
+Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-04-05 22:22 CST
+Nmap scan report for ec2-54-238-196-244.ap-northeast-1.compute.amazonaws.com (54.238.196.244)
+Host is up (0.35s latency).
+Not shown: 995 filtered ports
+PORT     STATE  SERVICE
+21/tcp   closed ftp
+22/tcp   open   ssh
+80/tcp   open   http
+443/tcp  closed https
+8080/tcp closed http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 96.26 seconds
+
+
+
+
+
+用网页解析出来的..202.177.31.253(中国香港)	
+
+✘✘∙𝒗 Desktop nmap 202.177.31.253
+
+Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-04-05 22:27 CST
+Nmap scan report for mail.itr.cn (202.177.31.253)
+Host is up (0.099s latency).
+Not shown: 988 filtered ports
+PORT     STATE  SERVICE
+25/tcp   open   smtp
+53/tcp   closed domain
+80/tcp   open   http
+110/tcp  open   pop3
+143/tcp  open   imap
+366/tcp  open   odmr
+389/tcp  closed ldap
+465/tcp  open   smtps
+587/tcp  open   submission
+993/tcp  open   imaps
+995/tcp  open   pop3s
+1000/tcp open   cadlock
+
+Nmap done: 1 IP address (1 host up) scanned in 11.42 seconds
+
+
+一看就是这个啊..  有25端口的...
+
+
+
+✘✘∙𝒗 Desktop nslookup -qt=MX mail.itr.cn
+*** Invalid option: qt=MX
+Server:		202.96.209.5
+Address:	202.96.209.5#53
+
+Non-authoritative answer:
+Name:	mail.itr.cn
+Address: 202.177.31.253
+
+
+
+
+
+
+
+
+
+🔵 日志分析
+
+        如果还是启动不成功就只能看日志了..
+        📌 tail -f /tmp/zabbix_server.log
+                tail 查看文件尾部几行.
+                -f是好东西.可以实时监听文件变化内容. 
+                /tmp 是日志的路径.
+
+
+
+        🔸shared memory
+                共享内存: 方便两个进程直接通信.  比如 server 和 agent 都安装在本地的.
+                正常来说. 两个进程要通信 需要 客户端把数据写到一个文件. 然后服务器去访问这个文件.
+                有了共享内存 两个进程之间就能直接互相访问.
+
+
+        🔸semaphore: 
+                信号量: 解决资源冲突的东西.
+                举个简单的例子，
+                一张凳子一个人已经坐 了，第二个人就不能坐，
+                但如果第二个人不知道这张凳子已经给人坐了，还坐上去，就会出现问题，
+                所以如果我们约定凳子被占了就登记到一个本子上，
+                每个人想坐 这张凳子之前都先看看这个本子有没写下东西，就不会出现上述情况了。
+
+
+
+        🔸 IPC
+
+                IPC   一个让进程之间可以通信的东西.
+                        ipcs  (ipc show) 查看ipc信息, 如内存共享.以及资源被谁占用.. 
+                        ipcrm (ipc rm)   删除某个东西,如删除共享内存.
+
+                ipcs -c 输出ipc各种方式的在该系统下的限制条件信息
+
+                📌ipcs -m    查看共享内存信息.
+                        IPC status from <running system> as of Sun Apr 16 09:40:33 CST 2017
+                        T     ID     KEY        MODE       OWNER    GROUP
+                        Shared Memory:
+                        m 327680 0x0052e2c1 --rw------- postgres   daemon
+                        m 393217 0x0052e6a9 --rw-------        v    staff
+
+                                T:    工具类型: q 消息队列. m共享内存段  s 信号量.
+                                ID:   工具项的标识.
+                                key:  占用共享内存的大小??
+                                mode: r 有读取权限、w 有写入权限、a 有修改权限
+                                owner: 工具项的所有者.
+                                group: 工具项的 组名.
+
+
+                📌sysctl -A | grep shm   查看当前共享内存设置
+                        kern.sysv.shmall: 1024       ➜ 全部允许使用的共享内存大小
+                        kern.sysv.shmseg: 8
+                        kern.sysv.shmmni: 32
+                        kern.sysv.shmmin: 1
+                        kern.sysv.shmmax: 4194304   ➜ 某进程最大值. 4194304 byte = 4MB
+                        machdep.pmap.hashmax: 18
+                        security.mac.posixshm_enforce: 1
+                        security.mac.sysvshm_enforce: 1
+
+
+                📌📌 sudo sysctl -w kern.sysv.shmmax=16777216    ➜ 手动设置上限.     
+
+
+
+
+
+🔵 debug 
+
+
+
+👹 ✔︎ cannot open PID file [/tmp/zabbix_server.pid]: [13] Permission denied
+        用sudo 执行启动目录
+        sudo zabbix_server
+
+
+👹 cannot allocate shared memory of size 16777216: [22] Invalid argument
+        allocate 分配!!  也就是不能分配 16777216 这么大的内存 来做共享内存.
+        那就调整shmmax的最大值.  
+
+
+👹 cannot allocate shared memory of size 16777216: [12] Cannot allocate memory
+        cannot allocate shared memory for history cache
+                🔸Cannot allocate memory
+                ✘✘∙𝒗 /etc sudo zabbix_server
+                zabbix_server [38439]: user zabbix does not exist
+                zabbix_server [38439]: cannot run as root!
+
+                        🔸cannot run as root!        把server.conf 里的 allowroot 设置成1 就用root了.
+
+
+
+
+👹 [12] Cannot allocate memory
+
+
+        Need to increase kernel.shmmax=134217728 which allows to use 128M for any cache related parameter in the zabbix server configuration.
+
+
+
+👹 cannot allocate shared memory for history cache
+
+
+
+
+👹cannot allocate shared memory of size 4194304: [28] No space left on device
+
+
+
+
+👹 connection to database 'zabbix' failed: [0] expected authentication request from server, but received M
+卡死在这了.  丫的 弄了快一天了.... zabbix-server放弃.
+
+
+
+
+
+运维分两块，一块是技术方面，另一块则是管理。 
+
+技术是发现、处理，保障运行；管理则时如何分配资源和人力，优化流程，尽快恢复以及未雨绸缪。 
+
+在管理上比较流行的是ITIL 和ITSM 。
+
+
+
+🔵自动化运维:
+
+
+
+
+
+
+
+🔸性能监控: web服务/应用服务/数据库服务   : zabbix 
+
+🔸批量运维: puppet、chef ruby写的; ansible、saltstack python写的
+
+🔸日志分析工具: 
+    线上系统最常规的问题定位方式，就是日志分析了。
+    随着服务器的增多，日志的分析定位也成为一个难点和痛点
+    想象一下，系统出故障之后，要去几十甚至数百个节点去上去查日志，是有多折腾
+
+🔸持续集成和发布工具
+    而如何把打好的包发布至各台服务器，则可以通过批量运维工具或者脚本来完成了。
+    版本发布的过程涉及到很多细节，包括了版本文件的上传、分发、版本管理、回滚等各种操作。
+    对于一般不太复杂的项目，
+    我比较推荐的做法是把打包好的文件上传到svn上，
+    然后通过脚本在各台服务器上进行发布操作就行了，
+    这样其实是利用了SVN来完成文件的上传、分发、版本管理、回滚等各种操作。
+
+
+🔸安全漏洞扫描工具
+    现在一个稍微有点知名度的系统，都会遭受各种各样的安全攻击的折磨。
+    一般的公司不太可能请得起专职的安全工程师，
+    所以运维工程师最好能自己借助一些安全扫描工具来发现自己系统的漏洞。
+
+
+
+
+
+系统安装: kickstart.
+
+
+
+
+
+
+
+
+ofo 开锁.
+
+
+第一步：按紧锁头(开锁的按钮)
+
+第二步：闭下眼睛，慢慢转动“千位转轮”(四位密码锁一共有4组密码，第一位数字称为千位)，找出最松动的位置。
+
+第三步：同样的道理，也由此找出其它三位数。
+
+那什么是“找出最松动的位置”呢?
+
+因为各个单个密码位的转轮看似旋转时转到每个数字时的转速相同，但是实则不然。如果千位数字，密码数字是“8”，那么你会发现“8”周围的数字包括“8”，转轮转到时，会很松动，这就需要破解密码者耐心寻找了。
+
+但是这种方法只能破解大多数的车，因为如果密码锁润滑油充足，转轮的松动是很难被察觉的。
+
+
+
+
+
+
+🔵 beacons
+
+beacon 是一种帧.
+有一个频率 默认是100ms 一次.
+
+就像菜市场卖菜 大妈叫卖 白菜白菜便宜啦
+
+ 这个叫卖的频率很有讲究 叫太快了整个市场都听你叫唤 别人没法做生意了 叫太慢又没人知道你卖白菜
+
+beacon设置频率太高 占用信道传输正常数据 频率太低 新连进来的设备就要很久才能显示出来这个wifi热点
+
+
+
+
+
+
+
+

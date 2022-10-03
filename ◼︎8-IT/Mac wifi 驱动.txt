@@ -1,0 +1,12 @@
+🔸 Mac wifi 驱动
+    网件 wna1100
+    [https://kb.netgear.com/000037854/ReadySHARE-Printer-Utility-Version-2-36-Mac-Supports-MAC-OS-10-11-and-above]
+
+
+
+
+
+🔸 Apple 蓝牙键盘连接
+    systemctl enable bluetooth.service
+    systemctl start bluetooth.service
+    运行之后 就能蓝牙搜索到键盘了 。 。。     

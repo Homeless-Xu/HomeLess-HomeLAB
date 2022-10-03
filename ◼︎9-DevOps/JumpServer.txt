@@ -1,0 +1,683 @@
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 Jumpserver  个人评价 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+不好用....   开启了 Jumpserver 居然ssh 不了服务器...  fuck..
+ssh 不了gce 只能用gce的 api 管理服务器了.非常不方便...
+
+
+停止docker 
+        /bin/systemctl status docker.service
+        /bin/systemctl stop  docker.service
+
+停止docker 开机启动
+    systemctl  disable docker.service
+
+删除文件
+    sudo rm -r /opt/jumpserver/
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 跳板机/堡垒机  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 WHY
+    为了保证服务器安全，加个堡垒机，所有ssh连接都通过堡垒机来完成.
+    堡垒机也需要有身份认证，授权，访问控制，审计等功能。
+
+
+🔸 堡垒机特点： 
+    1、安装非常简单，使用简单. 
+    2、支持用户的灵活授权，不同用户对堡垒机的操作权限不同，对资源的权限也不同，安全性很高。 
+    3、支持ssh、telnet协议无障碍访问、不卡死。 
+        1) 支持命令截取，命令审计 
+        2) 支持操作录像、录像回放。 
+        3) 支持各种unix、linux、路由器交换机、防火墙 
+        4) 支持命令级别划分（普通命令、警告命令、高危命令） 
+        5) 支持命令阻断。 
+    4、支持rdp无障碍访问，不卡死。跟用本地远程登录无区别 
+        1) 支持mstsc客户端 
+        2) 支持磁盘挂载，支持策略设置，某些用户可以挂在磁盘，某些客户禁止挂载磁盘。 
+        3) 支持复制粘贴，支持是否禁止策略 
+        4) 支持win2008的remote功能，这个功能太优美了。 
+        5) 支持录像本地回放 
+        6) 支持录像在线播放，速度快，拖动10s响应。 
+    5、支持oracle、db2、mysql、sqlserver等数据库协议 
+    6、支持ftp、sftp协议，记录上传下载记录，录像并回放 
+    7、支持ie的http协议 
+    8、支持未知协议的扩展，如加密机 
+    9、支持自身审计，新建用户、新建角色、授权更改等等都会记录，方便回顾。 
+    10、支持双机热备、高可用，一台宕机后，备机立马接管，ip不变。 
+    11、支持第三方强认证，如动态口令、LDAP等，支持本公司的动态口令系统。一次一密，防止静态密码丢失。
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 Jumpserver简介 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸简介
+    网站 http://www.jumpserver.org/
+    源码 https://github.com/jumpserver/jumpserver
+    DEMO http://demo.jumpserver.org:8080/users/login?next=/
+    使用 https://github.com/jumpserver/jumpserver/wiki
+    安装
+         https://github.com/jumpserver/jumpserver/wiki/v0.4.0-%E5%9F%BA%E4%BA%8E-CenOS7-%E7%9A%84%E7%B3%BB%E7%BB%9F
+
+
+🔸 Jumpserver
+
+    • 完全开源，GPL授权
+    • Python编写，容易再次开发
+    • 实现了跳板机基本功能，认证、授权、审计
+    • Bootstrap编写，界面美观.
+    • 安装配置简单
+    • 集成了Ansible，批量命令等
+    • 支持 WebTerminal
+    • 自动收集硬件信息
+    • 命令搜索
+    • 实时监控
+    • 批量上传下载
+    • 基于ssh协议来管理，客户端无需安装agent.
+    • 后端数据存储使用的是MySQL数据库，因此建议使用前先行配置及部署好MySQL数据库。
+
+
+🔸 Jumpserver 实现
+    Jumpserver 后端主要技术是LDAP，配置了LDAP 集中认证服务器， 所有服务器的认证都是由ldap完成的。
+    其做法是：每个用户一个密码，把密码加密放到了数据库中，当用户输入IP 从跳板机登陆服务器的时候，跳板机系统取出密码，并解密，通过pexpect 模块将密码发送过去，来完成登录。
+
+
+
+
+
+犹记得当初刚到新的公司，公司里面没有批量管理工具，新来程序猿同事，需要手动为它们在服务器一个个添加账号。
+
+过了一段时间，经理说服务器上的部署的应用没了，查了半天history没发现谁删的。痛定思痛后决定购买堡垒机产品，经理咨询报价后，说：老广，听说你在学习Python，要不你来写一个吧，后来就有了Jumpserver
+
+
+
+
+精确记录操作命令
+
+支持批量文件上传下载
+
+支持主机搜索登录
+
+支持批量命令执行(Ansible完成)
+
+支持Web Terminal连接主机
+
+支持Web端批量命令执行
+
+支持录像回放
+
+支持硬件信息如cpu,内存等抓取
+
+支持资产Excel导入导出
+
+支持资产批量更改
+
+支持系统用户的批量推送(Ansible实现)
+
+支持用户，主机，用户组，主机组，系统用户混合细颗粒授权
+
+支持sudo管理
+
+支持命令统计和命令搜索
+
+支持上传下载文件审计
+
+支持终止用户连接
+
+支持各种搜索
+
+其他
+
+
+
+
+
+
+设计一个跳转网关，所有登录操作都从网关通过
+网关具有模拟终端的功能，透明的中转ssh命令，以支持Tab,Ctrl+A,Ctrl-E等快捷键，网关既可以记录操作日志，又可以审计操作命令。
+
+设计一个认证模块
+为了实现认证功能，需要有个认证模块，认证信息存到数据库，用户使用跳板机首先需要认证。
+
+设计一个授权框架
+授权是跳板机不可缺少的部分，授权就是用户和资产的关系，将关系保存的数据库，用户登录主机需要先查授权。
+
+设计审计模块
+审计是为了追踪，我们支持了在线监控，命令统计，录像回放功能，供管理员审查。
+
+用户和主机模块
+跳板机脱离不了用户和主机，所以这两个部分是基本的模块，另外我们将主机模块扩展，实现基本CMDB功能。
+
+Web Terminal
+现在都流行Web操作一切，于是我们又实现了Web Terminal，供用户直接在线链接服务器，这里实现是用了Tornado来完成的，Tornado实现WebSocket特别简单。
+
+其它
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸 Jumpserver 架构 
+    用户 ➜ 跳板机/备份跳板机 ➜ LDAP 认证服务器 ➜ 服务器
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Jumpserver 安装   🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 硬件要求
+
+    ❗️❗️ openvz本身就是个container,不可能装docker的️,装了也有限制的. 建议 KVM❗️❗️
+    ❗️❗️ openvz本身就是个container,不可能装docker的️,装了也有限制的. 建议 KVM❗️❗️
+
+       我们用谷歌GCE的免费服务器
+
+
+🔸 软件要求
+    • Docker  和 Docker Compose
+    • Python3 和 Python 虚拟环境
+
+    还有 jumpserver 搭建好只也是用 ssh 的2222 端口的!
+    如果你现在的ssh 是2222 端口那么改掉.
+
+
+🔸 安装方法
+    两种安装方法. 
+    一种是用docker 命令. 虽然一个命令就可以了.但是不建议.  
+    一种是自己配置. 虽然配置麻烦.但是建议...
+
+
+🔸 Python3
+    安装 python3 不会影响自带的 python2 ; python 命令对应python2,python3 命令对应python3
+    安装 python3 不会影响自带的 python2 ; python 命令对应python2,python3 命令对应python3
+
+    ⦿ 编译所需依赖安装
+        yum -y install wget sqlite-devel xz gcc automake zlib-devel openssl-devel
+
+    ⦿ 编译安装 python 3.6.2 
+        wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tar.xz
+        tar xvf Python-3.6.2.tar.xz  && cd Python-3.6.2 && ./configure && make && make install
+
+    ⦿ 重连 SSH
+    
+    ⦿ 版本查看
+        python3 -V
+
+
+🔸 Python3 虚拟环境
+    我们在 /root 目录下新建个叫 jump-py3-env 的虚拟环境
+    之后所有命令都在 jump-py3-env 这个虚拟环境下执行!!!
+
+    ⦿ 创建虚拟环境
+        cd /root && python3 -m venv jump-py3-env
+    ⦿ 进入虚拟环境
+        ✘✘∙GCE ~ ➜ source /root/jump-py3-env/bin/activate
+        (jump-py3-env) ✘✘∙GCE ~ ➜
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 jumpserver 安装 一 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+⦿ 进入虚拟环境 source /root/jump-py3-env/bin/activate
+
+⦿ git 安装         yum -y install git
+
+⦿ jumpserver 下载  
+    cd /opt && git clone https://github.com/jumpserver/jumpserver.git && ls 
+    注：不要安装在/root、/home 等目录下，以免权限问题
+
+
+⦿ 安装依赖rpm包
+    cd /opt/jumpserver/requirements
+    yum -y install epel-release
+    yum -y install $(cat rpm_requirements.txt)  
+    # 如果没有任何报错请继续
+
+⦿ 安装python库依赖
+    pip install -r requirements.txt  
+    # 如果没有任何报错请继续
+
+🔸 Redis 配置
+    • 安装        yum -y install redis
+    • 启动        /bin/systemctl start  redis.service
+    • 6379  端口  netstat -nltp
+
+    • redis 加密 ➜  vi /etc/redis.conf ➜ 添加密码行 ➜ requirepass QwertYuiop
+        不加密 分分钟被黑! 必须加密.
+    • redis 重启 ➜  /bin/systemctl restart  redis.service
+    • redis 远程登录测试   现在就需要密码才能登录了! 
+        不然会报错 response received : -NOAUTH Authentication required.
+
+
+
+🔸 MySQL
+    本教程使用mysql作为数据库，如果不使用mysql可以跳过相关mysql安装和配置
+
+    ⦿ 安装 
+        yum -y install mysql mysql-devel mysql-server
+        service mysql start
+        netstat -nltp  ➜ 端口 3306
+
+    ⦿ 创建 jumpserver 数据库并授权
+        下面命令会进入mysql 命令行. 
+        创建一个叫 jumpserver 的数据库.
+        并创建一个叫 jumpserver 的用户. 密码是 jumpserverpasswd
+        jumpserver 用户只能通过 127.0.0. 1 登录mysql. 无外网登录权限
+
+        mysql -uroot -p 
+        show databases;
+        create database jumpserver default charset 'utf8';
+        grant all on jumpserver.* to 'jumpserver'@'127.0.0.1' identified by 'jumpserverpasswd';
+        show databases;
+
+
+🔸 安装 python3 mysql驱动: mysqlclient
+    由于MySQLdb库不支持 python3.5+，所以选择了mysqlclient作为驱动,pymysql使用python写的，速度较慢
+    pip install mysqlclient
+
+
+🔸 修改jumpserver配置文件
+    cd /opt/jumpserver
+    cp config_example.py config.py
+    vi config.py
+
+
+    class DevelopmentConfig(Config):
+        DEBUG = True
+        DISPLAY_PER_PAGE = 20
+        DB_ENGINE = 'mysql'
+        DB_HOST = '127.0.0.1'
+        DB_PORT = 3306
+        DB_USER = 'jumpserver'
+        DB_PASSWORD = 'somepassword'
+        DB_NAME = 'jumpserver'
+
+
+        SITE_URL = 'http://35.194.128.92:8080'
+
+
+
+    修改 SITE_URL
+
+    注释 Sqlite setting: 下的两行.
+    #  DATABASE_ENGINE = 'sqlite3'
+    #  DB_NAME = os.path.join(BASE_DIR, 'data', 'db.sqlite3')
+
+    修改 Mysql or postgres setting like: 下注释
+        DB_ENGINE = 'mysql'
+        DB_HOST = '127.0.0.1'
+        DB_PORT = 3306
+        DB_USER = 'jumpserver'
+        DB_PASSWORD = 'jumpserverpasswd'
+        DB_NAME = 'jumpserver'
+
+
+    ⦿ 设置redis 密码!!
+        REDIS_PASSWORD = '你之前设置的redia 密码'
+
+
+🔸 生成数据库表结构和初始化数据
+
+    cd /opt/jumpserver/utils
+    bash make_migrations.sh
+    bash init_db.sh
+
+
+🔸 运行Jumpserver
+    cd /opt/jumpserver
+    python run_server.py
+
+    运行不报错，请浏览器访问 http://35.194.128.92:8080/ 账号: admin 密码: admin
+
+
+
+
+
+🔸 Coco 简介
+    Coco 实现类似 ssh server 的功能.
+    用户不能用 openssh server ....
+
+
+🔸 Coco 安装 
+    cd /opt && git clone https://github.com/jumpserver/coco.git
+
+🔸 Coco 安装依赖
+
+    cd /opt/coco/requirements
+    yum -y  install $(cat rpm_requirements.txt) && pip install -r requirements.txt
+
+
+🔸 Coco 查看配置文件并运行
+
+    cd /opt/coco && ls
+    cat config.py && python run_server.py
+
+        ERROR:root:Load access key failed
+        Using access key 311d0e77-5ec9-4c46-a131-7409e1daf271:***
+        WARNING:/opt/coco/coco/service.py:App auth failed, Access key error or need admin active it
+
+        这时需要去 jumpserver管理后台-应用程序-终端(http://192.168.244.144:8080/applications/terminal/)接受coco的注册
+
+
+
+vi config.py
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 jumpserver 安装 二 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 docker 安装 
+    Docker 运行在 CentOS 7 上，要求系统为64位、系统内核版本为 3.10 以上。
+
+    • 查看内核版本:
+        ✘✘∙𝒗1 ~ ➜ uname -r
+        2.6.32-042stab123.3
+
+    • 安装第三方仓库:ELRepo
+        yum 默认安装的不是最新版本! 而是yum官方仓库里面的版本.一般比较老.
+        想要用 yum 来安装最新版本.就需要第三方仓库:ELRepo
+
+        rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+        rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+
+    • 列出可用内核包
+        一般都是4开头的! 最新版本是4.12 
+        yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
+            kernel-ml.x86_64    4.12.5-1.el7.elrepo  elrepo-kernel
+
+    • 升级内核最新版本
+        yum --enablerepo=elrepo-kernel install kernel-ml
+
+    • 确保 yum 包更新到最新
+        sudo yum update -y
+
+    • 执行 Docker 安装脚本
+        curl -fsSL https://get.docker.com/ | sh
+
+    • 启动 Docker 进程
+        /bin/systemctl start  docker.service
+        /bin/systemctl status docker.service
+        /bin/systemctl stop  docker.service
+
+
+    • 验证 docker 是否安装成功并在容器中执行一个测试的镜像
+        sudo docker run hello-world
+
+    • Docker 开机启动
+        systemctl  enable docker.service
+
+
+
+🔸 Docker Compose 安装 
+    Docker Compose 是 Docker 官方编排（Orchestration）项目之一，负责快速在集群中部署分布式应用。
+    Compose 目前支持 Linux 和 Mac OS 平台，两者的安装过程大同小异。
+    安装 Compose 之前，要先安装 Docker（需要 Docker Engine 1.7.1+）
+    Compose 可以通过 Python 的 pip 工具进行安装.
+
+    sudo pip install -U docker-compose
+    docker-compose -v
+
+
+🔸 jumpserver 安装运行
+
+    • 启动 docker 
+        /bin/systemctl start  docker.service
+
+    • 进入虚拟环境
+        source /root/jump-py3-env/bin/activate 
+    
+    • 启动
+        cd /opt/jumpserver && sudo docker-compose up
+
+
+
+
+🔸 网页登录 
+    35.194.128.92:8080   admin  admin 
+
+
+🔸 设置 Terminal 
+    服务器上用docker 虚拟出来的两个虚拟机.会有两个内网IP.
+    你需要同意后.服务器才能正常开启 coco (类似ssh, 可以让用户连接到跳板机器) 
+    application ➜ terminal ➜ 勾选 coco 和 luna 点击同意.
+
+
+🔸 Coco 客户端测试连接
+    ssh -p2222 admin@35.194.128.92    密码: admin 就会出现下面的类似ssh的界面了.
+
+    admin, 欢迎使用Jumpserver开源跳板机系统
+
+            1) 输入 ID 直接登录 或 输入部分 IP,主机名,备注 进行搜索登录(如果唯一).
+            2) 输入 / + IP, 主机名 or 备注 搜索. 如: /ip
+            3) 输入 P/p 显示您有权限的主机.
+            4) 输入 G/g 显示您有权限的主机组.
+            5) 输入 G/g + 组ID 显示该组下主机. 如: g1
+            6) 输入 E/e 批量执行命令.(未完成)
+            7) 输入 U/u 批量上传文件.(未完成)
+            8) 输入 D/d 批量下载文件.(未完成)
+            9) 输入 H/h 帮助.
+            0) 输入 Q/q 退出.
+
+    Opt>
+
+
+
+🔸 Luna 客户端测试连接
+    浏览器 ➜  23.105.192.96:5000  会出现个界面.
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Jumpserver 使用 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+🔸 用户管理
+
+    ⦿ 使用Jumpserver前要理解清楚这三个用户关系:
+
+        • 用户：    是指你在web上创建的用户,会在跳板机上创建这个用户,作用就是用于登录跳板机
+        • 管理用户：是指客户端上的如root等高权限账号,用于在客户端创建系统用户
+        • 系统用户：是指要在客户端上创建这个系统用户,通过推送来实现,作用就是登录客户端
+
+    ⦿ 管理用户和系统用户的关系：
+
+        两者都是客户端上的用户,后者涉及到一个推送动作,
+
+        比如推送test系统用户,也就是在客户端上创建test用户,那么创建用户需要有权限,
+        有没有权限创建就要看你是用客户端的root用户还是普通用户做为管理用户,
+        如果后者做为管理用户就需要添加sudo权限又是NOPASSWD: ALL,
+        这样推送系统用户,就可以成功在客户端上创建test用户
+
+
+
+🔸 资产管理
+
+    资产组：同用户组,这里是资产组成的集合,为了方便授权.
+    资产：  资产通常是我们的服务器、网络设备、其它ssh协议硬件设备等.
+
+    添加资产时需要添加一个管理用户，该管理用户是客户端上拥有sudo权限的用户，
+    如root，或者有 NOPASSWD: ALL的用户.
+    该管理用户用来向资产推送系统用户，如果有关联sudo别名会为系统用户添加sudo.
+    通过管理用户来获取资产的一些硬件信息.
+    机房：记录IDC机房信息
+
+
+🔸 授权管理
+    sudo别名、系统用户、授权规则使用
+    sudo别名：sudo命令列表，多个用逗号隔开，不能换行
+    系统用户：客户端的ssh连接账号(系统账号)，关联sudo别名，被使用前记得推送到客户端
+    推送：推送系统用户： 添加完系统用户，需要推送，推送操作是使用ansible.
+
+    授权规则：web用户，资产主机，系统用户三者关联(绑定)，控制web普通用户能管理的资产和ssh连接用的系统账号
+
+
+🔸 上传下载
+    文件上传： 上传文件名能有中文，可以同时上次多个文件到指定的主机，留存是先上传到管理主机的tmp/{datatime}/文件名，再传到指定主机的tmp/{datatime}/文件名目录
+    文件下载：只能下载客户端或服务端主机的/tmp目录中的文件
+
+
+🔸 日志审计
+    在线、登陆记录、命令记录、上传下载四种信息
+
+🔸 设置
+    配置连接客户端的高级管理权限账号(可以密码及密钥)
+
+
+
+
+
+
+
+
+🔸 流程
+    • Users                     ➜ 添加 Jumpserver用户 > 查看邮箱 > 下载私钥 > ssh登录跳板机
+    • Admin/System user         ➜ 添加登录 真实服务器的用户和密码
+    • Asset                     ➜ 添加 真实服务器
+    • perms > asset permission  ➜ 设置真实服务器的权限.
+    • ssh 登录 Jumpserver > 选择真实服务器进行登录 
+
+
+
+🔸 web ➜ Users 
+    这个是登录跳板机器的用户.
+
+
+🔸 web ➜ assets ➜ admin user/system user 
+    这个是服务器的用户密码.
+    比如你要管理很多服务器. 那么 Jumpserver 首先需要能连接到哪些服务器. 
+    这时候需要要用户和密码/密钥 这里的用户就是真实服务器的帐号密码.
+    admin 和 system 区别就是帮你权限分组.
+
+🔸 web ➜ assets ➜ asset 
+    这里添加真实服务器的IP、端口等信息.
+    好让 admin/system user 登录对应的服务器.
+
+
+
+
+🔸 更改admin 密码 必须!
+    web ➜ user ➜ user ➜ admin ➜ update ➜ 
+
+
+
+
+
+
+
+
+
+
+
+🔸 Terminal
+    以前你是用ssh 连到服务器自带的 ssh server的.
+    现在你是用ssh 连到服务器新装的 jumpserver 的 ssh server.
+    这个 ssh 服务器 和常规的sshserver 有点区别.
+    用户 ➜ ssh 跳板机器 ➜ 跳板机器选择一个 服务器进行登录.
+
+    1) 输入 ID 直接登录.
+
+    2) 输入 / + IP, 主机名 or 备注 搜索. 
+                    
+    3) 输入 P/p 显示您有权限的主机. 
+
+    4) 输入 G/g 显示您有权限的主机组.
+
+    5) 输入 G/g + 组ID 显示该组下主机. 
+
+    6) 输入 E/e 批量执行命令. 
+
+    7) 输入 U/u 批量上传文件.
+
+    8) 输入 D/d 批量下载文件.
+
+
+
+
+
+🔸 Web批量执行命令
+可以选择多个服务器 提示执行命令.
+
+
+
+
+
+🔸 WebTerminal:
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Misc 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸 登录
+    http://35.194.128.92:8080
+    账号: admin 密码: admin
+
+
+🔸 上传本机公钥 到网页.
+
+
+不是谁都可以登录网页的. 
+
+
+
+
+（一）让jms与服务器建立联系，这样才能对其他的用户和sudo进行添加。
+        step1：“主页”–>“资产管理”–>“查看资产”–>“添加资产”
+此页面填写“主机名”及其其他你需要与jms建立联系的服务器的相关信息。此处的管理账号可以是root或者其他具有root权限的用户，然后“提交”。
+step2：“主页”–>“授权管理”–> “系统用户”–>“添加系统用户”
+此页面用户名称==填写你需要在服务器上需要建立的用户账号（此账号服务器原初不能存在且不能为root）。
+默认密码==用户密码（此处你需要添加的用户的sshd服务器必须允许使用密码登录，不支持请修改重启服务）。
+关联sudo，此处选择设置好的sudo权限，未设置可以不选择。
+点击“确定保存”提交。
+step3：“主页”–>“授权管理”–> “系统用户”
+此处找到step2建立好的用户，“操作”栏下点击“推送”。将该用户推送到服务器上（效果为在服务器上建立该用户，如果有sudo别名，推送的时候也会在/etc/sudoers文件下写入相关配置）。
+（二）jms用户授权管理
+        step1：“主页”–>“授权管理”–>“授权规则”
+“添加授权规则”的含义就是将jms的用户和之前添加的“系统用户”关联起来。一个jms用户可以管关联多个“系统用户”。
+step2：当添加好授权规则之后，在“主页”–>“资产管理”–>“查看资产”就可以查看你所拥有的服务器了。
+点击“操作”下的“连接”便可以使用网页登录服务器了。
+通过以上操作，一个完整的流程便完成，其他相关功能可以慢慢发掘了。
+
+
+
+
+

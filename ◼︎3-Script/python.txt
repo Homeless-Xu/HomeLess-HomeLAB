@@ -1,0 +1,71 @@
+备份脚本
+
+
+
+
+
+
+Python 精简
+
+
+
+
+
+终端 选择器调试. 
+scrapy shell "https://www.0214.live"
+	scrapy shell + 网页地址. 
+	scrapy 就获取到 指定网页 的信息了.
+	这些信息都储存在 response 这个变量里面.
+	一定记得给url地址加上引号，网址里的特殊符号(&)会影响运行
+
+response.body
+就是你想爬的那个网页的源码. 
+所有后续操作都是基于你爬到了正确的源码.
+然后再用 css选择器 来选择你要的数据.
+
+
+>>> response.css('ul.post-list li a::attr(href)').extract()
+这个获取 类名是post-list 的ul  下的li 的a链接属性是 fref的链接.
+
+
+
+
+
+获取网站标题
+>>> response.css('title')
+[<Selector xpath=u'descendant-or-self::title' data=u'<title>Xu.Jian</title>'>]
+
+>>> response.css('title::text')
+[<Selector xpath=u'descendant-or-self::title/text()' data=u'Xu.Jian'>]
+
+>>> response.css('link')
+
+>>> response.css('a::attr(href)')
+会显示所有的链接.. 
+怎么显示网页某类下的链接呢.
+
+
+
+
+
+比如 我网站里面的 第一列. 就是大类名字. 对应 class=“cateNames”
+
+response.xpath('//title') 
+就能获取到网页的标题了!!!!
+[<Selector xpath='//title' data=u'<title>Xu.Jian</title>'>]
+
+
+
+
+正则式筛选数据.
+
+
+
+
+
+
+
+
+
+
+

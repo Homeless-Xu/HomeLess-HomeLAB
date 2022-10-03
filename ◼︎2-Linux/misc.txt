@@ -1,0 +1,93 @@
+
+❤️ CentOS7 虚拟机网络配置
+	虚拟机搭建好后,一般来说网络是没有启动的.需要自己设置
+
+	🔸 相关目录:
+		/etc/sysconfig/network                   # 包括主机基本网络信息，用于系统启动
+		/etc/sysconfig/network-script/           # 此目录下是系统启动最初始化网络的信息
+		/etc/sysconfig/network-script/ifcfg-em1  # 网络配置信息，每个人的配置名字不一样通过命令查看
+		/etc/xinetd.conf                         # 定义了由超级进程XINETD启动的网络服务
+		/etc/protocols                           # 设定了主机使用的协议以及各个协议的协议号
+		/etc/services                            # 设定了主机的不同端口的网络服务
+
+
+
+	🔸 重启/停止/查看网络
+
+		  nmcli dev status         # 检查受网络管理器管理的网络接口
+		  systemctl status NetworkManager.service # 验证网络管理器服务的状态
+
+
+	🔸 启动/关闭网卡:
+		ifup <设备名>    # 激活网卡 {网卡名字}   如: ifup em1
+		ifdown <设备名>  # 关闭网卡
+
+
+	🔸 再次查看网卡状态: 
+		网卡被启动后.就可以看到获取到的 IP地址了.就可以 SSH了.
+		最好设置下 静态IP.
+
+		查看网卡状态: ➜  ip addr ➜  有status UP、status DOWN的.
+		UP 就说明网卡开启了.
+		Down 就说明网卡没开启.
+
+	🔸 开启ssh远程(默认自带ssh服务的)!!! 
+		service sshd status  ➜  正常应该是运行的.
+		service listening on 0.0.0.0 port 22 ➜  说明 CentOS 是允许所有电脑进行远程的.
+
+	🔸 免密码SSH
+
+		客户端: 🔅 cd /Users/v/.ssh/
+		服务器: 🔅 mkdir ~/.ssh
+		客户端: 🔅 scp -r id_rsa.pub root@192.168.169.111:~/.ssh/            
+		服务器: 🔅 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+
+🔵 外网开启
+
+
+网络是在 安装虚拟机的时候设置的 操...
+
+	首先 虚拟机网络设置中 选择NAT方式.
+	上面的只是开启了内网.... 外网死活上不去...
+
+ip addr 你会发现有个 virbr0 网卡.
+这个网卡默认使用 192.168.122.0/24 这个网段.
+这个网卡 是给 开启NAT上网方式的人用的.
+
+
+
+
+
+
+	🔸 虚拟机设置快照来备份
+		选择虚拟机 ➜  右键 ➜  snapshot ➜  take ..
+
+
+
+
+
+Linux 新文件默认权限.
+
+
+
+系统不允许你在创建一个文本文件时就赋予它执行权限，必须在创建后用chmod命令增加这一权限。但是文件夹可以.
+
+
+
+
+默认情况下的umask值是022(可以用umask命令查看）
+此时你建立的文件默认权限是644(6-0,6-2,6-2)，
+建立的目录的默认权限是755(7-0,7-2,7-2)，
+
+
+## 修改 umask
+
+
+
+umask 和 chmod 效果相反
+chmod 是给予权限.
+ummask 是去除权限
+
+我们只要记住u m a s k是从权限中“拿走”相应的位即可。
+如：umask值为022，则默认目录权限为755，默认文件权限为644。

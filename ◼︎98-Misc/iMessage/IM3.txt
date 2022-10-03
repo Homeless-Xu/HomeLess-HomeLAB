@@ -1,0 +1,221 @@
+Python 标准库 提供范围很广的工具. window、unix、mac 都有涉及.
+Python 标准库内容:  http://usyiyi.cn/translate/python_278/library/index.html
+
+其中自带的 MacPython OSA Modules 模块 可以实现在python中运行 applescript.
+当然还有别的第三方模块也能实现类似功能.
+
+
+🔸 subprocess 模块.
+    运行python 都是在创建并运行一个进程. 一个进程可以分出好几个子进程!
+    这些子进程就可以执行外部的命令和程序.
+
+    在python中 我们通过标准库中的 subprocess 来创建子进程.并运行外部程序.
+    比如要用 wget下载文件. 就需要调用 wget这个程序. 
+
+
+
+🔸 把变量传入变量..
+str.format("var1","var2")
+str里面用 {0} 就代表 var1  用{1}就代表var2 ..
+
+下面就要从数据库中 提取.. 短信内容和短信号码了..
+首先建立数据库..  mysql
+
+
+
+
+
+🔸 Python mysql
+1. 导入mysql模块...  import MySQLdb
+2. 连接mysql    db = MySQLdb.connect("localhost","imuser","impasswd", "iMessage")
+
+
+
+# 使用cursor()方法获取操作游标 
+cursor = db.cursor()
+
+# 使用execute方法执行SQL语句
+cursor.execute("SELECT VERSION()")
+
+# 使用 fetchone() 方法获取一条数据库。
+data = cursor.fetchone()
+
+print "Database version : %s " % data
+
+# 关闭数据库连接
+db.close()
+
+
+
+
+
+
+查询数据库:select * from 'iMessage'.'IM' where name is xujian
+
+
+
+
+
+🔸 同步数据库.
+如果数据库有更新 那么就 取出数据 执行脚本..
+
+
+数据库 是否有写入时间/递增序号之类的..  
+新加入的数据会有个 备注. 0 
+python 检测到 带有0 的数据. 那么就执行脚本???
+如果执行完成那么就 改成1 表示已发送..
+
+新数据写入  队列 读出.  
+从数据库读就很容易了，如果只有一个reader，就select * from table得到一个完整的数据集，遍历写入队列即可
+
+
+
+
+🔸 检测数据库变化.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 MacPython OSA Modules 
+https://docs.python.org/2/library/macosa.html
+
+这个是Python 自带的???  
+
+tell application "Finder"
+    get name of window 1
+end tell
+
+等于
+
+import Finder
+
+f = Finder.Finder()
+print f.get(f.window(1).name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+✔︎ 在applecsript 中运行 python do shell script "python /Users/Tom/Desktop/ayscript.py"
+
+
+
+🔸 在python中 运行 applescript
+
+用 subprocess 模块 代替 os.system 
+
+用 os.system 库里面的 subprocess
+
+
+
+
+cmd = """osascript -e 'tell app "Finder" to sleep'"""
+def stupidtrick():
+    os.system(cmd)
+
+
+
+✔︎ 机器人跑 python..
+
+http://www.macdevcenter.com/pub/a/mac/2007/05/08/using-python-and-applescript-to-get-the-most-out-of-your-mac.html?page=2
+
+
+
+
+import sys
+
+for f in sys.stdin:
+	print f,
+
+import os
+
+#An example of the HEREDOC method
+cmd = """osascript<<END
+tell application "iTunes"
+play playlist "Party Shuffle"
+end tell
+END"""
+
+def play_iTunes():
+     os.system(cmd)
+
+play_iTunes()
+
+
+
+
+
+
+
+
+
+
+
+🔵 传递变量到 applescript
+
+
+
+
+
+
+
+🔵 传递applescript 变量到 shell
+
+	set hostname to "www.apple.com"
+	do shell script "ping -c5 " & hostname
+
+  就会ping 5次.. 然后给出结果..
+
+
+
+
+
+
+
+----
+
+import os
+'''
+script =
+    tell application "Messages"
+      set textNumber to "18621923213"
+      set textContent to "test message"
+      send textContent to buddy textNumber of service "E:xujian0219@126.com"
+    end tell
+os.system('osascript -e ' + script)
+
+'''
+
+cmd = """osascript -e 'tell app "Finder" to sleep'"""
+    def stupidtrick():
+        os.system(cmd)
+
+

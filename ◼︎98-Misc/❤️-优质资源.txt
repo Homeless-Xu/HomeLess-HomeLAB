@@ -1,0 +1,24 @@
+🔸 哈佛公开课
+
+    哈佛公开课 Computer Science 系列.
+ 
+    ⦿ CS75 
+        Building Dynamic Websites
+        [youtube 链接]
+        [https://www.youtube.com/channel/UCsW8A\_qLM5R20RdGslSUyfw]
+
+        官网地址: 有原版代码 和 幻灯片/pdf 下载.
+        www.cs75.tv
+
+
+    ⦿ CS50
+      www.cs50.tv
+
+
+    ⦿ 计算机科学导论
+      [http://open.163.com/special/lectureroncomputerscience/]
+
+
+
+
+

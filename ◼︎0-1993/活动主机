@@ -1,0 +1,82 @@
+二: 活动主机
+
+
+
+i-shanghai
+IP是 101.92.195.15 
+掩码: 255.255.240.0
+网段: 101.92.192.0 - 101.92.207.255
+
+
+namp 扫描整个局域网  : nmap 101.92.192.0/20
+namp 扫描部分局域网  : nmap 101.92.192.0-100
+
+
+➜  ~ nmap 101.92.192.0-10
+
+Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-03-07 20:07 CST
+Nmap scan report for 101.92.192.5
+Host is up (0.068s latency).
+Not shown: 995 closed ports
+PORT     STATE    SERVICE
+22/tcp   open     ssh
+53/tcp   filtered domain
+80/tcp   filtered http
+3128/tcp open     squid-http
+8080/tcp filtered http-proxy
+
+Nmap scan report for 101.92.192.10
+Host is up (0.012s latency).
+Not shown: 997 closed ports
+PORT     STATE    SERVICE
+53/tcp   filtered domain
+80/tcp   filtered http
+8080/tcp filtered http-proxy
+
+然后 0-10 中 只有两个电脑连着.
+
+
+
+
+
+
+shlibrary
+ip是 10.1.182.116
+掩码是 255.255.255.0
+路由器: 10.1.182.254
+网段 10.1.182.0 - 255
+
+➜  ~ nmap 10.1.182.0-255
+
+Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-03-08 15:50 CST
+Nmap scan report for 10.1.182.116
+Host is up (0.0011s latency).
+Not shown: 500 closed ports, 497 filtered ports
+PORT     STATE SERVICE
+80/tcp   open  http
+3306/tcp open  mysql
+5900/tcp open  vnc
+
+Nmap scan report for 10.1.182.250
+Host is up (0.0039s latency).
+Not shown: 985 filtered ports
+PORT     STATE  SERVICE
+17/tcp   open   qotd
+21/tcp   open   ftp
+80/tcp   open   http
+389/tcp  closed ldap
+443/tcp  open   https
+636/tcp  closed ldapssl
+1723/tcp open   pptp
+2323/tcp closed 3d-nfsd
+5080/tcp closed onscreen
+8080/tcp open   http-proxy
+8081/tcp open   blackice-icecap
+8082/tcp open   blackice-alerts
+8083/tcp closed us-srv
+8088/tcp open   radan-http
+8888/tcp closed sun-answerbook
+
+Nmap done: 256 IP addresses (2 hosts up) scanned in 9.89 seconds
+
+只有两个电脑... 一个是我  一个估计是服务器....

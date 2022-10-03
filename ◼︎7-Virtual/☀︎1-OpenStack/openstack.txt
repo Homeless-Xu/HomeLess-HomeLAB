@@ -1,0 +1,365 @@
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 简单入门 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸准备工作🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸  启用EPEL源 ✔︎
+	yum install epel-release && yum update -y
+
+🔸 添加 rdo 源 ✔︎
+	加了rdo源后就可以用 yum 安装 OpenStack
+	yum install -y https://rdoproject.org/repos/rdo-release.rpm && sudo yum update -y
+
+	sudo yum install -y centos-release-openstack-mitaka
+
+
+🔸 更新
+	sudo yum update -y
+
+
+🔸 安装 packstack  ✔︎
+	yum install openstack-packstack -y
+		packstack 可以安装openstack 单一节点的核心套件.
+		也就是想要在一台服务器上安装 all-in-one 最方便的就是用 packstack
+
+
+
+🔸 网络设置. ?? 
+	禁止开机启动 + 停止 	为什么.
+
+	systemctl disable NetworkManager
+	systemctl stop NetworkManager
+
+
+🔸 安装 OpenStack
+
+	packstack --allinone
+
+
+
+
+
+
+
+
+
+
+
+
+	 **** Installation completed successfully ******
+
+	Additional information:
+	 * A new answerfile was created in: /root/packstack-answers-20170819-111158.txt
+	 * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.
+	 * Warning: NetworkManager is active on 10.140.0.4. OpenStack networking currently does not work on systems that have the Network Manager service enabled.
+	 * File /root/keystonerc_admin has been created on OpenStack client host 10.140.0.4. To use the command line tools you need to source the file.
+	 * To access the OpenStack Dashboard browse to http://10.140.0.4/dashboard .
+	Please, find your login credentials stored in the keystonerc_admin in your home directory.
+	 * The installation log file is available at: /var/tmp/packstack/20170819-111158-BrkSrZ/openstack-setup.log
+	 * The generated manifests are available at: /var/tmp/packstack/20170819-111158-BrkSrZ/manifests
+	You have new mail in /var/spool/mail/root
+
+
+
+🔸 openstack 内网测试 
+
+	gce 服务器默认两个IP. 外网+ 内网.  上面的设置默认设置内网的.
+	可以直接用 http://10.140.0.4/dashboard 访问 openstack.
+	但是 gce 的内网是给搭建集群用的.  我们外网是无法直接访问gce 的内网的!
+	只能在服务器用 wget 来测试网站是否起来了!
+	yum install wget -y && wget http://10.140.0.4/dashboard
+
+		[root@openstack v]# wget http://10.140.0.4/dashboard
+		--2017-08-20 11:30:50--  http://10.140.0.4/dashboard
+		Connecting to 10.140.0.4:80... connected.
+		HTTP request sent, awaiting response... 302 FOUND
+		Location: http://10.140.0.4/dashboard/auth/login/?next=/dashboard/ [following]
+		--2017-08-20 11:30:51--  http://10.140.0.4/dashboard/auth/login/?next=/dashboard/
+		Connecting to 10.140.0.4:80... connected.
+		HTTP request sent, awaiting response... 200 OK
+		Length: unspecified [text/html]
+		Saving to: ‘dashboard’
+
+			[ <=>                                 ] 8,636       --.-K/s   in 0s
+
+		2017-08-20 11:30:53 (197 MB/s) - ‘dashboard’ saved [8636]
+
+
+🔸 openstack 外网访问
+http://35.194.253.203/dashboard     显示访问不了...
+http://35.194.253.203/              只有apache 的测试页面..
+
+
+首先要用内网登录...  才能配置 ...
+
+
+
+	这其实要... 了解openstack 才能改啊..
+
+或者安装之前. 直接卸载内网. / 关闭内网..
+新的 gce 只有默认两个网卡: lo + eth0 
+但是这个 etho 是内网IP!   不是外网....   外网好像是谷歌经过中转的...
+那么只能 在 vps1 上搭建了...   或者就是 mac 自己建虚拟机.. 得新建两个虚拟机!
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 devstack 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+查看系统进程  pstree
+
+
+
+
+
+
+装完后，通过keystonerc文件，你可以获取到admin的密码。默认的密码是非常复杂，packstack提供默认参数，可以把默认密码设置简单。
+
+packstack --allinone --default-password=pass
+把所有的涉及的密码，都改成pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  复杂安装  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+
+
+
+
+
+
+
+
+
+
+
+初窥门径
+尝试探索OpenStack Compute最为合适的起点莫过于devstack.org站点，它为开发人员或是概念验证者们提供了一套脚本化安装方案。来自docs.openstack.org的OpenStack入门教程同样具备一步步详细的指示，帮助我们在Ubuntu 11.10中设定OpenStack Compute、镜像服务以及多合一对象存储的安装。如果大家拥有一台自己的服务器，并打算利用它搞一些概念验证工作，那么 点击此处 可以获取一套专门供裸机使用的StackOps安装系统。有了它，我们可以通过CD或者USB记忆棒完成OpenStack的安装。
+
+各位还可以利用docs.openstack.org上提供的对象存储管理员指南或者OpenStack Compute管理员指南中的安装说明，设置出生产级别的OpenStack对象存储集群或是OpenStack Compute云。
+
+OpenStack的使用
+安装结束之后，接下来我们就要看看如何利用部分安全功能，通过仪表板接口或是命令行启动OpenStack Compute实例。我还将展示面向对象存储的、用于通过块存储备份镜像或者视频的接口。
+
+
+
+登录到仪表板接口
+OpenStack的仪表板是安装在运行着Nova API服务的节点中的。通过这套仪表板，大家应该可以看出Nova API实例的URL与有效仪表板的证书一样，也包括用户名及密码。
+
+只要有了用户名与密码，大家可以利用OpenStack仪表板实现许多功能。首先，通过云管理员分配给我们的用户名及密码登录到仪表板中。
+
+登录之后，可以看到服务器使用量与每台服务器的当前状态，如图一。
+
+
+
+
+
+大家也可以点击查看哪些服务器处于终止状态。请注意，这里的正常运行时间并不会显示每套单独服务器的状态。
+
+用户仪表板左侧的菜单提供的是我们所能执行的仪表板操作选项，所发出的命令通过API传递至终端。系统面板（也就是页面最上方的菜单）提供另一套视图，使得管理员能够监控使用状态、检查云中正在运行的服务并管理用户及项目的配额。
+
+如何在仪表板中启用实例
+现在，大家已经初步熟悉了仪表板的总体布局，接下来就该利用自己的云启动一套新的虚拟机系统，也就是镜像实例。一般来说，我们的云管理员应该已经上传了启动所必需的镜像。如果没有，我将在后文中讨论如何创建自定义镜像。要想启动镜像，首先找到仪表板中的镜像选项，在选定所要启动的镜像类型后点击启用按钮。图二中显示了可用的几款Ubuntu服务器镜像以及一款Windows镜像。
+
+
+
+
+
+
+
+
+
+
+云平台管理的项目. 是一个由好几个组件组成的软件.
+免费开源软件. 适合中小企业.
+可以给公司内部的开发测试部门使用..  也可以跑一些服务.
+
+就像云服务企业会对 openstack 进行二次开发. 增加一些功能或者管理界面. 就像vps.
+
+OpenStack不光光能在1分钟给你想要的image操作系统，也可以做到5分钟能帮你生成一台app节点（应用服务器）加入到业务中去。
+后者才是我们现在更需要去做的，从irc聊天室、邮件列表、以及一些wiki的内容来看，老外已经在这方面走在了前面。
+
+
+比如企业. 
+
+
+
+这个环境一共用了6台8核的服务器。除去控制器的核心不算，一共有40个可用于计算的核心。其中：
+
+启动了4台的cpu作为计算节点用来跑虚拟机（nova-compute）
+一台服务器安装了nova，glance，keystone，dashboard的所有服务和mysql数据库作为控制节点
+一台启用了nova-volume服务，提供给虚拟机额外的块存储
+这样图中显示的40 cores就是总共的cpu，已经用了16个；第二列是内存，下面显示了有两个部门。分别跑了2个和5个实例。
+
+
+
+
+这张图展示的是Images，通俗的讲就是预先做好的系统或者模板。images是通过名叫glance的这个组件来管理（这下知道glance的用处了吧），它提供命令接口允许用户把自己做好的系统（支持img，qcow2等格式），至于如何用kvm做自己的img，可以参考这份文档。
+
+在图中可以看出，有CentOS，Windows XP，RHEL的模板。另外3个image是用户自己做的，简单的是就是用户使用我做的RHEL（里面只装了一些基本的系统软件）生成虚拟机实例，然后在虚拟机中配置了他自己需要的软件应用。配置完成之后，保存为rhel_app这个image，这样下次有需要的时候，就可以直接从rhel_app启动新的实例，1分钟之内就可以使用他需要的应用。
+
+
+
+这张图显示的就是目前跑在私有云上的实例。我们可以看到右边有四个选项，Terminate是撤销，也就是删除虚拟机实例，Reboot重启，Console Log显示终端上的信息，VNC Console这个是直接在web上面开个vnc窗口显示console，另外还有Snapshot的按钮，这个按钮会出现在以用户自己身份登陆的界面上。目前我是以admin身份登陆。
+
+限于篇幅原因，还有很多tab页面我不做介绍了。总的来说，你只要给一个用户一个帐号，他就能从image选择不同配置（cpu，内存，磁盘）的实例，分配ip，开端口，登陆，完全自主的操作，不需要管理员去干涉。如果你觉得这套管理工具对你或者你们企业来说有一定的帮助，想要尝试一下，或者基于它来作二次开发（因为OpenStack是完全开源的），可以继续往下看，我将会简单介绍一下如何构造这么一个系统。
+
+
+
+这张图是个简单的拓扑图。每台host都有两块网卡，连接switch1的是外部访问接口，就是用户可以直接连接到的ip网络，这个网络用来提供给虚拟机以便用户使用。switch2使用一个内部的网络，即对用户不可见，我们可以设定一个私有网络，这个网络用来node节点和controller之间的网络通讯，image的传输，nova-volume和node之间的iscsi的数据传输。
+
+环境准备
+
+所有的服务器都安装Ubuntu 11.10。
+
+网络配置
+
+参照上一篇文章中配置网络接口那一部分，请把br100的设置controller为10.200.200.1，node1为2，以此类推。
+
+时间同步
+
+时间同步很重要，保证你各个节点之间，通常在controller上配置ntp服务器。其余节点的配置文件以controller的ip为ntp服务器。
+
+安装控制器
+
+在这里我以controller的外网ip为10.11.3.62，内网为10.200.200.1，安装过程参照了devstack的脚本 ，我注释掉了脚本里的swift以及一些目前还用不到的部分。设置了一些自己的环境参数。
+
+git clone git://github.com/livemoon/mydevstack
+cd mydevstack
+修改localrc的内容：
+
+DEST这个你可以设置为你自己想要安装的目录，我这里用/data/stack
+FIXED_RANGE这个很重要，简单的说就是switch2的网段
+FLOATING_RANGE外网的地址网段
+FLAT_INTERFACE这个就是你绑定网桥的那个网口。和你/etc/network/interfaces里一致
+MYSQL_USER脚本里默认使用root，我使用了一个别的用户。这个随便你
+然后执行脚本./stack.sh
+
+
+一开始会问你几个密码，分别是mysql，rabbitmq，service_token，horizon and keystone admin。你可以按照自己的输入，只是要注意别搞混了。接着它就会运行下载安装，由于可能网络的原因会导致安装中途断掉，遇到这种情况，重新运行脚本即可。脚本执行完之后，屏幕上会出现“stack.sh completed in $SECONDS seconds.”
+
+这时候，打开你的web浏览器。输入 “http://$HOST_IP/”，$HOST_IP/就是我的10.11.3.62，输入你自己的，如果出现登陆界面，输入admin和刚才的 horizon and keystone admin这个密码。如果登陆成功，那就说明你完成了controller的安装。
+
+默认情况下，controller上面会起所有nova的服务，你应该可以看到你有几个cpu和内存可以使用，现在已经可以使用基本的功能了。这个时候，你的controller其实即是控制节点，也是计算节点（因为起了nova-compute和nova-network服务）。
+
+以上就是一个最简单的搭建教程。如果你只是想看一下界面，知道它是怎么样的一个东西，那么现在已经足够了。
+
+在下一篇中，我将介绍如何平行的添加节点，制作镜像，进行快照，设定实例的配置选项。如果你想继续深入，把OpenStack作为一个可以研究的对象的话，请先读懂devstack的脚本，然后我们再深入。
+
+作者简介：livemoon（gtalk: mwjpiero@gmail.com），小小SA，关注mac，BSD，openstack，开源技术，webos。座右铭：非淡泊無以明志，非寧靜無以致遠。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

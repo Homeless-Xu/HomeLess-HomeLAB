@@ -1,0 +1,443 @@
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 CentOS_7 部署 K8s 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔵 硬件要求
+
+    🔶 电脑一台
+    
+        k8s 是集群. 那么肯定得好几台服务器. 
+        就算我们用虚拟机. 也得虚拟好几个系统出来.
+        所以 一般的 vps 配置都比较低. 不适合搭建集群.
+        所以我们这里弄了个 windows 的电脑 安装 vmware.
+        在 vmware 里面安装 CentOS7.  只要内存够.想装几个就装几个虚拟机.
+
+
+    🔶 VPS (KVM) 服务器一个
+
+        很多镜像是需要翻墙下载的.
+        不翻墙的话得注册各种网站.. 比如 阿里云的. Daocloud 的...
+        vps 还得是可以运行Docker 的!!!  很多openvz 的vps是运行不了Docker的.
+        所以我们推荐用 KVM 的 vps.
+
+
+🔵 虚拟机要求
+
+    虚拟机肯定用 Linux 的.  一般都是 CentOS_7 x64 Mininul.
+    镜像大小选择最小的那个就可以了. 完全没必须选择 完整的 8G 的那个.
+
+
+
+🔵 Docker 版本要求 - (虚拟机)
+
+    k8s 既然是管理容器的. 首先你得有容器才能让 k8s 去管理.
+    要创建容器么. 肯定要安装 Docker 程序了. 这就涉及到 Docker 版本问题了.
+    虽然现在 Docker 已经出了 v17了.  但是 k8s 只在 v12 的Docker 上面通过测试.
+    我们也就安装 12 或者 13好了. 没必要安装太新的.
+
+
+🔵 k8s 安装方式.
+
+    yum 可以直接安装 k8s  但是版本有点低! 1.5的 , 现在都出到 1.8 了. 所以我们手动安装! 
+
+    其实有自动化部署的办法的.
+    但是把 你要学k8s 还是手动搭建吧... 
+    不然各种云上都有现成的 k8s. 你只要购买. 然后开机就可以了...
+
+    通过手动配置, 你将会理解所有底层的包、服务、端口 等等.
+
+
+    🔸 Kubeadm 
+
+        你可以一项一项安装.  也可以使用 Kubeadm 来一键部署!
+        kubeadm是Kubernetes官方提供的快速安装和初始化Kubernetes集群的工具
+        当然，目前的kubeadm是不能用于生产环境的。
+
+
+🔵 服务器列表
+
+    虚拟机1:
+    虚拟机2:
+    虚拟机3:
+
+
+
+
+🔵 CentOS7 安装: Docker 
+
+
+
+
+
+
+🔵 Docker 私有仓库搭建
+
+    公有仓库墙的墙. 慢的慢. 自己搭一个吧. 很简单的. 利人利己....
+    而且... 你可以把自己的镜像备份到私有仓库中!!! 
+    这时候你就不用担心 备份镜像中的资料会被别人获取了.
+
+    我们在 VPS 98.142.138.81 上搭建私有仓库.
+
+    🔶 基础知识 - 私有仓库
+        
+        Dockers不仅提供了一个中央仓库，同时也允许我们使用搭建本地私有仓库。
+        
+        私有仓库分两种:. 
+            ⦿ 个人的: Docker Registry
+            ⦿ 企业的: Docker Distribution 
+
+            两者区别不用管.我们用用个人的足够了!!! 
+
+
+    🔶 基础知识 - Docker 标签
+
+        Git 的标签功能是给文档打上一个标记. 相当于操作系统的一个备份!!!
+        Docker 的标签  就是给镜像一个取个好记的名字!!! 方便管理.
+
+
+    🔶 Docker Registry(注册) 镜像
+
+        私有仓库是个刚需. 所以Docker 自己提供了一个叫 Registry 的容器镜像!
+        把这个镜像下到 vps 上运行就可以了.
+        当然 vps 里面. Docker 的安装.和启动就不说了...
+        
+
+    🔶 私有仓库搭建
+
+        ⦿ 一: 下载镜像
+
+            docker pull registry:latest
+
+        ⦿ 二: 查看镜像
+
+            VPS∙ ~ %}➜ docker images
+            REPOSITORY                                       TAG                 IMAGE ID            CREATED             SIZE
+            docker.io/registry                               latest              d1fd7d86a825        3 months ago        33.3 MB
+
+        ⦿ 三: 运行镜像
+
+            docker run \
+            --detach \
+            --name registry \
+            --hostname registry \
+            --volume $(pwd)/registry:/var/lib/registry/docker/registry \
+            --publish 5000:5000 \
+            --restart unless-stopped \
+            registry:latest
+
+
+
+            // 这个命令 就是你重启了Docker 服务. 这个容器也会自动重启的.... 牛...
+            // 这个命令 会在 vps 和 docker 都开一个 5000 端口. vps的5000 端口对应 docker 容器的 5000端口.
+
+            // 将registry的数据卷与本地关联，便于管理和备份registry数据.
+            // 就是以后把镜像 下载到 vps 的某个目录. 然后别的电脑就可以通过 Docker Registry 来下镜像了.
+                $ sudo docker run -d -p 5000:5000 registry
+                默认情况下，会将仓库存放于容器内的/tmp/registry目录下，
+                这样如果容器被删除，则存放于容器中的镜像也会丢失，所以我们一般情况下会指定本地一个目录挂载到容器内的/tmp/registry下，
+                如下：sudo docker run -d -p 5000:5000 -v /opt/data/registry:/tmp/registry registry
+
+
+        ⦿ 四: 查看运行中镜像
+
+            VPS∙ ~ %}➜ docker ps
+            CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+            c264c19a9bf4        registry:latest     "/entrypoint.sh /e..."   9 seconds ago       Up 9 seconds        0.0.0.0:5000->5000/tcp   registry
+
+
+
+        ⦿ 查看私有仓库的镜像
+
+            VPS 服务器用 curl 命令查看:  curl http://127.0.0.1:5000/v2/_catalog
+            或者
+            本地浏览器访问  http://98.142.138.81:5000/v2/_catalog
+            都会得到  {"repositories":[]}  
+            这是因为现在还没有 镜像推送到 私有仓库....
+
+
+        ⦿ 查看现有镜像
+
+            VPS∙ ~ %}➜ docker images
+            REPOSITORY                                       TAG                 IMAGE ID            CREATED             SIZE
+            docker.io/registry                               latest              d1fd7d86a825        3 months ago        33.3 MB
+            gcr.io/google_containers/k8s-dns-sidecar-amd64   1.14.1              fc5e302d8309        14 months ago       44.5 MB
+
+                我们下载的时候用的是   docker pull registry:latest
+                冒号后面的是 版本.  冒号前面的是镜像名.
+
+
+        ⦿ 给镜像打标签 (重命名-? 不是啊 .. 新建了个 镜像出来啊.. 是哪个用的 镜像的意思!!! 快照)
+            
+            语法: docker tag ID 仓库名/镜像名:版本
+            例子: docker tag fc5e302d8309 127.0.0.1:5000/xxx:114
+                标签名字是 私有仓库+名字+版本号组成的!!! 必须带有 私有仓库..
+
+        ⦿ VPS 上推送镜像到 私有仓库
+
+            docker push 127.0.0.1:5000/xxx:114 
+
+        ⦿ 私有仓库 查看镜像
+            http://98.142.138.81:5000/v2/_catalog
+            {"repositories":["xxx"]}
+            就说明 我们的私有仓库 有了个 xxx 的镜像.
+
+        ⦿ 9、从你的本地环境中移除所有未使用的镜像：
+            docker -rmi -f $(docker images -q -a )
+
+
+        ⦿ 私有仓库 测试 - 服务器
+
+            docker run localhost:5000/hello-mine
+            这里必须加上 私有仓库的网址: localhost:5000  不然默认是从 docker.io 这个网站上下载的.
+            
+
+        ⦿ 私有仓库 测试 - 客户端
+
+docker pull 98.142.138.81:5000/xxx
+
+
+
+        ⦿ 结尾
+
+            私有仓库建好了. 也会上传镜像了.
+            下面就是把 k8s 所需的镜像 上传到我们自己的私有仓库里面.
+            首先 我们要查看下 最新的 k8s 的镜像版本. 以及要哪些镜像.
+
+
+
+
+
+....
+
+
+
+
+
+
+
+🔵 K8S 最新镜像
+
+    docker 默认都是从这个网站 docker.io 下载/搜索 镜像的.
+    但是我们的 K8S 官方镜像是谷歌出的. 要去 gcr.io 下载.比如下面的命令.
+    docker pull gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.1
+
+    首先你得知道最新的k8s版本吧. 这就要搜索 gcr.io 里面的镜像了
+    docker 命令 也是支持搜索私有仓库的!!!
+
+
+
+
+
+
+
+
+
+🔵 CentOS 创建 Docker (CentOS)
+
+    用什么镜像呢...  
+
+
+🔸 Docker 节点 配置防火墙 
+      Docker从1.13版本开始调整了默认的防火墙规则，禁用了iptables filter表中FOWARD链，
+      这样会引起Kubernetes集群中跨Node的Pod无法通信，
+      在各个Docker节点执行下面的命令：来允许流量转发.
+
+      iptables -P FORWARD ACCEPT
+
+      iptables -L ➜ 查看防火墙...
+      iprables -F ➜ 清空防火墙...
+      systemctl stop firewalld  ➜ 停止防火墙
+      systemctl disable firewalld  ➜ 禁止开机自启
+
+
+🔸 Docker 节点 关闭 Selinux 
+
+    cat /etc/sysconfig/selinux  ➜ SELINUX=disabled ➜ 就说明是关闭的.
+    如果不是disable就需要手动执行下面一步
+    vi /etc/sysconfig/selinux  ➜ 改成  SELINUX=disabled ➜  然后重启机器就可以了.
+
+
+
+
+
+
+🔵 CentOS_7 x64 k8s 源
+
+
+🔶 谷歌的 k8s 源
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+
+
+
+🔶 阿里云的 k8s 源
+
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+EOF
+
+
+
+
+
+    添加源之后就可以用下面命令查看k8s各核心组件的版本了,选择某个版本进行安装.
+yum list kubeadm  --showduplicates |sort -r
+yum list kubelet  --showduplicates |sort -r
+yum list kubectl  --showduplicates |sort -r
+yum list kubernetes-cni  --showduplicates |sort -r
+
+
+
+🔸 k8s 核心组件安装
+    yum -y install kubeadm-1.8.0 kubelet-1.8.0 kubectl-1.8.0 kubernetes-cni-1.8.0
+
+    yum -y install kubeadm-1.10.1-0 kubelet-1.10.1-0 kubectl-1.10.1-0 kubernetes-cni-0.6.0-0
+
+    也许 下面命令会自动安装 最新的版本的...
+    yum -y install docker kubelet kubeadm kubectl kubernetes-cni
+
+
+    rpm -qa|grep kube  ➜ 查看安装的软件版本
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 K8S 准备镜像  🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔶 VPS一台.
+
+    openvz 的vps 还不行.  因为一般系统内核版本低. 运行不了Docker.
+    而且这个 镜像是不能 通过代理来下载的...
+    所以只能登录到 vps上去. 安装好Docker . 用Docker Pull 把镜像拉下来.
+    然后 导出 Docker 镜像. 再下载到本地....
+    或者自己搭建个 Docker 的....网站出来??
+
+
+
+
+🔶 镜像版本问题.
+
+    docker 
+
+
+
+
+
+🔸
+k8s 是非常多的软件组合而成的! 
+这些软件都被制作成Docker镜像了! 
+所以这些镜像也是必须要下载的! 
+这么多镜像的软件版本也不是随便来的. 有些要和 k8s 主版本一致.
+
+
+下面四个 一般跟着大版本走. 如果k8s 的版本是1.8.0 下面的也必须对应
+gcr.io/google_containers/kube-apiserver-amd64:v1.5.2
+gcr.io/google_containers/kube-proxy-amd64:v1.5.2
+gcr.io/google_containers/kube-controller-manager-amd64:v1.5.2
+gcr.io/google_containers/kube-scheduler-amd64:v1.5.2
+
+
+下面这个是k8s 的控制台. 尽量跟着大版本, 大版本是1.8.x 这个可以安装 1.8.0
+gcr.io/google_containers/kubernetes-dashboard-amd64:v1.5.1
+
+
+下面三个是 DNS 服务, 一般不跟 k8s ! 
+# docker pull gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.1
+# docker pull gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.1
+# docker pull gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.1
+
+
+etcd 服务.不跟k8s
+# docker pull gcr.io/google_containers/etcd-amd64:3.0.17
+
+很久都是3.0了. 
+# docker pull gcr.io/google_containers/pause-amd64:3.0
+
+网络组件
+# docker pull quay.io/coreos/flannel:v0.7.1-amd64
+
+查看镜像：# docker images
+
+
+
+
+
+
+
+images=(kube-proxy-amd64:v1.7.3 kube-scheduler-amd64:v1.7.3 kube-controller-manager-amd64:v1.7.3 kube-apiserver-amd64:v1.7.3 etcd-amd64:3.0.17 k8s-dns-sidecar-amd64:1.14.4 pause-amd64:3.0 k8s-dns-kube-dns-amd64:1.14.4 k8s-dns-dnsmasq-nanny-amd64:1.14.4)
+for imageName in ${images[@]} ; do
+  docker pull gcr.io/google_containers/$imageName
+done
+
+  docker pull gcr.io/google_containers/kube-proxy-amd64:v1.7.3
+
+
+
+gcr.io/google_containers/kube-scheduler-amd64
+
+
+
+
+
+
+
+
+🔸 修改网络 
+
+
+主要是开启桥接相关支持，这个是 flannel 需要的配置，具体是否需要，看自己的网络组件选择的是什么。
+
+修改/usr/lib/sysctl.d/00-system.conf,将net.bridge.bridge-nf-call-iptables改成1.之后修改当前内核状态
+
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+
+
+
+
+🔸 启动kubelet：
+
+# systemctl enable kubelet
+# systemctl start kubelet
+
+
+
+🔸 初始化master机器：
+
+# kubeadm init \
+    --apiserver-advertise-address=172.16.20.99 \
+    --kubernetes-version=v1.6.1 \
+    --pod-network-cidr=10.244.0.0/16
+  参数解释：
+ --apiserver-advertise-address # API Server（master）IP地址
+ --kubernetes-version # 初始化安装的Kubernetes版本
+ --pod-network-cidr # 选择flannel作为Pod的网络插件，所以指定 10.244.0.0/16
+
+
+;🔸 使用kubectl 管理命令行：
+
+为了使用kubectl访问apiserver，在~/.bash_profile中追加下面的环境变量：
+
+# echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
+# source ~/.bash_profile
+# kubectl get nodesNAME STATUS AGE VERSIONnode0 NotReady 3m v1.6.1
+
+
+
+
+
+
+
+

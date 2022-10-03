@@ -1,0 +1,16 @@
+自动化运维工具.   和puppet / ansible / chef 
+
+关于 Saltstack 的介绍，简单一句话：整合了Puppet和 Chef的功能，更加强大，更适合大规模批量管理服务器。
+
+puppet 是老牌的.  文档 文档多. 
+Saltstack 新手.. 文档少...
+
+
+刚好这几天也正在看配置管理系统选型。
+puppet的影响力更大，在国内应用比较广，资料也多。
+其他两款saltstack和chef在国内应用不多，另外还有一款配置管理系统Ansible据说也不错
+
+
+规模不大建议用ansible，因为简单，不用部署agent;
+
+更新一下这个话题，目前使用的salt+docker，比单纯使用salt要好很多。

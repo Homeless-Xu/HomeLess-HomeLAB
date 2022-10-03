@@ -1,0 +1,19 @@
+🔶  Chef 
+
+    IT 自动化工具.  类似 Puppet, 把服务器的环境进行抽象化.
+    然后用语音 对其进行管理. 
+
+
+
+
+🔶 Why Chef 
+
+    安装一台服务器可以手动装!  但是 安装成百上千台呢! 
+    当然你会shell 脚本的话. 也可以实现. 
+    但是用脚本来安装和维护 大量服务器是非常痛苦的!!! 
+    所以就有了Puppet Ansible Chef 这种工具的出现了! 
+
+
+🔶 Chef 
+★★★★★ 
+https://blackanger.gitbooks.io/tao-of-chef/chapter_1_chef/chef_vs_puppet.html

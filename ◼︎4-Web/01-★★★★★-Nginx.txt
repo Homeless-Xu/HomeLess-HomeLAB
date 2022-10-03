@@ -1,0 +1,779 @@
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸储备知识🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 域名简介:
+
+    • 0214.help  是一个域名 
+    • 0214.live  是一个域名
+
+    • l.0214.help  是 0214.help 的一个子域名.
+    • o.0214.help  是 0214.help 的一个子域名.
+    • v.0214.help  是 0214.help 的一个子域名.
+    • e.0214.help  是 0214.help 的一个子域名.
+
+
+🔸 域名 VS 子域名
+
+    域名是不带前缀的! 子域名是带前缀的!!!  这点非常重要. 
+    你购买了一个域名. 那么你就拥有了该域名下的所有子域名!
+    换句话说.... 如果你有一个非常好的域名, 那么你可以自己开域名店,卖子域名.
+    世界上最短的在用域名是 x.com   这个是天价域名. 如果你有这个域名那么.
+    a.x.com  可以拿来卖...  肯定有人买的
+    x.x.com  也可拿来卖...
+
+
+🔸 公网IP & 端口 & 域名
+
+    小网站 也许只有一个 html 文件 index.html 
+    大网站 也许有千万个 html 文件 index.html、about.html、contant.html.....
+
+    一台服务器一般只有一个公网IP, 但是一台服务器可以有很多网站的!! 
+    我们只有一个公网IP 怎么才能访问这个服务器里个各种网站呢. 答案是通过手动指定端口
+    假设你安装好了 nginx, 并且服务处于运行中
+
+    你在浏览器用输入服务器的 IP 地址 回车会出现 nginx 的默认页面. 
+    浏览器的真正地址其实是 IP:80 ; 
+    绝大多数网站都是通过80端口向客户提供网页服务的.所以浏览器的默认端口就是 80
+    如果你服务器搭建了很多网站. 那么怎么才能访问那些网站呢.
+    你需要给每个网站分配一个端口!
+    比如给 qq 这个网站分配2222端口. 你就可以在浏览器输入 IP:2222 访问 qq 这个网站
+    比如给 yy 这个网站分配3333端口. 你就可以在浏览器输入 IP:3333 访问 yy 这个网站
+    ......
+
+    这样就能实现用单个 IP 访问某个服务器中的 指定网站! 
+    当然IP地址不好记, 端口更加没人注意.. 想要用户记住你的网站 就得用域名了.
+    有了域名就可以不用依赖端口来实现访问多个网站了.
+    有了域名就可以用子域名来实现多个网站的访问了.(需要先设置域名解析,再配置相应的 Nginx 文件 )
+    比如给 qq 这个网站分配 qq.x.com 这样域名, 这样就可以在浏览器用 qq.x.com 访问你服务器里的 qq 这个网站了
+    比如给 yy 这个网站分配 yy.x.com 这样域名, 这样就可以在浏览器用 yy.x.com 访问你服务器里的 yy 这个网站了
+    只要你买了域名. 那个域名下的所有子域名都是你的... 只要你愿意... 你可以创建N个子域名.这样就可以范围N个网站了!
+
+
+
+🔸 域名解析
+
+    域名解析就是给某个域名/子域名 指定一个公网IP这么简单.
+    你可以随意创建任意前缀的子域名
+    一个域名/子域名 必须绑定一个公网IP.
+    多个域名/子域名 可以绑定到同一个公网IP
+
+    比如 0214.help 
+        • 子域名 1.0214.help 卖给了 a ,就把这个子域名.通过域名解析绑定到 a 提供的公网IP. 剩下的就不管你的事情了.
+        • 子域名 2.0214.help 卖给了 b ,就把这个子域名.通过域名解析绑定到 b 提供的公网IP. 剩下的就不管你的事情了.
+        • 子域名 3.0214.help 卖给了 c ,就把这个子域名.通过域名解析绑定到 c 提供的公网IP. 剩下的就不管你的事情了.
+
+
+
+🔸 WEB 服务器 
+    对域名有了大概的了解后.就要了解下Web服务器了.
+    Linux 平台下常用的Web服务器有: Apache、Nginx、Lighttpd、Tomcat
+    那么什么是web 服务器呢! 
+
+    我们上面说了. 一个服务器里面可以有千万个网站! 
+    网站是需要管理的! web 服务器就是 网站管理员! 网站为什么需要管理呢!
+    上面我们说了.. 域名解析 就是把子域名 解析到某个公共IP上. 
+    如 qq.x.com 指定到了 35.194.128.92
+    如 yy.x.com 也指定到 35.194.128.92
+    那么问题来了... 域名解析只是复制 名字 和 公网IP的对应. 其他的一律不归域名解析管.
+    公网IP 可以比喻成某个固定的地址 比如 宁波大学的1#101教室
+    子域名 可以比如成某个学生的名字.
+    如果我要找 qq 这位同学的地址, 一查发现在 宁大1#101, 当我进1#101教室的时候懵了.... 教室几百号人.. 那个才是qq...
+    最好的办法当然是问老师了... 老师是管理学生的啊.. 肯定知道谁是谁...  
+    这里的老师就相对于web服务器. 管理网站(学生)用的.
+    IT 是非常严谨的. 既然有了  web 管理器这个老师, 那么这个老师就会全权接管这项工作.
+    所有找人 (域名查询) 相关的事情 都会第一时候让 老师(web服务器) 来处理.
+    老师说qq 这名字是谁的就是谁的..... 一切老师说了算...
+
+
+
+
+
+🔸 IP 默认页 & 域名默认页
+    输入服务器的公网 IP 会出现一个默认页面.
+    输入服务器的域名  也会出现一个默认页面. 
+    用ip 和 用域名访问的默认路径是不同的!
+
+    ⦿ 域名 默认路径
+        域名访问是要配置过的.
+
+    ⦿ IP 默认路径
+        ip访问只要文件放到 /home/wwwroot/default 下面. 如 xx.html 就可以用23.105.192.96/xx.html访问.
+
+    ⦿ 默认网站根目录是 /home
+        网站1: /home                      可以用  www.0214.help
+        网站2: /home/puppet/index.html    可以用  www.0214.help/puppet
+        网站3: /home/zabbix/index.html    可以用  www.0214.help/zabbix
+
+
+
+🔸 连接 / 请求 / keep-alive
+
+    ⦿ 连接
+        并发连接: 客户端向服务器发起请求. 并建立了TCP连接.
+        并发连接数: 每秒服务器链接发总TCP 数量.
+
+    ⦿ 请求: 
+        客户端在建立完连接后. 向服务器发出 get/post/head 请求数据包. 服务器会返回响应数据.
+        比如客户端进入网站首页后 要下载某个文件. 这时候就浏览器就会发起请求.
+
+    ⦿ 请求结果:
+        服务器在响应浏览器的请求之后会有两种情况.
+        关闭本次TCP连接.(http 数据包含有 Close )
+        维持本次TCP连接.(http 数据包含有 Keep-Alive )
+
+    ⦿ Keep-Alive 作用
+        为什么要 keep-alive呢. 是为了方便后续请求.
+        就像打电话.如果你有很多话要说/或者非常频繁  当然是在一次通话中完成了.
+        不然的话 你要重新建立TCP请求. 建立一个 TCP 连接需要三次握手..这个蛮耗时的! 
+        但是如果你只有几句话要说.那就没必要用 keep-alive了.
+        keep-alive 虽然好. 但是要消耗服务器资源的... 避免浪费.
+
+    ⦿ 总结
+        连接数就是服务器的TCP数量
+        请求数就是服务器在建立TCP连接之后.客户端发起的请求. 
+        就像电话打通之后.  客户端基本不说话就是请求数量少. 客户端一堆废话就是请求数量多.
+        说的糊里糊涂的. 下面来个实例列子 让大家看看.
+
+    ⦿ 实例
+        1.) 谷歌浏览器浏览器  打开 https://www.0214.live/en/?edit
+        2.) 按F12 切换到 Network 选项.
+        3.) 刷新网页
+
+        每一行都是一个请求!  每个css 每个js 还有每张图片 都是一个单独的请求! 
+        (网页是由很多东西组成的 最基本的 index.html 加上一些 css、js、图片.)
+        (访问一个网页.肯定首先加载的是 index.html 通过这个文件才能知道css/js/图片的下载路径!)
+
+            • 如果服务器 没启用 keep-alive 功能. 
+                浏览器打开index.html 文件后. 首先打来4个并发连接来加载 各种css、js、图片资源.
+                每个并发会处理一个请求.  在这4个并发(请求)全部完成后.会关闭这4个连接.  再打开4个连接来加载资源.
+                并不是网页有1000个请求 就会产生100个并发. 而是一次进行 4个并发.这个浏览器最多只能产生4个并发.
+
+            • 如果服务器 启用了 keep-alive 功能
+                浏览器打开index.html 后. 首先还是打开4个并发来加载数据. 同样一次处理4个请求. 
+                不同的是 处理完4个请求后 不会关闭连接! 而是继续在同一个连接 继续别的请求. 节约重新打开连接的时间! 加快网页加载.
+
+
+
+
+🔸 Nginx 简介
+    终于说到 Nginx了...   之前web服务器的老大是 Apache.  但是最近变成了 Nginx
+    Nginx 这么流行是有原因的!  下面我们简单说说Nginx 的优点.
+    性能非常强大! Nginx 是专门为性能优化而开发的!  
+
+    ⦿ 低内存消耗
+        10000个非活跃的HTTP Keep-Alive 连接在Nginx中仅消耗2.5M的内存，这也是Nginx支持高并发连接的基础.
+
+    ⦿ 处理响应请求很快
+        相比其他 web 服务器.  Nginx 能更快的响应客户端发起的请求.
+        
+    ⦿ 高并发
+        理论上Nginx支持的并发连接数上限取决于你内存的大小. 轻松处理 10w+的并发连接数
+        在互联网用户不断增加的时代. 个大网站都需要面对高并发请求
+        一般一个网页会产生4个并发, 也就是说用 nginx 的话 可以支持 2.5w 网页的同时在线.
+        每人打开一个网页的话. 也就是 支持 2.5w 人的同时访问..
+        当然这个是软件限制. 你服务器硬件也得跟的上才行.
+
+    ⦿ 高可靠 高稳定
+        高可靠性高稳定性来自 核心框架代码的优秀设计. 模块的简单性
+        Nginx 比其他Web服务器更加稳定可靠.
+        Dos 攻击对Nginx 来说基本是毫无用处的. Nginx 就是处理巨量连接而出名的...
+            • Dos 攻击: 建立巨量的连接.消耗服务器资源.使得服务器无法正常提供服务.
+
+
+
+
+🔸 Nginx 负载均衡
+    keepalived 保证了服务器的高可靠. 也就是某台主服务器挂了,会自动切换到备份服务器上.
+    Nginx      可以实现 Web服务器的负载均衡. 让N台服务器 平均分担负载.提高性能.
+
+
+
+
+🔸 反向代理
+
+    反向代理其实也是跳板.
+    比如  A 是 g.0214.help ;    B 是 www.google.com 
+    国内不能直接访问B, 但是你购买的国外 VPS 可以访问B. 
+    你可以在VPS上搭建个网站A.  这时候你是可以访问网站A的.
+    你只要在 A 网站里进行方向代理设置. 就可以实现 你访问A, A由于设置了反代理会访问B,并把B的结果返回到你浏览器上.
+    这样就相对于 访问A 就是访问B 谷歌了.
+
+    反向代理有很多用处!   
+    如果你不想暴露服务器真实 IP 地址，可以在搭建一个反向代理服务器，让用户都是访问反向代理服务器...
+
+
+
+
+🔸 Nginx 反向代理
+
+    反向代理技术在 nginx 上用的最多了. 所以这里以 nginx 为例.
+    谷歌反向代理 搭建非常简单, 能看懂 Nginx 配置就行.
+
+
+🔸 Nginx 配置文件
+    ❗️❗️nginx 虽然有很多配置文件,但是优先级不一样 ❗️❗️
+    
+        /etc/nginx/nginx.conf 
+        /usr/local/nginx/conf/nginx.conf 
+        /usr/local/nginx/conf/vhost/xxxx.conf
+
+    /etc/nginx/nginx.conf是 Nginx 默认加载的配置文件. 
+    这个文件里面会有一行 include /usr/local/nginx/conf/nginx.conf . 所以你的nginx 配置 可以在好几个地方修改. 都可以生效.
+    一般给每个网站都在vhost 目录下建立一个 独立的 conf文件. 所有这个网站相关的配置都写在这个文件中.方便管理!
+    include 意思就是其实两个文件可以合并成一个. 但是为了方便Nginx 配置文件的管理. 所以这里分成两个文件.
+
+    /usr/local/nginx/conf/nginx.conf 这个配置文件... 会有 include /usr/local/nginx/conf/vhost/*.conf
+    意思是包含 vhost文件夹下的所有 .conf 后缀结尾的文件.
+    我们平时创建的 nginx 配置文件都在这里.
+    如果你不在vhost这个文件夹下创建配置. 那么就得手动添加 include + 文件路径 到/usr/local/nginx/conf/nginx.conf 里面.
+    这样Nginx 才能找到你的配置文件. 才能正常加载你创建的nginx配置.
+    
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸配置实例🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 例: 总配置
+
+main
+
+events {                       ➜  nginx 工作模式
+    use kqueue;                ➜ 可选值: select/kqueue/qpoll .mac平台用kqueue
+    worker_connections  1024;  ➜ 每个进程的最大连接数. 也就是前端最大请求数量.
+   }
+
+
+http {   http服务器相关设置. 最主要就是 server、upstream 两个模块
+    ....
+
+
+    upstream iyangyi.com {   指定了一个负载均衡器的名称iyangyi.com
+    
+     ip_hash;   ➜ 一种负载均衡调度算法: 每个请求按访问IP的hash结果分配，
+                ➜ 这样来自同一个IP的访客固定访问一个后端服务器，
+                ➜ 有效解决了动态网页存在的session共享问题。
+
+    server 192.168.12.1:80;           ➜ server指令指定后端服务器的IP地址和端口，
+    server 192.168.12.4:8080;   
+    server 192.168.12.2:80 down;    ‍  ➜  当前的server暂时不参与负载均衡。
+    server 192.168.12.3:8080  max_fails=3  fail_timeout=20s;
+                                      ➜ max_fails，   允许请求失败的次数，默认为1。
+                                      ➜ fail_timeout，max_fails失败后，暂停服务的时间. 
+    server 192.168.12.5:8080 backup;  ➜ 备份服务器,其他机器出现故障/忙时启用.
+
+
+    
+    }
+
+    server  {  http的子模块.里面还有个location模块. 每个server可以指定一个虚拟主机.
+
+                listen       8080;         ➜  指定这个虚拟主机的端口.
+                server_name  localhost 192.168.12.10 www.yangyi.com;
+                                        ➜  指定该虚拟主机的IP/域名. 多域名用空格分开
+                root   /Users/yangyi/www;  ➜ 这个虚拟主机的网站根目录.
+                index  index.php index.html index.htm;                ➜ 设置默认首页地址!
+                charset utf-8;                                        ➜ 设置网页编码格式.
+                access_log  usr/local/var/log/host.access.log  main;  ➜ 日志路径
+                aerror_log  usr/local/var/log/host.error.log  error;  ➜ 日志路径
+                ....
+
+
+                location / {                 ➜ 最主要模块:负载均衡、反向代理、虚拟域名.. 
+                                             ➜ 这个模块用定位URL.解析URL(支持正则匹配)
+                                             ➜ / 的意思就是匹配访问根目录.
+                                             ➜ 开启正则式匹配(加~):location ~ \.php$ 
+                    root   /Users/yangyi/www;      ➜ 指定该虚拟主机的web目录.
+                    index  index.php index.html;   ➜ 指定默认首页
+                
+                }
+
+            }
+
+    server  {  主机2 设置
+                location {  URL 匹配    }
+            }
+    server  {  主机3 设置
+                location {  URL 匹配    }
+            }            
+    ....
+}
+
+
+
+
+
+
+
+🔸 例: 某主机配置
+
+    server {
+        listen 80;
+        server_name example.com;
+        root /var/www/example;
+    }
+
+
+
+🔸 例: 某主机配置
+
+    server {
+        listen 80;
+        server_name example.com;
+        root /var/www/example;
+
+        location / {
+            
+        }
+    }
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸server {}🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 root
+
+    最关键参数:  指定 html和css文件的存放路径. 不然谁知道你把这个网站的文件放在服务器哪里了
+
+
+
+🔸 location
+
+    Location接受两个参数，一个字符串或者正则和一段代码。字符串或者正则用于匹配某个特定目录。
+    如果你想让用户在访问 example.com/whaterver 时访问某个特定页面，你需要将 whatever 设置为uri地址。在这里我们只需要访问root目录，因此只需要加上 / 即可，内容暂时为空，后面再做解释。
+
+
+    第一参数可以有很多种写法，你可以参考上面给出的链接。在以上区块内，我们需要路由指向结果页面。注意 / 会匹配所有的url地址，因为在这里它被解释为一个正则。如果你只想匹配某个准确的字符串，只需要在前面加上一个等号，写法如下：
+
+    location = / { ... }
+    现在我们需要完成之前的代码。我们可以在区块内添加另外一段指令，用于加载名为 try_files 的文件。Try fiels接受了一组文件名或者正则，用于在根目录下查找，并会加载查找到的第一个结果。对于我们的静态服务器来讲，我们希望找到一个在 / 之后紧跟着whatever的文件，例如 whatever.html. 如果在斜线后面没有任何内容，则会寻找 index.html. 在上面给出的文档链接种你可以找到更多的关于如何设置该选项的吸纳关系介绍，这里我们只写一些简单的配置：
+
+    server {
+        listen 80;
+        server_name example.com;
+        root /var/www/example;
+
+        location / {
+            try_files $url $url/ /index.html;    
+        }
+    }
+    你可能会奇怪上面的 $url 是从哪里来的？其实是nginx所提供的。每次有请求时，nginx会生成一系列变量，这些变量存储了请求的相关信息。这里的uri就是我们将要了解的内容之一。
+
+    来自 http://example.com 的请求进入。
+    nginx找到server片段代码，其中 server_name 为 example.com ，并使用它来处理请求
+    nginx匹配任意请求。因为这里的 / 会匹配根域名下的任意内容。
+    在匹配到的location代码种，nginx开始试图加载一个文件。首先寻找一个未命名的文件，因为这里的url匹配的就是没有名称的文件，所以无法找到。接着开始查找未命名的目录，结果还是找不到。最后开始查找并加载根目录下 /index.html 。
+    接下来想象一下如果你添加一个名为 test.html 的文件到根目录下并访问 http://example.com/test.html .自己试一下你就知道了。
+
+    你可以任意的去尝试改变这里的配置环境。例如，在carrot.is这个网站里，但用户访问某个文件并且没有加上 .html 后缀时，try_files同样会查找 $uri.html 并匹配相应结果。因此在你访问 http://carrot.is.about 和 http://carrot.is/about.html 时你会得到相同的文件。你可以充分发挥你的想象力去设置你的配置文件。
+
+    启动服务
+    总结一下我们所做的事情。首先添加了 server 选项，在nginx运行时，会查找 /etc/sites-enabled 目录下的所有配置文件用于显示对应内容。但是请等一下，你可能无法马上得到结果－因为nginx并不知道你所作的这些改动。为了让nginx真正读取新配置文件，你需要重启服务器，运行以下命令：
+
+    service nginx reload
+    注意：这里的 service 命令实际上是调用了配置文件里内容，这些都在使用 apt 时被生成。这里调用的实际上是 /etc/init.d/nginx reload .
+    接下来就是访问服务器IP地址便可得到你想要的页面。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 Nginx 安装 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 Nginx 安装
+    LNMP 环境安装好. 
+    浏览器地址栏就可以通过 IP地址 来访问服务器默认网页了!!
+    这个默认页面 有链接  可以用 myphpadmin 直接连到数据库.
+    这个默认网页在服务器的 /home/wwwroot/default/index.html
+    /home/wwwroot/default/ 这个就是网站的根目录!!!!
+
+
+
+❤️❤️ nginx 操作命令
+
+✔︎ 查看版本:    nginx -v
+
+✔︎ 安装Nginx    包管理器安装 / 源码编译安装.
+
+
+  📌包管理器安装方式1: CentOS 亲测可用
+    官方的源中不包含nginx,要先下载并安装一个rpm包,
+    这个包会给yum添加一个源.之后就能用 yum 安装 ngixn了
+
+    1. 下载对应的rpm包
+    wget http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm
+
+    2. 安装这个rpm包
+    rpm -ivh nginx-release-centos-6-0.el6.ngx.noarch.rpm 
+
+    3. 安装nginx  
+    yum install nginx
+
+
+
+  📌包管理器安装方式2: 
+        https://gist.github.com/ifels/c8cfdfe249e27ffa9ba1
+
+
+  📌编译安装:
+        1 wget http://nginx.org/download/nginx-1.4.2.tar.gz 
+        2 tar -zxvf nginx-1.4.2.tar.gz
+        3 mv nginx-1.4.2 nginx
+        4 cd nginx
+        5 ./configure --prefix=/usr/local/nginx # 编译选项配置，这里从简
+        6 make && make install # 编译安装
+        7 ln -s /usr/local/nginx/sbin/nginx /usr/sbin/nginx
+
+
+
+📌 Nginx 常用操作
+    语法: Usage: nginx {start|stop|restart|condrestart|try-restart|force-reload|upgrade|
+reload|status|help|configtest|check-reload}
+
+
+    /etc/init.d/nginx start      # 启动Nginx服务
+    /etc/init.d/nginx stop       # 停止Nginx服务
+    /etc/init.d/nginx force-quit # 强制退出 Nginx服务
+    /etc/init.d/nginx status     # 查看Nginx服务状态
+
+    /etc/nginx/nginx.conf        # Nginx配置文件位置
+    chkconfig nginx on           # 设为开机启动
+    启动后 就能访问 Nginx 的欢迎页面了.
+    如果不出现这个页面. 需要重装. 或者是防火墙问题.
+
+
+
+📌 查看进程
+    ps -ef|grep nginx 
+
+
+📌 卸载 Nginx
+
+    1. 先停止服务.
+        service nginx stop
+    2. 移除自动启动项
+        chkconfig nginx off
+    3. 然后删除文件夹...
+        rm -rf /etc/nginx
+        rm -rf /etc/init.d/nginx
+
+
+      如果你是用 yum 安装的 那就可以用 yum来卸载.
+      如果你不是用 yum安装的 那就用其他办法来卸载.
+
+
+
+
+
+✔︎ 查看详细信息:
+    [root@localhost default]# nginx -V
+    nginx version: nginx/1.10.0
+    built by gcc 4.4.7 20120313 (Red Hat 4.4.7-17) (GCC)
+    built with OpenSSL 1.0.1e-fips 11 Feb 2013
+    TLS SNI support enabled
+    configure arguments: --user=www --group=www --prefix=/usr/local/nginx --with-http_stub_status_module
+    --with-http_ssl_module --with-http_v2_module --with-http_gzip_static_module --with-ipv6 --with-http_s
+    ub_module
+
+✔︎ nginx 启动:      /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+✔︎ 开启nginx服务器  sudo service nginx start
+
+
+✔︎ 查看进程:      ps -ef |grep nginx
+  [root@localhost default]# ps -ef |grep nginx
+  root     22559     1  0 09:21 ?        00:00:00 nginx: master process /usr/local/nginx/sbin/nginx -c
+  /usr/local/nginx/conf/nginx.conf
+  www      22560 22559  0 09:21 ?        00:00:00 nginx: worker process
+  root     23283 12694  0 10:34 pts/2    00:00:00 grep nginx
+
+
+✔︎ 重启nginx
+  /usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf
+  其中 -t 表示测试，并不真正执行。 
+
+  然后，通过以下命令重加载Nginx配置：
+  kill -HUP master进程号
+
+
+Nginx支持以下几种信号控制：
+  TERM, INT 快速关闭
+  QUIT 从容关闭
+  HUP 平滑重启
+  USR1 重新打开日志文件，在切割文件时用处大
+  USR2 平滑升级
+  WINCH 从容关闭工作进程
+  我们可以通过信号停止Nginx主进程，首先，我们需要通过 ps -ef | grep 命令获得master进程的PID，或者通过cat pid文件获得主进程号。下面是几个典型的停止语句：
+
+
+  #从容停止Nginx  
+  kill -QUIT master进程号  
+  #快速停止Nginx  
+  kill -TERM master进程号  
+  #强制停止Nginx  
+  kill -9 master进程号
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 Nginx 配置 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+📌 一般安装在 /usr/local/nginx 下面.
+
+
+启动 $ /usr/local/nginx/sbin/nginx
+        检查是否启动成功：
+        打开浏览器访问此机器的 IP，如果浏览器出现 Welcome to nginx! 则表示 Nginx 已经安装并运行成功。
+
+重启：  $ /usr/local/nginx/sbin/nginx –s reload
+✔︎ 停止： $ /usr/local/nginx/sbin/nginx –s stop
+测试配置文件是否正常：  $ /usr/local/nginx/sbin/nginx –t
+
+强制关闭：$ pkill nginx
+
+
+🔵 配置文件:    vi /usr/local/nginx/conf/nginx.conf
+
+Nginx配置文件常见结构的从外到内依次是「http」「server」「location」等等，
+缺省的继承关系是从外到内，也就是说内层块会自动获取外层块的值作为缺省值。
+
+Server
+
+接收请求的服务器需要将不同的请求按规则转发到不同的后端服务器上，在 nginx 中我们可以通过构建虚拟主机（server）的概念来将这些不同的服务配置隔离。
+
+server {
+    listen       80;
+    server_name  localhost;
+    root   html;
+    index  index.html index.htm;
+}
+
+这里的 listen 指监听端口，
+server_name 用来指定IP或域名，多个域名对应统一规则可以空格分开，
+index 用于设定访问的默认首页地址，
+root 指令用于指定虚拟主机的网页跟目录，这个地方可以是相对地址也可以是绝对地址。
+
+
+
+
+
+
+server {  
+    listen 80;
+    server_name example.com;
+    root /var/www/ss-panel/public/;
+    index index.php index.html index.htm;
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+    location ~ \.php$ {
+        try_files $uri =404;
+                fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+                fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include fastcgi_params;
+    }
+}
+
+当然这是典型配置，记得把 example.com 换成你自己的网址。
+
+
+
+http://23.105.192.96/index.php
+
+The 23.105.192.96 page isn’t working
+
+23.105.192.96 is currently unable to handle this request.
+HTTP ERROR 500
+
+500 说明是服务器问题. 
+服务器是 nginx  没启动还是...
+
+
+
+
+
+
+❤️ 网站配置  Nginx
+
+📌 一键脚本安装好后:  创建一个虚拟主机:
+    lnmp vhost add
+
+    一步步... 最后会问你是否要安装数据库.这里选否 ss的数据库我们自己安装.
+
+    Restart Nginx......
+    ================================================
+    Virtualhost infomation:
+    Your domain: www.0214.help
+    Home Directory: /home/wwwroot/www.0214.help
+    Rewrite: other
+    Enable log: yes
+    Create database: no
+    Create ftp account: no
+    ================================================
+
+
+📌 下载 ss-panel
+
+
+
+
+📌 Nginx 网站根目录:
+    一键脚本环境安装好的最后有提示的. 下面这行就是网站根目录.    
+    Default directory: /home/wwwroot/default
+
+
+📌 Nginx 配置文件:
+  /usr/local/nginx/conf/vhost/ss.panel.conf
+
+
+
+修改完了之后，到网站目录下进行一些修改。
+[root@vultr vhost]# cd /home/wwwroot/ss.panel/
+[root@vultr ss.panel]# chattr -i .user.ini
+[root@vultr ss.panel]# mv .user.ini public
+[root@vultr ss.panel]# cd public
+
+
+
+
+
+
+
+
+ss-panel 应该先下载 解压出来. 解压后的一大堆文件夹 都放在 wwwroot 下面
+
+
+
+
+
+
+
+
+卸载 重装 nginx
+
+yum install
+yum remove
+
+
+
+虚拟主机有很多类型. 基于IP/基于域名/基于端口.
+一般一个服务器也就一个iP和一个域名. 所以基于端口的虚拟主机最常见.
+
+配置简单..  一个网站,一个端口,一个 server,一个根目录.
+基于端口的话. 服务器上虚拟主机只需要创建一个!!!
+要添加端口 .去配置文件中 添加 server就可以了.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 实例: 谷歌镜像站搭建 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+ 
+🔸 准备
+
+    国外vps一台 + 域名一个. 
+
+
+🔸 谷歌反代 参考
+
+    日本樱花搭建google镜像
+    https://coderschool.cn/2131.html
+
+
+    使用nginx制作镜像站
+    https://chenjx.cn/make-google-mirror/
+
+
+🔸 why 谷歌反向代理网站
+    很多公共wif 都是有各种防火墙的. 不允许VPN, 用了ss 也不能上谷歌.
+    只能用这个了...
+
+
+🔸 域名解析 
+    g.0214.help 解析到服务器ip
+
+
+🔸 lnmp 添加虚拟主机 
+    lnmp vhost add 
+    ================================================
+    Virtualhost infomation:
+    Your domain: g.0214.help
+    Home Directory: /home/wwwroot/g.0214.help
+    Rewrite: none
+    Enable log: no
+    Create database: no
+    Create ftp account: no
+    ================================================
+
+
+🔸 配置文件 
+    vi /usr/local/nginx/conf/vhost/g.0214.help.conf
+
+    改成如下. 主要就是修改 location 模块.
+
+        server
+            {
+                listen 80;
+                server_name g.0214.help ;
+                index index.html index.htm index.php default.html default.htm default.php;
+                root  /home/wwwroot/g.0214.help;
+
+                location / {  
+                    proxy_set_header  Host  "www.google.com";
+                    proxy_set_header  User-Agent $http_user_agent;
+                    proxy_set_header  Connection "";
+                    proxy_http_version 1.1;
+                    proxy_pass https://www.google.com;
+                }
+
+                access_log off;
+            }
+
+
+🔸 重启 nginx    service nginx reload
+
+
+🔸 浏览器测试  g.0214.help  就出来谷歌的页面了...
+    如果谷歌镜像网站访问频率过高 可能会要你输入验证码... 有点麻烦..
+    还有 使用 https 给搜索加密非常重要...
+    不然当你的 域名 可能被封! 因为某些国内禁止的关键字...
+    要搭建一个完善的谷歌镜像还有很多工作要做... 不深入了..

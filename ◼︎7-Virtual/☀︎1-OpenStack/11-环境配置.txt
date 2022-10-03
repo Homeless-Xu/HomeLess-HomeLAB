@@ -1,0 +1,188 @@
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 VM1 搭建.  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 组件  
+    组件可以单独安装的! 不一定要安装在一台电脑上的! 
+    OpenStack 可以看成是一个集群.  
+    7个核心组件可以安装在多台服务器上.  也可以全部安装在一台服务器上.
+    我们学习的话. 至少要两个主机 才能学习.
+    一般在本地电脑虚拟出两个 centos7 最小化安装的虚拟机.
+    一个控制节点. 一个计算节点.
+
+
+🔸 安装方法
+    可以用 RDO仓库安装, 也能用devstack安装.
+
+
+🔸 硬件需求:
+    计算节点 至少要两个网卡!!
+    一般来说 控制节点 也会担任计算节点的功能. 所以控制节点也要两网卡.
+
+
+🔸 网络 
+    你可以在 gce aws 上搭建.  
+    也可以在 本地电脑用虚拟机虚拟出几个服务器
+
+
+🔸 环境 
+    以下最小需求支持概念验证环境
+    控制节点: 1 处理器, 4 GB 内存, 及5 GB 存储
+    计算节点: 1 处理器, 2 GB 内存, 及10 GB 存储
+
+    我们推荐你最小化安装你的Linux发行版。
+
+
+
+🔸 本地 VM 虚拟机 
+    建议用本地虚拟机! 而不是用 gce aws 这类vps.
+
+    本地的好处是 网络设置! gce 这里云的网络设置很麻烦!  本地VM的话就很简单了!
+
+
+
+
+🔸 主机网络 
+    安装好两个虚拟机后 就必须配置网络接口了!
+
+    在用 RDO / devstack 等安装 openstack 的时候
+    强烈建议你禁用自动网络管理工具并手动编辑你相应版本的配置文件
+
+    所有节点都需要可以访问互联网. 
+    大部分情况 节点要通过管理网络接口访问互联网.
+
+    也就是所有节点两个网卡.  
+    一个外网: 上网用
+    一个内网: 连接其他 openstack 节点
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 OpenStack client  安装 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 Centos7 安装 OpenStack Ocata 版本
+
+    ⦿ 启用OpenStack库          yum install centos-release-openstack-ocata -y
+    ⦿ 更新软件包：             yum upgrade -y
+    ⦿ 安装 OpenStack client：  yum install python-openstackclient -y
+
+        • Openstack client 简介
+            OpenStack 各组件之间 是通过 REST 接口进行相互通信，
+            OpenStack 各组件内部 则采用了基于 AMQP 模型的 RPC 通信。
+            而各个组件的 client 就是将我们的请求处理封装为一个标准的 RESTful 请求。
+
+        • 安装了 python-openstackclient 就安装了 其他所有组件的 client.
+        • 每个组件都有一个 client. 作用就是和其他组件通信.
+            python-openstackclient
+            python-glanceclient
+            python-ironicclient
+            python-manilaclient
+            python-novaclient
+            python-neutronclient
+            python-swiftclient
+
+
+    ⦿ Selinux 设置 (可选)
+        如果开启了 Selinux 那么就需要安装:   yum install openstack-selinux -y
+        如果没开启.那么别装了..
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸数据库:  MariaDB 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 数据库简介:    OpenStack 需要服务使用 SQL 数据库来存储信息. 这里用 Mariadb 
+
+🔸 数据库安装:    yum install mariadb mariadb-server python2-PyMySQL -y 
+
+🔸 配置数据库 (新建文件)
+    只需修改 bind-address, 其他别改.
+    vi /etc/my.cnf.d/openstack.cnf
+
+    [mysqld]
+    bind-address = 192.168.1.112
+
+    default-storage-engine = innodb
+    innodb_file_per_table
+    max_connections = 4096
+    collation-server = utf8_general_ci
+    character-set-server = utf8
+
+
+🔸 数据库自启           systemctl enable mariadb.service
+🔸 数据库启动           systemctl start mariadb.service
+
+🔸 设置root密码(可选)   mysql_secure_installation
+        回车 ➜ Y + 回车 ➜ 两次新密码 + 回车 ➜ 
+        其他..看着办吧. 这个命令能反复运行,修改也方便
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸消息队列🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 消息队列 简介
+    消息队列（Message Queue，简称MQ）.
+    
+    消息队列的主要特点是异步处理，主要目的是减少请求响应时间和解耦。
+    使用场景就是将比较耗时而且不需要即时（同步）返回结果的操作作为消息放入消息队列。
+
+    OpenStack 使用 message queue 协调操作和各服务的状态信息。消息队列服务一般运行在控制节点上。
+    我们这里安装 RabbitMQ 消息队列服务，因为大部分发行版本都支持它。
+
+
+🔸 消息队列 举例
+
+    注册网站,其实后台进行了很多操作:
+        • 校验用户名等信息，如果没问题会在数据库中添加一个用户记录
+        • 如果是用邮箱注册会给你发送一封注册成功的邮件，手机注册则会发送一条短信
+        • 分析用户的个人信息，以便将来向他推荐一些志同道合的人/文章
+        • 给用户发送一个包含网站操作指南的系统通知
+        • 等等……
+
+    但是对于用户来说, 只想登录网站而已. 完全不关心其他功能.
+    其他功能 不能在用户注册的时候完成! 这些功能都是非常耗时的! 
+    所以就需要 进行控制. 首先完成向数据库添加用户记录. 这时候用户就可以登录了.
+    其他功能 以后慢慢执行.   要完成这样的流程控制就需要消息队列.
+
+
+
+🔸 安装   yum install rabbitmq-server -y
+🔸 启动   systemctl start rabbitmq-server.service
+🔸 自启   systemctl enable rabbitmq-server.service
+ 
+🔸  添加 openstack 用户：
+    rabbitmqctl add_user openstack RABBIT_PASS
+    Note: 用合适的密码替换 RABBIT_DBPASS。
+
+🔸 openstack 用户配置写和读权限：
+    rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸Memcached🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+认证服务认证缓存使用Memcached缓存令牌。
+缓存服务memecached运行在控制节点。在生产部署中，我们推荐联合启用防火墙、认证和加密保证它的安全
+
+🔸 安装   yum install memcached python-memcached -y
+
+🔸 配置   vi /etc/sysconfig/memcached
+    OPTIONS="-l 127.0.0.1,::1". 改成  OPTIONS="-l 127.0.0.1,::1,controller"
+
+🔸 运行   systemctl start memcached.service
+🔸 自启   systemctl enable memcached.service
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+ 
+下面是新文章. 认证服务.txt 

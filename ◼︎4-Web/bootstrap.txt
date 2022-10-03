@@ -1,0 +1,656 @@
+---
+layout: post
+title:  Bootstrap
+tags: Buttones
+categories: Web
+---
+
+
+包含内容
+
+
+
+- 脚手架
+
+全局性样式文件.
+重置背景,链接样式,栅格系统等，并包含两个简单的布局结构。
+
+
+
+- 基本CSS 样式
+排版 代码 表格 按钮 
+
+
+→
+- 组件
+
+标签 pill 导航 警告 页面标题 
+
+- js 插件
+
+类似组件,  提示:tooltip
+弹出框 popover
+模态对话框 modal码
+
+
+组件列表 (组件库+JS插件集)
+按钮组
+按钮下拉菜单
+
+导航标签 pill 列表
+导航条
+Labels
+badges
+page headers and hero unit
+缩略图
+警告对话框
+进度条
+模态对话框 modals
+下拉菜单  dropdowns
+Tooltips
+popovers
+assordion
+carousel
+typeahead
+
+
+
+基本 Bootstrap 模板:
+(其实就是几个要引用的文件..)
+为了使其成为一个Bootstrap模板, 需要包含相应的 CSS and JS 文件：
+
+
+
+1.  <!DOCTYPE html>
+2.  <html>
+3.    <head>
+4.      <title>Bootstrap 101 Template</title>
+5.      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+6.      <!-- Bootstrap -->
+7.      <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+8.    </head>
+9.    <body>
+10.     <h1>Hello, world!</h1>
+11.     <script src="http://code.jquery.com/jquery.js"></script>
+12.     <script src="js/bootstrap.min.js"></script>
+13.   </body>
+14. </html>
+
+设置成功! 
+加入这两个文件:  .css .js   设置对路径.
+你就可以开始用Bootstrap开发任何网站和应用程序了。
+
+
+
+
+
+---
+
+全局设置
+
+排版和链接
+
+Bootstrap 默认全局样式:
+- 移除body的 margin.
+- body 背景色: white
+- 使用 @baseFontFamily、@baseFontSize 和@baseLineHeight 属性作为我们排版的基础
+- 通过 @linkColor 设置全局链接颜色，并且，当链接处于 :hover 状态时才会带有下划线
+
+
+
+用 Normalize 重置样式
+
+
+
+默认栅格系统
+
+ ，形成一个940px宽的容器，
+
+如果加入响应式布局CSS文件，栅格系统会自动根据可视窗口的宽度从724px到1170px进行动态调整。
+
+在可视窗口低于767px宽的情况下，列将不再固定并且会在垂直方向堆叠。
+
+
+
+带有基本 格子的 html代码
+
+对于简单的 两列式布局.
+创建一个 .row 容器.
+在容器里加入 适量的 .span*
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+
+
+
+
+---
+
+组件/插件 区别
+
+组件目的: 功能模块化.
+提供某一完整功能的模块.
+如qq空间的 关注组件
+
+插件: 封闭某一功能的函数
+区别很小. 一般组件叫的少. 全部叫插件.
+
+
+
+
+组件
+
+control 控件
+component 组件
+
+控件: 具有用户界面的组件.
+类似各种开关 按钮.
+
+
+可复用组件
+
+按钮什么的 做成可以重复使用的东西.
+
+可以更少的代码... 
+更快的开发效率
+
+
+
+
+
+
+
+下拉菜单的子菜单
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+圆角. border-radius:
+- 原来:
+~~~
+    -webkit-border-radius: 10px  
+    -moz-border-radius:10px  
+    -border-radius:10px  
+~~~
+
+
+- bootstrap:
+~~~
+    @include border-radius(10px);
+~~~
+
+
+
+
+
+丰富的组件
+HTML 组件./ JS 组件
+非常丰富，并且代码简洁，非常易于修改，你完全可以在其基础之上修改成自己想要的任何样子。这是工作效率的极大提升。
+
+
+
+插件
+最实用的 是 font-awesome .提供非常丰富的插件.
+
+
+
+
+基于这个 可以快速搞出一个网站的基本布局.
+
+
+用网格系统 分分钟搭建好布局.
+
+
+
+
+
+
+---
+
+可视化布局..
+在线可视化布局网站 (http://www.ibootstrap.cn/)
+
+不是自带的... 
+有些网站提供这个功能:
+网站里 拖几下 就能大致搭建个网站框架出来.
+再把代码 下载. 放到自己本地... 就算是你自己搭建的了...
+
+
+
+
+
+
+
+
+
+
+SASS
+预处理脚本.
+
+
+
+ 官网 (http://getbootstrap.com/) 来自 Twitter .
+基于 Html css js.
+简洁灵活. 使得web开发更加快捷.
+
+
+为什么用 Bootstrap
+- 移动设备优先.
+- 所有主流浏览器都支持.
+- 容易上手 (有html/css基础就行)
+- 响应式设计. 自动适应台式/平板/手机.
+- 给开发人员创建接口. 提供了一个 简洁统一的解决方案.
+- 包含强大内置组件.易于定制.
+- 提供基于web的定制.
+- 开源的
+
+
+
+
+
+
+
+
+安装包内容:
+
+- 基本结构: 提供了一个 带有 网格系统,链接样式,背景的基本结构.
+
+- CSS: 全局的CSS设置. 定义基本的html元素样式.可扩展的Class. 以及一个先进的网格系统.
+
+- 组件: 包含十几个可重用的组件:创建图像,下拉菜单,导航,警告框.弹出框等等...
+
+- JS 插件: 包含 几十个 自定义的 jQuery插件.
+
+- 定制: 可以定制 bootstrap 组件. less 变量. jQuery插件
+
+
+
+
+
+
+
+
+
+
+前端开发框架.
+有需求才会选着某个框架. 没有好坏之分.
+会用一个 别的就容易上手.
+
+
+ Bootstrap 的用法及其简单( 这也可能就是 Bootstrap 作者阅攻城士无数，了解他们痛的结果 )，以至于是个小前端都可以快速上手，几乎没什么学习成本。
+
+
+
+安装方法:
+
+一种是下载编译好的文件. 就一个css 一个js 引用下就好了.
+一种是 安装源码. 很多很多文件 很麻烦的
+
+4.0的 编译好的好没出来 只有 源码下载.
+先用3.多的把
+
+
+
+
+
+下载后解压出来. 
+bootstrap.min.xxx 是压缩后的.
+bootstrap. 是没压缩的.
+
+所有js 插件都依赖 jQuery 库.
+
+
+
+
+
+html 基本模板.
+
+
+
+
+
+
+
+
+
+
+- 用免费的CDN:
+
+  <!-- 新 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+  <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+
+
+1. 下载源码包. 手动安装
+2. 用工具下载
+npm install bootstrap@4.0.0-alpha.4
+
+
+
+源码包 安装方法
+官方英文教程 (http://v4-alpha.getbootstrap.com/getting-started/build-tools/#tooling-setup)
+
+
+1. Download and install Node
+
+2. Install the Grunt command line tools, grunt-cli, with sudo npm install -g grunt-cli.
+
+3. cd to 源码包.  运行 npm install
+
+4. grunt dist
+5. grunt watch
+6. grunt test
+7. grunt docs
+8. grunt
+
+
+
+Bootstrap 有两个版本,
+- 预编译的压缩版.
+- 源代码
+使用预编译的方便.
+下载下拉 也就三个文件夹. css js fonts.
+文件分类: 
+.css 是已编译的
+.min.css 是已编译&压缩的
+.js .min.js 也是这样.
+
+
+
+
+HTML 模板
+
+head 里面 一般都会有
+jQuery.js
+bootstrap.min.js
+bootstrap.min.css
+
+
+
+Bootstrap CDN
+
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- 可选的Bootstrap主题文件（一般不使用） -->
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+ 
+
+
+
+可视化布局
+操  这么简单. 拖来拖去就好了.....
+
+
+
+
+
+
+
+例子1
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1>你好，世界！</h1>
+
+
+
+
+<div class="container">
+  <div class="jumbotron">
+    <h1>我的第一个 Bootstrap 页面</h1>
+    <p>重置窗口大小，查看响应式效果！</p> 
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Column 1</h3>
+      <p>学习使人进步！</p>
+      <p>骄傲使人落后！</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Column 2</h3>
+      <p>学习使人进步！</p>
+      <p>骄傲使人落后！</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Column 3</h3> 
+      <p>学习使人进步！</p>
+      <p>骄傲使人落后！</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
+
+
+
+
+
+Bootstrap默认的栅格系统为12列
+
+
+四列布局
+
+
+固定布局(container) & 流动布局(container-fluid)
+
+固定: <div class="container">
+流动:  <div class="container-fluid">
+
+
+
+具体看 网页代码. 不看本文.
+
+创建按钮: 
+
+~~~
+<button class="btn btn-block btn-primary">Like</button>  蓝色
+<button class="btn btn-block btn-info">Info</button>    青色
+<button class="btn btn-block btn-danger">Delete</button>  红色
+~~~
+{: .language-ruby}
+
+
+
+
+
+文本居中:  
+class= text-center  这个不一定有效.
+用 html 自带的  align="center"
+
+
+
+DIV 居中
+block 没设定宽度是不能 margin auto 来居中的，
+
+
+
+单行文本垂直居中:
+height=3em;
+line-height=3em; 
+
+
+
+
+
+
+结合 fontawesome
+
+
+
+
+
+
+
+
+
+Bootstrap 综合框架: CSS + JS 
+jQuery    JS框架
+css 用的是 link href 标签.
+js  用的是 script src 标签
+
+
+
+Boorstrap 最简单的方法: 使用在线CDN
+两个文件(bootstrap.min.css bootstrap.min.js ).的网址链接放到你html文件里就可以.
+
+Bootstrap 在线CDN 中心 (https://www.bootstrapcdn.com/alpha/)
+- CSS Link (Bootstrap 4.0.0) (https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css)
+  - JS Link (https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js)
+
+
+bootstrap 是依赖jquery 必须也得加上jquery.
+且 jquery 版本要小于3.0的 jquery 3.11 CDN (http://www.bootcdn.cn/jquery/) 
+
+Bootstrap 基于 HTML5的. 
+
+
+
+
+
+----
+
+Bootstrap 中文官网 (http://www.bootcss.com/) & 官方中文说明文档 (http://docs.bootcss.com/bootstrap-2.3.2/docs/scaffolding.html)
+
+
+- 先进的响应式的栅格系统 所有设备都能适配.   尤其适合移动设备优先的Web项目.
+
+- 只需一个框架 自动适配各种大小的显示设备
+
+
+
+简单点说: 
+- 事先帮你写好很多 CSS 样式, 用的时候只要调用相应的 class.
+  - 比如: 按钮,表单,表格...
+
+- 能自动适应手机,平板,电脑等等..不需要你去费心布局的事情
+
+手动浏览器改变宽度就能试出来:同样是写几个div. 
+- 用框架的,浏览器宽度改变会自动排版.
+- 没框架的,浏览器宽度改变不自动排版.
+
+
+
+Bootstrap 是基于Less的一套前端工具库.意图成为Web前端的一站式解决方案.
+
+- 一套完整的 基础CSS模块..
+- 一套 预定义样式表.包括一个 格子布局系统.
+- 一组基于 jQuery 的js 交互插件.
+包括:对话框,下拉导航 等等 功能完善,十分精致,
+
+
+---
+
+Web / Full Stack 开发 最佳组合: 
+<b>: SASS + Compass + Bootstrap.</b>
+- SASS 强大的编程能力.
+- Compass 强大的底层函数.
+- Bootstrap 丰富的UI组件支持.
+
+Bootstrap 是基于Less的,
+- 要让Sass和bootstrap 协同工作.  
+- 需要 Sass 的bootstrap 移植版本: Bootstrap-sass (https://github.com/twbs/bootstrap-sass)
+- Bootstrap-sass Mac 安装:gem install bootstrap-sass
+
+bootstrap 只是个框架.在这个框架上你可以任意的发挥.并且发挥的更好.所以不必排斥框架.
+
+
+
+包含很多非常实用的 Mixin库.
+
+
+
+
+
+
+
+
+
+title:  Bootstrap图片
+class="image-responsive"  图片自动缩放 
+
+
+
+
+
+Bootstrap自适应
+container-fluid   里面的会自动适应任何宽度.
+
+
+
+
+
+
+

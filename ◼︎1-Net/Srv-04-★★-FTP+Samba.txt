@@ -1,0 +1,530 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  FTP 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔵 centos6 搭建ftp:
+    sudo yum install vsftpd  
+    adduser userftp
+    passwd userftp xujian1111
+
+    禁止用户的 ssh 登录权限，只允许 FTP 访问:
+    usermod -s /sbin/nologin userftp
+
+    配置 VSFTP    sudo vi /etc/vsftpd/vsftpd.conf
+
+      anonymous_enable=NO           关闭匿名访问：
+      local_enable=YES              去掉 local_enable 的注释，修改为开启：
+      chroot_local_user=YES         限制用户仅能访问自己的主目录：
+      local_root=/data/test         设置用户的主目录：(不设置时，默认为用户的家目录/home/userftp)
+
+
+    重启服务：       sudo service vsftpd restart   
+    设置开机自启动： chkconfig vsftpd on           
+
+    ftp userftp@112.126.74.124 连接测试
+
+    ftp> pwd
+    Remote directory: /home/userftp
+
+    ftp> quit
+    221 Goodbye.
+
+
+
+
+
+
+
+
+
+
+
+
+---
+layout: post
+title: FTP Server
+tags: 
+categories: IT-Admin
+---
+
+FTP Server
+文件服务器,不一定要FTP的.
+SMB 能实现同样的功能 而且的更方便.
+445 是SMB端口,能直接上传下载文件. 集成AD域的
+
+
+Windows 2003 搭建 阿里云详细教程 (https://help.aliyun.com/knowledge_detail/5974571.html)/微软官网教程 (https://support.microsoft.com/zh-cn/kb/323384)
+FTP 依赖 IIS. 必须开启 IIS.
+IIS 的 FTP 是不支持用户自己修改改密码的.
+FTP 有很多软件可以实现.最简单的是用系统自带的.
+
+有问题 记得重启服务器.再试试. 比如 端口被占用.
+
+
+FTP windows2003 搭建
+
+1. manage your server 
+2. add or remove a role 
+3. add or remove programs !!!!
+4. 选择 application server
+5. 点击 details
+6. 选择 IIS 27.4MB 的那个 不要打钩 选择 details
+只要选择 common filee
+FTP server
+IIS
+
+ok → ok → next 
+
+(需要插入光盘的话. 可以去下个 iis 的安装包. 缺少文件就定位到这个安装包 重复好多次 就能安装成功了)
+
+然后就能看到本机21端口开了.
+
+
+
+
+配置 FTP 服务
+若要将 FTP 服务配置为仅允许匿名连接，请按照下列步骤操作：
+1   启动“Internet 信息服务管理器”或打开 IIS 管理单元。
+2   展开“服务器名称”，其中服务器名称是该服务器的名称。
+3   展开“FTP 站点”
+4   右击“默认 FTP 站点”，然后单击“属性”。
+5   单击“安全帐户”选项卡。
+6   单击以选中“允许匿名连接”复选框（如果它尚未被选中），然后单击以选中“仅允许匿名连接”复选框。 
+7   
+8   如果您单击选中“仅允许匿名连接”复选框，则您将 FTP 服务配置为仅允许匿名连接。用户无法使用用户名和密码登录。
+9   单击“主目录”选项卡。
+10  单击以选中“读取”和“日志访问”复选框（如果它们尚未被选中），然后单击以清除“写入”复选框（如果它尚未被清除）。
+11  单击“确定”。
+12  退出“Internet 信息服务管理器”或者关闭 IIS 管理单元。
+FTP 服务器现已配置为接受传入的 FTP 请求。将要提供的文件复制或移动到 FTP 发布文件夹以供访问。默认的文件夹是驱动器:InetpubFtproot，其中驱动器是安装 IIS 的驱动器。
+
+
+
+
+查看端口:
+
+3 Posts
+Re: IIS cannot be started. Another web site may be using the same port
+Jul 20, 2007 11:30 AM|LINK
+this is what netstat -a produced....
+C:Windowssystem32>netstat -a
+Active Connections
+  Proto  Local Address          Foreign Address        State
+  TCP    0.0.0.0:135            MARS:0                 LISTENING
+  TCP    0.0.0.0:427            MARS:0                 LISTENING
+
+
+
+
+You can use the netstat -anbcommand to see which process is listening on port 21.
+Be sure to run that from an elevated command-line.
+Edit: For clarification, here is what the -anb option does:
+• a Displays listening ports as well as open connections
+• n Doesn't attempt to resolve host names and port numbers (makes it much faster)
+• b Tries to display the process associated with each specific socket.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Samba 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔵 目的:  CentOS6 上搭建samba; 然后客户端本地挂载整个服务器硬盘. 使得vsc可以直接编辑服务器上的文件
+
+
+🔵 简介: 
+    Samba作用: 跨平台的文件共享和打印共享，
+
+    linux 自带3.6 版本最新版本4.6+ .编译安装最新版很麻烦,依赖太多.我是没成功.别折腾了.
+    yum list samba 或者 yum info samba 查看.
+        
+
+
+🔵 必知内容
+
+
+    ❗️组成Samba运行的有两个服务，一个是SMB，另一个是NMB；
+        SMB是核心服务
+            主要负责建立 Linux Samba服务器与Samba客户机之间的对话， 验证用户身份并提供对文件和打印系统的访问，
+            只有SMB服务启动，才能实现文件的共享，监听139 TCP端口；
+        
+        NMB是负责解析用的
+            类似与DNS实现的功能，NMB可以把Linux系统共享的工作组名称与其IP对应起来，
+            如果NMB服务没有启动，就只能通过IP来访问共享文件，监听137和138 UDP端口。
+
+
+    ❗️ 登录smb 有好几种方法.最常见的是下面两种.
+            share: 不用验证 直接登录. ❗️❗️❗️❗️但是这个方法已经被抛弃不用了. 所以只能选择 user了.❗️❗️❗️❗️
+            user:  需要输入用户名密码才能登录!
+
+
+
+发现SMB 好慢啊!!! 登录慢.上传文件慢.下载也慢.....
+
+
+
+
+
+
+
+🔵 端口
+
+    Samba 使用的端口汇总
+        端口	协议	服务	           守护进程	描述
+        137	  UDP	netbios-ns	    nmbd	  NetBIOS 名称服务
+        138	  UDP	netbios-dgm	    nmbd	  NetBIOS 数据报服务
+        139	  TCP	netbios-ssn	    smbd	  NetBIOS over TCP（会话服务）
+        445	  TCP	microsoft-ds	smbd	  直接托管的 SMB
+
+    使用 netstat 查找 SMB 在监听哪个端口
+        ➜  ~ netstat -antp | grep smbd
+        tcp        0      0 0.0.0.0:139                 0.0.0.0:*                   LISTEN      31638/smbd
+        tcp        0      0 0.0.0.0:445                 0.0.0.0:*                   LISTEN      31638/smbd
+        tcp        0      0 :::139                      :::*                        LISTEN      31638/smbd
+        tcp        0      0 :::445                      :::*                        LISTEN      31638/smbd
+
+
+    使用 netstat 查找 NMB 在监听哪个端口
+        ➜  ~ netstat -anup | grep nmbd
+        udp        0      0 23.105.192.96:137           0.0.0.0:*                               31665/nmbd
+        udp        0      0 23.105.192.96:137           0.0.0.0:*                               31665/nmbd
+        udp        0      0 0.0.0.0:137                 0.0.0.0:*                               31665/nmbd
+        udp        0      0 23.105.192.96:138           0.0.0.0:*                               31665/nmbd
+        udp        0      0 23.105.192.96:138           0.0.0.0:*                               31665/nmbd
+        udp        0      0 0.0.0.0:138                 0.0.0.0:*                               31665/nmbd
+
+
+
+    ❗️❗️139、445 端口可能被运营商封掉!!! !!!必须换smb默认端口
+    ❗️❗️139、445 端口可能被运营商封掉!!! !!!必须换smb默认端口
+    ❗️❗️139、445 端口可能被运营商封掉!!! !!!必须换smb默认端口
+
+        如果服务器 nmap 127.0.0.1 发现139/445 是open的 而且服务器防火墙是关闭的. 
+        但是你用客户端 nmap 23.105.192.96 却发现139/445 是filtered的.那就是运营商吧这些端口封了!!!
+        只能换SMB的默认端口! vi /etc/samba/smb.conf ➜ smb ports = 445 139 ➜ smb ports = 2445 2139
+        然后重启服务. 然后Mac ➜ Finder ➜ ⌘K ➜ smb://23.105.192.96:2445 就可以访问了
+
+
+
+
+🔵 图形网页管理工具 SWAT (可选)
+
+    samba 官方网页管理工具: swat  可以方便的配置samba.
+        HOME：    Samba相关程序及文件说明。
+        GLOBALS： 设置Samba的全局参数。即smb.conf文件的[global]。
+        SHARES：  设置Samba的共享参数。
+        PRINTERS：设置Samba的打印参数。
+        WIZARD：  Samba配置向导。
+        STATUS：  查看和设置Samba的服务状况。
+        VIEW：    查看Samba的文本配置文件，即smb.conf。
+        PASSWORD：设置Samba用户，可以修改密码，新建删除用户。
+    
+    
+    安装: yum install samba-swat 
+    配置: vi /etc/xinetd.d/swat
+            service swat
+            {
+                    port            = 901                //网页默认端口. 可自定义.
+                    socket_type     = stream
+                    wait            = no
+                    only_from       = 0.0.0.0            //允许登录的外网IP.
+                    user            = root
+                    server          = /usr/sbin/swat
+                    log_on_failure  += USERID
+                    disable         = no                //这样swat子进程就可以随xinetd超级守护进程一起启动了
+            }
+
+    启动:  service xinetd restart
+
+    进入:  浏览器输入: 23.105.192.96:901
+            403 Forbidden
+            Samba is configured to deny access from this client 
+            Check your "hosts allow" and "hosts deny" options in smb.conf
+
+            vi /etc/samba/smb.conf
+            hosts allow = 0.0.0.0/0          //❗️❗️❗️❗️❗️ 默认是不运行外网访问的. 改成这样就所有IP可以访问了
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 准备工作
+
+
+    安装 samba    yum install samba samba-client
+
+    开机启动 chkconfig smb on
+
+
+
+🔵 常用命令:
+
+    service smb restart && service nmb restart
+        smb 默认开启139 445 这两个tcp端口
+        nmb 默认开启137 138 这两个udp端口
+
+
+
+🔵 设置SMB 用户和密码
+    ❗️❗️❗️ smb的用户密码 和 linux系统的用户密码是两回事!! 不通用的!!!
+    ❗️❗️❗️ smb的用户密码 和 linux系统的用户密码是两回事!! 不通用的!!!
+
+    添加用户:
+    smbpasswd -a root  #添加用户. 然后要你输入密码. xujian.
+
+        这里的用户必须是 linux中已有的用户名. 密码可以自定义!!!!
+        samba所使用的用户，必须是系统用户，并且需要加入到samba用户中
+        /usr/local/samba/bin/smbpasswd -a root (增加root用户，root必须是系统用户)
+        /usr/local/samba/bin/smbpasswd -d root (冻结root用户，root必须是系统用户)
+        /usr/local/samba/bin/smbpasswd -e root (恢复root用户，root必须是系统用户)
+        /usr/local/samba/bin/smbpasswd -n root (把root用户密码设置成空，root必须是系统用户) 需要在配置文件中在global段中写入null passwords -true
+        /usr/local/samba/bin/smbpasswd -x root (删除root用户，root必须是系统用户)
+
+
+
+
+🔵 共享文件夹设置
+    先创建文件夹. 再给权限. ❗️ 这里权限直接给777 .反正smb必须要登录后才能连上的.
+
+    mkdir /home/share && chmod -R 777 /home/share
+
+    
+
+🔵 最简单配置文件
+
+    [global]
+            workgroup = WORKGROUP
+            server string = Samba Server Version %v
+            security = USER                # ❗️❗️❗️
+            log file = /var/log/samba/log.%m
+            max log size = 50
+            smb ports = 2445 2139          # ❗️❗️❗️ 
+            client signing = required
+            idmap config * : backend = tdb
+            valid users = root share v
+            admin users = root
+            read list = root
+            hosts allow = 0.0.0.0/0
+            browseable = yes
+
+
+    [share]
+        path = /home/share     ### 共享文件夹路径
+        read only = no
+        valid users = root     ### 这里列出的用户才能登录 共享文件夹.
+        write list = root      ### 这里列出的用户才能写文件到共享文件夹.
+
+
+
+🔵 连接测试:  
+
+    Mac:     Finder   ➜ 前往服务器 ⌘K ➜ smb://23.105.192.96:2445
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔵 问题排除
+
+    思路: 
+    首先用 testparm 这个smb专用的 配置文件测试命令开查看配置文件!!!!!
+    然后 查看smb.conf 中的日志文件路径.去查看日志!!!!  /var/log/samba/log.%m
+
+
+    ❗️❗️❗️❗️❗️ testparm 配置文件测试命令️ ️ ️❗️❗️❗️❗️❗️
+    ❗️❗️❗️❗️❗️ testparm 配置文件测试命令️ ️ ️❗️❗️❗️❗️❗️
+    ❗️❗️❗️❗️❗️ testparm 配置文件测试命令️ ️ ️❗️❗️❗️❗️❗️
+
+    WARNING: The security=share option is deprecated
+    居然没用了... 那就只能 user 了
+
+
+
+
+    故障排除:
+        Mac 连接不上.
+        1. nmap 看服务器 139端口是否开启
+        2. 关闭服务器和客户端防火墙.
+        3. 关闭服务器 SELINUX
+            Security-Enhanced Linux的缩写，是一种非常安全的LINUX模式。
+            基本上用户得不到什么权限在这个系统下面。
+            🔅 /usr/sbin/sestatus -v                      ➜ 查看当前SELINUX状态. 
+                vi /etc/selinux/config                    ➜ 修改这个文件来永久关闭SELINUX
+                将SELINUX=enforcing改为SELINUX=disabled   ➜ 修改后重启电脑.
+
+        3. 重启服务器 smb/nmb 服务.
+
+
+    还不行. 动用 wireshark. 抓包
+    ➜ 显示过滤器: ip.dst==23.105.192.96 && !(tcp.dstport == 1028) 
+
+            过滤语法可以 在下方详细信息里 选一行右键 准备过滤器.
+            由于我ss翻墙也是用的这个服务器ip. 翻墙端口是1028. 所以把1028过滤掉. 剩下的基本就是 连接smb的数据包了.
+
+    ➜ 分析数据包
+        发现只有两个端口的数据包 445/139  先来看139吧, 选着第一个139的包 进行追踪流.
+
+        三次握手. 第一个syn 发出后全部是tcp retransmission . 
+        也就是tcp 重传!! 肯定是遇到错误了 tcp才会进行重复传. 说明对方没回复. 
+        没回复说明要么对方端口没开. 要么开了端口但是没开服务.
+        查了下发现139端口确实开启的. 那就查服务去.
+
+            TCP重传：
+
+            主机报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。
+
+            报文丢失的可能因素有很多种，包括应用故障，路由设备过载，或暂时的服务宕机。报文级别速度是很高的，而通常报文丢失是暂时的，因此TCP能够发现和恢复报文丢失显得尤为重要。
+
+            决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK时计时器停止。报文发送至接收到ACK的时间称为往返时间（RTT）。对若干次时间取平均值，该值用于确定最终RTO值。在最终RTO值确定之前，确定每一次报文传输是否有丢包发生使用重传计时器，下图说明了TCP重传过程。
+
+
+            当报文发送之后，但接收方尚未发送TCP ACK报文，发送方假设源报文丢失并将其重传。重传之后，RTO值加倍；如果在2倍RTO值到达之前还是没有收到ACK报文，就再次重传。如果仍然没有收到ACK，那么RTO值再次加倍。如此持续下去，每次重传RTO都翻倍，直到收到ACK报文或发送方达到配置的最大重传次数。
+
+            最大重传次数取决于发送操作系统的配置值。默认情况下，Windows主机默认重传5次。大多数Linux系统默认最大15次。两种操作系统都可配置。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 配置文件详解
+
+    Samba 的配置文件有一个相对简单的格式，使用三个不同的结构：
+        Sections   ➜ 将配置文件分成独立的部分。例如，一个文件共享有其自己的区域。
+        Parameters ➜ 是键值对。比如 “read only”。
+        Comments   ➜ 注解, Comments 以分号（;）或散列字符（哈希符号或 #）开头。
+
+        ❗️❗️❗️ 有三个 section 名具有特殊的含义：
+        global 中的所有内容都适用于整个服务器。如有需要，可在共享级别覆盖 global 部分中的配置项。
+        
+        homes
+            homes 部分充当所有用户共享的模板，且 Samba 负责将用户名映射到该部分中的配置，每次您想让用户进入其主目录时都几乎无需配置独立的共享。
+        
+        printers    该部分类似于 homes，区别在于它用于打印机。
+    
+
+
+    如果使用的 section 名不是上述之一，那么会被看作是文件或打印机共享。
+    
+    当针对特定共享名的一个连接请求进入 Samba 时，守护进程寻找具有该名称的、会定义该共享的属性的 section。
+    如果未找到这个 section，Samba 浏览系统上的用户列表，看看连接是否是指一个用户。
+    如果不是，Samba 查询系统打印机列表，看具有该名称的打印机是否存在。
+    如果连接匹配用户，则使用 homes 部分的配置。如果打印机匹配，则使用 printers 部分。
+    在所有情况下，区域级配置覆盖 global 配置部分。
+    如果上述情况都不匹配，还有最后一项检查。如果配置了默认服务，则使用该服务。如果没有，一个错误会传回客户端。
+    默认情况下，不配置默认服务，因此不正确的共享名会导致错误。
+
+    
+
+
+
+
+
+主配置文件由两部分构成
+    Global Settings   ➜   与Samba服务整体运行环境有关的选项，它的设置项目是针对所有共享资源的。
+    Share Definitions ➜   针对的是共享目录个别的设置，只对当前的共享资源起作用。
+
+
+interfaces = lo eth0 192.168.12.2/24 192.168.13.2/24
+
+hosts allow = 127. 192.168.1. 192.168.10.1
+说明：表示允许连接到Samba Server的客户端，多个参数以空格隔开。可以用一个IP表示，也可以用一个网段表示。
+
+max connections = 0
+说明：max connections用来指定连接Samba Server的最大连接数目。如果超出连接数目，则新的连接请求将被拒绝。0表示不限制。
+
+
+deadtime = 0
+说明：deadtime用来设置断掉一个没有打开任何文件的连接的时间。单位是分钟，0代表Samba Server不自动切断任何连接。
+
+❗️❗️❗️ security = user
+说明：设置用户访问Samba Server的验证方式，一共有四种验证方式。
+1. share：用户访问Samba Server不需要提供用户名和口令, 安全性能较低。
+2. user：Samba Server共享目录只能被授权的用户访问,由Samba Server负责检查账号和密码的正确性。账号和密码要在本Samba Server中建立。
+3. server：依靠其他Windows NT/2000或Samba Server来验证用户的账号和密码,是一种代理验证。此种安全模式下,系统管理员可以把所有的Windows用户和口令集中到一个NT系统上,使用 Windows NT进行Samba认证, 远程服务器可以自动认证全部用户和口令,如果认证失败,Samba将使用用户级安全模式作为替代的方式。
+4. domain：域安全级别,使用主域控制器(PDC)来完成认证。
+
+
+
+guest account = nobody
+说明：用来设置guest用户名。
+
+
+
+
+
+共享参数：
+#================== Share Definitions ==================
+[共享名]
+
+comment = 任意字符串  说明：comment是对该共享的描述，可以是任意字符串。
+
+path = 共享目录路径
+
+admin users = 该共享的管理者 （对该共享具有完全控制权限)
+
+valid users = 允许访问该共享的用户
+说明：valid users用来指定允许访问该共享资源的用户。
+例如：valid users = david，@dave，@tech（多个用户或者组中间用逗号隔开，如果要加入一个组就用“@组名”表示。）
+
+invalid users = 禁止访问该共享的用户
+说明：invalid users用来指定不允许访问该共享资源的用户。
+例如：invalid users = root，@bob（多个用户或者组中间用逗号隔开。）
+
+write list = 允许写入该共享的用户
+说明：write list用来指定可以在该共享下写入文件的用户。
+例如：write list = david，@dave
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

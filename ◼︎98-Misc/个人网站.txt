@@ -1,0 +1,304 @@
+IP  一个: 23.105.192.96
+域名一个: 0214.help 
+web服务器: Nginx
+
+www.0214.help   ➜ 个人网站首页
+ss.0214.help    ➜ ssr 注册页
+skill.0214.help ➜ 技能页面
+
+首先设置域名解析(二级域名)!然后添加虚拟主机!然后测试.
+
+本文将讲解如何在 一台 Centos6 服务器上使用 Nginx Web服务器来实现多个二级域名来搭建多个网站。
+
+
+
+
+
+🔵 配置文件
+
+
+    nginx   配置文件:   vi /usr/local/nginx/conf/nginx.conf
+    虚拟主机配置文件:   vi /usr/local/nginx/conf/vhost/www.0214.help.conf
+
+
+    nginx 配置文件:
+    网页要变成网站. 必须有个web服务器. 
+    这个不配置. 不管是ip还是域名 你都访问不了. 
+    如果配置了就能用ip来访问.  如果想用域名来访问 那就还得配置 虚拟主机配置文件
+
+
+
+
+🔵 服务器网站文件结构:
+
+    home
+      wwwroot
+        www.0214.help
+          index.php
+        skill.0214.help
+          index.php
+        ss.0214.help
+          ss-panel
+            public
+              index.php
+    
+
+
+
+🔵 域名解析.
+    阿里云 ➜ 域名解析 ➜ 添加解析 
+
+    ➜ 记录类型: A 
+    ➜ 主机记录: ss
+    ➜ 记录值:  23.105.192.96
+
+
+    ➜ 记录类型: A 
+    ➜ 主机记录: skill
+    ➜ 记录值:  23.105.192.96
+
+
+
+
+
+
+
+🔵 新建虚拟主机
+      注: 我用的是 lnmp 一键安装脚本. 非常方便. 参考:ss-panel+ssr.txt
+
+          列出虚拟主机 lnmp vhost list
+          删除虚拟主机 lnmp vhost del
+
+    🔅 lnmp vhost add
+        📌 输入你的域名: ss.0214.help 其他全部选no 或者默认
+
+            虚拟主机设置好后
+              ls /usr/local/nginx/conf/vhost 
+              下就多了个ss.0214.help.conf虚拟主机配置文件.
+              
+              ls /home/wwwroot/               
+              下也多了个ss.0214.help 的虚拟主机文件夹
+
+
+
+    🔅 lnmp vhost add
+        📌 输入你的域名: skill.0214.help 其他全部选no 或者默认
+
+            虚拟主机设置好后
+              ls /usr/local/nginx/conf/vhost 
+              下就多了个skill.0214.help.conf虚拟主机配置文件.
+              
+              ls /home/wwwroot/               
+              下也多了个skill.0214.help 的虚拟主机文件夹
+
+
+
+🔵 配置 skill.0214.help 
+
+    这个网站简单. 就一个 html 几个css js文件. 
+    直接把 index.html 放到 /home/wwwroot/skill.0214.help 文件夹下就可以访问了.
+
+
+
+🔵 配置 ss.0214.help
+
+    这个网站很复制的. 
+    首先把ss-panel 整个文件夹放到 /home/wwwroot/ss.0214.help 
+    然后要修改下 配置文件:  vi /usr/local/nginx/conf/vhost/ss.0214.help.conf
+            root  /home/wwwroot/ss.0214.help; 这行改成:
+            root  /home/wwwroot/ss.0214.help/ss-panel/public;
+
+    然后重启nginx: /usr/local/nginx/sbin/nginx –s reload
+    然后浏览器: ss.0214.help 就可以访问了
+
+
+
+🔵  虚拟主机: www.0214.help
+
+    该虚拟主机配置: vi /usr/local/nginx/conf/vhost/www.0214.help.conf
+
+        确保root行是: root /home/wwwroot/www.0214.help;  
+        然后重启nginx:  /usr/local/nginx/sbin/nginx –s reload
+     
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+下面就是 个人网站 设计了...
+
+
+类似 mac的 dashboard !!
+
+首先显示图标!!!   
+
+网页背景是全黑.
+图标图片来源是Mac的app 图标.
+
+响应设计用 bootatrap ?? 别 .还是用 博客里的吧.
+
+
+图标 + 
+
+
+
+🔵 纯黑背景
+
+    <style>
+        html,body { height: 100% }
+        body { background-color: black }
+    </style>  
+
+
+
+🔵 文本居中
+    <h1 style="background-color: red" align="center" >   
+      <a href="http://ss.0214.help" style="color: white;"> SS网站移到: ss.0214.help </a> 
+    </h1>
+
+
+🔵 icon 自适应+居中:
+        #iconDiv {flex-basis: 20%; text-align: center}
+
+    <div id="iconDiv"> <img src="icones/Appicon.webp"   class="icon" > </div>
+
+
+
+
+🔵 图标
+  👁‍🗨 webp 很多浏览器不支持. safari不行. 好像只有chrome 可以.
+
+  apple
+      Mac app 图标是 icon 格式.  程序➜ 右键显示包内容 ➜ resource ➜ icon 打开 ➜ 导出 png格式. 
+      转 webp 格式. https://convertio.co/zh/png-webp/
+      加图调整大小:  <img src="icones/Appicon.webp" width="100px" height="100px" alt="a picture">
+
+
+  <img src="icones/Appicon.webp" width="100px" height="100px" alt="a picture">
+  <img src="icones/Code.webp" width="100px" height="100px" alt="a picture">
+  <img src="icones/Navicat.webp" width="100px" height="100px" alt="a picture">
+  <img src="icones/Ulysses.webp" width="100px" height="100px" alt="a picture">
+  <img src="icones/Wireshark.webp" width="100px" height="100px" alt="a picture
+
+
+
+🔵 网站标题 icon
+
+
+
+
+
+
+🔵 网页排版.
+
+
+单独的文章 放一个图标.
+系列的文章 每个系列一个图标. 连到github 主题. 
+
+还是自己写网页. 还是用博客的模板...
+
+
+左边 200*100的图标.  右边标题 + 介绍
+
+点进去 是wiki.... 左边目录 右边文章.
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔵 谷歌分析工具 ✔︎
+
+    谷歌网站统计分析工具
+    [https://www.google.com/analytics/]
+
+    登录.
+    管理 → 新建 →  获得跟踪代码 粘贴 网站里面.
+    建议粘贴到</body> 上面. 也就是最后加载.
+
+
+
+
+
+
+
+
+
+
+🔵 python 网页开发.
+
+
+diango
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     
+     
+
+
+
+
+
+
+
+
+
+

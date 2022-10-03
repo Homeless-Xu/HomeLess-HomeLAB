@@ -1,0 +1,276 @@
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 IPsec  VPN  搭建 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 VPN 准备.
+	这里不建议用 脚本. 
+	一旦mac vpn 连到服务器, 服务器会给mac 分配一个内网IP地址.
+	我们要确保 这个IP地址 和 aaa/bbb /gce 在一个内网网段内!
+	这就需要手动指定 vpn 的网段设置.
+
+
+🔸 参考: https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/README-zh.md
+
+🔸 系统: KVM GCE Ubuntu_17 
+
+
+🔸 aaa 安装: wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+
+	================================================
+
+	IPsec VPN server is now ready for use!
+
+	Connect to your new VPN with these details:
+
+	Server IP: 104.199.235.151
+	IPsec PSK: GZmMBvhMXsU74RNW
+	Username: vpnuser
+	Password: VzT9X23C2SkgErGx
+
+	Write these down. You'll need them to connect!
+
+	Important notes:   https://git.io/vpnnotes
+	Setup VPN clients: https://git.io/vpnclients
+
+	================================================
+
+
+
+
+🔸 bbb 安装: wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+
+        ================================================
+
+        IPsec VPN server is now ready for use!
+
+        Connect to your new VPN with these details:
+
+        Server IP: 35.194.218.62
+        IPsec PSK: HS6yYSukdAqasjWw
+        Username: vpnuser
+        Password: jAABrZd4f6DqeUib
+
+        Write these down. You'll need them to connect!
+
+        Important notes:   https://git.io/vpnnotes
+        Setup VPN clients: https://git.io/vpnclients
+
+        ================================================
+
+
+    你的 VPN 登录凭证将会被自动随机生成，并在安装完成后显示在屏幕上。
+
+
+
+🔸 修改 VPN 网段
+    详细参考: http://blog.csdn.net/lic95/article/details/48264933
+     
+     sudo vi /etc/xl2tpd/xl2tpd.conf
+        ip range = 10.140.0.21-10.140.0.100 
+        local ip = 10.140.0.20
+
+
+
+🔸 Mac VPN 连接设置 
+
+    ⦿ 新建 VPN 
+        L2TP over IPSec ; bbbVPN
+
+    ⦿ 配置 VPN
+        server address : 35.194.218.62
+        Account Name:   vpnuser
+        Authentication settingss : password        jAABrZd4f6DqeUib
+        Authentication settingss : shared Secret   HS6yYSukdAqasjWw
+
+    ⦿ 保存 apply 
+    ⦿ 连接 connect 
+
+    ⦿ 查看网段 : 192.168.42.10 
+
+
+
+
+🔸 相关命令     
+    service ipsec start && service ipsec status
+    service ipsec stop && service ipsec status
+    service ipsec restart
+
+🔸 reboot 
+    脚本设置开机启动的. 不想研究各种启动命令. 直接重启
+
+🔸 连接测试
+    成功. 现在 mac 分配到的IP 就是 10.140.0.21 
+    
+
+🔸 ping gce bbb 内容IP测试
+	ping 10.140.0.3  可以....
+	但是ping 不了 gce 实例组的 aaa 和 gce ...
+	为啥... 
+	10 网段是内网! 只能在网络内部通信,这个网络 是 bbb 创建的
+	而我们实例组的 内网 是谷歌创建的!  
+	就好比我家里路由器网段是 192.168.1.1  公司的网段也是 192.168.1.1
+	虽然都是192.168.1.1 但是肯定不互通的..
+
+	看了我们的 openstack 控制台 要和 vpn 装在一个服务器内才行了.
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  GCE -  devstack 安装 - Ubuntu 16 ✔︎ 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+❗️❗️ 最新版本的 devstack 必须用 Ubuntu 16/17 不能用 Ubuntu 14 ❗️❗️
+❗️❗️ 最新版本的 devstack 必须用 Ubuntu 16/17 不能用 Ubuntu 14 ❗️❗️
+❗️❗️ 最新版本的 devstack 必须用 Ubuntu 16/17 不能用 Ubuntu 14 ❗️❗️
+
+
+
+🔸 架构
+	两个 GCE 服务器, 单网卡就行. 只要内存高点. 其他无所谓.
+
+
+🔸 GCE 实例创建
+	我们会创建两个临时的 gce 虚拟机. 服务器.内存要求较高 8G+ . 其他越高越好.
+	建议配置: 2 vcpu + 13G 内存 + 30G SSD +  CentOS_7 x64
+
+	⦿ 实例1 : aaa    Ubuntu 17    104.199.235.151 
+	⦿ 实例2 : bbb     Ubuntu 17    35.194.218.62 
+
+
+🔸 GCE 创建实例组
+
+	⦿ 创建实例组: 
+		单地区 ➜ asia-east1-a ➜ 非托管实例组 ➜ 网络默认 ➜ 子网默认: 10.140.0.0/20
+		vm 实例 添加 aaa . bbb 
+
+	⦿ 编辑实例组
+		我们把 aaa 和 bbb 都放到这个组内. 
+		然后我们把 gce 也放到这个组内.
+		最后在gce 上创建vpn . 这样我们的mac本地电脑 就能访问 实例组的内网IP了.
+
+			实例名  内部IP       外部IP            SSH 登录
+			aaa     10.140.0.5   104.199.235.151   ssh v@104.199.235.151
+			bbb     10.140.0.3   35.194.218.62     ssh v@35.194.218.62
+			gce     10.140.0.2   35.194.128.92     ssh -p 2190 root@35.194.128.92
+
+	⦿ 网络确认
+		登录 aaa  ip addr ➜ 存在 : inet 10.140.0.5/32 brd 10.140.0.5
+		登录 bbb  ip addr ➜ 存在 : inet 10.140.0.3/32 brd 10.140.0.3
+		登录 gce  ip addr ➜ 存在 : inet 10.140.0.2/32 brd 10.140.0.2
+
+	⦿ 互 ping 确认
+		确保三台机器的 内网IP 可以互相ping 通
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 服务器准备工作 
+
+	⦿ ssh 设置:  上传mac 密钥 ➜ 	用 v 账户免密码登录 ➜  sudo su 切换到root.
+	⦿ 关闭 防火墙  ??
+	⦿ 关闭 SELINUX  ??
+		• 查看当前状态:   /usr/sbin/sestatus -v 
+		• 关闭 SELINUX:   /etc/selinux/config  里的 SELINUX=enforcing 改为 SELINUX=disabled
+		• sed 一键命令:	  sed -i '/SELINUX=enforcing/c SELINUX=disabled' /etc/selinux/config
+		•   重启服务器:   reboot 就行. 不要关机再启动(非常块), 一个是软重启. 一个是硬重启.
+
+
+
+
+🔸 Ubuntu 准备 
+
+	⦿ 切换root:    sudo su 
+	⦿ 更新软件:    apt-get update
+	⦿ 安装 git:    sudo apt-get install git -y
+
+
+
+🔸 下载 devstack
+	强烈建议下载到 /opt/stack 下面. 下载好后的路径: /opt/stack/devstack
+
+	mkdir /opt/stack && cd /opt/stack && git clone https://git.openstack.org/openstack-dev/devstack && cd devstack
+
+
+
+
+🔸 创建配置文件.
+
+	创建:  cp /opt/stack/devstack/samples/local.conf /opt/stack/devstack/local.conf
+	编辑:  vi /opt/stack/devstack/local.conf
+
+		[[local|localrc]]                          # 开头.. 都是这样的. 不管
+		MULTI_HOST=true                            # ❗️? 添加:  也就是有多个节点. 
+		HOST_IP=35.194.253.203                     # ❗️ 添加:  管理服务器的IP! 这里是本机ip.
+
+		#DISABLED_SERVICES=n-net'                  # ! 注释 ???
+
+		LOGFILE=/opt/stack/devstack/stack.sh.log   # ❗️ 必须改掉. 日志文件位置.
+		ADMIN_PASSWORD=nomoresecret                # 默认密码, 建议改掉
+		DATABASE_PASSWORD=stackdb                  # 默认密码
+		RABBIT_PASSWORD=stackqueue                 # 默认密码
+		SERVICE_PASSWORD=$ADMIN_PASSWORD           # 默认密码
+
+
+
+🔸 配置用户 
+	Devstack 脚本 不能用root 用户运行.必须不能用 root 运行! 所以要新建个用户
+	Devstack 脚本 需要 root 权限.
+	创建用户不需要我们手动. Devstack 自带创建用户的脚本.
+
+	⦿ 脚本自动创建 (推荐)
+		• 创建用户 		/opt/stack/devstack/tools/create-stack-user.sh
+		• 文件夹权限    chown -R stack:stack /opt/stack/devstack
+		• 登录用户	    su stack
+
+
+	⦿ 手动创建 (可选)
+		• 创建用户    sudo useradd -s /bin/bash -d /opt/stack -m stack
+		• 权限设置    echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
+			这里默认把 stack 登录位置改到 /opt/stack 了. 知道就行.
+		• 登录用户    sudo su - stack
+
+
+
+🔸 开始部署:  
+	sudo su  先登录 root . 不然 登录 stack 要密码.    确保现在是 su stack
+	/opt/stack/devstack/stack.sh   时间蛮长的!  
+
+
+🔸 命令
+    sudo systemctl stop devstack@dstat.service
+    sudo systemctl start devstack@dstat.service
+    sudo systemctl status devstack@dstat.service
+
+
+🔸 Horizon 登录   http://10.140.0.5/dashboard
+	admin / nomoresecret
+	具体密码 vi /opt/stack/devstack/local.conf 里面看 
+
+
+
+🔸 外网配置
+上面只能用内网IP 访问. 必须用vpn才行. 太麻烦了 现在我们来配置外网访问.
+我们需要在 Neutron 中定义外部网络的对象，这样 router 才知道如何将租户网络和外部网络连接起来
+
+管理员 ➜ 网络 ➜ 网络 ➜ 创建网络.
+⦿ 网络 
+	名称: ext_net 
+	项目: ??
+	供应商网络类型: Flat 
+	物理网络: external
+
+⦿ 子网 
+?
+
+
+
+⦿ 子网详情
+??
+

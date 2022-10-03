@@ -1,0 +1,96 @@
+🔸 LDAP 
+
+    LightWeight  Directory  Access  Protocol  轻量级目录存取协议.
+
+    LDAP 是一个数据库, 但又不是数据库.
+    说他是数据库是因为 他是一个存储数据的东西.
+    说不是数据库是因为 他的功能没数据库那么强. 只是一个目录.
+
+    LDAP 就像生活中的电话簿.可以查找某个公司的基本信息. 如电话,地址,经营范围.
+    LDAP 和 AD 差不多, 都是树型结构! 
+
+    LDAP 的目的是为了查找内容, 而不是写内容. 
+    轻量级产品的代价就是写入性能不高.
+
+    我认为现在最大的LDAP Server，应该还是Microsoft的AD。
+    虽然不一定是标准的，但是的确是用的最多的一个LDAP Server。
+    每个公司只要用到域，就肯定会用到了。
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  CentOS_7 openLDAP 搭建  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 步骤简介
+
+
+
+准备编译环境和依赖包
+
+
+1.2 安装openldap
+
+
+
+1. 安装 LDAP服务器和客户端  yum -y install openldap-servers openldap-clients
+
+
+2、设置openldap的管理员密码
+
+
+3、更改配置信息
+
+4、更改监控认证配置：
+
+5、设置DB Cache:
+
+6、测试配置文件是否有错
+
+7、启动服务
+
+8、安装httpd
+
+9、修改配置文件httpd.conf
+
+10、启动httpd服务，测试web页面。
+
+
+11、安装phpldapadmin
+
+12、修改配置文件
+
+13、重启httpd服务
+
+14、访问http://192.168.1.105/phpldapadmin
+
+
+
+
+
+
+🔵 安装 LDAP服务器和客户端
+  
+    yum -y install openldap-servers openldap-clients
+
+
+🔸 配置
+
+
+
+
+cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG 
+chown -R ldap.ldap /var/lib/ldap/
+systemctl enable slapd
+systemctl start slapd
+
+
+
+
+
+
+
+

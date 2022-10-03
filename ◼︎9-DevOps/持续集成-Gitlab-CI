@@ -1,0 +1,94 @@
+Git 是一种工具. 
+Github 是一个开放的网站
+Gitlab 是一个库, 用这个你可以搭建私人 Git 服务.
+
+
+
+🔸 软件集成 
+    
+    合并代码 ➜ 安装依赖 ➜  编译 ➜ 测试 ➜  发布...
+
+🔸 持续集成
+
+    从上面可以看成 软件集成不是一件小事情, 如果全手工是非常耗时的工作,会累死人的.
+    所以就有了 所谓的 持续集成系统 如 Jenkins、Gitlab-CI、Gitlab-Runner 
+
+    持续集成的好处是可以快速发现问题!   
+    而不是改了很多功能后 一起发布, 然后出来一堆问题! 这时候由于修改了太多的代码. 要找出问题原因就非常难了!
+    所以最好的办法是 有一点小变动 立刻集成. 有问题 当场改掉. 
+
+
+
+🔸 Gitlab-CI
+
+    Gitlab-CI 是一套配合GitLab使用的持续集成系统,Gitlab 默认就包含了 Gitlab-CI的. 而且还是自动开启的.
+
+    Jenkins  也可以配合GitLab使用
+
+
+🔸 GitLab-Runner
+
+    GitLab-Runner是配合GitLab-CI进行使用的。
+    一般地，GitLab里面的每一个工程都会定义一个属于这个工程的软件集成脚本，用来自动化地完成一些软件集成工作。
+    当这个工程的仓库代码发生变动时，比如有人push了代码，GitLab就会将这个变动通知GitLab-CI。
+    这时GitLab-CI会找出与这个工程相关联的Runner，并通知这些Runner把代码更新到本地并执行预定义好的执行脚本。
+
+    所以，GitLab-Runner就是一个用来执行软件集成脚本的东西。
+    你可以想象一下：Runner就像一个个的工人，而GitLab-CI就是这些工人的一个管理中心，
+    所有工人都要在GitLab-CI里面登记注册，并且表明自己是为哪个工程服务的。
+    当相应的工程发生变化时，GitLab-CI就会通知相应的工人执行软件集成脚本。如下图所示：
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸Gitlab 搭建 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 环境:  CentOS_7 x64
+
+
+🔸 GitLab 官网安装方法  https://about.gitlab.com/installation/#centos-7
+
+
+🔸 添加 GitLab 镜像源并安装
+
+    添加源:
+        curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+
+    安装: sudo yum install -y gitlab-ee
+    
+    这个蛮大的! 需要1G的空间... 而且运行 应该也蛮耗资源的... 就像 Jenkins 一样..
+
+
+🔸 配置并启动 GitLab
+
+    sudo gitlab-ctl reconfigure
+
+    然后 CPU 就直接 100%了... 还是算了吧... 
+
+
+🔸 通过浏览器访问上一步配置的域名
+
+    第一次访问 GitLab，系统会重定向 url 到重置密码的页面，你需要输入初始化管理员账号的密码。 设置完成后，系统会重定向到登录界面，你就可以使用刚才输入的密码登录系统了。
+
+    系统默认的管理员账号为 root， 登录系统后，你可以修改管理员账号为自己喜欢的账号。
+
+
+
+
+🔸 卸载 Gitlab 
+
+    1、停止gitlab  ➜  gitlab-ctl stop
+
+    2、卸载gitlab  ➜  rpm -e gitlab-ce
+
+    3、查看gitlab进程  ➜  ps aux | grep gitlab
+
+    4、杀掉第一个进程（就是带有好多.............的进程）
+        kill -9 18777
+        杀掉后，在ps aux | grep gitlab确认一遍，还有没有gitlab的进程
+
+    5、删除所有包含gitlab文件
+        find / -name gitlab | xargs rm -rf
+
+
+

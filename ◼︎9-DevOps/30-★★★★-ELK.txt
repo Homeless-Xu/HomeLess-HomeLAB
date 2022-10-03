@@ -1,0 +1,960 @@
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 精简 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 端口检测
+    netstat -nltp
+        kibana 是 5601 
+        Elasticsearch 是 9200、9300
+
+
+    netstat -a -n | grep tcp | grep 9200
+
+
+🔸 Elasticsearch 命令:
+    ❗❗️️服务启动需要时间的. 端口不是立马就打开的. 得几分钟.fuck .!!!!❗️❗️
+
+    ⦿ 启动: systemctl start elasticsearch && systemctl status elasticsearch && netstat -nltp
+    ⦿ 停止: systemctl stop elasticsearch && systemctl status elasticsearch && netstat -nltp
+    ⦿ 重启: systemctl restart elasticsearch && systemctl status elasticsearch && netstat -nltp
+
+    ⦿ 配置文件:     vi /etc/elasticsearch/elasticsearch.yml
+
+    ⦿ 日志   cat /var/log/elasticsearch/elasticsearch.log
+
+
+
+🔸 kibana 命令:
+    ❗❗️️服务启动需要时间的. 端口不是立马就打开的. 得几分钟.fuck .!!!!❗️❗️
+
+    systemctl stop kibana
+    systemctl restart kibana
+    systemctl status kibana
+
+    sudo systemctl enable kibana
+    sudo systemctl disable kibana
+
+    sudo systemctl enable kibana
+
+    sudo systemctl enable nginx
+
+
+    ⦿ 配置文件    vim /etc/kibana/kibana.yml
+
+
+🔸 logstash 命令.
+    用的java 虚拟机 太占内存了! 关闭..
+
+    ⦿ 启动    /bin/systemctl start  logstash.service && /bin/systemctl status  logstash.service
+    ⦿ 停止    /bin/systemctl stop  logstash.service && /bin/systemctl status  logstash.service
+    ⦿ 状态    service logstash status
+
+    ⦿ 取消自启    sudo systemctl disable logstash
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 搭建 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 ELK 简介 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 参考
+    如何在 CentOS 7 上安装 Elastic Stack   ★★★★★  https://linux.cn/article-8460-1.html
+
+
+🔸 WHY ELK
+
+    各个系统都有日志，日至数据分散难以查找
+    日志数据量大，查询速度慢，或者数据不够实时
+
+    分析网站的访问情况时我们一般会借助Google/百度/CNZZ等方式嵌入JS做数据统计，
+    但是当网站访问异常或者被攻击时我们需要在后台分析如Nginx的具体日志
+    单个服务器的Nginx日志查看简单，分布式集群的日志就麻烦了. ELK 可以解决这个问题.
+    把所有服务器的日志都集中到一起.然后还可以通过漂亮的前端网页来查看日志.
+    有了这样的工具，黑客干完坏事，删除日志，这招已经没用了.因为日志已经上传到日志服务器中了.
+
+    集中日志记录在尝试识别服务器或应用程序的问题时非常有用，因为它允许您在单个服务器搜索所有服务器的日志。
+    它也很有用，因为它允许您通过在特定时间范围内关联其日志来识别跨多个服务器的问题。
+    可以使用Logstash收集所有类型的日志，但我们将本教程的范围限制为系统日志: syslog 的收集。
+
+
+🔸 ELK ( Elasticsearch + Logstash + Kibana ) 开源日志管理首选方案
+    ⦿ 服务器:
+        • Logstash：     收集客户端上传过来的日志
+        • Elasticsearch：负责日志检索和分析 储存.
+        • Kibana：       用于搜索和可视化日志的Web界面
+            ELK 三个都是一家公司的产品.
+            公司首页: https://www.elastic.co/products
+
+    ⦿ 客户端
+        • Filebeat            将其日志发送到Logstash服务器.
+        • Logstash Forwarder  也可以选择这个来发送日志.
+
+
+🔸 通信流程
+
+    filebeat      (客户端) ➜  发送日志到服务器 
+    logstash      (服务器) ➜  接收客户端的日志
+    Elasticsearch (服务器) ➜  储存日志
+    kibana        (服务器) ➜  查看/搜索日志
+    Nginx 
+    管理员浏览器
+
+
+🔸 组件
+
+    ⦿ Elasticsearch 简介
+        Lucene可以被认为是迄今为止最先进、性能最好的、功能最全的搜索引擎库。
+        但是，Lucene只是一个库。想要使用它，非常麻烦.
+        Elasticsearch 是Lucene的二次开发.是一个搜索引擎.非常易用!
+
+    ⦿ logstash 简介
+        logstash 是一个数据分析软件，主要目的是分析log日志。
+
+    ⦿ kibana 简介
+        Kibana 是一个基于Elasticsearch的分析和可视化平台，可帮助您更好地了解数据。 
+        可视化的界面. 非常漂亮!  Kibana 对实时数据分析来说是特别适合的工具。
+        
+
+    ELK 可以当作一个MVC模型:
+        • Model层:      Elasticsearch    ➜ 分析日志
+        • View 层:      kibana           ➜ 查看日志
+        • Controller层: logstash         ➜ 获取日志
+
+
+
+🔸 组件兼容性
+    https://www.elastic.co/support/matrix#show_compatibility
+
+    Elasticsearch	Kibana	X-Pack	Beats*	Logstash*	ES-Hadoop (jar)*
+    有兼容性要求的. ELK 都是一家公司的. 有很多版本. 最好安装一样的版本.
+
+
+🔸 注意点
+    Elasticsearch 是不需要外网访问的.
+    Kibana   也不需要外网访问!
+    我们通过nginx 反代来实现外网访问服务器上的 Kibana 页面. 
+    然后服务器上的 kibana 会连接服务器上的 Elasticsearch.
+    我们要做的外网配置 就是 Nginx 设置.
+
+
+🔸 安装 JAVA 环境
+    安装Elasticsearch唯一的要求是安装官方新版的Java.
+
+    查看最新版本: yum search java|grep jdk
+    安装最新版本: yum install java-1.8.0-openjdk -y
+    检测安装版本: java -version
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Elasticsearch (GCE)🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+
+🔸 添加密钥
+    在安装 Elasticsearch 之前，将 elastic.co 的密钥添加到服务器。
+    作用未知....
+    
+    rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+
+🔸 安装 Elasticsearch
+        
+    ⦿ RPM链接  https://www.elastic.co/downloads/elasticsearch
+    ⦿ 下载:    wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.1.rpm
+    ⦿ 安装:    yum localinstall elasticsearch-5.5.1.rpm -y
+
+
+
+
+🔸 基本命令
+    ⦿ 启动: systemctl start elasticsearch && systemctl status elasticsearch
+    ⦿ 停止: systemctl stop elasticsearch && systemctl status elasticsearch
+    ⦿ 重启: systemctl restart elasticsearch && systemctl status elasticsearch
+    ⦿ 自启:
+        sudo systemctl daemon-reload
+        sudo systemctl enable elasticsearch.service
+        sudo systemctl disable elasticsearch.service
+
+        这些命令不会提供有关Elasticsearch是否已成功启动的反馈 ❗️❗️❗️❗️
+        这些命令不会提供有关Elasticsearch是否已成功启动的反馈 ❗️❗️❗️❗️
+        这些命令不会提供有关Elasticsearch是否已成功启动的反馈 ❗️❗️❗️❗️
+        如果端口没打开.我们要自己想办法排错误.
+        status 命令显示启动了不代表端口打开了!
+
+
+🔸 检测运行状态
+    ⦿ 检测 9200 9300 端口状态 三种方法:
+        • 网络查看
+        netstat -nltp
+
+        • nmap 查看(服务器本机)
+        nmap -p 9200,9300 127.0.0.1
+
+        • 查看心跳
+        curl -XGET 'localhost:9200/?pretty'
+
+        • 直接查看网页 ?
+        GET /
+
+
+🔸 journalctl 日志 简介
+    系统有很多很多日志. 各种服务的日志. 
+    其实可以把日志集中起来. 直接在一个地方查看.
+    而不是去程序各自的目录下查看日志.
+    journalctl 就是一个收集日志. 显示日志的东西.
+    要用这个东西 你首先要先设置下对应的程序来开启 journalctl 日志
+
+
+🔸 开启 journalctl 日志
+    默认情况下，Elasticsearch服务不会记录systemd日志中的信息。
+    要启用 journalctl日志 记录 必须进行配置.
+
+    vim /etc/systemd/system/multi-user.target.wants/elasticsearch.service
+    # 注释24行的 --quiet \
+
+
+🔸 查看 journalctl 日志
+    当启用systemd日志记录时，使用journalctl命令可以获得日志记录信息：
+    sudo journalctl -f
+    sudo journalctl --unit elasticsearch
+
+
+🔸 Elasticsearch 自己的日志
+    tail /var/log/elasticsearch/elasticsearch.log
+    cat /var/log/elasticsearch/elasticsearch.log
+
+
+🔸 配置
+    下面的配置文件绝对不能乱改.不然会报错.
+
+    vi /etc/elasticsearch/elasticsearch.yml
+
+        network.host: 127.0.0.1
+        http.port: 9200
+        transport.host: localhost
+        transport.tcp.port: 9300
+
+
+    ⦿ 重启服务.
+        sudo systemctl restart elasticsearch && systemctl status elasticsearch
+
+
+    ⦿ 端口状态
+        • nmap 查看
+        nmap -p 9200,9300 127.0.0.1
+        发现 9200开启了. 9300 没开启. 
+        我们就是这么配置的 没关系.
+
+
+
+       到这里Elasticsearch就算配置好了. 
+       下面先来弄Kibana.这个简单. 
+       logstash 相对麻烦.最后弄.
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 kibana 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 rpm 安装 
+    官方下载链接  https://www.elastic.co/downloads/kibana
+
+    wget https://artifacts.elastic.co/downloads/kibana/kibana-5.5.1-x86_64.rpm
+    rpm -ivh kibana-5.5.1-x86_64.rpm
+
+🔸 编辑 Kibana 配置文件。
+    vim /etc/kibana/kibana.yml
+
+    去掉配置文件中 server.port、server.host 和 elasticsearch.url 这三行的注释。
+
+
+
+🔸 将 Kibana 设为开机启动，并且启动 Kibana 。
+    sudo systemctl enable kibana
+    sudo systemctl start kibana
+
+
+    systemctl stop kibana
+    systemctl restart kibana
+    systemctl status kibana
+
+
+🔸 5601 端口检测
+    netstat -nltp
+ 
+    netstat -plntu
+        tcp    0    0 127.0.0.1:5601      0.0.0.0:*    LISTEN      10522/node
+
+    curl -XGET 'localhost:5601/'
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸  Nginx 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 Nginx 
+    Kibana 安装到此结束。 
+    现在我们需要安装 Nginx 并将其配置为反向代理，以便能够从公共 IP 地址访问 Kibana。
+
+
+⦿ 安装 Nginx 和 httpd-tools 这两个包
+    yum -y install nginx httpd-tools
+        httpd-tools 软件包包含 Web 服务器的工具，可以为 Kibana 添加 htpasswd 基础认证。
+
+
+⦿ 编辑 Nginx 配置文件并删除 server {} 块，这样我们可以添加一个新的虚拟主机配置。
+
+    cd /etc/nginx/
+    vim /etc/nginx/nginx.conf
+
+    删除里面的 整个 server {} 模块.
+
+
+
+⦿ 新建虚拟主机配置文件. 自己改域名.
+    vim /etc/nginx/conf.d/kibana.conf
+
+    server {
+        listen 80;
+        server_name kibana.0214.help;
+        auth_basic "Restricted Access";
+        auth_basic_user_file /etc/nginx/.kibana-user;
+        location / {
+            proxy_pass http://localhost:5601;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+
+
+⦿ 反向代理配置精简参考
+    也就是外网通过nginx访问服务器内网的网站..
+    server {
+    listen 80;
+    server_name sup.0214.help;
+    location / {
+        proxy_pass         http://127.0.0.1:9001;
+    }
+    }
+
+
+⦿ 创建认证文件.
+    然后使用 htpasswd 命令创建一个新的基本认证文件。
+
+    sudo htpasswd -c /etc/nginx/.kibana-user admin
+    “输入你的密码” admin/admin
+
+
+⦿ 测试 nginx 配置 
+    nginx -t
+
+⦿ 重启Nginx 
+    ❗️ 这里可能要重启服务器.不然有报错.. nginx 会启动失败..
+    systemctl restart nginx.service
+    systemctl status nginx.service
+    systemctl stop nginx
+    systemctl start nginx
+
+
+⦿ 域名解析 
+⦿ 浏览器测试
+    kibana.0214.help  
+    输入 账户密码 admin  admin 就登录进去了.
+    现在前端页面基本搭建成功了. 就差日志数据了额.
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 logstash 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+🔸 目的: 
+
+    服务端  安装 Logstash，
+    客户端: 安装 filebeat 的服务器的日志统一发给服务器.
+    然后过滤和转换 Syslog 数据，并将其移动到存储中心（Elasticsearch）中。
+
+
+🔸 安装
+  
+    官网:  https://www.elastic.co/products/logstash
+    下载:  wget https://artifacts.elastic.co/downloads/logstash/logstash-5.5.1.rpm
+    安装:  yum localinstall logstash-5.5.1.rpm -y
+
+
+🔸 配置SSL证书设置
+
+    由于我们将使用Filebeat将日志从我们的客户端服务器发送到我们的ELK服务器，
+    我们需要创建一个SSL证书和密钥对。 Filebeat使用该证书来验证ELK Server的身份。
+    日志不是谁都可以给的.客户端要和服务器联系.需用到SSL证书来保证通信的安全.
+    生成证书前 我们要先配置下证书生成配置.
+
+    cd /etc/pki/tls
+    vim openssl.cnf
+
+    [ v3_ca ] 下面添加服务器IP!
+    subjectAltName = IP: 35.194.128.92
+
+
+
+🔸 创建 SSL 
+
+    在/etc/pki/tls 中生成SSL证书和私钥：
+    证书文件可以在 /etc/pki/tls/certs/ 和 /etc/pki/tls/private/ 目录中找到。
+
+
+    cd /etc/pki/tls
+
+    openssl req -config /etc/pki/tls/openssl.cnf -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout /etc/pki/tls/private/logstash-forwarder.key -out /etc/pki/tls/certs/logstash-forwarder.crt
+
+
+
+🔸 配置Logstash
+    接下来，我们会为 Logstash 创建新的配置文件。
+    • 创建一个 filebeat-input.conf       文件来为 filebeat 配置日志源，
+    • 创建一个 syslog-filter.conf        文件来处理 syslog，
+    • 创建一个 output-elasticsearch.conf 文件来定义输出日志数据到 Elasticsearch。
+
+    Logstash配置文件为JSON格式，驻留在/etc/logstash/conf.d中。
+    cd /etc/logstash/conf.d
+
+
+🔸 vim /etc/logstash/conf.d/filebeat-input.conf
+
+input {
+  beats {
+    port => 5443
+    ssl => true
+    ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+    ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
+  }
+}
+
+
+
+🔸 vim /etc/logstash/conf.d/syslog-filter.conf
+
+filter {
+  if [type] == "syslog" {
+    grok {
+      match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+      add_field => [ "received_at", "%{@timestamp}" ]
+      add_field => [ "received_from", "%{host}" ]
+    }
+    date {
+      match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+    }
+  }
+}
+
+
+🔸 vim /etc/logstash/conf.d/output-elasticsearch.conf
+
+    output {
+    elasticsearch { hosts => ["localhost:9200"]
+        hosts => "localhost:9200"
+        manage_template => false
+        index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+        document_type => "%{[@metadata][type]}"
+    }
+    }
+
+
+
+🔸  logstash 设定为开机启动并且启动服务。
+
+    sudo systemctl enable logstash
+
+    /bin/systemctl start  logstash.service && /bin/systemctl status  logstash.service
+    /bin/systemctl stop  logstash.service && /bin/systemctl status  logstash.service
+    service logstash status
+
+
+🔸 查看5443端口
+    netstat -nltp
+    tcp6       0      0 :::5443          :::*      LISTEN      2311/java
+    这里是ip6 不知为什么..
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 客户端vps1 安装 Filebeat 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+🔸 简介
+
+    上面服务端算搭建好了. 下面就要客户端把日志传给服务器了.
+
+    Beat 安装在客户端，将数据从客户机发送到 Logstash 或 Elasticsearch 服务器.有 
+    
+    4 种 beat:
+        • Filebeat 用于发送“日志文件”，
+        • Metricbeat 用于发送“指标”，
+        • Packetbeat 用于发送“网络数据”，
+        • Winlogbeat 用于发送 Windows 客户端的“事件日志”。
+
+    这里介绍如何安装和配置 Filebeat，通过 SSL 连接将数据日志文件传输到 Logstash 服务器。
+
+
+
+
+🔸 服务器发送 SSL证书+密钥 给客户端
+
+    vps1 先创建个文件夹. 存放证书用
+    mkdir -p /etc/pki/tls/certs/ && cd /etc/pki/tls/certs/
+
+    ssh 登录 gce 服务器 ; 
+    我们需要通过scp命令.把证书发给客户端.
+    服务器的证书路径在: /etc/pki/tls/certs/logstash-forwarder.crt
+    客户端的证书路径在: /etc/pki/tls/certs/
+
+    服务器密钥路径: /etc/pki/tls/private/logstash-forwarder.key
+    客户端密钥路径: /etc/pki/tls/certs/
+
+
+⦿ 证书
+    scp -P 2222 -r /etc/pki/tls/certs/logstash-forwarder.crt root@23.105.192.96:/etc/pki/tls/certs/
+
+⦿ 密钥
+    scp -P 2222 -r /etc/pki/tls/private/logstash-forwarder.key root@23.105.192.96:/etc/pki/tls/certs/
+
+
+
+🔸 vps1 客户端 导入 gce 的密钥
+    接下来，在客户端 1 服务器上导入 elastic 密钥.
+    下面的不用进行任何更改.
+
+    rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+
+🔸 vps1 下载安装 Filebeat 
+
+    官网: https://www.elastic.co/downloads/beats/filebeat
+
+    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.5.1-x86_64.rpm
+    
+    rpm -ivh filebeat-5.5.1-x86_64.rpm
+
+
+
+🔸 Filebeat 配置:    vim /etc/filebeat/filebeat.yml
+
+⦿ 1
+    21 行的路径部分，添加两行 
+    我们将创建两个文件，
+    记录 ssh   活动的 /var/log/secure
+    记录 服务器获得的 /var/log/messages
+
+    paths:
+        - /var/log/secure
+        - /var/log/messages
+
+⦿ 2
+    在第 26 行添加一个新配置来定义 syslog 类型的文件。
+    document-type: syslog
+
+⦿ 3
+    Filebeat 默认使用 Elasticsearch 作为输出目标。 在本教程中，我们将其更改为 Logshtash。 在 83 行和 85 行添加注释来禁用 Elasticsearch 输出。
+
+    #-------------------------- Elasticsearch output ------------------------------
+    #output.elasticsearch:
+    # Array of hosts to connect to.
+    #  hosts: ["localhost:9200"]
+
+⦿ 4
+    现在添加新的 logstash 输出配置。 直接在文件尾部追加就可以了.
+    记得hosts里面的ip 改成你服务器的ip
+
+    output.logstash:
+    # The Logstash hosts
+    hosts: ["35.194.128.92:5443"]
+    bulk_max_size: 1024
+    ssl.certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
+    ssl.key: ["/etc/pki/tls/certs/logstash-forwarder.key"]
+    template.name: "filebeat"
+    template.path: "filebeat.template.json"
+    template.overwrite: false
+
+
+
+
+🔸 将 Filebeat 设定为开机启动并启动。
+    sudo systemctl enable filebeat
+    sudo systemctl start filebeat && systemctl status filebeat
+
+
+🔸 检查服务状态：
+    sudo systemctl status filebeat
+
+👹 启动失败..
+✘✘∙𝒗1 ~ ➜     sudo systemctl status filebeat
+● filebeat.service - filebeat
+   Loaded: loaded (/usr/lib/systemd/system/filebeat.service; enabled; vendor preset: disabled)
+   Active: failed (Result: start-limit) since Sat 2017-08-05 22:35:28 CST; 5s ago
+     Docs: https://www.elastic.co/guide/en/beats/filebeat/current/index.html
+  Process: 30673 ExecStart=/usr/share/filebeat/bin/filebeat -c /etc/filebeat/filebeat.yml -path.home /usr/share/filebeat -path.config /etc/filebeat -path.data /var/lib/filebeat -path.logs /var/log/filebeat (code=exited, status=1/FAILURE)
+ Main PID: 30673 (code=exited, status=1/FAILURE)
+
+Aug 05 22:35:28 mail systemd[1]: Unit filebeat.service entered failed state.
+Aug 05 22:35:28 mail systemd[1]: filebeat.service failed.
+Aug 05 22:35:28 mail systemd[1]: filebeat.service holdoff time over, scheduling restart.
+Aug 05 22:35:28 mail systemd[1]: start request repeated too quickly for filebeat.service
+Aug 05 22:35:28 mail systemd[1]: Failed to start filebeat.
+Aug 05 22:35:28 mail systemd[1]: Unit filebeat.service entered failed state.
+Aug 05 22:35:28 mail systemd[1]: filebeat.service failed.
+
+
+🔸 查看日志! 
+    cd /var/log/filebeat/
+
+    cat /var/log/filebeat/filebeat
+    里面有7个文件.
+    ✘✘∙𝒗1 filebeat ➜ cat filebeat
+
+    👹 ERR failed to initialize logstash plugin as output: missing required field accessing 'output.logstash.hosts'
+    👹 CRIT Exiting: error initializing publisher: missing required field accessing 'output.logstash.hosts'
+
+
+
+
+    👹 这个是重点  missing required field accessing 'output.logstash.hosts'
+
+    yml 语法问题..
+    使用缩进表示层级别!!
+    不能用tab 缩进. 只能用空格.
+    多少个空格无所谓! 只要对齐就好
+    上一步修改成如下! 
+    hosts 等等参数都是属于 output.logstash 的!!!而不是和output.logstash 平级的!!
+
+    125 output.logstash:
+    126   hosts: ["35.194.128.92:5443"]
+    127   bulk_max_size: 1024
+    128   ssl.certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
+    129   template.name: "filebeat"
+    130   template.path: "filebeat.template.json"
+    131   template.overwrite: false
+
+
+
+
+⦿ 再次检测 filebeat 运行状态
+    sudo systemctl status filebeat
+    running 就对了...
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 👹 Debug 👹  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Elasticsearch Debug 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+👹 ✔︎ 启动失败
+    🔸 问题
+        ✘✘∙GCE ~ ➜ systemctl status elasticsearch
+            ......
+            Active: failed (Result: exit-code) since Fri 2017-08-04 18:55:34 CST; 8s ago
+            ......
+            Aug 04 18:55:34 gce elasticsearch[10176]: OpenJDK 64-Bit Server VM warning: INFO: os::commit_memory(0x0000000085330000, 2060255232, 0) failed; er...errno=12)
+
+
+    🔸 原因
+        Elasticsearch 默认需要 2G内存. 修改 Elasticsearch 配置文件. 降低内存需求.
+
+    🔸 解决
+        vi /etc/elasticsearch/jvm.options
+            -Xms512m -Xmx512m  这两个本来是2g 改成512m
+        
+        现在再去重新启动服务就可以了.
+
+
+
+
+
+👹 ✔︎ logstash elasticsearch 不能同时启动
+    可能你硬件不够. 要么你服务器中毒了.硬件占用过多导致服务启动不起来.
+
+
+
+👹 ✗ elasticsearch 自动关闭
+
+    后台启动! 不然ssh断开 elasticsearch 也会停止... ??
+    
+    参考
+        https://github.com/wuhaixing/doc.elasticsearch.cn/blob/master/guide/reference/setup/installation.textile
+
+
+        Elasticsearch在Linux下使用命令sh elasticsearch start，按键ctrl+c的时候程序就会stop掉，如何将程序在后台启动呢？ 
+
+        需要使用:./elasticsearch -d 
+        这里首先要找出程序的运行路径.
+
+        丫的是java 虚拟机启动的啊... 
+
+        systemctl start elasticsearch
+
+        systemctl status elasticsearch && netstat -nltp
+
+        ps -ef | grep elasticsearch
+
+
+        这时执行的时候会出现没有权限./elasticsearch: Permission denied 
+        需要授权执行命令:chmod +x bin/elasticsearch 
+        再次执行./elasticsearch -d即可启动 
+        使用ps aux|grep elasticsearch可以查看是否启动 
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸  Nginx debug 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+👹  cv.0214.help 也变成 kibana 页面了..
+
+    虚拟主机配置文件.
+    其实默认配置有好几个的.
+    一个是  vim /etc/nginx/nginx.conf
+    一个是  vi /usr/local/nginx/conf/nginx.conf 
+    其实是加载好几个配置文件的. 首先加载/etc的 然后加载 /usr的 然后加载/vhost 里面的.
+    一般 /etc 和 /usr 不去修改!! 而是修改 vhost 文件夹里的.
+    每个域名一个配置文件.这样最好!
+
+
+    cd /usr/local/nginx/conf/vhost/ && ls 
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸  Kibana 前端 debug 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+👹 Status: Red 
+👹 Elasticsearch plugin is red
+👹 Unable to connect to Elasticsearch at http://localhost:9200.
+
+两个报错! 红色三角感叹号.
+
+Status: Red  好像是服务器/集群有问题. 
+原因还是 Elasticsearch 没启动! 9200、9300端口肯定没开.
+问题在 Elasticsearch. 不在 kibana.
+
+
+是不是没有设置 java 的堆栈大小ES_HEAP_SIZE
+调大一点看看吧，可能内存不够用
+
+
+这两个错误不解决. 网页永远是这样的... 
+Elasticsearch 是运行的. 但是9200端口没打开!!!
+
+🔸 导入GPG校验密钥
+
+    wget  https://packages.elastic.co/GPG-KEY-elasticsearch
+
+    rpm --import GPG-KEY-elasticsearch 
+
+
+
+🔸 kibana 和 elasticsearch 同时 关闭安全选项
+    估计是 license 过期... 
+    要么下载一个免费的基本license.
+
+
+    ⦿ vi /etc/elasticsearch/elasticsearch.yml
+    xpack.security.enabled: false
+
+    重启elasticsearch :  sudo systemctl restart elasticsearch && systemctl status elasticsearch
+
+
+🔸 编辑 Kibana 配置文件。
+    vim /etc/kibana/kibana.yml
+
+        添加:  关闭SSL 验证?? 
+        verify_ssl: false
+
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 Logstash debug 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+👹 ✔︎ 服务启动但是端口未开
+    logstash[11931]: OpenJDK 64-Bit Server VM warning: If the number of processors....
+    服务虽然启动了. 但是端口没打开.. 哪里出错了.
+    好像是 javja 不支持最新版本的 logstash ????
+
+    需要配置 jvm.option. 
+
+    vi /etc/logstash/jvm.options
+
+    添加:
+    -XX:-AssumeMP
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 使用 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+再刷新网页. 进去. 就要你 Configure an index pattern
+现在就对了.
+
+创建一个新的默认索引 第一个框填写 filebeat-*，
+第二个框会自动填充内容.
+然后点击“创建”按钮。
+
+
+然后就看不懂了啊.....
+
+这个不管了额...  麻烦... 
+
+默认索引已创建。 如果 elastic stack 上有多个 beat，您可以在“星形”按钮上点击一下即可配置默认 beat。
+
+
+
+
+
+
+
+🔸 discover 
+
+转到 “发现” 菜单，您就可以看到 elk-client1 和 elk-client2 服务器上的所有日志文件。
+
+
+
+
+
+
+
+🔵  ELK 使用教程
+
+
+最开始使用ElasticSearch时，一般都是创建一个索引，导入数据，然后发送查询命令检索数据。
+
+当应用程序规模增长，越来越多的数据需要进行索引,这个时候,慢慢地问题也就出现了 。
+
+这时候，就该思想如何规划索引数据、优化配置使得应用程序的处理能力与规模增长相同步。
+
+
+🔸 分片
+    索引分片就是把索引数据切分成多个小的索引块，这些小的索引块能够分发到同一个集群中的不同节点。在检索时，检索的结果是该索引每个分片上检索结果的总和(尽管在某些场景中“总和”并不成立：单个分片有可能存储了所有的目标数据)。
+
+    默认情况下，ElasticSearch会为每个索引创建5个主分片，就算是单结点集群亦是如此。
+    像这样的冗余就称为过度分配：这种场景下，这种分配方式似乎是多此一举，
+    而且只会在索引数据(把文档分发到多个分片上)和检索(必须从多个分片上查询数据然后全并结果)的时候增加复杂度，乐享其成的是，这些复杂的事情是自动处理的，但是为什么ElasticSearch要这样做呢？
+
+
+
+分片数
+
+分片数是与检索速度非常相关的的指标，如果分片数过少或过多都会导致检索比较慢。分片数过多会导致检索时打开比较多的文件别外也会导致多台服务器之间通讯。而分片数过少会导致单个分片索引过大，所以检索速度慢。基于索引分片数=数据总量/单分片数的计算公式，在确定分片数之前需要进行单服务单索引单分片的测试，目前我们测试的结果单个分片的内容为10G。
+
+分片（Shard）：一个索引会分成多个分片存储，分片数量在索引建立后不可更改，推荐【分片数*副本数=集群数量】
+
+
+
+🔸 分片副本
+
+    索引分片机制用来存储超过单个节点存储容量的数据，
+    分片副本用来应对不断攀升的吞吐量以及确保数据的安全性。
+
+    当一个节点的主分片丢失，ElasticSearch可以把任意一个可用的分片副本推举为主分片。
+    在默认情况下，ElasticSearch会创建一个分片副本。
+    然而分片副本的数量可以通过设置相关的API随时更新，这一点与主分片是不同的。
+    分片副本的动态更新功能使得创建应用程序时十分方便，查询吞吐量可以随着分片副本数量的增加而增长，与此同时，使用分片副本还可以处理查询的发并量。
+    使用分片副本的缺点也是显而易见的：额外的存储空间开销，从主分片复制数据到分片副本时的开销。选定分片副本的数量时，还需要考虑到现阶段需要多少副本。
+    如果分片副本的数量太多，那么就会浪费存储空间和ElasticSearch的资源，实际上一些分片副本并没有起作用。
+    如果没有设置分片副本，如果主分片出现了故障，数据就会丢失。
+
+
+副本数
+
+    副本数与索引的稳定性有比较大的关系，如果Node在非正常挂了，经常会导致分片丢失，为了保证这些数据的完整性，可以通过副本来解决这个问题。建议在建完索引后在执行Optimize后，马上将副本数调整过来。
+
+
+
+分词
+
+分词对于索引的影响可大可小，看自己把握。大家或许认为词库越多，分词效果越好，索引质量越好，其实不然。分词有很多算法，大部分基于词表进行分词。也就是说词表的大小决定索引大小。所以分词与索引膨涨率有直接关系。词表不应很多，而对文档相关特征性较强的即可。比如论文的数据进行建索引，分词的词表与论文的特征越相似，词表数量越小，在保证查全查准的情况下，索引的大小可以减少很多。索引大小减少了，那么检索速度也就提高了。
+
+索引段
+
+索引段即lucene中的segments概念，我们知道ES索引过程中会refresh和tranlog也就是说我们在索引过程中segments number不只一个。而segments number与检索是有直接联系的，segments number越多检索越慢，而将segments numbers 有可能的情况下保证为1，这将可以提高将近一半的检索速度。
+
+
+
+创建一个新的默认索引 filebeat-*，然后点击“创建”按钮。
+
+
+
+
+
+
+
+
+🔸 索引:
+    类似文章的集合.  如 nginx 日志索引.   syslog 索引.
+    索引名字用来进行索引、搜索、增删文档.
+
+
+🔸 类型: 
+    一个索引中可以定义多个类型.
+    如: 用户数据类型.  帖子数据类型.   评论类型.
+
+
+🔸 分片 和 副本  
+
+
+
+🔸 es集群状态：
+    • Green： 所有主分片和副本分片都可用；
+    • Yellow：所有主分片可用，但不是所有副本分片都可用；
+    • Red：  不是所有的主分片都可用。
+
+如果你不对es进行配置的话，默认情况下，一个index是有5个primary shard（主分片），
+而一个主分片默认对应一个replicas（副本分片）。
+副本分片的意义在于备份主分片中的数据，如果你只有一个es节点，那么副本分片就没有任何意义，因为当es宕机以后，这种情况主分片和副本分片都会数据丢失，所以只有至少两个es节点，副本分片才会有意义。
+
+
+
+
+🔸 heap 
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸页面使用🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 
+
+
+

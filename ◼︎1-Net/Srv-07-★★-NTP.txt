@@ -1,0 +1,61 @@
+测试坏境
+  VPS Centos 6.9
+
+
+
+NTP  network time protocol 网络时间协议
+用于同步计算机和网络设备的内部的时间一种协议。
+
+不同的计算机之间进行通信的基础是时间.
+很多软件都假设双方电脑的时间是一致的.
+怎么来保证 所有电脑的时间一致呢. NTP服务器. 
+所有客户端的时间都从NTP获取.
+
+
+
+➜  ~ yum list installed | grep ntp
+ntp.i686                      4.2.6p5-10.el6.centos.2           @updates
+ntpdate.i686                  4.2.6p5-10.el6.centos.2           @updates
+
+➜  ~ rpm -qa | grep ntp
+ntpdate-4.2.6p5-10.el6.centos.2.i686
+ntp-4.2.6p5-10.el6.centos.2.i686
+
+
+两种查看方法. 可以看出 已经安装了.ntp. 
+ntpdate 是用来和其他服务器做时间对比的软件.
+
+查看文件...
+rpm -ql ntp 
+rpm -ql ntpdate
+
+
+
+配置文件:
+在配置之前首先查看是否可以启动 
+/etc/rc.d/init.d/ntpd start   启动
+/etc/rc.d/init.d/ntpd status  查看状态.
+
+
+service ntpd status   #查看ntpd服务状态
+service ntpd start    #启动ntpd服务
+service ntpd stop     #停止ntpd服务
+service ntpd restart  #重启ntpd服务
+
+Ntp -p 列出所有作为时钟源校正过本地FTP服务器的上层服务器的列表
+Ntpstat 本地服务器与上层服务器进行了同步本地服务器为4、3层偏差小于1014ms或者218毫秒 每64s查询一次上层服务器的时间
+
+
+
+6.ntpd和ntpdate
+
+ntpd在实际同步时间时是一点点的校准过来时间的，最终把时间慢慢的校正对。而ntpdate不会考虑其他程序是否会阵痛，直接调整时间。
+一个是校准时间，一个是调整时间。
+
+
+
+
+
+
+
+

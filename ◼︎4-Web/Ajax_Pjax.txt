@@ -1,0 +1,1221 @@
+🔸  Ajax vs Pjax 
+
+    功能: 都可以实现不刷新网页就能更改页面内容.
+    但是 Ajax 有缺陷. 比如不支持浏览器后退!
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵   Ajax   🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+AJAX: 加载 html文件中 某个片段的数据
+AJAX: 加载 html文件中 某个片段的数据
+AJAX: 加载 html文件中 某个片段的数据
+
+
+$("#result").load("ajax/test.html #container");
+
+1. jquery 取回 ajax/test.html 整个文档,
+2. jquery 解析文档. 查找带有 container ID的元素.
+3. 该元素的内容. 会被插入到 result ID的元素中.
+4. 丢弃其余部分.
+
+
+点击按钮/链接  触发 一个函数. 
+这个函数会 获取服务器上某信息.
+
+点击 输入当前的url. 这个url 给函数. 获取该url网页中的某个信息...
+
+
+XMLHttpRequest 是 AJAX 的基础。
+XMLHttpRequest 用于在后台与服务器交换数据。
+这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+
+
+
+创建 XMLhttpRequest 对象
+
+variable=new XMLHttpRequest();
+
+
+
+
+向服务器发送请求
+open() + send()
+
+xmlhttp.open("GET","test1.txt",true);
+xmlhttp.send();
+
+
+open(method,url,async)
+规定请求的类型、URL 以及是否异步处理请求。
+- method：请求的类型；GET 或 POST
+- url：文件在服务器上的位置
+- async：true（异步）或 false（同步）
+
+
+
+send(string)
+
+- string：仅用于 POST 请求
+
+
+
+GET / POST
+
+与 POST 相比，GET 更简单也更快，并且在大部分情况下都能用。
+然而，在以下情况中，请使用 POST 请求：
+• 无法使用缓存文件（更新服务器上的文件或数据库）
+• 向服务器发送大量数据（POST 没有数据量限制）
+• 发送包含未知字符的用户输入时，POST 比 GET 更稳定也更可靠
+
+
+
+
+
+GET 请求
+
+xmlhttp.open("GET","demo_get.asp",true);
+xmlhttp.send();
+
+
+
+
+通过 GET 方法发送信息，请向 URL 添加信息：
+
+
+
+xmlhttp.open("GET","demo_get2.asp?fname=Bill&lname=Gates",true);
+xmlhttp.send();
+
+
+
+
+
+
+
+Post 请求
+xmlhttp.open("POST","demo_post.asp",true);
+xmlhttp.send();
+
+
+
+
+
+
+
+URL 服务器上的文件地址
+可以是任何文件: txt html xml json asp php
+
+
+
+
+异步
+XML 如果要用于ajax  async参数必须设置true.
+
+
+xmlhttp.open("GET","ajax_test.asp",true);
+
+
+
+
+
+
+
+
+
+
+
+js写ajax 主要问题就是 不同浏览器需要不同的代码,并且状态和错误处理写起来很麻烦.
+jquery 能大大优化代码.
+
+ajax(url,settings) 需要一个必要的url 和 一个可选的settings
+
+settings:
+- async: 是否异步执行AJAX请求. 默认true. 全部别手贱改false
+- method: 发送方法. 默认 GET. 可选: POST PUT
+- contentType: 发送post请求的格式..默认值为'application/x-www-form-urlencoded; charset=UTF-8'，也可以指定为text/plain、application/json；
+- data:  发送的数据. 可以是字符串.数组.或对象.
+  如果是get请求 data会被转换成query.附加到url上.
+  如果是post 根据contentType 把data序列化成合适的格式.
+- headers: 发送的额外http头. 必须是一个 object
+- dataType: 接收的数据格式.可指定: html xml json text.
+  默认情况下会根据相应的contenttype 猜测
+
+
+
+例: 发送一个GET 请求. 并返回一个 JSON格式数据.
+var jqxhr = $.ajax('/api/categories', {
+dataType: 'json'
+});
+// 请求已经发送了
+
+
+
+
+jQuery的jqXHR对象类似一个Promise对象，我们可以用链式写法来处理各种回调：
+
+var jqxhr = $.ajax('/api/categories', {
+dataType: 'json'
+}).done(function (data) {
+ajaxLog('成功, 收到的数据: ' + JSON.stringify(data));
+}).fail(function (xhr, status) {
+ajaxLog('失败: ' + xhr.status + ', 原因: ' + status);
+}).always(function () {
+ajaxLog('请求完成: 无论成功或失败都会调用');
+});
+
+
+
+
+
+
+
+
+get
+
+get请求非常常见.所以jquery提供了  get()方法
+
+var jqxhr = $.get('/path/to/resource', {
+name: 'Bob Lee',
+check: 1
+});
+第二个参数如果是object，jQuery自动把它变成query string然后加到URL后面，实际的URL是：
+/path/to/resource?name=Bob%20Lee&check=1
+
+
+第二个参数如果是object，jQuery自动把它变成query string然后加到URL后面，实际的URL是：
+
+
+
+
+
+post
+post()和get()类似，但是传入的第二个参数默认被序列化为application/x-www-form-urlencoded：
+var jqxhr = $.post('/path/to/resource', {
+name: 'Bob Lee',
+check: 1
+});
+
+实际构造的数据name=Bob%20Lee&check=1作为POST的body被发送。
+
+
+getJSON
+由于JSON用得越来越普遍，所以jQuery也提供了getJSON()方法来快速通过GET获取一个JSON对象：
+var jqxhr = $.getJSON('/path/to/resource', {
+name: 'Bob Lee',
+check: 1
+}).done(function (data) {
+// data已经被解析为JSON对象了
+});
+
+
+
+安全限制
+jQuery的AJAX完全封装的是JavaScript的AJAX操作，所以它的安全限制和前面讲的用JavaScript写AJAX完全一样。
+
+
+
+
+
+
+
+
+
+
+
+
+AJAX: Asynchronous JavaScript and XML，用JavaScript执行异步网络请求。
+
+Form 形式提交:
+ 一旦点击 Submit 表单就开始提交. 浏览器就会刷新页面.
+网络慢的话 经常会得到 404 页面.
+这就是Web的运作原理: 一次HTTP 请求 对应一个页面
+如果要在当前页面 发出新的HTTP请求: 
+必须要用JS发送这个新请求,
+收到数据后再用JS更新页面.
+这样就可以实现 在当前页面.不断的更新数据
+
+
+异步执行: 需要通过回调函数获得响应
+
+
+AJAX 主要依靠: XMLHttpRequest 对象
+
+
+
+安全限制
+浏览器的同源策略: JS 在发送AJAX请求时: AJAX里URL的域名 必须和当前页面 完全一致
+
+完全一致:
+- 域名要相同: www.xx.con 不等于 xx.com
+- 协议要相同 http 不等于 https
+- 端口号相同 80 不等于 8080
+
+
+
+用JS 请求外域 (也就是其他网站)变通方法:
+
+通过在同源域名下架设一个代理服务器来转发，JavaScript负责把请求发送到代理服务器：
+/proxy?url=http://www.sina.com.cn
+代理服务器再把结果返回，这样就遵守了浏览器的同源策略。这种方式麻烦之处在于需要服务器端额外做开发。
+
+
+第2种方式称为JSONP，它有个限制，只能用GET请求，并且要求返回JavaScript。这种方式跨域实际上是利用了浏览器允许跨域引用JavaScript资源：
+<html>
+<head>
+<script src="http://example.com/abc.js"></script>
+...
+</head>
+<body>
+...
+</body>
+</html>
+JSONP通常以函数调用的形式返回，例如，返回JavaScript内容如下：
+foo('data');
+这样一来，我们如果在页面中先准备好foo()函数，然后给页面动态加一个<script>节点，相当于动态读取外域的JavaScript资源，最后就等着接收回调了。
+
+
+
+
+
+
+
+
+CORS HTML5 新的 跨域策略.
+CORS全称Cross-Origin Resource Sharing，是HTML5规范定义的如何跨域访问资源。
+
+简单点说 就是
+本站发一个请求到外域名.外域会回一个http.
+这个http里面有个设置: 是否允许别人通过外域连到我这里.
+可见，跨域能否成功，取决于对方服务器是否愿意给你设置一个正确的Access-Control-Allow-Origin，决定权始终在对方手中。
+
+
+
+origin: 本域 浏览器当前页面的域
+
+无论你是否需要用JavaScript通过CORS跨域请求资源，你都要了解CORS的原理。最新的浏览器全面支持HTML5。在引用外域资源时，除了JavaScript和CSS外，都要验证CORS。例如，当你引用了某个第三方CDN上的字体文件时：
+/ CSS /
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('http://cdn.com/fonts/fontawesome.ttf') format('truetype');
+}
+如果该CDN服务商未正确设置Access-Control-Allow-Origin，那么浏览器无法加载字体资源。
+
+
+
+---
+
+
+
+
+
+
+
+
+
+
+Ajax 
+
+任何使用 AJAX 更新的数据都可以使用 JSON 格式存储在 Web 服务器上
+
+用 AJAX，那么 JavaScript 就可以在必要时取回并解析这些 JSON 文件:
+• 把它们显示到网页上之前将解析的值存储到变量中便于进一步处理。 • 直接分配数据给网页中的 DOM 元素，那么它就会显示在站点上。
+
+
+
+
+
+
+def show
+ @widget = Widget(params[:id])
+ respond_to do |format|
+format.html # show.html.erb
+format.json { render json: @widget }
+ end
+end
+
+
+
+
+
+例: 
+1.1
+创建一个User对象，并具有以下属性:  用户ID + 用户名 + 用户Email
+
+
+<script>
+var User = {"UserID":11, "Name":"Truly", "Email":"zhuleipro◎hotmail.com"};
+alert(User.Name);
+</script>
+
+
+
+1.2
+实际使用时可能更复杂一点，比如我们为Name定义更详细的结构，使它具有FirstName和LastName：
+
+<script>
+var User = {"UserID":11, "Name":{"FirstName":"Truly","LastName":"Zhu"}, "Email":"zhuleipro◎hotmail.com"};
+alert(User.Name.FirstName);
+</script>
+
+
+
+
+
+1.3
+现在我们增加一个新的需求，我们某个页面需要一个用户列表，而不仅仅是一个单一的用户信息，那么这里就需要创建一个用户列表数组。 下面代码演示了使用JSON形式定义这个用户列表：
+[
+](){"UserID":11, "Name":{"FirstName":"Truly","LastName":"Zhu"}, "Email":"zhuleipro◎hotmail.com"},
+{"UserID":12, "Name":{"FirstName":"Jeffrey","LastName":"Richter"}, "Email":"xxx◎xxx.com"},
+{"UserID":13, "Name":{"FirstName":"Scott","LastName":"Gu"}, "Email":"xxx2◎xxx2.com"}
+]
+  
+完整代码:
+<script>
+var UserList = [
+](){"UserID":11, "Name":{"FirstName":"Truly","LastName":"Zhu"}, "Email":"zhuleipro◎hotmail.com"},
+{"UserID":12, "Name":{"FirstName":"Jeffrey","LastName":"Richter"}, "Email":"xxx◎xxx.com"},
+{"UserID":13, "Name":{"FirstName":"Scott","LastName":"Gu"}, "Email":"xxx2◎xxx2.com"}
+];
+alert(UserList0 ().Name.FirstName);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵   Pjax   🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+1. 给需要被更新的容器加ID
+<div id="container"></div>
+
+
+1. 初始化pjax , 监听URL
+   $(function(){
+     // pjax
+     $(document).pjax('a', '#container');
+     $.pjax.reload('#container');
+   })
+
+
+
+
+后端处理 pjax 请求
+
+1. 首先判断是不是 pjax.
+是:   更具参数返回局部内容.
+不是: 就返回layout布局.
+
+
+然后有 $.pjax.reload('#container'); 发起pjax 请求
+
+
+
+
+
+jquery-pjax官网实例
+
+两页面: page + page/2
+
+两个页面布局结构是一样的 . 只是内容有一点区别.
+
+每个页面 都有一样的div(里面的id名字也一样)
+只是div里面的内容有点区别.
+
+
+我们就是要把 page2 中的ID为pjax-container 的的内容
+显示到page 中 ID为pjax-container的容器中.
+  <div class="container" id="pjax-container">
+  </div>
+
+
+
+page
+  <div class="container" id="pjax-container">
+Go to <a href="/page/2">next page</a>.
+  </div>
+
+一个 div div 里 一个下页 page/2 的链接.
+
+
+page2
+
+  <div class="container" id="pjax-container">
+我是 page2. !!!!
+  </div>
+
+一个 div div 里一行文本
+
+
+
+
+首先监听所有的链接.并指定一个容器来显示pjax获取到的数据.
+
+$(document).pjax('a', '#pjax-container')
+
+ 
+当 有人点击 page下的 链接时. 
+page 页指定容器的内容会更新成 page2的内容.
+
+
+
+当然 这里还需要服务器来处理...
+服务器会更具你请求是不是pjax 然后决定放回整个网页还是某网页片段.
+
+
+
+
+
+
+
+
+GithubPages-Pjax
+
+怎么可能不执行呢... 
+jquery-pjax demo 好像不是用gitpage建立的...
+
+
+
+
+
+$(function(){
+$('a[data-pjax]').pjax()
+$("#time").text(new Date())
+});
+
+
+
+
+
+github 不支持 jquery-pjax.
+静态网站 是不支持 jquery-pjax 的!!!!!
+静态网站 是不支持 jquery-pjax 的!!!!!
+静态网站 是不支持 jquery-pjax 的!!!!!
+
+你需要服务端的配合才能使用  jquery-pjax!!!!
+
+
+
+变通办法(不需要服务器后端的任何处理...)....
+
+另一种  pjax... (https://github.com/MoOx/pjax)
+
+
+优点
+
+通过ajax 来抓取  github上的内容.
+
+然后用 pushState 更新url....
+
+
+
+
+
+
+
+所有链接 用pjax
+
+$(function(){
+  $(document).pjax("a", '#contentDiv', { fragment: '#contentDiv', timeout:3000} );  
+});
+
+什么都不需要设置. 只需要执行这个JavaScript 就可以了.
+
+所有的 链接a.都用pjax效果..
+然后更新的内容显示到 contentDiv这个id里面
+
+
+
+指定链接用Pjax
+
+
+
+
+
+
+用pjax . 必须是两个相同的网页结构.
+
+比如博客. 大部分都一样 只有每篇文章是不一样的...
+
+
+然后pjax 的作用就是 
+在第一个html的 某个div里.
+更新内容成 第二个dhtml 某个div里的内容..
+
+
+
+
+
+
+
+首先: html 先指定
+需要做pjax的链接内容是哪些， 以及点击之后需要更新的部分（放在data-pjax属性里面）:
+$('a[data-pjax]').pjax()
+
+
+当加载pjax 脚本之后.  它会拦截这些链接事件. 
+然后包装成一个 ajax 请求发送给服务器..
+
+
+
+
+
+
+
+
+
+
+
+
+
+一、首先你的项目需要有两个页面，page1.html, page2.html，现在的需求是在page1.html点击一个超级链接跳转到page2.html的时候能直接更新网页内容而不需要重新刷新整个网页。 
+
+
+
+
+二、在page1.html中创建一个class为main-wrap的div，在里面随意添加一些内容。然后在div的后面添加一个跳转到page2.html的超级链接:<a  data-pjax href="./page2.html"></a> ，并在文件中引入jquery和pjax
+三、我想你现在应该注意到了这个标签里面有个属性data-pjax，加这个标签是告诉pjax只有添加了data-pjax属性的a标签的跳转才交到pjax处理，其他的还是刷新的方式加载。
+四、将page1.html的内容复制到page2.html，之后修改page2中main-wrap的内容跟原来不一样就可以了，。
+当然我这只是以一个demo的方式来讲解，读者可以把pjax用在自己的项目中就可以了。
+好了，现在点击page1.html中的那个a标签，现在可以看到main-wrap中的内容被页面page2中的main-wrap替换掉了。
+
+
+
+
+
+
+
+http://www.uedsc.com/jquery-pjax-js.html (http://www.uedsc.com/jquery-pjax-js.html)
+
+
+定义需要局部更新的容器..
+<div id="container"></div>
+
+
+初始化 pjax 监听url
+$(function(){
+  $(document).pjax('a', '#container');
+  $.pjax.reload('#container');
+})
+
+
+后端处理
+后端的处理逻辑是，首先判断是不是pjax请求，如果是的话，根据请求参数返回局部内容，否则返回layout布局，然后由$.pjax.reload('#container');发起pjax请求。
+
+var pjaxFilter = function(req, res, next) {
+  if (req.get('X-PJAX')) {
+next();
+return;
+  }
+  //如果不是pjax请求的话直接返回布局模板
+  res.render('layout', { title: 'Pjax simple demo' });
+};
+
+router.get('/', pjaxFilter, function(req, res) {
+  res.render('index');
+});
+
+router.get('/poem/:id', pjaxFilter, function(req, res) {
+  var poemId = req.params.id;
+  res.render('poem/' + poemId);
+})
+
+
+
+
+
+
+pjax 需要在html里 设置和指定一个包含在您页面上的元素.
+当你浏览网站时将被替换.
+
+
+
+大部分情况 我们值希望返回页面的内容.
+而不要任何布局...
+def index
+  if request.headers['X-PJAX']
+render :layout => false
+  end
+end
+
+
+
+
+
+
+
+
+
+http://blog.csdn.net/lee_magnum/article/details/10655707 (http://blog.csdn.net/lee_magnum/article/details/10655707)
+
+Ajax: 可以实现页面的无刷新操作 但是 无法前进与后退！
+Pjax: 可以实现页面的无刷新操作 + 前进与后退！
+
+pjax 是一款 jquery 小插件. 
+将 ajax 和浏览器的 pushState API 封装到一起.
+- 解决了单纯使用 ajax 进行无刷新加载时对搜索引擎的不友好，
+- 并且节省了 HTTP 开支、提高了浏览速度，明显地优化了用户体验。
+
+
+
+pushState
+pushState 是 html5 提供的API，是对浏览器历史对象 history 的增强。
+
+BOM       浏览器对象模型
+window    则是 BOM 的具体实现
+history   则是 window 的 子对象.
+pushState 就属于 window.history 的一个方法
+
+
+var stateObj = { foo: "bar" }
+history.pushState(stateObj, "title", "bar.html")
+
+1.  声明一个对象. 可以储存 数据.
+2. pushState 方法: 往浏览器历史栈插入一条历史记录.
+3. 执行完成后 浏览器会立刻将历史项中的 url 显示在地址栏中.但不会加载.
+
+
+
+pjax 大概流程
+- 监听 所有需要 pjax 效果的 链接.
+- 用 ajax 和后端协议取回 html 碎片.并填充到DOM中.
+- pushState 复制把浏览器地址 改成我们想要的 url 并在历史记录中增加一个历史记录.
+- 通过 监听popstate 让浏览器的前进后退也 实现 pjax 化.
+
+
+
+注意点
+绑定选择器时 推荐用 data-pjax.
+这个属性会自动寻找 标签 及 子标签中的 超链接.
+绑定  click.pjax.
+
+$(document).pjax('[data-pjax] a, a[data-pjax]', '#pjax-container')
+
+
+如果 后端程序 响应慢. pjax 会直接跳转... 
+- 要么 优化后端程序..  优化网络...
+- 要么修改 pjax 的延迟
+  $.pjax.defaults.timeout = 1600 /\*默认 650 毫秒\*/  
+
+
+
+
+pjax 不是开箱即用的
+应为 所有js 脚本的调用 会在 第二次执行 pjax 方法时失败.
+pjax 会确保 不会重新请求任何已经下载过的脚本文件.
+节省 http 开支.. 这个在第二次执行脚本时就产生问题了
+
+解决方法:
+监听 pjax:end/pjax:success/pjax:complete  事件
+三个区别不大...
+
+
+$(document).on('pjax:end', function() {
+NProgress.done()
+self.blogBootUp()
+})
+
+
+当 pjax 生命周期结束，主动调用一下脚本启动程序即可。这里，我将我所有的脚本启动程序都封装到 blogBootUp 中了
+
+
+
+使用了 pjax 就相当于 阻断了浏览器的常规浏览机制.
+常规情况下 浏览器是有缓存的. 能实现秒进 秒退.
+但是 如果pjax 不哟欧化这一块.那么前进后退都是要流量的.
+
+
+
+
+
+
+
+
+
+
+
+
+ajax 有缺点...  所以有了 pjax
+
+history API:
+新特性:history.pushState和history.replaceState，
+
+现在很多网站( facebook, twitter)都支持这样的一种浏览方式， 当你点击一个站内的链接的时候， 不是做页面跳转， 而是只是站内页面刷新。 这样的用户体验， 比起整个页面都闪一下来说， 好很多。 其中有一个很重要的组成部分， 这些网站的ajax刷新是支持浏览器历史的， 刷新页面的同时， 浏览器地址栏位上面的地址也是会更改， 用浏览器的回退功能也能够回退到上一个页面。
+
+
+
+基本思路
+用户点击一个链接. 通过 ajax 更新页面变化的部分.
+然后使用 html 的 pushState 修改浏览器的 URL 地址.
+这样就避免了整个页面的重新加载.
+
+
+ajax 一般是从后台获取 json 数据. 然后给前端去解析.
+pjax 请求的是 一个 在服务器上 生成好的html碎片.
+
+流程
+1. 客户端 发送一个普通请求. (也就是点击一个链接).
+2. 服务器 相应这个请求: 返回一个 html 文档.
+3. 客户端 发送一个 有 pjax 标志的请求
+4. 服务器 只会返回一个 html 碎片
+
+
+
+
+ajax pjax 区别
+
+ajax: 能不用刷新页面 就看到新的内容.
+
+ajax 缺点:
+- 搜索引擎 不识别 js代码. 无法指定 ajax 交互之后的内容.
+- js 做页面的内容显示. 浏览器地址不会切换.
+  这个在博客系统中就是个大问题. 博客是 每篇文章一个url.
+- 应为浏览器地址不能切换: 不支持后退!!!!
+
+Pjax: pushState + Ajax
+主要的功能是解决ajax上面的几个问题，只是刷新部分页面，切换地址，游览器能记录历史地址，不用重新加载公共的js、css等公共资源，提升用户的体验
+
+
+
+
+
+Pjax Demo 页面 (http://pjax.herokuapp.com/)
+
+
+
+---
+
+
+
+
+
+1. 当加载 pjax 脚本之后. 它会拦截这些链接的事件.
+然后包装成一个 ajax 请求. 发送给服务器.
+
+
+
+1. 这个请求 带有 x-pjax 的header 标识.
+服务器收到这样的请求 就知道 只需要返回渲染部分页面就可以了.
+
+
+1. pjax 收到返回的请求. 更新 data-pjax 指定的区域.    同时也会更新 浏览器地址.
+
+
+2. 为了能支持 浏览器的后退.
+利用 history api 记录下对应的信息.
+  
+
+
+
+1. 浏览器后退的时候. 拦截事件. 根据记录的历史信息. 产生一个新的 ajax 请求.
+
+2. 为了支持 fallback :
+3. 一个是 在加载的时候 判断 浏览器是否支持 history push state api.
+4. 另一个是 发现请求一段时候没有回复 (设置 timeout) 直接做页面挑转.
+
+
+
+
+
+--- pjax 教程.
+
+无刷新翻页...
+需要 1.7+ 的 jquery
+
+ $(document).pjax('a[target!=_blank]', '#contentleft', {fragment:'#contentleft', timeout:8000});
+
+绑定本页 非新窗口打开的 所有 本域链接.
+链接点击后  替换 contentleft 的内容为新内容:contentleft
+ajax 超时  8秒..
+
+
+---
+ 等待pjax 缓冲...  加入等待动画:
+$(document).on('pjax:send', function() { //pjax链接点击后显示加载动画；
+$(".pjax_loading").css("display", "block");
+});
+$(document).on('pjax:complete', function() { //pjax链接加载完成后隐藏加载动画；
+$(".pjax_loading").css("display", "none");
+});
+
+
+
+
+pjax 后续问题
+pjax之后多说评论框不加载，ajax评论不能提交等等问题。
+
+问题原因：原先容器绑定的事件被新容器替换掉了，新容器的div没有绑定事件，所以点击无效。 
+    解决方法：利用pjax的加载完成回调函数，重新绑定事件。
+
+
+
+$(document).on('pjax:complete', function() {
+pajx_loadDuodsuo();//pjax加载完成之后调用重载多说函数
+});
+function pajx_loadDuodsuo(){
+var dus=$(".ds-thread");
+if($(dus).length==1){
+var el = document.createElement('div');
+el.setAttribute('data-thread-key',$(dus).attr("data-thread-key"));//必选参数
+el.setAttribute('data-url',$(dus).attr("data-url"));
+DUOSHUO.EmbedThread(el);
+$(dus).html(el);
+}
+}
+
+
+
+
+
+
+
+
+Pjax&jQuery
+
+不兼容 jquery 3+
+不兼容 jquery 3+
+不兼容 jquery 3+
+
+
+
+$.pjax({
+selector: 'a',
+container: '#container', //内容替换的容器
+show: 'fade',  //展现的动画，支持默认和fade, 可以自定义动画方式，这里为自定义的function即可。
+cache: true,  //是否使用缓存
+storage: true,  //是否使用本地存储
+titleSuffix: '', //标题后缀
+filter: function(){},
+callback: function(){}
+})
+
+
+selector
+给哪些选择器 绑定 pjax 事件.
+一般为a. 
+如果要去掉一些外链. 
+"a[href^='http://www.welefen.com']"
+表示域名http://www.welefen.com 下才有pjax事件.
+也就是 站内.
+
+
+
+
+
+container
+内容变换容器. 指哪个容器里的内容发生变换.
+
+
+
+cache
+缓存 pjax内容. 更新不频繁的页面.可以缓存 减少http请求.
+
+
+storage
+本地缓存. 即使浏览器关闭 这个缓存还在.
+
+
+titleSuffix
+标题后缀.对于pjax显示标题，首先会从返回内容里查找，如果没有的话，会取当前a标签的title值，并可以指定统一的后缀
+
+
+
+filter
+过滤函数. 
+虽然options.selector可以写个比较复杂的选择器，但有时候还要过滤一些URL，如：后台的URL。
+ fitler: function(href){
+//对于wordpress后台的URL和wp-content里的URL不使用pjax
+if(href.indexOf('/wp-admin') || href.indexOf('/wp-content')){
+return true;
+}
+}
+
+对于要过滤掉的URL， 需要返回值为true。
+
+
+
+
+callback
+回调函数，这个函数不同于pjax.start和pjax.end（这2个事件下面描述）事件。
+该函数会在每个阶段都会执行，即使pjax发生error的时候，并且会传递一个参数标明当前的状态，如：
+
+
+callback: function(status){
+var type = status.type;
+switch(type){
+case 'success': ;break; //正常
+case 'cache':;break; //读取缓存 
+case 'error': ;break; //发生异常
+case 'hash': ;break; //只是hash变化
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pjax = pushState + ajax
+
+Pjax 官方Demo (要学习只要看源码!! 很简单的 就两个文件. 几行而已) (http://pjax.herokuapp.com/)
+
+demo 其实是两个网页!!!!
+两个网页 大部分都一样的. 除了一个 会变的 内容框....
+
+pjax 就是只把另外一个html文件里的 变动的内容 显示到本html里..
+
+
+学习方法: 看pjax 官方Demo . 用开发者工具看源码...
+
+
+源码解析
+
+html结构:
+main div下三个链接.
+<div id="main">
+  <ul>
+  <li>home</li>
+  <li><a href="/dinosaurs.html">dinosaurs</a></li>
+  <li><a href="/aliens.html">aliens</a></li>
+</ul>
+
+
+
+
+
+
+加载脚本?
+<script type="text/javascript">
+$(function(){
+  // pjax
+  $(document).pjax('ul a', '#main')
+})
+  </script>
+
+
+
+
+
+
+
+js
+
+这个是 pjax 的 勾选按钮啊....
+$(function() {
+  $(':checkbox').prop('checked', sessionStorage['pjax'])
+
+  if ( !$(':checkbox').prop('checked') )
+$.pjax.disable()
+
+  $(':checkbox').change(function() {
+if ( !$.support.pjax ) {
+  this.checked = false
+  return alert( "Sorry, your browser doesn't support pjax :(" )
+}
+if ( $(this).prop('checked') )
+  sessionStorage['pjax'] = true
+else
+  sessionStorage['pjax'] = ''
+
+window.location = location.href
+  })
+});
+
+
+
+
+
+
+
+
+
+
+$.pjax({
+selector: 'a',
+container: '#container', //内容替换的容器,也就是你PJAX获取的内容放在的位置
+show: 'fade',  //展现的动画，支持默认和fade, 可以自定义动画方式，这里为自定义的function即可。
+cache: true,  //是否使用缓存,如果是分页的话，数据几乎没什么更新采用这种方式提高性能，让用户感觉访问速度快
+storage: true,  //是否使用本地存储，这个选项一般高版本浏览器才支持，设置为true有助于提高性能
+titleSuffix: '', //标题后缀
+filter: function(){},
+callback: function(){}
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pushState
+html5 新的api . 是对浏览器历史记录的增强.
+
+
+var stateObj = { foo: "bar" }
+history.pushState(stateObj, "title", "bar.html")
+
+首先 声明一个对象. 储存数据. 比如html碎片?
+
+pushState 会向浏览器历史记录里面插入一条记录.
+然后把历史记录 的url 显示到地址栏.(但不加载)
+
+什么时候调用 这个方法呢.
+就在 pjax 被点击的时候 . 用 return false; 禁止默认跳转. 
+
+
+
+
+
+选择器的绑定
+
+推荐使用 data-pjax 属性.
+可以绑定某个链接..  也可以绑定某个div下的 所有链接.
+
+
+
+
+
+
+
+
+
+
+
+
+1. 需要在 网页上 设置一个容器.
+当你点击ajax链接的时候.  pjax内容可以显示在这个容器里.
+ <div class="container" id="pjax-container">
+Go to <a href="/page/2">next page</a>.
+  </div>
+
+
+
+要实现 点击 page2 这个链接. 在 pjax-container 这个地方刷新:
+
+
+首先 我们想要 pjax 先抓取到这个链接.
+然后 然这个链接不是在新窗口打开. 而是在当前窗口 某个div里打开..
+
+$(document).pjax('a', '#pjax-container')
+
+我们用 pjax 监听所有的a. 然后在pjax-container 这个容器中打开.
+
+
+
+不想所有链接用Pjax.
+那就在 div 和 链接 的html里 加上 data-pjax标记
+pjax 就能自动识别这个被标记的链接.
+
+可以 选择在链接里面加上  data-pjax 标记
+还可以 选择在div里面 加上 data-pjax 标记.
+<a data-pjax href=>
+<div data-pjax>
+$(document).pjax('[data-pjax] a, a[data-pjax]', '#pjax-container')
+
+
+语法: 选择的链接.. 容器… 
+$(document).pjax(selector, [container], options)
+
+
+
+
+
+
+还需要 配置服务器. 
+来 寻找 pjax 请求. 和返回的内容.
+
+
+
+
+
+
+1. 首先 在html中 用data-pjax 属性来存储链接数据.
+只有在这里存储的链接 . 才能进行过滤 和 后续处理..
+
+
+
+
+
+
+
+首先要声明一个变量.  来储存 链接数据????
+
+监听 需要pjax效果链接的 click事件. 默认禁止跳转
+
+
+
+jquery-pjax
+
+
+绑定选择器 
+
+绑定选择器时，推荐使用 data-pjax 属性，这个属性会自动寻找标签及其子标签中的超链接，绑定 click.pjax (顺便注意这里的事件命名空间，目的是为了主动 trigger 时能区别对待 click) 事件。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

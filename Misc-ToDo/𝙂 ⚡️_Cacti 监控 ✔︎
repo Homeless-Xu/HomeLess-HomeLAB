@@ -1,0 +1,93 @@
+🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
+                        Cacti 监控设备   192.168.10.19
+
+🔵 Cacti 简介
+
+    Cacti 英文是仙人掌的意思..
+
+    是一套基于 PHP、Mysql、SNMP... 开发的 网络流量监测 图形分析工具.
+
+    它通过snmpget来获取数据，使用 RRDtool绘画图形，
+    它的界面非常漂亮，能让你根本无需明白rrdtool的参数能轻易的绘出漂亮的图形。
+
+    而且你完全可以不需要了解RRDtool复杂的参数。
+    它提供了非常强大的数据和用户管理功能，
+    可以指定每一个用户能查看树状结 构、host以及任何一张图，
+    还可以与LDAP结合进行用户验证，
+    同时也能自己增加模板，让你添加自己的snmp_query和script！
+    功能非常强大完善，界面友好。
+    可以说，Cacti将rrdtool的所有“缺点”都补足了！
+
+
+🔵 Cacti 工作流程 ✔︎
+
+    1.) 定时采集数据 ➜ 用snmp 协议
+    2.) 存储数据
+    3.) 查看某设备的流量: 
+    4.) 找该设备对应的 rra 文件 ➜ mysql 查询
+    5.) 用 rrdtool 绘图该文件  ➜ rrdtool 命令绘图
+    6.) 返回给用户
+
+
+
+🔵  密码重置 ✔︎
+    ⚡ 完了密码没关系. 只要能进入 mysql 就可以修改用户密码.
+
+    mysql -u root -p ➜ 居然不要密码 ...(不能远程登录的.还好..)
+    show databses;   ➜ 查看所有数据库
+    use cacti;       ➜ 使用 cacti 这个数据库
+    show tables;     ➜  查看数据库的表
+    select * from user_auth; ➜ 查看用户信息表
+    update user_auth set password=md5("cactipasswd") where id='1'; ➜ 更改密码
+
+    🔶 测试
+        浏览器访问 Cacti 服务器的IP . 输入 admin / cactipasswd 就可以登录了.
+
+
+
+🔵 基本信息 ✔︎
+
+    首先得知道 Cacti 的安装路径.
+    locate /cacti 会查找根目录下的所有Cacti文件夹.
+    locate /config.php  这个查出来的结果比较准...
+
+
+
+🔵 基本使用
+
+    就几个图...和 zabbix 差不多的..
+
+
+
+
+
+🔵 启停 Cacti ?
+
+
+    Cacti启动命令：
+
+    主服务器：
+    root用户
+    /usr/sbin/snmpd
+    ①01 01 * * * service httpd restart
+    ②01 01 * * * service snmpd restart
+    ③01 01 * * * service mysqld restart
+
+
+    其他服务器：
+    root 用户
+    service snmpd restart
+    00 13 * * 1,2,3,4,5,6,0 service snmpd restart
+
+
+
+
+
+确认服务端是否有计划任务:
+*/5 * * * * /usr/bin/php /var/www/html/cacti/poller.php
+
+用来测试被控对象(serverIP)是否开启了SNMP服务
+snmpwalk -v 2c -c public ServerIP
+
+
+

@@ -1,0 +1,91 @@
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 界面服务 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 安装 
+    yum install openstack-dashboard -y
+
+
+🔸 配置 
+
+    vi /etc/openstack-dashboard/local_settings
+
+    # 改 ➜ 设置控制节点.
+    OPENSTACK_HOST = "controller"
+
+    # 改 ➜ 允许所有主机访问仪表板：
+    ALLOWED_HOSTS = ['*', ]
+
+    #配置 memcached 会话存储服务：
+    # 第一行新增. 后面的修改.
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': 'controller:11211',
+        }
+    }
+
+
+
+    # 改 ➜ 启用第3版认证API:
+    OPENSTACK_KEYSTONE_URL = "http://%s:5000/v3" % OPENSTACK_HOST
+
+    #通过仪表盘创建的用户默认角色配置为 user ：
+    OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
+
+    # 去注释+修改 启用对域的支持
+    OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
+
+    # 去注释+修改 配置API版本:
+    OPENSTACK_API_VERSIONS = {
+        "identity": 3,
+        "image": 2,
+        "volume": 2,
+    }
+
+    # 去注释 ➜ 通过仪表盘创建用户时的默认域配置为 default :
+    OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = "Default"
+
+
+
+
+    # 如果您选择网络参数1，禁用支持3层网络服务：
+    # 只修改下面参数. 不要删除其他设置.
+    OPENSTACK_NEUTRON_NETWORK = {
+        ...
+        'enable_router': False,
+        'enable_quotas': False,
+        'enable_distributed_router': False,
+        'enable_ha_router': False,
+        'enable_lb': False,
+        'enable_firewall': False,
+        'enable_vpn': False,
+        'enable_fip_topology_check': False,
+    }
+
+    # 改 ➜ 可以选择性地配置时区：
+    # 时区详情 https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    TIME_ZONE = "Asia/Shanghai"
+
+
+
+🔸 重启web服务器以及会话存储服务
+    systemctl restart httpd.service memcached.service
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸验证🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+Mac 浏览器 输入 控制节点IP
+http://192.168.1.112/dashboard
+
+域: default 
+用户1密码: admin  ADMIN_PASS
+用户2密码: demo   demo 
+这些密码都是在 认证服务里 创建用户的时候 设置的...
+
+
+这里非常耗CPU.  虚拟机CPU ....100% 
+登录需要半天...
+

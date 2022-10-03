@@ -1,0 +1,10 @@
+```
+
+print 
+
+
+netstat -nr
+
+
+
+```

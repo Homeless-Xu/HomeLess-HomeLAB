@@ -1,0 +1,840 @@
+一: Linux Sum ✔︎ 
+
+常识:
+
+系统核心在内存中的.而且受到保护.
+	核心作用是 控制硬件
+		必须用shell和核心交流
+
+shutdown [选项] <now或关机时间>  
+	< > 表示必须包含的选项或参数; 
+	[ ] 表示可选项或参数。
+
+终端使用Tab按键 来自动补全命令!!!!
+
+终端下 $ 代表普通用户
+终端下 # 代表root用户
+
+ssh 远程 默认能登陆6个账号. 用 tty1-6 表示
+
+
+ctrl + c 停止命令.
+ctrl + d 暂停命令.
+ctrl + z 前后台切换.
+
+alias lm='ls -al'
+	别名: 也就是 按下lm  就等于按下 ls -al 
+
+长命令分行: \+回车键.   下面就会出现>符号.可以继续输入命令.
+
+
+1. 标准输入 (stdin) ：代码为 0 ，使用 < 戒 << ； 
+2. 标准输出 (stdout)：代码为 1 ，使用 > 戒 >> ； 
+3. 标准错诨输出(stderr)：代码为 2 ，使用 2> 戒 2>> ；
+  
+	将 stdout 不 stderr 分别放到不同的档案去
+	find /home -name .bashrc > list_right 2> list_error
+
+	将错误信息丢弃. dev/null 类似于垃圾桶
+	find /home -name .bashrc 2> /dev/null
+
+
+cat > catfile 会建立一个文件.让等你输入内容.结束输入按Ctrl+D
+cat > catfile << "eof" 也建立一个人家. 当你输入eof就自动结束 
+
+[root@www ~]# cat > catfile << "eof"
+	> This is a test.
+	> OK now stop
+	> eof <==输入这关键词，立刻就结束而丌需要输入 [ctrl]+d
+
+cat > catfile < ~/.bashrc 会建立一个 catfile 文件. 然后里面的内容是 .bashrc的内容
+类似复制了. 内容一模一样.
+
+<< 结束输入字符的意思.
+
+
+cmd1 && cmd2
+	1. 若 cmd1 执行完毕且正确执行($?=0)，则开始执行 cmd2。
+	2. 若 cmd1 执行完毕且为错诨 ($?≠0)，则 cmd2 丌执行。
+cmd1 || cmd2
+	1. 若 cmd1 执行完毕且正确执行($?=0)，则 cmd2 丌执行。
+	2. 若 cmd1 执行完毕且为错诨 ($?≠0)，则开始执行 cmd2。
+command1 && command2 || command3
+	ls /tmp/vbirding && echo "exist" || echo "not exist"
+		ls 测试 /tmp/vbirding 是否存在，
+			若存在则显示 "exist" ，
+			若不存在，则显示 "not exist"！
+
+
+
+
+
+Linux 系统结构: 内核+ shell + 命令 + 文件/目录
+
+GUI / CLI
+	GUI: 有图形界面的软件
+	CLI: 只能用命令行操作的软件
+
+相对路径 ./ 开头.  是按照当前文件夹来的
+绝对路径  / 开头.  是按照系统根目录来的
+当前目录 .
+上级目录 ..
+
+*: 匹配 0 个或多个任意字符；
+?: 匹配一个字符
+
+> 结果导出到文件
+< 文件导入到命令
+>> 结果追加到文件尾部.
+
+echo 输出信息到屏幕
+echo '' 里面包含的特殊符号.会一模一样输出
+echo "" 里面包含的特殊符号.系统会处理后再输出.
+		如 \n 换行. \r回车 
+
+终端输入shell名 (如:sh/zsh/bash)直接可以切换对应的shell 
+
+i386   i是兼容 intel 的意思    386 是cpu 等级
+x86_64 对64位cpu 进行特定的优化.
+
+
+变量
+变量: 方便修改.
+myname=VBird → 设定变量: 变量值如果有空格需要 双引号/单引号.
+	双引号内可以使用特殊字符如 $ 等，
+	『var="lang is $LANG"』则
+		『echo $var』可得『lang is en_US』 
+	单引号里的内容完全一模一样输出
+	『var='lang is $LANG'』则
+		『echo $var』可得『lang is $LANG』
+echo $myname → 显示变量: 用 echo $+变量名.如 echo $PATH
+
+	
+若该发量为扩增发量内容时，则可用 "$发量名称" 戒 ${发量} 累加内容，如下所示： 『PATH="$PATH":/home/bin』
+
+若该发量需要在其他子程序执行，则需要以 export 杢使发量发成环境发量： 『export PATH』
+
+
+取消变量的方法为使用 unset  如:『unset myname』
+
+范例四：呈范例三，我要将 name 癿内容多出 "yes" 呢？
+
+[root@www ~]# name=$nameyes
+
+知道了吧？如果没有双引号，那么发量成了啥？
+name 癿内容是 $nameyes  个发量！
+
+下面才是对的.
+[root@www ~]# name="$name"yes
+[root@www ~]# name=${name}yes <==以此例较佳！
+
+子程序: 当前shell 下再开一个shell
+如当前是 sh  里面可以开个 zsh. 也可以开个sh!!!
+这里开出来的zsh/sh 就是子程序了.
+一般来说. 父程序的自定义变量是没法直接在子程序里用的.
+可以用export把变量变成环境变量.就可在子程序上用了.
+
+指令中反单引号(也就是数字1左边的按键.)
+里面的命令会首先执行. 这样就可以给别的命令用了.
+比如 locate 可以列出所有相关档案的文件名，
+但是，如果我 想要知道各个档案的权限呢？
+ls -l locate crontab 
+先以 locate 将文件名数据都列出来，
+再以 ls 列出详细信息.
+老实说，使用『 version=$(uname -r) 』取代『 version=uname -r 』比较好， 因为反单引号大家老是容易打错戒看错！ 所以现在鸟哥都习惯使用 $( 挃令 ) 
+
+export： 自定义发量转成环境发量
+
+
+
+
+Cut & Grep
+	先截取一段数据. 再用grep 一行行来分析.
+cut: 
+	-d 参数: 排列混乱的按某个特定的分割符来截取.
+		Path变量中的第五个.   → echo $PATH | cut -d ':' -f 5
+	 	Path变量中的第3和 第5 → echo $PATH | cut -d ':' -f 3,5
+	-c 参数: 排列整齐的用c参数.
+
+Grep
+	cut 取出我们需要的部分.然后用grep一个个分析.
+
+	范例一：将 last 当中，有出现 root 的那一行取出；
+		[root@www ~]# last | grep 'root'
+	范例二：不范例一相反，只要没有 root 的就取出！
+		[root@www ~]# last | grep -v 'root'
+
+
+排序命令 sort wc uniq
+
+
+
+
+
+
+
+
+
+GRUB MBR/GPT UEFI
+
+分区表有三种 : 
+	传统的 MBR
+	大容量的 GPT 
+	小设备的 无
+
+
+
+启动光盘: 可以用工具. 也可以用命令.
+Linux 启动盘 可以用 dd命令 来制作.
+
+- MBR:
+  硬盘最前面的 512字节是有特殊用处的
+  0-446 字节:  是一段二进制程序. 引导电脑加载位于其他分区的引导程序.
+  446-510字节: 是4个16字节的. 磁盘分区表. 所以一般硬盘只能有4个主分区 
+  210-512: 两个字节. 结束标志.
+
+- 磁盘分区表:  描述某个分区是从哪一块开始,到哪一块结束.
+
+- GRUB: 引导加载最终的系统.尺寸比较大.而且大小还不固定.所以不能放在硬盘最前面.所以才有了MBR.
+
+/boot/grub/grub.cfg  找到类似下面一段:
+menuentry "Ubuntu 9.10, kernel 2.6.31-17-generic" {
+search --no-floppy --fs-uuid --set f1bafdd4-73c2-44b2-9a62-d50a2da4d019
+linux /boot/vmlinuz-2.6.31-17-generic root=UUID=f1bafdd4-73c2-44b2-9a62-d50a2da4d019 ro splash
+initrd /boot/initrd.img-2.6.31-17-generic
+}
+ 
+这是一个标准的 ubuntu 引导菜单.
+menuntry 那行 仅仅显示 该项目的名称. 不管
+第二行 才是真正进入 linux 系统引导过程.
+search 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Linux 文件系统 ✔︎
+ext2 ：  早期linux中常用的文件系统；
+ext3 ：  ext2的升级版，带日志功能；
+RAMFS ： 内存文件系统，速度很快；
+iso9660：光盘或光盘镜像；
+NFS ：   网络文件系统，由SUN发明，主要用于远程文件共享；
+MS-DOS ：MS-DOS文件系统；
+FAT ：   Windows XP 操作系统采用的文件系统；
+NTFS ：  Windows XP+ 操作系统采用的文件系统。
+
+
+分区 & 目录
+文件系统位于磁盘分区中；
+一个硬盘可以有多个分区,一个分区只能包含一个文件系统。
+
+windows 分区是 并列结构. 
+linux 分区是树结构. 所有分区都在/目录下, 目录: /home /var /usr ...
+任何一个分区都必须对应到某个目录上，才能进行读写操作，称为“挂载”.
+目录是逻辑上的区分。分区是物理上的区分。
+
+为什么分区:
+- 可以把不同资料，分别放入不同分区中管理，降低风险。
+- 大硬盘搜索范围大，效率低。
+- /home、/var、/usr/local 经常单独分区，经常会操作，容易产生碎片。
+
+
+
+FHS
+文件系统层次结构标准.
+第一个   / 根目录.
+下面就是 /bin 等等 二级目录.
+再下面是 /etc/opt/ 这样的三级目录
+
+
+
+
+
+
+
+
+LVM
+
+logical volume manager  
+安装 Linux 困境:
+如何精确分配硬盘的分区容量.万一哪个分区不够用就面临重装系统
+
+LVM 对磁盘分区进行自动管理的一种机制.
+建立在 分区之上 文件系统之下的一个逻辑层面.
+/boot 分区不能基于 LVM 创建.必须独立出来!!
+
+  逻辑卷管理. 非常实用
+
+1. 将一个或者多个硬盘的分区,在逻辑上集合.相当于一个大硬盘. 
+   1.1 再把这个硬盘进行分割. 这些分割出来的分区 可以随时改变大小 , 以及删除. 
+       1.1.1.1 硬盘空间不够 只要加个新硬盘就可以扩容了.
+
+物理存储介质 physical media 
+  硬盘等等
+
+物理卷 physical volume
+  类似分区
+
+逻辑卷 logiacl volume
+  这上面可以建立文件系统 : /home /usr
+
+PV: 物理的磁盘分区
+VG: LVM 中的物理的磁盘分区.
+一个仓库 或者 几个大的硬盘的集合
+LV: 从 VG 划分的逻辑分区
+
+LVM 的分区类型 ID 是 8e
+
+Kali - LVM 实例
+vb 虚拟机 添加个4.4G 的 vdi 硬盘.给这个虚拟机上的硬盘进行分区:
+
+进系统 fdisk -l 能看到4.4G 的硬盘
+创建第一个分区:
+	fdisk /dec/sdc
+		n  →  p  → 1
+	开始扇区 → 回车键
+	结束扇区 → +1024M  就创建一个1G 的分区.
+	p 查看分区→ 现在就能看到 1G 的分区了.
+
+创建第二个分区:
+	n → p → ↵ → ↵ → 输入大小 +2048M → ↵ 
+	p  查看分区.
+
+创建第三个分区 (用剩余容量)
+  一路默认就好了.
+
+保存修改 → w
+
+fdisk -l 就能看到 新加的硬盘有了三个分区.
+
+
+分区之后格式化
+
+转换磁盘分区 到 LVM
+	pvcreate /dev/sdc1
+	pvcreate /dev/sdc2
+	pvcreate /dev/sdc3
+
+
+扫描 本地的 vg 储存池 :vgscan
+
+创建 VG 存储池 
+	VG: LVM 中的物理磁盘分区. 
+	要加入 LVM 的物理分区 都要创建一遍 vg
+		(把很多物理分区 集中到一个逻辑分区上)
+
+			vgcreate vg1 /dev/sdc1 1G
+			vgcreate vg2 /dev/sdc2 2G 
+			vgcreate vg3 /dev/sdc3 1.4G
+
+	vgdisplay 看创建的vg分区.
+
+分配 LV 逻辑卷.(类似 win 系统分区)
+	lvcreate -L 500M -n work vg1
+	显示 lv 卷. lvdisplay
+
+分区格式化
+	mkfs.ext3 /dev/vg1/work
+
+挂载:
+	mkdir /home/work
+	mount /dev/vg1/work /home/work
+	挂载后就能 在  df -h 下面看到了.
+
+
+
+
+新增 LVM. 格式化的时候就要选择 luks 的格式.
+
+	cryptsetup --cipher aes-xts-plain64 --key-size 512 --iter-time 10000 luksFormat /dev/sdc1
+
+	YES → 输入密码
+	// /dev/sdc1 is in use
+	
+卸载 sdc1 umount /dev/sdc1
+
+
+
+
+
+
+LVS
+linux 服务器集群:
+- 高性能:  多台服务器相互独立. 
+- 可伸缩:   加几台电脑就好了..
+- 高可用: 软件/硬件上都有冗余，
+
+GNU GPL
+是版权!!!   促进软件发展的一种方式...  大家一起写 总比你自己写好...
+
+
+
+Linux 文件类型 ✔︎
+普通文件 / 目录 / 设备文件.
+文件类型: ls -l
+drwxr-xr-x@  8 v  staff          646  2 18 20:33 Download
+-rwxr-xr-x@  1 v  staff        93696  3  7 10:03 Thumbs.db
+
+前缀	描述
+-	    普通文件。如文本文件、二进制可执行文件、源代码等。
+b	    块设备文件。硬盘可以使用块设备文件。
+c  	    字符设备文件。硬盘也可以使用字符设备文件。
+d	    目录文件。目录可以包含文件和其他目录。
+l	    软链接。可以链接任何普通文件，类似 Windows 的快捷方式。
+p	    具名管道。管道是进程间的一种通信机制。
+s	    用于进程间通信的套接字。
+
+
+
+
+
+
+
+
+
+
+管道
+管道: pipeline . 连接两个命令. 前面命令的输出 变成 后面命令的输入
+为了建立管道，需要在两个命令之间使用竖线(|)连接。
+
+管道是Linux进程之间一种重要的通信机制；除了管道，还有共享内存、消息队列、信号、套接字(socket) 等进程通信机制。
+
+重定向
+cat > nusers 
+cat是输出文件内容的命令，>nusers表示把内容送到文件 nusers 里而不是默认的显示在屏幕上。
+
+- > 重定向: 保存输出结果到某个文件用的.
+- >> 重定向: 追加到文件尾部.
+
+
+
+
+CURL
+文件传输工具.  获取网页
+
+curl -V 查看支持的协议类型  可以看到确实没有 HTTPS.
+
+curl-7.49.1 curl -V
+curl 7.49.1 (x86\_64-apple-darwin15.6.0) libcurl/7.49.1 zlib/1.2.5
+Protocols: dict file ftp gopher http imap ldap ldaps pop3 rtsp smtp telnet tftp
+Features: IPv6 Largefile libz UnixSockets
+
+
+*Mac 支持 Https 解决方法*:
+下载curl源码包. 编译的时候 加上— with-darwinssl 选项
+./configure --with-darwinssl
+
+然后 make 然后 sudo make install
+然后再看看 curl -V 就有 https 了.
+
+
+*reinstall curl :*
+[下载源代码]   选tar.gz 这个格式.
+
+tar -xzf curl-\*\*\*.tar.gz
+cd curl-*.*.\*
+./configure --with-darwinssl
+make
+sudo make install
+
+这里的 --with-darwinssl 是关键.
+
+
+
+
+换源
+- kali2.0 中科大源	
+  sudo vi /etc/apt/sources.list
+   //必须用 sudo 不然会报错 注释掉官方源，粘贴以下四行进去
+
+  deb http://mirrors.ustc.edu.cn/kali sana main non-free contrib deb-src http://mirrors.ustc.edu.cn/kali sana main non-free contrib deb http://mirrors.ustc.edu.cn/kali-security/ sana/updates main contrib non-free deb-src http://mirrors.ustc.edu.cn/kali-security/ sana/updates main contrib non-free 
+
+  apt-get update 
+- 阿里源地址链接 (deb http://mirrors.aliyun.com/kali kali main non-free contrib   deb-src http://mirrors.aliyun.com/kali kali main non-free contrib   deb http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+常见Linux 目录 ✔︎
+bin/sbin;  dev;  etc;  home/root;  opt;  usr; var; lib; mnt
+
+/ :  根目录    只能包含目录，不能包含具体文件。
+
+dev: 设备驱动. Linux 所有设备都是文件.如 硬盘啊 声卡啊..
+
+etc: 配置文件: hosts; httpd.conf (apache的配置文件)
+
+home/root:     普通用户/root用户的家目录
+
+opt: 额外软件: option (可选) 
+
+usr: 系统软件  usr/local → 用户安装的软件默认位置
+
+var: 系统文档. 如日志.  var/log → 系统日志
+
+bin/sbin 可执行的文件/命令: ls cp mkdir....
+bin  → 储存普通用户可以使用的 基础命令
+shin → 储存root用户可以使用的 基础命令
+
+lib: 共享函数库.
+函数 可以看成 功能.  各种系统功能都是通过一个个函数来实现的
+不是所有的功能都在内核中的. 内核要精简. 
+内核外的功能都放在这里.用到时候调用.不用就不调用.
+
+mnt 临时挂载目录. 所有的存储设备都要先挂载才能使用.
+tmp 临时文件目录，系统重启后不会被保存。
+
+
+
+系统 所有数据都是文件,所以目录结构很重要.
+以根目录为主:用/表示
+文件数据 实际数据是 放在硬盘分区中的 
+挂载的意思:根目录 对应 那个分区(c d e 盘)
+
+比如 根目录下面有 5个文件夹 etc dev bin misc home
+可以把前四个 文件夹 挂载到 c 盘
+把 home 文件夹 挂载到 d 盘
+
+系统安装  最好自定义custom 分区
+新手: 只要 分根目录 /
+和 swap 分区就好
+
+高级点的: 留个备用分区  备份一些重要配置/脚本
+读写频繁的目录 与 根目录 分开.
+ /  ; /usr ; /home ; /var ; /Swap  都是容量大且读写频繁的. 
+20G 建议  15g 给 linux  1g swap(内存2倍) 内存超4g 的话 也不是必须要分的. 4g 留着备用. 
+iso 文件  映像文件  不能用数据格式 刻成光盘的
+必须 用 映像文件格式 刻录成光盘才行.
+
+
+
+
+
+
+重要文件
+- /etc/passwd  系统账户信息.
+- /etc/shadow  账户密码信息.加密的密码,不是明文.
+- /etc/group   群组信息 这里修改群组名
+- /etc/sudoers 给普通用户 开通临时使用 root 的权限
+
+
+
+
+
+
+任务 ✔︎
+任务是最抽象的.可以是一个进程 也可以是多个进程.
+进程: 一个进程可以看成一个独立的程序.
+一个进程所拥有的数据和变量只属于它自己..
+
+查看运行任务: jobs
+查看正在运行的任务. 没有运行的任务时候是不会显示的.  jobs -l
+➜  sh jobs
+➜  sh jobs -l
+➜  sh top &
+[1] 69443
+[1]  + 69443 suspended (tty output)  top
+➜  sh jobs
+[1]  + suspended (tty output)  top
+
+
+暂停任务
+如果希望将当前任务转移到后台，可以先 Ctrl+z 暂停任务， 再使用 bg 命令。 任务转移到后台可以空出终端，继续输入其他命令。
+bg 命令可以将后台暂停的任务，调到前台继续运行，语法为：
+$bg %jobnumber
+
+前后台任务切换: fg 
+fg % 任务编号
+➜  sh fg % 1
+jobnumber 是通过 jobs 命令获取的后台任务的的序号，注意不是pid。
+如果后台只有一个任务，可以不指定 jobnumber。 直接用 fg
+
+
+ 
+
+
+
+
+
+
+文件储存结构
+
+文件: 目录项 + inode (文件索引) + 数据块(文件内容)
+目录项: 文件名+inode节点号
+inode:  文件索引. 包含文件的基础信息 以及 数据块的指针.
+
+
+inode 文件索引
+硬盘最小的储存单位叫: 扇区 sector; 每个扇区 0.5kb
+文件存储的最小单位叫:   块 block   每块的一般是4k. 也就是8个扇区.
+操作系统读取硬盘是以块为单位的.也就是一次性连续读取多个扇区.
+查看某个文件:  先从 inode表中查出文件属性.以及数据存放点. 再从数据块中读取数据.
+
+除了文件名和文件数据 以外的所有文件信息 都存在 inode中.
+
+文件数据都存储在块中. 显然我们还必须找到一个地方储存文件的元信息.
+比如 文件的创建者. 创建日期. 文件大小. 这种储存元信息的区域就叫 inode. 也就是索引节点.
+
+inode:
+文件字节数.
+文件拥有者 ID.
+文件 group ID
+文件的 读写执行权限.
+文件的时间戳: 
+ctime: status time   inode上次变动的时间.
+mtime: 文件内容上次变动时间.
+atime: access time文件上一次打开时间
+
+
+
+
+链接数: 多少个文件名指向这个inode
+
+查看 inode 信息:  stat xxx
+
+
+
+inode 也会消耗硬盘空间.  所以格式化硬盘的时候. 操作系统会自动把硬盘分成两个区域.
+一个是数据区. 存放文件数据.
+一个是inode区.(inode table) 存放inode所包含的信息.
+
+每个inode节点.大小 一般是 128/256字节.
+inode节点的总数，在格式化时就给定，一般是每1KB或每2KB就设置一个inode。假定在一块1GB的硬盘中，每个inode节点的大小为128字节，每1KB就设置一个inode，那么inode table的大小就会达到128MB，占整块硬盘的12.8%。
+
+查看每个硬盘分区的inode总数和已经使用的数量，可以使用df -i 命令。
+
+由于每个文件都必须有一个inode，因此有可能发生inode已经用光，但是硬盘还未存满的情况。这时，就无法在硬盘上创建新文件。
+
+每个inode都有一个号码，操作系统用inode号码来识别不同的文件。
+这里值得重复一遍，Linux系统内部不使用文件名，而使用inode号码来识别文件。对于系统来说，文件名只是inode号码便于识别的别称或者绰号。表面上，用户通过文件名，打开文件。实际上，系统内部这个过程分成三步：首先，系统找到这个文件名对应的inode号码；其次，通过inode号码，获取inode信息；最后，根据inode信息，找到文件数据所在的block，读出数据。
+使用ls -i命令，可以看到文件名对应的inode号码，例如：
+➜  Desktop ls -i x
+16615696 x
+
+
+
+
+- 目录项
+linux中  目录也是一种文件. 打开目录 其实就是打开目录文件.
+
+目录文件结构很简单: 就是一系列目录项 的列表.
+每个目录项: 文件的文件名 + 文件对应的inode号
+
+
+
+
+
+
+
+
+
+
+用户管理
+
+用户: Root用户 & 系统用户 & 普通用户.
+用户组: 一个组可以包含多个用户.  一个用户可以属于不同的组.
+
+相关文件:
+/etc/passwd:  保存用户名和密码(加密后的密码!)的信息.
+/etc/group:   保存用户组的所有信息
+
+➜  Desktop cat /etc/passwd
+##
+# User Database
+#
+# Note that this file is consulted directly only when the system is running
+# in single-user mode.  At other times this information is provided by
+# Open Directory.
+#
+# See the opendirectoryd(8) man page for additional information about
+# Open Directory.
+##
+nobody:*:-2:-2:Unprivileged User:/var/empty:/usr/bin/false
+root:*:0:0:System Administrator:/var/root:/bin/sh
+daemon:*:1:1:System Services:/var/root:/usr/bin/false
+_uucp:*:4:4:Unix to Unix Copy Protocol:/var/spool/uucp:/usr/sbin/uucico
+_taskgated:*:13:13:Task Gate Daemon:/var/empty:/usr/bin/false
+_networkd:*:24:24:Network Services:/var/networkd:/usr/bin/false
+_installassistant:*:25:25:Install Assistant:/var/empty:/usr/bin/false
+_lp:*:26:26:Printing Services:/var/spool/cups:/usr/bin/false
+_postfix:*:27:27:Postfix Mail Server:/var/spool/postfix:/usr/bin/false
+
+每行一个用户,每行分为7个字段. 
+sam    :  x  :  200   :  50 :  Sam san  :  /usr/sam   : /bin/sh
+用户名   密码  用户ID   组ID   描述信息   用户主目录    用户Shell
+密码: 都是x.  系统中还有一个/etc/shadow文件用于存放加密后的口令，
+用户ID: 系统内部根据用户ID而不是用户名来识别不同的用户
+•	0代表系统管理员
+•	1-500系统预留的ID。
+•	500以上是普通用户使用。
+
+用户主目录: 用户登录系统后将首先进入该目录。root用户默认是/，普通用户是/home/username。
+用户Shell: 用户登录系统时使用的Shell。false 就是不让用户登录的意思.
+
+
+
+
+系统性能
+
+系统整体性能取决于各种资源的平衡. 类似木桶原理.
+主要资源: CPU 内存 硬盘 I/O时间 网络时间 应用程序.
+CPU 又分 系统占用的CPU  和 用户占用的CPU
+I/O时间 网络时间.  本地硬盘响应时间 以及网络连接花费时间.
+内存: 切换山下文 和 交换数据(虚拟内存内容的导入导出) 花费的时间
+一般认为 CPU 70% 以内是良好状态.
+
+
+
+
+
+
+
+
+
+
+日志 & 分析
+
+win / linux / 应用程序 / 路由器/防火墙 都有日志的.
+系统/软件运行会产生各种信息: 错误信息.警告信息 和 其他提示.. 
+这些对管理员了解系统状态非常有用. 
+
+
+文件监控:
+如：文件或文件夹被创建、访问、查看、修改、重命名）
+了解谁、什么时间、从哪里、访问/修改了什么文件。也可以根据实际情况，配置实时告警。
+
+用户监控:
+执行了什么活动、活动的结果、影响的服务器、从哪里进行访问的等等。
+
+Linux 提供非常灵活/强大的日志功能. 几乎可以保存所有操作记录.
+
+syslog 这程序就是来完成这个工作的.
+会根据不同的类别.优先级把日志保存到不同的文件中.
+日志文件默认都是在/var/log 目录下
+Mac 的话可以用 console 控制台来非常方便的查看日志
+
+➜  /usr cd /var/log
+➜  log ls
+Bluetooth                 displaypolicyd.log        opendirectoryd.log.7      timezone
+CDIS.custom               displaypolicyd.stdout.log opendirectoryd.log.8      uucp
+CoreDuet                  emond                     opendirectoryd.log.9      vnetlib
+DiagnosticMessages        eventmonitor              osquery                   weekly.out
+GrandHelper.log           fsck_hfs.log              powermanagement           wifi.log
+SleepWakeStacks.bin       getsslpassphrase.log      ppp                       wifi.log.0.bz2
+alf.log                   install.log               radius                    wifi.log.1.bz2
+apache2                   monthly.out               system.log                wifi.log.10.bz2
+appfirewall.log           opendirectoryd.log        system.log.0.gz           wifi.log.2.bz2
+asl                       opendirectoryd.log.0      system.log.1.gz           wifi.log.3.bz2
+com.apple.revisiond       opendirectoryd.log.1      system.log.2.gz           wifi.log.4.bz2
+com.apple.xpc.launchd     opendirectoryd.log.2      system.log.3.gz           wifi.log.5.bz2
+corecaptured.log          opendirectoryd.log.3      system.log.4.gz           wifi.log.6.bz2
+cups                      opendirectoryd.log.4      system.log.5.gz           wifi.log.7.bz2
+daily.out                 opendirectoryd.log.5      system.log.6.gz           wifi.log.8.bz2
+devicemgr                 opendirectoryd.log.6      system.log.7.gz           wifi.log.9.bz2
+
+
+日志类型:
+auth	    用户认证时产生的日志，如login命令、su命令。
+authpriv	与 auth 类似，但是只能被特定用户查看。
+console	    针对系统控制台的消息。
+cron	    系统定期执行计划任务时产生的日志。
+daemon	    某些守护进程产生的日志。
+ftp	        FTP服务。
+kern	    系统内核消息。
+lpr	        与打印机活动有关。
+mail	    邮件日志。
+mark	    产生时间戳。系统每隔一段时间向日志文件中输出当前时间.
+				可以由此推断系统发生故障的大概时间。
+news	    网络新闻传输协议(nntp)产生的消息。
+ntp	        网络时间协议(ntp)产生的消息。
+user	    用户进程。
+uucp	    UUCP子系统。
+
+日志优先级
+emerg	紧急情况，系统不可用（例如系统崩溃），一般会通知所有用户。
+alert	需要立即修复，例如系统数据库损坏。
+crit	危险情况，例如硬盘错误，可能会阻碍程序的部分功能。
+err	    一般错误消息。
+warning	警告。
+notice	不是错误，但是可能需要处理。
+info	通用性消息，一般用来提供有用信息。
+debug	调试程序产生的信息。
+none	没有优先级，不记录任何日志消息。
+
+常见日志文件
+/var/log/boot.log	开启或重启日志。
+/var/log/cron	    计划任务日志
+/var/log/maillog	邮件日志。
+/var/log/httpd   	Apache HTTP 服务日志。
+/var/log/samba  	samba 软件日志
+/var/log/messages	该日志文件是许多进程日志文件的汇总，
+						从该文件可以看出任何入侵企图或成功的入侵。
+
+日志配置文件
+/etc/syslog.conf 是 syslog 的配置文件，
+➜  /etc cat syslog.conf
+# Note that flat file logs are now configured in /etc/asl.conf
+
+install.*                                               @127.0.0.1:32376
+
+# used for the adaptive firewall: man emlog.pl
+auth.*                                @127.0.0.1:60762
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+❌Misc❌ 
+
+用命令发送邮件
+$mail [-s subject] [-c cc-addr] [-b bcc-addr] to-addr
+$mail -s "Test Message" admin@yahoo.com
+→ 写正文内容 → 按ctrl+D 结束输入. 然后就发送了.
+
+s: 邮件标题
+c: 发送给谁.多人用逗号隔开
+b: 抄送给谁.
+
+
+发送文件:
+$mail -s "Report 05/06/07" admin@yahoo.com < demo.txt
+
+
+接收邮件: mail

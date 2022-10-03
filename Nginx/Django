@@ -1,0 +1,440 @@
+🔸 Django 版本
+
+    最新稳定版本是 1.11.6  安装:   pip install Django==1.11.6
+    最新测试版本是 2.0     安装:   pip install --pre django
+
+    1.11  和 2.2 是长期支持的版本. 所以2.0 的话... 暂时不折腾了.
+    而且2 的话变化非常大. 你不是老手 是搞不定的. 
+
+
+🔸 项目环境:   开发在Mac上.  部署到CentOS上.
+
+
+🔸 安装 Django 1.11.6 
+
+    sudo pip install Django==1.11.6
+    终端好像需要翻墙,不然下不了..
+    当然你可以去官网下下来 手动编译安装. 
+    https://www.djangoproject.com/
+
+
+🔸 Python 版本 
+
+    Django 是对Python 版本有要求的!!!
+    Django 1.11 需要 Python 2.7 3.4 3.5 3.6 等待
+
+
+
+🔸 Mac 虚拟环境准备
+
+    ⦿ 创建虚拟环境         🔅 virtualenv djangoenv
+
+    ⦿ 进入虚拟环境         🔅 source djangoenv/bin/activate
+
+    ⦿ 安装Django           🔅 sudo pip install Django==1.11.6
+
+    ⦿ 重启虚拟环境 (可选)  🔅 deactivate && source djangoenv/bin/activate
+    
+    ⦿ 注意 djangoenv 只是个虚拟环境的名字. 可以任意取.
+    ⦿ 注意 djangoenv 是一个文件夹, 各种虚拟环境需要安装的东西都会安装在这个文件夹.
+    ⦿ 注意 djangoenv 不是 Django 的项目文件夹. 是存放虚拟环境的文件夹.
+
+
+    ⦿ 验证 Django 安装 
+
+      (djangoenv) ✘✘∙𝒗 djangoenv python
+      Python 2.7.13 (default, Apr  4 2017, 08:47:57)
+      [GCC 4.2.1 Compatible Apple LLVM 8.1.0 (clang-802.0.38)] on darwin
+      Type "help", "copyright", "credits" or "license" for more information.
+      >>> import django
+      >>> print(django.get_version())
+      1.11.6
+      >>> exit()
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸 数据库选择 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+Django 默认用的 SQLite 数据库.  
+如果你要用 MySQL 那么需要安装对应的组件.
+
+
+
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+🔸 初始化项目目录 
+
+    首先你要新建一个文件夹,来放 Django 项目相关的文件.
+    由于 Django 是个网站, 一般来说都是放到 Nginx的网站文件夹下的.
+    Mac 的话 就是 /usr/local/var/www
+    CentOS的话 最好也建议放到 home 目录下面. 不然可能会有权限问题! 
+    我们在 /var/www/ 目录下
+    用 Django 自带的 django-admin.py startproject 命令来快速创建一个djangosite项目.
+    django-admin.py 这个命令在你安装好 Django 后就自动加入到你的系统环境路径中了. 所以能直接用
+    然后就会自动帮你简历很多Django必要的文件了
+
+    🔅 cd /usr/local/var/www
+
+    🔅 django-admin.py startproject djangosite
+
+        查看项目文件构成
+        
+          (djangoenv) ✘✘∙𝒗 www tree djangosite
+          djangosite
+          ├── djangosite
+          │   ├── __init__.py   ➜ 不用你管.
+          │   ├── settings.py   ➜ 项目设置.
+          │   ├── urls.py       ➜ URL 设置. 就是网站的那个网址对应那个网页都是这里指定的. 
+          │   └── wsgi.py
+          └── manage.py         ➜ 使用命令,会用就好. 不用管. 
+
+
+🔸 运行开发服务器 
+
+    初始化好环境后. 相对于有了一个最基本的网站了.
+    要看网页 是需要 像 Nginx Apache 这样的 web服务器的.  
+    Django 自带了个 web 服务器, 功能虽然非常一般般,但是使用非常方便.
+    一个命令就可以了:  python manage.py runserver  
+    当然要执行这个命令 需要先 cd 到 manage.py 这个目录.
+    这就不需要你学 Nginx 了. Nginx 可不容易学的... 降低学习Django的入门要求吧.
+
+    然后浏览器访问 http://127.0.0.1:8000/ 就会出现 
+    It worked!
+    Congratulations on your first Django-powered page.
+    
+    至于如何开发网页就要你来弄了..
+
+    注: 
+    如果你电脑的 8000 端口被占用可以 手动指定端口
+    python manage.py runserver 8080 ➜ 就用 http://127.0.0.1:8080/ 来访问
+    
+    如果你想然所有人都可以看到你的网页 那么用 0.0.0.0  默认是只有你本机可以看的.
+    python manage.py runserver 0.0.0.0:8000
+
+
+
+🔸 Next
+
+    接下来改网页内容.. 自带的多 low... 怎么也得来个 hello world ....
+
+    如果你折腾过静态网站. 那么你会发现静态网站的网址是和 网页文件在服务器上的路径有关系的!
+    比如你把 一个 hello.html 放到 var/www 下面 那么 可以直接用浏览器: 127.0.0.1/hello.html 来访问
+    如果你把 一个 world.html 放到 var/www/xxx 下面 那么你要用 127.0.0.1/xxx/world.html 来访问.
+
+    但是 Django 是动态网站!  和静态网站对 URL 的处理方式不同! 
+    静态网站要显示hello world 两个字. 
+    首先要把 hello world 写到 html 文件中.
+    然后把 html 文件放到指定的位置
+    最后让浏览器访问某个网址才行 
+
+    动态网站的话, 网页内容是由函数生成的!  URL 则是定义在 URLconf 配置文件中的.
+    Django 页面内容的产生是靠 view function 视图函数来产生的.
+    Django 的URL 是定义在 urlconf 中的.
+
+    首先我们来创建一个 hello world 视图函数.
+
+
+🔵 第一个视图
+
+    (djangoenv) ✘✘∙𝒗 djangosite tree
+    .
+    ├── db.sqlite3
+    ├── djangosite
+    │   ├── __init__.py
+    │   ├── __init__.pyc
+    │   ├── settings.py
+    │   ├── settings.pyc
+    │   ├── urls.py
+    │   ├── urls.pyc
+    │   ├── wsgi.py
+    │   └── wsgi.pyc
+    └── manage.py
+
+    djangosite 下新建个 view.py  也就是 和 urls.py 同级的地方创建.
+    文件内容输入 下面三行内容.
+    这个就相对于写好一个静态html 文件了.
+    接下来就是 Django 怎么显示这个这个函数/文件了
+
+    from django.http import HttpResponse
+
+    def hello(request):
+        return HttpResponse("Hello world")
+
+
+
+🔵 URL 
+
+    Django 想要显示某个网页/函数. 就得先配置urls.py 这个文件.
+    Django 首先会查找配置文件, 有对应的URL 才能显示出内容了. 
+    重点就是 urls.py 里的 urlpatterns 设置.   默认是这样的 
+
+    from django.conf.urls import url
+    from django.contrib import admin
+
+    urlpatterns = [
+        url(r'^admin/', admin.site.urls),
+    ]
+
+
+
+    重点就是两行. 
+    from django.contrib import admin
+    url(r'^admin/', admin.site.urls),
+    首先你要导入... 然后你就可以用 http://127.0.0.1:8000/admin 来访问 admin.site.urls 
+    admin.site.urls  是某个视图文件中预先定义好的. 
+
+
+    如果我们想要用 Django 显示 hello world. 
+    首先要导入    from mysite.views import hello
+    然后是设置路径.      ('^hello/$', hello),
+    也就 urls.py 是改成下面的.
+
+    from django.conf.urls import url
+    from django.contrib import admin
+    from djangosite.view import hello
+
+    urlpatterns = [
+        url(r'^admin/', admin.site.urls),
+        url(r'^hello/$', hello),
+    ]
+
+    然后你就可以用 http://127.0.0.1:8000/hello/ 就会出现 hello world了..
+
+    简单来说，我们只是告诉 Django，所有指向 URL /hello/ 的请求都应由 hello 这个视图函数来处理。
+    这里需要懂点正则式, 不会写没关系, 至少要能看懂
+    如果去企业工作, 正则式是必须要会的... 一遍的URL 都是匹配出来的. 而不是完全指定的...
+
+    如果你在浏览器输入一个 没有在 urls.py 中定义的url 那么就会出现 404 页面.
+    Django 自带的 404  还能用来问题排查.
+
+
+
+
+
+
+🔵 第二个视图
+
+    hello world 是指定的 不会变的. 不是所谓的动态网站. 怎么才能动起来呢...
+    比如网页上显示时间. 只显示时间的话 不需要数据库的. 直接调用系统的时钟就行.
+
+    首先我们要指定 怎么用python 显示时间.
+
+        (djangoenv) ✘✘∙𝒗 djangosite python
+        Python 2.7.13 (default, Apr  4 2017, 08:47:57)
+        [GCC 4.2.1 Compatible Apple LLVM 8.1.0 (clang-802.0.38)] on darwin
+        Type "help", "copyright", "credits" or "license" for more information.
+        >>> import datetime
+        >>> now = datetime.datetime.now()
+        >>> now
+        datetime.datetime(2017, 10, 16, 16, 11, 3, 761125)
+        >>> print now
+        2017-10-16 16:11:03.761125
+
+    下面怎么才能让 Django 显示当前日期和时间. 
+    我们只要把 datetime.datetime.now()放如视图函数.然后改下 urls.py 就可以了.
+    我们就不新建view.py 文件了.  直接用之前的  view.py  尾部追加就可以了. 
+
+    imoort datetime
+    def current_datetime(request)
+        now = datetime.datetime.now()
+        html = "<html><body>IT iS now %s.</body></html>" % now
+        return HttpResponse(html)
+
+    就5行代码 我们简单分析下.
+    第一行 import  一个时间模块 导入后就可以计算时间日期了.
+    第二行 def 是定义一个函数! 
+    第三行 now =... 是计算当前的时间日期. 结果保存为 变量 now 
+    第四行 html = ....  %s 是一个占位符.  最后面的 % now 表示用变量 now 来替代 %s
+    第五行 return ... 视图返回一个 httpresponse 对象.  对象内容是第四行html 的结果
+
+
+🔸 下面来配置 urls.py  
+
+    同样的. 先导入视图   ➜  from djangosite.views import current_datetime
+    然后修改 urlpatterns ➜  ('^time/$', current_datetime),
+
+    然后就可以用浏览器访问 127.0.0.1:8000/time/
+    会显示  IT iS now 2017-10-16 08:40:52.178783.
+
+    详情请参考 http://djangobook.py3k.cn/2.0/chapter03/
+
+
+
+🔵 URL 
+
+    两个例子下来. 应该对Django 有点理解了.  现在来说下 Django 的 URL. 
+
+    在 Django 中  url 和视图 是 松 耦合的
+    也就是说... 决定URL返回哪个视图函数  和 实现这个视图函数是在两个不同的地方.
+    比如说你要改变 time 的url 把 127.0.0.1/time 改成 127.0.0.1/currenttime 
+    那么你只要改 urls.py 就好. 而不用去改视图. 因为时间还是时间没变. 也就没必要修改函数.
+
+
+
+
+🔵 第三个视图 动态URL 
+上面的时间毕竟不是真正的动态网站.  虽然内容确实是动态的. 但是 URL是静态的.
+大多数网站 url 都会包含相关的参数. 
+比如在线书店会给每一本书提供一个URL.如 /books/1/ 、/books/2/、 /books/219/....
+如果我现在想做个 国际时钟的网站.  全球分为24和时区. 每个时区一个页面.
+如 /time/plus/1 表示当前时间加一个小时的时间.
+如 /time/plus/2 表示当前时间加二个小时的时间.
+如 /time/plus/3 表示当前时间加三个小时的时间.
+一遍我们会这样设置 urlpattern 
+urlpatterns = patterns('',
+    ('^time/$', current_datetime),
+    ('^time/plus/1/$', one_hour_ahead),
+    ('^time/plus/2/$', two_hours_ahead),
+    ('^time/plus/3/$', three_hours_ahead),
+    ('^time/plus/4/$', four_hours_ahead),
+)
+
+很明显这样是不好的, 这样的话 每个时区你都要做一个视图.
+而且上面的 urlpatterns 只设置了 4个小时的.   哪天要弄 +5小时的有得添加.
+其实都是有共同点的. 
+Django 的核心理念是 URL 必须看起来漂亮...
+URL /time/plus/3/ 更加清晰， 更简单，也更有可读性，可以很容易的大声念出来，
+因为它是纯文本，没有查询字符串那么 复杂。 漂亮的URL就像是高质量的Web应用的一个标志。
+
+怎么设计程序来处理任意数量的时差呢. 答案是用 通配符. 
+一个 url 模式就是一个正则表达式...  我们用正则式来解决这类问题...
+
+    (r'^time/plus/\d+/$', hours_ahead),
+    这个正则式匹配 /time/plus/2/ , /time/plus/25/ ,甚至 /time/plus/100000000000/ 的任何URL
+    
+    如果你要限制最大允许99小时, 也就是两位数. 那么可以用下面的 
+    (r'^time/plus/\d{1,2}/$', hours_ahead)
+
+
+正则式最前面的r是干什么用的呢...
+r 告诉python 后面的是原始字符串. 不需要处理里面的反斜杆. 也就是转义字符.
+普通python字符串中. 反斜杆用于特殊字符的转义,  如 \n 的意思是换行
+正则式的语法 和 python 的语法是有冲突的. 所以强烈建议用正则式的时候 都在最前面加上r避免转义.
+
+现在我们 已经设计了一个带通配符的 url. 
+我们需要一个方法把它传递到视图函数中去...
+这样我们只用一个视图函数就可以处理所有时间段了.
+我们使用 圆括号把参数在 url 里面标识出来. 
+这个例子中  我们把这些数字作为参数. 用圆括号把 \d{1,2} 包围起来 变成了 
+    (r'^time/plus/(\d{1,2})/$', hours_ahead)
+如果你数序正则式,你就指定. 正则式里面也是用 圆括号来从文本中提取数据的. 
+最终的 urls.py 包含两个视图: current_datetime, hours_ahead
+
+from django.conf.urls.defaults import *
+from mysite.views import hello, current_datetime, hours_ahead
+
+urlpatterns = patterns('',
+    (r'^hello/$', hello),
+    (r'^time/$', current_datetime),
+    (r'^time/plus/(\d{1,2})/$', hours_ahead),
+)
+
+现在开始写hours_ahead 视图. 
+这个例子中 我们我们是先写 url 再写视图的.  之前我们是先写 视图再写url的. 
+这是两种思维. 如果你是一个大局观念强的. 你会在项目开始前就想好所有的 url 配置.
+其他人可能更喜欢先写视图 再写url.  两种方法都可以. 
+
+
+houes_ahead 和 current_datetime 很像. 
+关键区别在于 它多了一个额外参数: 时间差
+
+from django.http import http404, httpresponse
+import datetime 
+
+def hours_ahead(request, offset):
+  try: 
+      offset = int(offset)
+  except ValueError:
+      raise Http404()
+  dt = datetime.datetime.now()+datetime.timedelta(hours=offset)
+  html = "<html><body>In %s hour(s), it will be %s.</body></html>" % (offset, dt)
+  return httpresponse(html)
+
+
+
+
+
+
+  🔵 模板  
+
+
+上面的例子中html 被直接写在了 Python中....
+虽然这样便于解释 视图是如何工作的. 
+但是直接将 html 写在 python 代码中 不是一个好主意. 有很多缺点. 比如.
+ 你想改变任何html页面显示 都要改对应的代码...
+ 其实网站 前端页面是经常要改的. 但是后端的python代码改的却很少...
+ python 和 html 是两个不同 的工作!  大部分公司都是分开的两个人. 甚至两个部门..
+ 前端人员不应该需要会改python 才能完成前端工作...
+
+
+
+🔸 模板基本知识
+
+
+
+
+
+🔵 模型.
+利用Djangp 建站的基本路径:   建立视图 和 URLconf .
+
+视图负责放回结果. 
+
+在现代的web应用中.  经常涉及到与数据库的交互. 
+经常要从数据库中取出一些数据. 然后在 web 页面中显示这些数据.
+
+就比如 amazon 就是一个数据驱动的站点. 
+每个产品页面都是数据库数据 用 html ges进行展现. 
+当用户进行评论的时候, 评论会被写到数据库中. 
+
+python 天生具备 简单而强大的数据库查询执行方法. 
+Django 非常适合开发数据库驱动网站.
+Django 数据库层. 
+
+要用 Python 操作数据库. 
+你首先要安装 musqldb 这个库/模块.  pip install mysql-python
+当然你首先得安装 mysql 数据库... 这个就不说了...
+
+🔸 查询 Mysql 数据库: 
+
+
+
+
+
+
+博客... 文本多的可以用 postgresql. 
+就需要安装...  psycopg 这个模块 而不是 mysqldb .
+需要写个 后端框架么....  要么...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+# 工具集合
+
+
+## 端口扫描 nmap 
+
+
+## 漏洞扫描二: OpenVAS
+OpenVAS 是Nessus分支. 完全免费! 是Kali中的标准.
+
+不支持MAC OS 必须用虚拟机. Linux..
+
+Kali 不自带,需先安装的. 
+`sudo apt-get install openvas`
+
+
+
+
+
+

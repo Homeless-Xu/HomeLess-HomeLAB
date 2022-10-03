@@ -1,0 +1,431 @@
+---
+layout: post
+title: ZSH tags: CLI
+categories: Tooles
+---
+
+
+❤️ zsh install: 
+   brew install zsh  (home-brew needed )
+
+❤️ iTerm install :
+   official website .   iTerm2 download link (https://www.iterm2.com/downloads.html)
+
+❤️ oh-my-zsh install:
+   Website (http://ohmyz.sh)
+   sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" 
+
+
+🔵 zsh 插件: autojump
+  自动跳转.
+
+
+
+🔵 zsh 插件: autosuggestions 
+  https://github.com/zsh-users/zsh-autosuggestions
+  根据历史命令智能补全
+
+  安装
+  git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+  添加到 vi ~/.zshrc
+  plugins=(zsh-autosuggestions)
+
+  使用: 输入命令就会自动补全.
+
+
+
+🔵 curl 升级美化版本
+  https://github.com/jakubroztocil/httpie/
+
+  ⦿ MacOS 安装   brew install httpie
+  ⦿ Linux 安装   yum install httpie
+
+  ⦿ 语法:  http [flags] [METHOD] URL [ITEM [ITEM]]
+      http httpie.org
+
+
+
+
+
+
+
+
+🔵 Taskwarrior: 这个是装逼的, 终端 todo list
+https://taskwarrior.org/
+
+
+
+
+
+
+
+🔵 dbcli/mycli: 这个是装逼的, 终端操作数据库的时候, 自动提示
+
+
+
+
+
+
+
+
+🔵 dirhistory 目录的上翻，下翻功能的插件。
+
+  cd ~
+  cd /usr
+  cd share
+  cd doc
+
+  如果现在在 share .
+  如果按 alt-left 就会到 usr 
+  如果按 alt-right 会到 doc 
+
+
+
+
+
+
+
+🔵 OSX 插件
+
+一款增加了一些在OSX上实用的命令插件。
+
+
+Command	Description
+tab	Open the current directory in a new tab
+ofd	Open the current directory in a Finder window
+pfd	Return the path of the frontmost Finder window
+pfs	Return the current Finder selection
+cdf	cd to the current Finder directory
+pushdf	pushd to the current Finder directory
+quick-look	Quick-Look a specified file
+man-preview	Open a specified man page in Preview app
+
+
+
+
+🔸 
+
+
+    
+iTerm2
+
+开发必备.最强大终端.
+
+
+在 Keys -> Hotkey 中设置 command + option + i 在 Profiles -> Default -> Check silence bell
+
+快速显示和隐藏 iTerm
+
+
+
+
+⌘  数字 切换标签
+⌘  方向键 切换标签
+
+⌘  回车键 全屏
+⌘  f 查找
+
+⌘ d 垂直分屏幕 
+⌘ shift d 水平分屏 
+⌘  () 分屏切换 
+⌘ t 新建标签
+⌘ w 关闭标签
+
+⌘ ; 自动补全历史命令
+
+⌘ shift h 剪切板历史
+
+
+
+
+
+
+
+
+
+
+
+
+
+** ZSH Function :
+
+- ping -  ✚  ⇥   列出 ping 的所有参数说明.
+
+- ping ✚  ↑      智能匹配有关 ping 的历史命令。
+
+- 双击 Tab        给出所有的补全列表并直接进入到选择列表
+
+- 支持后缀alias,即以什么命令打开特定的后缀名文件。   例如alias -s js=mvim,输入hello.js，会以vim打开该文件
+
+ShortCut
+  
+⌘R        → 清屏
+^U         → 清行
+⌘N/T      → 新 窗口/标签页
+⌘;        → 智能匹配历史命令
+⌘数字     → 标签页切换
+⌘D    → 水平分屏 
+⌘⇧D  → 垂直分屏
+⌘⇧h      → 列出剪切板历史
+⌘↵       → 全屏切换 
+
+
+
+
+
+
+Vundle
+插件管理. 能自动更新插件,任意备份.   官方Git 主页 (   https://github.com/gmarik/Vundle.vim)
+
+install : 
+1. install git (Required!!!!)
+   brew install git
+
+   1.1 install Vundle        sudo git clone https://github.com/gmarik/Vundle.vim.git /.vim/bundle/Vundle.vim
+
+   1.2 打开/新建 ~/.vimrc
+       Mac 默认是没有的,新建个 .vimrc 文件就行. 
+
+   1.1 复制别人的 vundle 配置代码 (最简单的方法.)到新建的配置文件.
+
+
+
+       set nocompatible                " be iMproved
+       filetype off                    " required!
+       set rtp+=~/.vim/bundle/vundle/
+       call vundle#rc()
+       ``
+       " let Vundle manage Vundle
+       Bundle 'gmarik/vundle'
+
+       "my Bundle here:
+       "
+       " original repos on github
+       Bundle 'kien/ctrlp.vim'
+       Bundle 'sukima/xmledit'
+       Bundle 'sjl/gundo.vim'
+       Bundle 'jiangmiao/auto-pairs'
+       Bundle 'klen/python-mode'
+       Bundle 'Valloric/ListToggle'
+       Bundle 'SirVer/ultisnips'
+       Bundle 'Valloric/YouCompleteMe'
+       Bundle 'scrooloose/syntastic'
+       Bundle 't9md/vim-quickhl'
+       " Bundle 'Lokaltog/vim-powerline'
+       Bundle 'scrooloose/nerdcommenter'
+       "..................................
+       " vim-scripts repos
+       Bundle 'YankRing.vim'
+       Bundle 'vcscommand.vim'
+       Bundle 'ShowPairs'
+       Bundle 'SudoEdit.vim'
+       Bundle 'EasyGrep'
+       Bundle 'VOoM'
+       Bundle 'VimIM'
+       "..................................
+       " non github repos
+       " Bundle 'git://git.wincent.com/command-t.git'
+       "......................................
+       filetype plugin indent on
+
+
+       参考图:  
+
+
+
+   5. 重启 Macvim
+   每修改一次 .vimrc 都要重启macvim.
+
+
+1. 打开 macvim
+
+
+
+Vundle 命令
+|  操作   |  区分大小写  |  备注   |
+|插件安装:|BundleInstall |配置文件加入插件代码 → vim运行命令 |
+|插件删除:|BundleClean   |配置文件删除插件代码  → vim运行命令|
+|插件更新 |BundleUpdate  |
+|列出插件 |BundleList    |
+|查找插件 |BundleSearch  |
+
+
+
+
+Conf macvim
+
+
+
+
+
+VIM 配置文件:
+- vimrc 
+- gvimrc
+- exrc
+
+
+vimrc: 最主要配置文件:
+全局版本 global   → /usr/share/vim/vimrc
+用户版本 personal → ~/.vimrc
+Mac 默认是没有用户版本的.自己建一个!!!
+
+
+
+
+
+
+
+Vundle 插件形式:
+
+1. 官方移植的Vim Script,只需写脚本的名字，      Bu©ndle 'neocomplcache'
+2. Github 插件， 以作者/项目的形式    Bundle 'gmarik/vundle'    Git具体插件信息里面一般会有两行网址链接.一行是github.com 开始的    那行的最后 就是作者/和项目名了
+
+3. 指定一个完整的git repos地址        Bundle 'git://git.wincent.com/command-t.git'
+
+
+
+
+bundle分为三类：
+
+1.  在Github vim-scripts 用户下的repos,只需要写出repos名称
+2.  在Github其他用户下的repos, 需要写出”用户名/repos名”
+3.  不在Github上的插件，需要写出git全路径
+
+
+
+
+
+
+Vundle 安装插件
+
+1. vi ~/.vimrc
+
+   Plugin 'gmarik/Vundle.vim'
+   下面加上插件名字就好了.每个插件一行.
+   如:
+   Plugin scrooloose/nerdtree
+   Bundle 'kien/ctrlp.vim'
+   Bundle 'sukima/xmledit'
+   Bundle 'sjl/gundo.vim'
+   Bundle 'jiangmiao/auto-pairs'
+   Bundle 'klen/python-mode'
+   Bundle 'Valloric/ListToggle'
+   Bundle 'SirVer/ultisnips'
+   Bundle 'Valloric/YouCompleteMe'
+   Bundle 'scrooloose/syntastic'
+   Bundle 't9md/vim-quickhl'
+   Bundle 'Lokaltog/vim-powerline'
+   Bundle 'scrooloose/nerdcommenter'
+
+
+
+
+
+
+Nerdtree 使用方法: > 需要 英文状态下使用.**
+
+?           帮助文档
+
+ma xx.txt 新建 文件
+ma xx/    新建  xx文件夹
+mm        重命名文件 (修改文件名.不是直接输入新文件名)
+md        删除文件!! 需要确认.
+
+R          刷新选中目录 (更新文件之后 不会自动刷新的.) 
+shift + i  隐藏文件开关.
+
+
+- 方向键/hjkl  光标移动.
+  H J     目录最上/最下
+
+  - 回车键 打开和收起目录.   或者直接vim中打开文件(覆盖当前窗口)
+
+    ctrl + w + w   光标左右切换.  (文件/目录 切换用)
+     ctrl + w + h    光标到左侧的目录
+     ctrl + w + l    光标到右侧的文件
+     ctrl + w + r    目录列表左右切换 
+    p 小写  上一级文件夹
+    P 大写  用户目录/父目录
+
+  C 大写 将选中的目录 / 文件的目录   设置为根目录 
+   也就是nerdtree 目录 只显示你选择的根目录.
+
+
+  F   文件夹 or 文件夹+文件 
+
+
+
+
+  o :   目录下:单纯展开目录,相当于回车键
+    文件下:打开文件  光标定位到打开的文件中
+  go:  目录下:窗口中新建水平小窗口  光标不定位过去 .
+    文件下:窗口中新建水平小窗口  光标不定位过去.
+  t   新tab   打开选中文件/选中的书签目录.    光标跳过去
+  T   新tab   打开选中文件/选中的书签目录.    光标不跳过去
+  i / gi   加水平窗口  打开文件/目录      光标 跳/不跳 
+  s /gs       加垂直窗口  打开文件/目录  光标 跳/不跳 
+  - 显示nerdtree 文件系统菜单 esc退回.    node 节点的意思
+  '' B 目录收藏书签??? 开关
+  :tabc  关闭当前tab
+  :tabo  关闭其他tab
+  cmd w  关闭当前tab
+  cmd { } 前后tab
+  !  执行当前文件 
+  O 递归打开节点下 所有目录
+  x合并父目录
+    X 递归 合并节点下所有目录
+     e   编辑当前dif?
+     D 删除当前书签   ???   
+     u 当前根节点的父目录 设为根目录  合拢原根节点
+    U                                                展开
+    r 递归刷新选中目录
+    cd 将cwd 设为选中目录
+     切换标签页:
+    :tabnew          指定文件新建tab
+
+
+
+
+NERDTree
+ 
+功能: 方便目录操作.         列出当前路径的目录树，一般IDE都是有的。
+方便浏览项目的总体的目录结构
+方便创建删除重命名文件或文件名。
+
+MacVim 自动开启 NERDTree
+ .vimrc 添加(首行亲测有效): autocmd VimEnter * NERDTree 
+ 
+F3 快速调出和隐藏 NERDTree
+.vimrc 添加: nmap <F3> :NERDTreeToggle <CR>
+
+
+
+
+
+Autojump ZSH Plugin
+
+原理:  记录你常去的文件夹到数据库 → 根据使用频率 自动跳到常用文件夹.
+
+**手动编译 :
+1. 终端输入:  获取源代码
+   `git clone git://github.com/joelthelion/autojump.git
+   `2.  定位到下载的文件夹
+   `cd autojump
+   `3. 运行 python 的安装 或者 卸载脚本
+   `python ./install.py`
+   .py  就是 python 文件    运行方法: Python hello.py
+   1.1 根据屏幕提示  打开用户的 zshrc 配置        vi /users/v/.zshrc
+       编辑 .zshrc (用户目录下的隐藏文件) 用 ls -a命令显示隐藏文件.
+       文件末尾添加两行屏幕出现的提示   
+   1.2 重启 zsh 就能用了.
+
+**Manual
+
+j de        → 智能跳到常用的包含 de 的文件夹 比如:desktop
+jo music    → 在 Finder 中打开Music文件夹
+d           → 列出历史访问目录,输入序号跳转文件夹
+autojump -v → 版本信息
+autojump -s → 历史路径库
+历史记录文档路径: vi /Users/v/Library/autojump/autojump.txt
+

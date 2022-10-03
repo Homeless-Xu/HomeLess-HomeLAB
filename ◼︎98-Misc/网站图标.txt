@@ -1,0 +1,43 @@
+@: 1987-12-12-01-‼️网站全套图标Favicon
+---
+layout: post
+title: ‼️网站全套图标Favicon
+tags: Misc
+categories: Web
+---
+
+## 网站图标
+
+*图标适配: 其实不简单.....*
+
+- IOS 
+- Andriod
+- Windows Metro (windows 8+ 的固定大图标)
+- safari: 固定适合显示的图标..
+- Mac 的视网膜屏幕 2X..
+
+这么多尺寸. 总不能用 一张固定大小的 ico 就敷衍了事.....
+
+
+### 专业的 icon 图标转换网站
+能生成全套的.(Mac Win iphone ...) 各种视网膜屏幕 都最适合的icon
+
+还能自动生成 icon 代码. 你只要粘贴就行了.
+
+
+*Favicon 位置: jekyll 根目录* icon 文件大小.  图标尺寸 好像都有限制的!!!!
+
+
+
+Mac 程序的图标格式:   icns
+
+web 图标:  ico
+
+
+
+1.  icns Mac 自带的预览 打开. 导出 png格式.
+2.  打开 [图标转换在线网站]
+
+[http://realfavicongenerator.net/]
+
+

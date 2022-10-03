@@ -1,0 +1,1037 @@
+❗️❗️❗️❗️❗️❗️❗️❗️ DNS 原理 & DNS服务器搭建 ❗️❗️❗️❗️❗️❗️❗️❗️❗️
+
+❤️ DNS服务器:
+    访问网站本质就是访问网站服务器的IP地址.
+    DNS服务器一直在背后默默的把域名转为IP地址的.
+    只要想上网就需要把域名转换成对应的IP. 
+    怎么才能知道某个域名对应的是哪个IP呢. 这些对应关系都存在DNS服务器中.
+    一台服务器 不可能存下全世界的IP和域名的对应关系.就算能存下.要在千万的数据中找出某一条也要花费很长的时候.
+    所以 全世界有很多台DNS服务器. 而且DNS服务器也是分类别的.
+
+
+❤️ 域名解析过程:  
+
+    📌📌 用户 — 本地递归服务器 — 根权威服务器 — COM权威服务器 - 权威服务器 -用户
+
+    （1）客户机将查询www.test.com的信息传递到自己的首选DNS服务器。
+    （2）首选DNS服务器检查区域数据库，由于此服务器没有test.com域的授权记录.
+            它将查询信息传递到根域DNS服务器，请求解析主机名称。
+    （3）根域DNS服务器把负责解析“com”顶级域的DNS服务器的IP地址返回给首选DNS服务器。
+    （4）首选DNS服务器将请求发送给负责“com”域的DNS服务器。
+    （5）负责“com”域的服务器根据请求将负责“test.com”域的DNS服务器的IP地址返回给首选DNS服务器。
+    （6）首选DNS服务器向负责“test.com”区域的DNS服务器发送请求。
+    （7）由于此服务器具有www.test.com的记录，因此它将www.test.com  的IP地址返回给首选DNS 服务器。
+    （8）首选DNS服务器将www.test.com的IP 地址发送给客户机。
+    （9）域名解析成功后，客户机将http请求发送给Web服务器。
+    （10）Web服务器响应客户机的访问请求，客户机便可以访问目标主机。
+
+
+
+❤️ DNS服务器种类
+        根DNS、权威DNS、 递归DNS、转发DNS
+
+        🔵 根DNS
+            每个递归服务器下面都有这个文件: named.ca
+            里面记录了13个根域的域名和ip.
+            全世界只有13个根域服务器.
+
+            全世界有 260个左右的互联网后缀: com、cn、org、net、live、help...
+            根服务器负责管理世界各国的域名信息，
+
+            根服务器没有每个域名的具体信息. 但是储存了每类域名的 dns服务器地址.
+            只负责 .com  .cn  .us  之类的顶级域名解析.
+            比如你不不知道上海某家单位的电话号码 根服务器(114)会告诉你 . 你可以查 021114.
+
+
+            每个后缀都有几台 顶级dns服务器 负责解析.
+
+            比如你要查某个 .com 结尾的域名的ip.
+            根服务器就会回复你哪几个IP的DNS服务器是 负责com 这类域名解析的.
+            然后你去问 其中的某一个IP进行下一步.
+
+
+            ❗️一个域名必须首先经过根数据库的解析后，才能转到顶级域名服务器进行解析。
+
+
+        🔵 顶级权威DNS: 
+            com、cn、org 这类顶级服务器.
+            
+            com 服务器:        知道 taobao.com 对应哪个IP
+
+
+        🔵 权威服务器
+
+
+        🔵 递归DNS:
+                可以缓存结果. 避免重复向上查询.
+                我们用的最多的就是这类DNS. 一般由网络运营商提供.
+
+
+        🔵 转发DNS:
+
+                接收用户查询. 也能返回结果给用户.
+                但在这个结果不是按照标准的 域名解析过程得到的.
+                而是直接把递归DNS的结果转发给用户.
+                路由器里面用的dns一般都是这一类.
+                路由器下的电脑的dns一般都是 192.168.1.1
+
+
+
+
+
+
+❤️ 储备知识
+
+
+    每个递归服务器上有一份根服务器的地址列表.
+
+    递归服务器一旦成功查询过一次.就会把权威服务器列表缓存下来. 
+    以后递归服务器就可以直接去查 权威服务器了. 而不是再查一遍根服务器.
+
+
+    域名解析过程是自上而下的，
+    客户端直接与DNS服务多次交互，
+    每一级DNS只管理直接下级Domain的DNS地址（我们称这些DNS为权威服务器，它们只负责与自己相关的事情），
+    过程如下：
+
+    domain=.          的DNS会告诉我们 domain=com.        的DNS的IP地址。
+    domain=.com       的DNS会告诉我们 domain=baidu.com.  的DNS的IP地址。
+    domain=.baidu.com 的DNS会告诉我们 FQDN=mp3.baidu.com 的IP地址。
+
+
+    1. DNS是应用层协议，端口号为tcp/53和udp/53
+
+
+    ❗️❗️❗️注册域名的时候.肯定有个默认DNS服务器的.  
+        每个域名要有一个DNS服务器来进行解析的.通过这个DNS服务器,你的域名解析信息才会扩散到全球.
+
+
+
+    域名是按等级授权的. 都是从域名最后的'.' 也就是根服务器开始分配的.
+    根服务器 只有13个.(a-m).root-servers.net.
+    .com .cn .net各种域名都从这里开始分配授权，
+    比如 .com 授权给 (A-G).GTLD-SERVERS.NET.
+    这批服务器又把 163.com 授权给另外的 服务器...
+        163.com 下面有很多服务的. 比如 blog.163.com mail.163.com....
+    163.com 又把 www.163.com 授权给别的zz服务器.
+    最后我们就能通过zz服务器查到www.163.com的ip了..
+
+
+    www.163.com. 拆分一下：(注意com. 后面的那个点)
+    .        分配com.           → . 就是根DNS服务器
+    com.     分配 163.com.      → com. 顶级权威DNS服务器
+    163.com. 分配 www.163.com.  → 163.com. 
+
+
+
+
+    🔵 正向解析: 通过域名找出对应的IP
+        ✘✘∙𝒗 Desktop nslookup www.0214.help
+        Server:		116.236.159.8
+        Address:	116.236.159.8#53
+
+        Non-authoritative answer:
+        Name:	www.0214.help
+        Address: 23.105.192.96
+
+
+    🔵 反向解析: 通过IP找出对应的域名.
+        好像只适合内网.
+        ✘✘∙𝒗 Desktop nslookup 23.105.192.96
+        Server:		222.66.251.8
+        Address:	222.66.251.8#53
+
+        Non-authoritative answer:
+        96.192.105.23.in-addr.arpa	name = 23.105.192.96.16clouds.com.
+
+        Authoritative answers can be found from:
+
+
+
+
+
+❤️ DNS 常见缩写:
+
+        SOA：  起始授权记录； 一个区域解析库有且只能有一个SOA记录
+        NS：   域名服务记录；一个区域解析库可以有多个NS记录；其中一个为主的；
+        A：    地址记录，FQDN –> IPv4；
+        AAAA： 地址记录， FQDN –> IPv6；
+        CNAME：别名记录；
+        PTR：Pointer，IP –> FQDN
+        MX：Mail eXchanger，邮件交换器；
+
+
+    SOA: 
+        DNS服务器之间的关系. 
+        表明谁是这个区域的所有者.
+        比如51CTO.COM这个区域。
+        ❗️❗️ 一个DNS服务器安装后，需要创建一个区域，以后这个区域的查询解析，都是通过DNS服务器来完成的。
+
+        所有者: 就是谁对这个区域有修改权限.
+
+        常见的DNS服务器只能创建一个标准区域.  可以创建很多辅助区域.
+        标准区域是可以读写的.
+        辅助区域只能 通过标准区域的复制来完成. 不能进行修改.
+        创建标准区域的DNS 就会有SOA记录.
+        准确说SOA记录中的主机地址一定是这个标准区域的服务器IP地址。
+
+
+
+    NS: 
+        NS记录 实际也是在DNS服务器之间. 表明谁对这个区域有解释权. 即权威DNS.
+        电信/联通都有很多DNS服务器. 这些服务器给我们上网提供了很多便利.
+        但是这些DNS里不存放任何区域.  被称为 缓存DNS服务器.
+        会缓存大量的 解析地址. 
+        通过ns记录. 就知道谁在负责0214.help 这个地域的管理工作.
+        比如你在万网 申请了一个域名. 
+        一般情况是 万网的域名服务器来替你解析如www.0214.help 这样的记录.
+        如果你想自己假设一个DNS服务器. 让这台服务器代替万网dns服务器解析.
+        你就需要在你的dns上 设置 ns 记录.
+        然后将万网域名管理中的ns记录 改成你的 dns服务器的ip.
+        以后就是你自己提供dns服务器解析了. 即使哪天万网的dns服务器挂了. 你的网站也还是可以访问的.
+
+
+
+
+
+
+❤️ Dig 命令
+    dig，作用和nslookup类似但是比nslookup强大很多,都是DNS查询工具.
+    dig: Domain Information Groper 域名信息搜索器
+
+    一般DNS出问题 都用这个来诊断.
+    当然 你要搭建DNS肯定会遇到很多问题.也需要用这个来找出问题.
+
+
+    🔵 dig
+
+        ✘✘∙𝒗 ssh dig
+
+        ; <<>> DiG 9.8.3-P1 <<>>
+        ;; global options: +cmd
+        ;; Got answer:
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 42432
+        ;; flags: qr rd ra; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 0
+
+        ;; QUESTION SECTION:
+        ;.				IN	NS
+
+        ;; ANSWER SECTION:
+        .			48632	IN	NS	j.root-servers.net.
+        .			48632	IN	NS	k.root-servers.net.
+        .			48632	IN	NS	g.root-servers.net.
+        .			48632	IN	NS	m.root-servers.net.
+        .			48632	IN	NS	f.root-servers.net.
+        .			48632	IN	NS	e.root-servers.net.
+        .			48632	IN	NS	h.root-servers.net.
+        .			48632	IN	NS	l.root-servers.net.
+        .			48632	IN	NS	i.root-servers.net.
+        .			48632	IN	NS	a.root-servers.net.
+        .			48632	IN	NS	d.root-servers.net.
+        .			48632	IN	NS	c.root-servers.net.
+        .			48632	IN	NS	b.root-servers.net.
+
+        ;; Query time: 6 msec
+        ;; SERVER: 116.236.159.8#53(116.236.159.8)
+        ;; WHEN: Thu Apr  6 09:04:08 2017
+        ;; MSG SIZE  rcvd: 228
+
+
+        这个是最简单的用法. 直接输入dig 按回车.
+
+        📌SERVER：查询的dns服务器. 查询你网络设置里的默认DNS服务器. 
+
+        📌查询内容: QUESTION SECTION: IN	NS
+            NS : Name Serve . 域名服务器. 
+                NS记录: 某域名由哪个DNS服务器来解析.
+                你申请域名的时候.肯定有个DNS服务器设置的.
+
+        📌查询结果: ANSWER SECTION:
+            .			48632	IN	NS	j.root-servers.net.
+            ....
+            有13条东西. 这就是 根域信息. 全世界只有13个根域.是固定的.
+            每个NDS服务器里都有个 文件. 里面记录这13个根域信息.
+            一旦哪个递归DNS服务器缓存中没有客户端想要的结果,就会通过这个文件.直接询问根域.
+
+
+
+    🔵 dig .
+
+        ✘✘∙𝒗 ssh dig .
+
+        ; <<>> DiG 9.8.3-P1 <<>> .
+        ;; global options: +cmd
+        ;; Got answer:
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 63153
+        ;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 0
+
+        ;; QUESTION SECTION:
+        ;.				IN	A
+
+        ;; AUTHORITY SECTION:
+        .			60900	IN	SOA	a.root-servers.net. nstld.verisign-grs.com. 2017040501 1800 900 604800 86400
+
+        ;; Query time: 5 msec
+        ;; SERVER: 116.236.159.8#53(116.236.159.8)
+        ;; WHEN: Thu Apr  6 09:25:44 2017
+        ;; MSG SIZE  rcvd: 92
+
+        dig . '.' 就是根域的意思. 这命令也就是查询 根域名的信息.
+        查询内容: QUESTION SECTION:	 IN	A
+            A 就是域名信息.  也就是域名设置里的A记录. 也就是某个域名对应哪个IP.
+            IN 是一种协议类型.不用管.
+
+        授权信息: AUTHORITY SECTION:
+            .	60900	IN	SOA	a.root-servers.net. nstld.verisign-grs.com. 2017040501 1800 900 604800 86400
+
+                SOA：  区域所有者.  一个DNS服务器 只能有一个区域.
+                    a.root-servers.net. 这是个区域. 一个根域
+                    nstld.verisign-grs.com. 这就是所有者. 这个公司 负责管理这个区域.
+
+
+    🔵 dig www.0214.help
+        ;; QUESTION SECTION:
+        ;www.0214.help.			IN	A
+
+        ;; ANSWER SECTION:
+        www.0214.help.		600	IN	A	23.105.192.96
+
+        最常见的, 默认查某个域名的A记录.
+        可以看成 www.0214.help 就是对应 23.105.192.96 这个IP.
+
+
+
+
+    🔵 dig www.0214.help ns
+        // 查询 负责解析这个网站的dns服务器
+        ; <<>> DiG 9.8.3-P1 <<>> www.0214.help ns
+        ;; global options: +cmd
+        ;; Got answer:
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4456
+        ;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 0
+
+        ;; QUESTION SECTION:
+        ;www.0214.help.			IN	NS
+
+        ;; AUTHORITY SECTION:
+        0214.help.		600	IN	SOA	dns9.hichina.com. hostmaster.hichina.com. 2016030311 3600 1200 3600 360
+
+        ;; Query time: 34 msec
+        ;; SERVER: 222.66.251.8#53(222.66.251.8)
+        ;; WHEN: Thu Apr  6 11:12:07 2017
+        ;; MSG SIZE  rcvd: 94
+
+
+
+
+    🔵 dig 0214.help MX
+        // 查询 0214.help 的MX记录.
+        // 注意 MX	1 mail.0214.help.  那个1是优先级的意思!!
+        ;; QUESTION SECTION:
+        ;0214.help.			IN	MX
+
+        ;; ANSWER SECTION:
+        0214.help.		600	IN	MX	1 mail.0214.help.
+
+
+    🔵 dig itr.cn MX
+        // 查询 itr.cn 的MX记录
+        ;; QUESTION SECTION:
+        ;itr.cn.				IN	MX
+
+        ;; ANSWER SECTION:
+        itr.cn.			300	IN	MX	30 cnc.biz-email.net.
+        itr.cn.			300	IN	MX	5 cdn.corpemail.net.
+        itr.cn.			300	IN	MX	10 cdn.corp-email.cn.
+        itr.cn.			300	IN	MX	20 mail.biz-email.net.
+            // 这里为什么有那么多条呢.
+            这个itr.cn 的域名设置里面 添加了4条MX记录. 分别有不同的优先级.
+
+
+    🔵 dig www.0214.live cname
+        // 查询cname信息. 这里注意 前面必须是www. 因为设置cname解析的时候 就在www类下设置的. 
+        ; <<>> DiG 9.8.3-P1 <<>> www.0214.live cname
+        ;; global options: +cmd
+        ;; Got answer:
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15492
+        ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+        ;; QUESTION SECTION:
+        ;www.0214.live.			IN	CNAME
+
+        ;; ANSWER SECTION:
+        www.0214.live.		600	IN	CNAME	pages.coding.me.
+
+        ;; Query time: 52 msec
+        ;; SERVER: 116.236.159.8#53(116.236.159.8)
+        ;; WHEN: Thu Apr  6 10:31:21 2017
+        ;; MSG SIZE  rcvd: 60
+
+
+
+    🔵 dig @8.8.8.8 www.baidu.com A
+        用谷歌的DNS服务器 来查询baidu的A记录.
+
+        ✘✘∙𝒗 ssh dig @8.8.8.8 www.baidu.com A
+
+        ; <<>> DiG 9.8.3-P1 <<>> @8.8.8.8 www.baidu.com A
+        ; (1 server found)
+        ;; global options: +cmd
+        ;; Got answer:
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 25224
+        ;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 0
+
+        ;; QUESTION SECTION:
+        ;www.baidu.com.			IN	A
+
+        ;; ANSWER SECTION:
+        www.baidu.com.		767	IN	CNAME	www.a.shifen.com.
+        www.a.shifen.com.	137	IN	A	115.239.210.27
+        www.a.shifen.com.	137	IN	A	115.239.211.112
+
+        ;; Query time: 434 msec
+        ;; SERVER: 8.8.8.8#53(8.8.8.8)
+        ;; WHEN: Thu Apr  6 09:50:28 2017
+        ;; MSG SIZE  rcvd: 90
+
+
+        📌Dig基本命令格式: dig @dnsserver name querytype
+            如果你设置了一个 dnsserver 那么dig就会通过这个DNS服务器 来查询信息.
+            你自己搭建服务器的时候. 就可以把这个设成自己DNS服务器的IP.
+            如果你没设置 那就会通过自动获取到的dns服务器来查询.
+
+            🔸querytype:  A/AAAA/PTR/MX/ANY等值. 默认是A记录.
+                A     地址记录(Ipv4)
+                AAAA  地址记录（Ipv6）
+                CNAME 别名记录
+                HINFO 硬件配置记录，包括CPU、操作系统信息
+                ISDN  域名对应的ISDN号码
+                MB    存放指定邮箱的服务器
+                MG    邮件组记录
+                MINFO 邮件组和邮箱的信息记录
+                MR    改名的邮箱记录
+                MX    邮件服务器记录
+                NS    名字服务器记录
+                PTR   反向记录
+                RP    负责人记录
+                SRV   TCP服务器信息记录
+                TXT   域名对应的文本信息
+
+
+
+    🔵 dig -x 23.105.192.96
+        // 逆向解析. 通过IP解析出域名..好像有问题.
+        // 能解析出 www.0214.help 就说明对了...
+        ; <<>> DiG 9.8.3-P1 <<>> -x 23.105.192.96
+        ;; global options: +cmd
+        ;; Got answer:
+        ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 54902
+        ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+        ;; QUESTION SECTION:
+        ;96.192.105.23.in-addr.arpa.	IN	PTR
+
+        ;; ANSWER SECTION:
+        96.192.105.23.in-addr.arpa. 1200 IN	PTR	23.105.192.96.16clouds.com.
+
+        ;; Query time: 14 msec
+        ;; SERVER: 222.66.251.8#53(222.66.251.8)
+        ;; WHEN: Thu Apr  6 10:35:54 2017
+        ;; MSG SIZE  rcvd: 84
+
+
+
+    🔵 dig +short www.baidu.com
+        www.a.shifen.com.
+        115.239.210.27
+        115.239.211.112
+
+        // 输出就只有这么三行!!! +short 就是精简输出的意思.
+
+
+
+
+        +[no]trace：跟踪解析过程；
+        +[no]recurse：进行递归解析；
+
+
+
+
+    🔵dig +trace @192.5.5.241 www.google.co.uk
+        // 使用trace/recurse 必须手动指定一个DNS服务器!!
+        //  +[no]trace：  跟踪解析过程；
+        //  +[no]recurse：进行递归解析；
+
+        ; <<>> DiG 9.8.3-P1 <<>> +trace @192.5.5.241 www.google.co.uk
+        ; (1 server found)
+        ;; global options: +cmd
+        .			518400	IN	NS	d.root-servers.net.
+        .			518400	IN	NS	h.root-servers.net.
+        .			518400	IN	NS	k.root-servers.net.
+        .			518400	IN	NS	a.root-servers.net.
+        .			518400	IN	NS	e.root-servers.net.
+        .			518400	IN	NS	m.root-servers.net.
+        .			518400	IN	NS	j.root-servers.net.
+        .			518400	IN	NS	b.root-servers.net.
+        .			518400	IN	NS	g.root-servers.net.
+        .			518400	IN	NS	l.root-servers.net.
+        .			518400	IN	NS	f.root-servers.net.
+        .			518400	IN	NS	i.root-servers.net.
+        .			518400	IN	NS	c.root-servers.net.
+        ;; Received 492 bytes from 192.5.5.241#53(192.5.5.241) in 108 ms
+
+        uk.			172800	IN	NS	dns4.nic.uk.
+        uk.			172800	IN	NS	dns2.nic.uk.
+        uk.			172800	IN	NS	dns3.nic.uk.
+        uk.			172800	IN	NS	nsc.nic.uk.
+        uk.			172800	IN	NS	dns1.nic.uk.
+        uk.			172800	IN	NS	nsb.nic.uk.
+        uk.			172800	IN	NS	nsd.nic.uk.
+        uk.			172800	IN	NS	nsa.nic.uk.
+        ;; Received 454 bytes from 192.36.148.17#53(192.36.148.17) in 204 ms
+
+        google.co.uk.		172800	IN	NS	ns2.google.com.
+        google.co.uk.		172800	IN	NS	ns1.google.com.
+        google.co.uk.		172800	IN	NS	ns4.google.com.
+        google.co.uk.		172800	IN	NS	ns3.google.com.
+        ;; Received 116 bytes from 156.154.102.3#53(156.154.102.3) in 51 ms
+
+        www.google.co.uk.	2887	IN	A	93.46.8.89
+        ;; Received 66 bytes from 216.239.38.10#53(216.239.38.10) in 6 ms
+
+
+
+    🔵 dig +notrace @192.5.5.241 www.google.co.uk
+
+        ;; QUESTION SECTION:
+        ;www.google.co.uk.		IN	A
+
+        ;; AUTHORITY SECTION:
+        uk.			172800	IN	NS	nsc.nic.uk.
+        uk.			172800	IN	NS	nsd.nic.uk.
+        uk.			172800	IN	NS	dns3.nic.uk.
+        uk.			172800	IN	NS	nsb.nic.uk.
+        uk.			172800	IN	NS	nsa.nic.uk.
+        uk.			172800	IN	NS	dns4.nic.uk.
+        uk.			172800	IN	NS	dns2.nic.uk.
+        uk.			172800	IN	NS	dns1.nic.uk.
+
+        ;; ADDITIONAL SECTION:
+        nsa.nic.uk.		172800	IN	A	156.154.100.3
+        nsb.nic.uk.		172800	IN	A	156.154.101.3
+        nsc.nic.uk.		172800	IN	A	156.154.102.3
+        nsd.nic.uk.		172800	IN	A	156.154.103.3
+        dns1.nic.uk.		172800	IN	A	213.248.216.1
+        dns2.nic.uk.		172800	IN	A	103.49.80.1
+        dns3.nic.uk.		172800	IN	A	213.248.220.1
+        dns4.nic.uk.		172800	IN	A	43.230.48.1
+        nsa.nic.uk.		172800	IN	AAAA	2001:502:ad09::3
+        dns1.nic.uk.		172800	IN	AAAA	2a01:618:400::1
+        dns2.nic.uk.		172800	IN	AAAA	2401:fd80:400::1
+        dns3.nic.uk.		172800	IN	AAAA	2a01:618:404::1
+        dns4.nic.uk.		172800	IN	AAAA	2401:fd80:404::1
+
+
+
+
+
+
+
+
+
+
+
+    🔵 其他废话 
+
+
+        比如谷歌网盘,主要就是存储数据的.一台服务器硬盘读写速度有限.必须得很多台电脑同时读写.
+        这就组成一个集群了.  集群一般都是内网... 
+        访问肯定是通过域名, 用到域名 就需要DNS服务器来解析域名.
+        内网之间访问频率是非常高的. 保证域名解析速度和可用性就很重要.
+        所以 很有必要搭建一个 内网nds 解决这些问题.
+
+        FQDN（完整主机名）= Hostname（主机名）+ Domain（领域名），根Domain是.（注意最后的”点”）
+
+        我们所说的”域名”就是FQDN，比如：mp3.baidu.com.（注意最后的”点”）。
+
+
+
+        正解是FQDN->ip，反解就是ip->FQDN，都是配置出来的效果。
+        反解因为是IP到FQDN，IP不具备全球唯一性，所以反解只用于内网使用。
+
+
+        DNS是协议，BIND是一个经典实现。
+
+        服务器修改配置将解析服务器指向BIND，这样操作系统内发起域名解析默认都将访问BIND获取IP。
+
+        为了实现域名智能解析，需要用到view，也就是根据客户端的来源IP返回不同的解析结果。
+
+
+
+        背景:
+
+            公共DNS服务器是非盈利的.用的人非常非常多但是全国就这么几个dns服务器.
+            一旦哪个坏掉了.或者被黑了.  那就大批量的不能上网了.DNS 是互联网的一大弱点!!! 
+            曾经有过北京联通DNS202.106.0.20和202.106.45.151间歇性瘫痪导致大面积用户上网不正常，而当时8.8.8.8已经被墙了
+
+
+        ❤️ 本地DNS作用:
+
+
+
+        1、节省出口带宽
+
+
+        2. 防止教工上班时间上淘宝。。。不过被我给公开了修改方法。
+
+        DNS缓存功能. 当查询过一条dns记录后. 本地dns会进行缓存. 以后之间从缓存读取.
+
+
+        5、被公网DNS服务器拒绝（学校等大用户量的出口往往只有单个或少数公网IP，其DNS请求可能会被部分公网DNS服务器认为是恶意请求而直接Drop掉，这种情况比较少，但不是没有。有遇到过某DNS服务器家用毫无问题，但是给某公司用，人数少没问题，人数一多就抽风的情况）
+
+
+        定时更新dns数据功能: 
+
+        dns查询统计. 看域名被访问次数
+
+        时间:
+        当网络好的时候: 本地速度是网络速度的 15+倍.
+        当网络差的时候: 本地速度是网络速度的 90+倍.
+
+        访问一个网站. 不是只查询一次dns的.
+        网站需要下载各种资源 什么 .js .css 图片 等等的 都是网址. 
+        每个资源都要查询dns的...  
+
+
+        搭建好DNS服务器.
+        可以手动设置几个 域名. 
+        也可以自动从别的服务器获取.  如 8.8.8.8
+
+
+        搭建一个自己的DNS服务器.
+
+        所有DNS服务器中. 用 bind 作为服务器软件的 占九成.
+        小规模的话 可以用 dnsmasq: 轻量级的 nds/shcp/tftp服务器.
+        多数路由器 都是用 dnsmasq 作为 dns 和 dhcp 支持的.
+
+
+        Bind：提供了域名服务的主要程序以及相关文件。
+        Bind-utils:提供了对DNS服务器的测试工具程序（nslookupdup、dig等）
+
+
+
+        📌 BIND 官网  https://www.isc.org/downloads/bind/
+
+
+
+
+
+
+    测试DNS服务器
+
+    使用命令 nslookup
+    systemctl stop firewalls.service
+
+
+
+
+
+    3. 正向解析测试，使用nslookup命令
+    #nslookup
+    > 172-16-1-50.realhostip.comServer:         172.16.1.4Address:        172.16.1.4#53Name:   172-16-1-50.realhostip.comAddress: 172.16.1.50> > 172-16-1-51.realhostip.comServer:         172.16.1.4Address:        172.16.1.4#53Name:   172-16-1-51.realhostip.comAddress: 172.16.1.51>
+    从结果可以看到，我们配置的两个域名都能成功解析，并且DNS服务器就是我们配置的那个服务器。
+
+
+
+    4. 反向解析，使用nslookup命令
+    #nslookup
+    > > 172.16.1.51Server:         172.16.1.4Address:        172.16.1.4#5351.1.16.172.in-addr.arpa        name = 172-16-1-51.realhostip.com.> > > 172.16.1.50Server:         172.16.1.4Address:        172.16.1.4#5350.1.16.172.in-addr.arpa        name = 172-16-1-50.realhostip.com.> >
+    从结果来看，可以正确解析我们的IP地址，并且DNS服务器就是我们配置的那个服务器。
+
+
+
+    5. 查看realhostip.com这个域名是哪个DNS服务器管理的，使用dig命令
+    # dig -t ns realhostip.com
+    ; <<>> DiG 9.8.2rc1-RedHat-9.8.2-0.17.rc1.el6_4.6 <<>> -t ns realhostip.com;; global options: +cmd;; Got answer:;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 37964;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 2;; QUESTION SECTION:;realhostip.com.                        IN      NS;; ANSWER SECTION:realhostip.com.         86400   IN      NS      realhostip.com.;; ADDITIONAL SECTION:realhostip.com.         86400   IN      A       172.16.1.4realhostip.com.         86400   IN      AAAA    ::1;; Query time: 1 msec;; SERVER: 172.16.1.4#53(172.16.1.4);; WHEN: Wed Oct 23 14:15:22 2013;; MSG SIZE  rcvd: 90
+
+
+
+    6. 使用dig命令进行正向解析
+    # dig 172-16-1-50.realhostip.com
+    ; <<>> DiG 9.8.2rc1-RedHat-9.8.2-0.17.rc1.el6_4.6 <<>> 172-16-1-50.realhostip.com;; global options: +cmd;; Got answer:;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 21109;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2;; QUESTION SECTION:;172-16-1-50.realhostip.com.    IN      A;; ANSWER SECTION:172-16-1-50.realhostip.com. 86400 IN    A       172.16.1.50;; AUTHORITY SECTION:realhostip.com.         86400   IN      NS      realhostip.com.;; ADDITIONAL SECTION:realhostip.com.         86400   IN      A       172.16.1.4realhostip.com.         86400   IN      AAAA    ::1;; Query time: 1 msec;; SERVER: 172.16.1.4#53(172.16.1.4);; WHEN: Wed Oct 23 14:17:57 2013;; MSG SIZE  rcvd: 118
+    注意：
+    windows客户端上只有nslookup工具。
+
+
+
+
+
+
+        ----
+    DNS 相关文件:
+        /etc/resolv.conf  这里可查系统当前用的DNS服务器IP.
+        /etc/hosts.conf   著名的host文件. 电脑查域名的IP,首先查hosts文件,找不到才查DNS服务器.
+
+    Bind的主配置文件: /etc/name.conf
+    bind区域配置文件: /etc/named.rfc1912.zones
+    正向域名解析数据库文件:
+    反向域名解析数据库文件:
+
+    根域配置文件: named.ca . 无需修改.知道就行.
+
+
+
+
+
+
+
+
+会 dig 就可以搭建一套自己的 DNS服务器了.
+自己添加 Zone、正解、反解、自己设置缓存超时等等...
+上面说了这么多废话.至于开始正题了.
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+           ❗️❗️❗️❗️❗️ 目的:  搭建一个私人DNS服务器 ❗️❗️❗️❗️❗️❗️❗️❗️
+           ❗️❗️❗️❗️❗️ 一定关闭服务器的防火墙再折腾 ❗️❗️❗️❗️❗️❗️❗️❗️
+
+🔵 服务器安装 bind 这个DNS服务器软件
+
+    🔅 yum install bind   // 安装bind
+    🔅 named -v           // 查看 bind 版本: 
+
+    📌 启动/停止/重启
+        service named start/stop/restart                CentOS 6-
+        systemctl start/stop/restart named.service      CentOS 7+
+        /etc/init.d/named start/stop/restart
+
+
+
+🔵 vi /etc/named.conf
+    // 编辑主要配置文件
+    
+    🔸 允许任意IP访问53端口. 
+        设置DNS服务器监听端口及范围. any 监听互联网, 127.0.0.1 监听本地电脑. 
+        找到对应行. 更改{} 里面内容成如下
+        listen-on port 53 { any; };       
+
+    🔸 允许任意电脑进行DNS查询
+        找到对应行. 更改{} 里面内容成如下
+        allow-query     { any; };          
+
+
+    🔸 添加 zone 
+            zone "0214.help" IN {
+                type master;
+                file "0214.help.zone";
+            };
+
+
+            上面4行是我们要添加的. 下面来仔细解释下
+
+                zone 就是区域. 可以看成一个域名!
+                0214.help 就是一个zone.
+                为什么要添加zone.
+                你可以选择不添加zone.直接到最后一步重启named服务.你的DNS服务器也算搭建完成了.
+
+                既然建立了私有DNS 我们就自己来解析自己的域名吧.
+                默认你从万网买域名.是它的域名服务器帮你解析域名的.
+                要自己解析域名. 就需要添加zone.
+                一个域名一个zone.
+
+                zone分两种: 正向zone  和 反向zone 
+                就是两种格式而已. 
+                一般都是正向的. 我们先不管反向的.
+                zone "0214.help" IN {
+                    type master;
+                    file "0214.help.zone";
+                };
+
+                zone "0.168.192.in-addr.arpa" IN {
+                    type master;
+                    file "192.168.0.zone";
+                };
+
+                其实很简单的. 
+                要修改的 也就是  zone 后面双引号里面的名字.改成你的域名.
+                还有zone 里面 file 后面的名字.
+                每个zone 都有一个对应文件的.
+                如果你新增了一个zone. 就必须手动建议一个文件.
+                文件名随意取. file 后面的文件名必须 要和你新建的文件名一致.
+                域名解析的详细设置 都是在那个新建的文件里面的.
+                named.conf这个配置文件.只负责引用相应文件的路径.
+
+                zone "." IN {    //定义了根域
+                type hint;       //定义服务器类型为hint
+                file "named.ca";  //定义根域的配置文件名
+                };
+                我们来看默认自带的 根域. 
+                类型: hint 就是根域名服务器的意思.
+                我们自建的zone 一般都是 master 类型.
+                根域 也是有个对应文件的: 叫 named.ca
+                这个文件 也是在 /var/named/目录下.
+
+
+                你添加了正向 0214.help 这个域名的正向zone后
+                你就可以 根据域名解析出IP地址了. 
+
+
+
+    🔸 注意点 
+        配置文件中有行: directory       "/var/named";     
+        意思就是所有的正向反向区域文件都在这个目录下创建. 
+        所有下面的 0214.help.zone 需要到/var/named/下去新建. 
+
+
+        有行: recursion yes;                                        
+        意思设置允许递归查询. 也就是你的DNS服务器查不到数据就去别的dns查.
+
+
+
+
+🔵 zone 文件
+    这个其实是 域名解析数据库文件.
+    /var/named/目录下 创建文件.
+    文件名要和 named.conf 创建的zone 里的file 后的文件名对应.
+    vi /var/named/0214.help.zone
+    文件内容:
+
+    $TTL 86400
+    @ IN SOA primary.linux.local. root.linux.local. (
+        2016042112 ;Serial
+        3600 ;Refresh
+        1800 ;Retry
+        604800 ;Expire
+        43200 ;Minimum TTL
+    )
+    ;Name Server Information
+    @ IN NS primary.linux.local.
+    ;IP address of Name Server
+    primary IN A 23.105.192.96
+    ;Mail exchanger
+    linux.local. IN MX 10 mail.linux.local.
+    ;A - Record HostName To Ip Address
+    www IN A 192.168.10.176
+    mail IN A 192.168.10.177
+    ;CNAME record
+    ftp IN CNAME www.linux.local.
+
+
+
+
+    📌 primary IN A 23.105.192.96
+    📌 www IN A 23.105.192.96
+    📌 mail IN A 23.105.192.96
+    这三个 都要改成你自己的IP.
+
+
+
+    🔸 正向域名解析数据库文件
+
+    $TTL 600
+    @        IN   SOA    dns.cwlinux.com   dnsadmin.cwlinux.com. (           //SOA字段
+                            2015031288    //版本号    同步一次  +1
+                                1H        //更新时间
+                                2M        // 更新失败，重试更新时间
+                                2D        // 更新失败多长时间后此DNS失效时间
+                                1D        //解析不到请求不予回复时间
+    )
+            IN    NS   dns                //有两域名服务器
+            IN    NS   ns2
+            IN    MX  10 mial             // 定义邮件服务器，10指优先级  0-99 数字越小优先级越高
+    ns2      IN    A    192.168.1.113     //ns2域名服务器的ip地址
+    dns      IN    A    192.168.1.10      //dns域名服务器的ip地址
+    mail     IN    A    192.168.1.111     //邮件服务器的ip地址
+    www      IN    A    192.168.1.112     //www.cwlinux.com的ip地址
+    pop      IN   CNAME  mail             //pop的正式名字是mail
+    ftp      IN   CNAME  www              //ftp的正式名字是www
+
+
+
+
+
+    🔸 反向域名解析数据库文件
+
+    $TTL 600
+    @         IN   SOA    dns.cwlinux.com.   dnsadmin.cwlinux.com. (
+                                2014031224
+                                1H
+                                2M
+                                2D
+                                1D
+    )
+            IN   NS      dns.cwlinux.com.
+    10      IN   PTR     dns.cwlinux.com.          //反向解析PTR格式
+    111     IN   PTR     mail.cwlinux.com.
+    112     IN   PTR     www.cwlinux.com.
+    // 声明域的时候已经有了，192.168.1 所以我们只需要输入10既代表192.168.1.10jc
+
+
+
+
+
+
+🔵 更改这文件的权限.
+    chmod 777 /var/named/0214.help.zone
+
+🔵 重启 named
+    /etc/init.d/named restart
+
+
+🔵 设置开机启动:
+
+    vi /etc/rc.d/rc.local
+    尾行添加: /etc/init.d/named start
+
+
+🔵 重启服务器看
+    /etc/init.d/named status
+    是否启动了.
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+问题排除:
+
+🔸 首先查 服务器53端口是否开启.
+    ✘✘∙𝒗 Desktop nmap -p 53 23.105.192.96
+
+    Starting Nmap 7.25BETA1 ( https://nmap.org ) at 2017-04-06 11:45 CST
+    Nmap scan report for 23.105.192.96.16clouds.com (23.105.192.96)
+    Host is up (0.16s latency).
+    PORT   STATE SERVICE
+    53/tcp open  domain
+
+
+🔸 查 服务器 named 服务是否启动.
+    ➜  ~   service named status
+    version: 9.8.2rc1-RedHat-9.8.2-0.47.rc1.el6_8.4
+    CPUs found: 1
+    worker threads: 1
+    number of zones: 22
+    debug level: 0
+    xfers running: 0
+    xfers deferred: 0
+    soa queries in progress: 0
+    query logging is OFF
+    recursive clients: 0/0/1000
+    tcp clients: 0/100
+    server is up and running
+    named (pid  4047) is running...
+
+
+🔸 vim /etc/named.conf
+    是否允许 所有电脑都可以访问53端口
+        listen-on port 53 { any; };
+
+
+    是否运行任何人都 可以进行DNS查询
+        allow-query     { any; };
+
+        是否允许递归查询
+        就是你的DNS服务器上找不到数据.是否可以查询通过别人的dns来获取数据.
+        
+
+🔸 重启named服务
+    /etc/init.d/named restart
+    如果配置有错误 会报错.
+    服务能启动后 下面就去客户端测试了!
+    最好安装dig 命令来测试... 看着办..
+
+
+🔸 确保防火墙53端口开发,
+    不会开端口,就直接关闭防火墙
+
+    ✘✘∙𝒗 Desktop dig @23.105.192.96 0214.com
+    ;; connection timed out; no servers could be reached
+
+    连接超时...
+    关闭防火墙...立马好... fuck....
+
+
+
+🔸 用你的NDS服务器获取百度信息
+    ✘✘∙𝒗 Desktop dig @23.105.192.96 www.baidu.com
+
+    ; <<>> DiG 9.8.3-P1 <<>> @23.105.192.96 www.baidu.com
+    ; (1 server found)
+    ;; global options: +cmd
+    ;; Got answer:
+    ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 7743
+    ;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 5, ADDITIONAL: 5
+
+    ;; QUESTION SECTION:
+    ;www.baidu.com.			IN	A
+
+    ;; ANSWER SECTION:
+    www.baidu.com.		1200	IN	CNAME	www.a.shifen.com.
+    www.a.shifen.com.	300	IN	A	103.235.46.39
+
+    ;; AUTHORITY SECTION:
+    a.shifen.com.		1200	IN	NS	ns5.a.shifen.com.
+    a.shifen.com.		1200	IN	NS	ns1.a.shifen.com.
+    a.shifen.com.		1200	IN	NS	ns3.a.shifen.com.
+    a.shifen.com.		1200	IN	NS	ns4.a.shifen.com.
+    a.shifen.com.		1200	IN	NS	ns2.a.shifen.com.
+
+    ;; ADDITIONAL SECTION:
+    ns1.a.shifen.com.	1200	IN	A	61.135.165.224
+    ns4.a.shifen.com.	1200	IN	A	115.239.210.176
+    ns3.a.shifen.com.	1200	IN	A	61.135.162.215
+    ns5.a.shifen.com.	1200	IN	A	119.75.222.17
+    ns2.a.shifen.com.	1200	IN	A	180.149.133.241
+
+    ;; Query time: 1133 msec
+    ;; SERVER: 23.105.192.96#53(23.105.192.96)
+    ;; WHEN: Thu Apr  6 12:21:07 2017
+    ;; MSG SIZE  rcvd: 244
+
+
+
+
+🔸 用你的DNS服务器获取 0214.help 的信息
+
+    ✘✘∙𝒗 Desktop dig @23.105.192.96 www.0214.help
+
+    ; <<>> DiG 9.8.3-P1 <<>> @23.105.192.96 www.0214.help
+    ; (1 server found)
+    ;; global options: +cmd
+    ;; Got answer:
+    ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 34952
+    ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
+
+    ;; QUESTION SECTION:
+    ;www.0214.help.			IN	A
+
+    ;; ANSWER SECTION:
+    www.0214.help.		86400	IN	A	23.105.192.96
+
+    ;; AUTHORITY SECTION:
+    0214.help.		86400	IN	NS	Xu-Jian.CentOS.VPS.
+
+    ;; Query time: 270 msec
+    ;; SERVER: 23.105.192.96#53(23.105.192.96)
+    ;; WHEN: Thu Apr  6 13:49:40 2017
+    ;; MSG SIZE  rcvd: 79
+
+
+
+0214.help 的信息都是我们自己设置的...
+如果发现不对得修改.. 要自己进行修改的啊..
+到这里 你的 dns服务器就算搭建完成了!!!
+
+
+
+
+最后 如果你用的是 帮瓦工的vps的话.
+可能会自动帮你屏蔽 53端口. 因为你没做安全措施....
+
+KiwiVM has detected an insecure recursive DNS resolver on IP ......, which may result in your server getting involved in DNS Amplification DoS attacks.
+To prevent this from happening, KiwiVM has blocked port 53 in your server by adding the following iptables rules:
+
+    iptables -I INPUT -p udp --destination-port 53 -j DROP
+    iptables -I FORWARD -p udp --destination-port 53 -j DROP
+
+You can fix this vulnerability by securing your DNS daemon (or by removing it from your server).
+
+Once this vulnerability is fixed, you may remove these iptables rules.
+
+
+下面就该自己搭个邮件服务器玩玩吧
+

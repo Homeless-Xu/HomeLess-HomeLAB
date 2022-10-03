@@ -1,0 +1,35 @@
+🔵 VScode json 查看器 ✔︎
+
+    JSON Tools
+    https://marketplace.visualstudio.com/items?itemName=eriklynd.json-tools
+
+    🔶 VScode 安装 JSON Tools
+
+        ⌘ ⇧ X   /  菜单栏➜ view ➜ Extensions
+
+        直接输入 json tools  安装就好了.
+        安装好后 重新加载.
+
+
+    🔶 默认快捷键
+        Cmd + Alt + M   ➜ 格式化
+        Alt + M         ➜ 最小化
+
+
+    🔶 修改后快捷键
+
+        ⌘ J    ➜ 格式化
+        ⌘ ⇧ J ➜ 压缩化 
+
+
+
+
+🔵 VScode 修改快捷键 ✔︎
+
+    🔶 进入快捷键设置界面
+        ⦿ ⌘+K ⌘+S  
+        ⦿ 任务栏 code ➜ preference ➜ keyboard shortcuts
+
+
+    🔶 找到 json tools 相关的快捷键.
+        选择 回车 就可以直接修改.

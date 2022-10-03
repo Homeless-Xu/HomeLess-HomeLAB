@@ -1,0 +1,26 @@
+❤️  Radmin
+    Remote Administrator 远程工具.
+
+    把Radmin的密码，选项和安装服务设置好，并且在hide那里打上“勾”（如果不打“勾”的话，到时候入侵的时候，目标的任务栏会出现一个小托盘，这样我们就容易暴露了）
+
+    三：利用IPC$或FTP攻击目标，映射目标C盘，把本机C：\winnt\system32下的r\_server.exe和admdll.dll2个文件复制到目标C盘下的winnt\system32\里面 
+
+    四：开始——运行，输入：telnet，然后输入r\_server /install，然后再输入：net start r\_server 五：连接到目标看看是不是可以看到对方在干什么了！- -！！！
+
+
+
+    
+
+
+❤️ SyncToy
+
+  微软出的  文件备份/同步 工具.  免费 非常好用.
+
+  使用教程:
+  1. Create NewFolder Pair 新建文件夹对比
+    左边选择要备份的文件夹  右边选择备份路径
+  2. 选择备份模式:  三选一.
+    - Synchronize:   **双向同步**:    左右完全一样. 左边改右边会改.   右边改左边也改.
+    - Echo:              **单向同步**:    和上面差不多 ,只是  右边修改不影响左边
+    - Contribute:     **增量备份**:    左边存在过的文件就算左边删除了  右边还是会有.
+

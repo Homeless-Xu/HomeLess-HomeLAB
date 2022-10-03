@@ -1,0 +1,242 @@
+Mac 设置.
+ssh -fNR 23.105.192.96:8989:localhost:22 root@23.105.192.96 -p 2222
+
+  • fnr
+
+  • 23.105.192.96:8989:localhost:22 
+  把服务器的 8989端口 对应到本地的22端口.
+
+  • root@23.105.192.96 -p 2222
+  ssh 服务器正常命令.
+
+
+服务器 设置
+ssh -p 8989 v@localhost
+
+然后服务器 就连上Mac 的ssh了..
+
+
+
+
+frp 虽然好用... 但是配置还是有点麻烦的.
+如果你只想 ssh 某台内网机器. 完全不用frp.
+ssh 自带内网穿透功能的.
+
+
+
+http://lvii.github.io/system/2013/10/08/ssh-remote-port-forwarding/
+
+http://www.senra.me/nat-traversal-series-ssh-reverse-tunnel-the-easies-solution/
+
+http://blog.csdn.net/wxqee/article/details/49234595
+
+https://linux.cn/article-5975-1.html
+
+https://blog.windrunner.me/sa/reverse-ssh.html
+
+🔸 环境
+
+⦿ 三台电脑:Mac、vps1、vps2
+
+  • Mac  有网络、无公网IP                    
+  • vps1 有网络、有公网IP:  23.105.192.96     开放 ssh 2222 端口.
+  • vps2 有网络、有公网IP: 104.224.139.45     开放 ssh 2222 端口
+
+
+
+
+⦿ 初始设置
+
+默认只要有 vps1、vps2 的密码. 任何电脑都可以连接ssh.
+由于 vps2 是核心服务器. 为了安全. 
+只能由 vps1 这个ip 可以ssh vps2 ,任何其他电脑不能ssh vps2
+
+
+
+
+🔸 反向 SSH
+  Mac 可以ssh vps1 vps2  因为vps1、vps2 有公网IP地址.
+  VPS1、vps2 不能直接ssh Mac 因为 Mac 没有公网IP地址.
+
+类似内网穿透..
+
+  那么 怎么才能实现 任意电脑 ssh mac 呢. 
+  有个中转站就可以了.   我们把vps1 当成中转站. 
+  我们在mac上 用ssh 连到vps1 
+  然后 其他电脑 也 连到vps1  
+  这样其他电脑就能 通过vps1 来连接Mac.
+
+
+  我们要让Mac 一直连接vps1, 
+  需要保存终端开启, 这个可以用 -N 参数来解决.
+  还要保持 SSH 断线重连. 这就需要 supervisor 第三方监控工具.
+
+
+
+🔸 Autossh
+
+⦿ 官方中文手册
+https://www.wziss.com/doc/AutoSSH_UserGuide_cn.pdf
+
+http://www.oschina.net/translate/automatically-restart-ssh-sessions-and-tunnels-using-autossh
+
+https://www.52os.net/articles/use-autossh-tunnel-to-auto-reconnect-for-mysql-replication.html
+
+
+Mac 和 vps1 
+mac 可以直接连 vps1 
+vps1 无法直接连 mac.
+
+两种解决办法: 
+1. 路由器端口映射  把mac的ssh端口 映射到mac的外网IP.
+
+2. ssh 反向连接.
+ssh -NfR 5555:localhost:22 root@23.105.192.96 -p 2222
+
+Mac 通过ssh 连接 vps1. 
+然后在 vps1 上打开一个端口(5555)进行监听.
+任何电脑 连接vps1 上的5555端口 就相对于连Mac的22 端口.
+
+2222 是vps1 的ssh端口.
+这样 连接vps1的1111 端口就是连接Mac的3333端口.
+
+
+
+
+
+
+
+  其实有个更好的 解决办法. autossh
+
+⦿ 安装
+  yum install autossh
+  brew install autossh
+
+⦿ 开机启动.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+我们设置只能由 vps2 主动ssh 连接别人, 任何电脑不能主动连接vps2的ssh
+那么我mac 怎么才能和 vps2 进行ssh交互呢.
+
+在vps2 上设置.
+ssh -fN -R 10022:localhost:2222 root@23.105.192.96
+
+在vps2 上建立一个 反向隧道.
+把vps2 的2222 端口.数据 转发到 vps1 的 10022端口
+
+然后在mac上 访问 vps1是 10022端口 实际就是访问 vps2 的2222端口
+ssh -p 10022 homeserver_user@localhost
+ssh -p 10022 root@23.105.192.96
+
+
+
+🔸 SSH -R  非本地端口映射到其他电脑
+
+
+
+
+
+🔸 反向 SSH 隧道
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔸 ssh tunnel（隧道）
+SSH Tunnel 顾名思义就是 SSH 安全隧道，
+
+
+
+
+SSH 的 -L, -R, -D 三种用法
+
+
+🔸 端口映射
+ssh -L  本地端口映射到其他机器..
+把vps1 的 8888 端口 映射到 vps2 的2222 端口.
+这样使用vps1 的8888 端口就相对于 用 vps2的 2222端口.
+
+vps1:  ssh -L 8888 root@104.224.139.45
+
+还可以把 mac的 9999 端口 通过vps1 映射到 vps2 的2222端口 
+Mac:  ssh -L 9999:104.224.139.45:2222 root@23.105.192.96
+
+
+
+
+
+
+
+
+有些服务器(vps2)为了安全 只能通过某台电脑(vps1)才能登录.  vps1就叫中转服务器.
+
+
+
+
+
+
+
+
+
+虽然安全了. 但是.. 登录确变得很麻烦.
+Mac 先 ssh 到vps1 然后在vps1里面再ssh vps2; 达到mac ssh vps2 的目的.
+
+
+解决办法: 用 ssh tunel 
+就可以通过一次 ssh 进行远程端口的映射，从而完成以上麻烦的步骤。
+ssh -fN -L local_port:remote_host:remote_port bridge_user@bridge_host
+-fN：表示在后台运行 ssh 并不执行远程命令
+
+-L：表示使用 ssh tunnel 将远程端口映射到本地
+
+local_port：本地的端口
+
+remote_host：远程服务器的地址
+
+remote_port：远程服务器的端口
+
+bridge_user：中转服务器的用户名
+
+bridge_host：中转服务器的地址
+
+
+例如，我们需要访问的内部机器的IP为：192.168.1.10，为windows，开启了远程桌面（端口为3389）， 中转服务器的地址为：zhixin@mail.wenzhixin.net.cn，那么我们使用以下命令：
+
+ssh -fN -L 3389:192.168.1.10:3389 zhixin@mail.wenzhixin.net.cn
+即可将远程服务器的 3389 映射到本地中，现在要登录远程服务器，只需要使用登录到 127.0.0.1:3389 即可。
+
+
+
+ssh -fN -L 2222:104.224.139.45:2222 23.105.192.96
+
+
+现在有了 SSH tunel 这软件. 就可以方便的进行这操作.
+
+
+
+
+
+

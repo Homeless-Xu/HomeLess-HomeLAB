@@ -1,0 +1,641 @@
+python 爬虫
+
+
+
+
+
+
+
+
+
+
+学习资料:
+
+imooc 入门极品视频: http://www.imooc.com/video/10675 (http://www.imooc.com/video/10675)
+
+
+
+书:  
+
+用python写网络爬虫---Richard Lawson
+python网络数据采集---Ryan MItchell
+
+
+
+
+
+
+
+
+
+
+
+爬虫原理
+
+
+爬虫(爬网页)
+找到我们想要爬的网址列表 URL
+通过 http 协议 把html页面下载下来
+从html 页面中解析出需要的信息.
+找到更多的 URL. → 下载 → 解析 
+这样一直重复就能获取很多数据了.
+
+提取数据
+	网页下载下来后. 最重要的就是提取出数据.
+	Scrapy 有自己的数据提取机制. 称为选择器.
+	通过 XPath 或 CSS 表达式 从html文档中取出数据.
+		Xpath 主要用在xml中. 也可以用在 html中.
+		css 也用在html中
+
+数据提取实例
+	•/html/head/title:        选择<title>节点, 它位于html文档的<head>节点内
+	•/html/head/title/text(): 选择上面的<title>节点的内容.
+	•//td:                    选择页面中所有的元素
+	•//div[@class=”mine”]:    选择所有拥有属性class="mine"的div元素
+
+Scrapy使用css和xpath选择器来定位元素，它有四个基本方法：
+	•xpath():   返回选择器列表，每个选择器代表使用xpath语法选择的节点
+	•css():     返回选择器列表，每个选择器代表使用css语法选择的节点
+	•extract(): 返回被选择元素的unicode字符串
+	•re():      返回通过正则表达式提取的unicode字符串列表
+
+
+实例1: 
+ <body>
+  <div id='images'>
+   <a href='image1.html'>Name: My image 1 <br /><img src='image1_thumb.jpg' /></a>
+   <a href='image2.html'>Name: My image 2 <br /><img src='image2_thumb.jpg' /></a>
+   <a href='image3.html'>Name: My image 3 <br /><img src='image3_thumb.jpg' /></a>
+   <a href='image4.html'>Name: My image 4 <br /><img src='image4_thumb.jpg' /></a>
+   <a href='image5.html'>Name: My image 5 <br /><img src='image5_thumb.jpg' /></a>
+  </div>
+ </body>
+
+>>> response.xpath('//title/text()')
+	[<Selector (text) xpath=//title/text()>]
+>>> response.css('title::text')
+	[<Selector (text) xpath=//title/text()>]
+	xpath() 和 css() 返回是是数组, 是一个列表!!!!!!
+
+>>> response.css('img').xpath('@src').extract()
+[u'image1_thumb.jpg', 
+u'image2_thumb.jpg', 
+u'image3_thumb.jpg', 
+u'image4_thumb.jpg', 
+u'image5_thumb.jpg']
+先选择网页中 所有的 img 属性, 然后筛选出 img属性中 src 的内容.
+extract()       显示所有匹配数据.
+extract_first() 显示第一个匹配数据.
+>>> response.css('img').xpath('@src').extract_first()
+u'image1_thumb.jpg'
+
+
+🎈实例二:🎈 
+spiders scrapy shell "https://www.0214.live"
+// 需要到项目里去运行..
+★取出网站标题★
+>>> response.css('title::text').extract()
+[u'Xu.Jian']
+
+★取出所有meta标签★
+>>> response.css('meta').extract()
+[u'<meta charset="utf-8">', 
+u'<meta http-equiv="X-UA-Compatible" content="IE=edge">', 
+u'<meta name="theme-color" content="#ffffff">', 
+u'<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">', 
+u'<meta name="mate" content="">']
+
+★取出某类名(cateNames)的数据★
+>>> response.css('.cateNames').extract()
+[u'<li id="Tooles" class="cateNames"><span>Tooles</span><sup class="cateSup">94</sup></li>', u'<li id="Web" class="cateNames"><span>Web</span><sup class="cateSup">74</sup></li>', 
+u'<li id="Blog" class="cateNames"><span>Blog</span><sup class="cateSup">45</sup></li>', 
+u'<li id="HTML" class="cateNames"><span>HTML</span><sup class="cateSup">16....
+
+★取出 cateNames 类下 span 元素里的数据.★
+>>> response.css('.cateNames span').extract()
+[u'<span>Tooles</span>', 
+u'<span>Web</span>', 
+u'<span>Blog</span>', 
+u'<span>HTML</span>'
+.....
+
+★取出 cateNames 类下 span 元素里的 文本数据.★
+>>> response.css('.cateNames span::text').extract()
+[u'Tooles', u'Web', u'Blog', u'HTML', u'CSS', u'JS', u'PHP', u'RegExp', u'NodeJS', u'IT-Admin', u'\U0001f310-NET', u'\U0001f31
+0-Net', u'\U0001f453-Linux', u'\U0001f4bb-Win']
+
+
+取出博客首页所有博客的标题和链接还有时间
+	所有的标题 一般都是 li 元素. (包括h2 + span)
+		span 里面是文件日期.
+		h2 里有个 链接元素a  a属性里面带有文章链接&名字
+		<a class="post-link" href="xxxxxxx">文件名</a>
+			这里出来的结果都得加上www.0214.live 这个前缀才能外网访问的.
+
+>>> response.css('.post-link').extract()
+...
+u'<a class="post-link" href="/tooles/1986/01/01/Fidder.html">Fidder</a>', 
+u'<a class="post-link" href="/tooles/1986/01/01/Chrome.html">Chrome</a>', 
+u'<a class="post-link" href="/tooles/1984/04/10/Keynote.html">Keynote</a>'
+...
+
+只要文件名.
+>>> response.css('.post-link::text').extract()
+Keynote Chrome Fidder
+只要文件地址:
+>>> response.css('.post-link::attr(href)').extract()
+
+文件名+文件地址: 
+数据库里 文件名是一个字段. 文件链接是另一个字段. 
+所以这里你不需要 把 文件名 和 文件地址 放一起..
+
+文件时间:
+>>> response.css('.post-meta::text').extract()
+
+
+下面就去 spider.py 文件里设置了
+
+首先是循环, 所有的文件都是在 post-list 这里ul下面的.
+	注意 输出的内容必须是对应的. 这个标题肯定对应这个链接.这个时间..
+
+def parse(self, response): ❌ 这里 文章标题/url 不保证能对应起来.
+for sel in response.css('.post-list'):
+title = response.css('.post-link::text').extract()
+link = response.css('.post-link::attr(href)').extract()
+time = response.css('.post-meta::text').extract()
+print title, link, time
+
+
+然后终端 到项目文件夹.再运行:
+scrapy crawl 0214 
+报错....
+
+
+
+❤️item❤️
+
+爬东西. 主要就是从非结构性的数据源中 提取结构性数据.
+Item 是个简单的容器. 保存了爬去的数据.
+
+
+字典,用标准的字典语法来获取其中的值!!! 方便快速查找.
+spider 爬到的数据 用item 对象返回.
+
+
+
+
+
+保存数据
+scrapy crawl dmoz -o items.json
+这个会用 json格式. 生成一个  items.json文件.
+一般小规模项目. 这种方式足够了.!!!
+更复杂的 可以自己编写 item pipeline.
+
+
+
+
+spider
+分析网站源代码结构, 定义如何爬网站. 
+
+•	Spider通常针对一个特定网站
+•	Spider里面存了爬行入口URLs集合
+•	Scrapy的引擎顺序拿Spider中的入口URL，构造Request对象，启动消息循环
+•	Spider提供接口方法，把抓取下来的内容进行输出
+
+
+
+
+
+
+
+❤️报错❤️
+
+File "/usr/local/lib/python2.7/site-packages/scrapy/cmdline.py", line 141, in execute
+cmd.crawler_process = CrawlerProcess(settings)
+设置问题 ???  
+(in unix you should write / instead of \ ) hehe.
+
+
+ImportError: No module named bs4
+
+pip install bs4
+就是 beautifulsoup4 啊.
+
+
+ImportError: No module named MySQLdb 
+pip install mysql-python
+
+
+ImportError: No module named envelopes        这个是邮件处理模块.
+pip install envelopes
+
+自己要先建立sql 表的....
+表建好了... 数据库还是没数据啊...
+
+
+
+
+
+
+选择器:
+从html源码中提取数据.
+
+
+登录....
+数据收集.
+
+
+
+
+调试
+
+
+
+
+
+
+火狐插件:  xpather 能直接在页面上测试 xpath.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+命令行工具: CLI
+
+
+两种命令:
+全局命令 和 项目命令.
+项目命令.只能在 具体某个项目中运行.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0x0: 新建 Scrapy 项目
+scrapy startproject tutorial     → 创建项目文件夹.自带很多文件
+
+项目目录结构:
+scrapy.cfg        项目配置文件.
+
+toturial          文件夹 (项目python模块)
+	item.py       存放数据.
+	pipelines.py
+	settings.py    项目设置文件.
+	
+	spiders        文件夹(放spider 代码)
+
+
+
+0x1: 定义item.py
+保持数据到哪里.
+根据要爬的网站来建模. 也就是结构.
+
+比如你要爬: 网站标题 & URL & 网站描述.
+这些爬虫收集到的资料要保存到本地的数据库中.
+数据库里面 数据表就要分三项. 对应标题 url 描述.
+这里只推荐用英文也就是对应: title link desc
+
+# -*- coding: utf-8 -*-
+
+import scrapy
+
+class TutorialItem(scrapy.Item):
+    title = scrapy.Field()
+    link = scrapy.Field()
+    desc = scrapy.Field()
+
+
+
+1.  创建一个爬虫文件
+在 spider 文件夹下创建一个 0214Live.py 文件. 名字任取.
+
+爬虫需要定义. 初始URL.
+如何跟进网页中的链接.
+如何分析页面中的内容.
+
+
+1. 执行爬虫
+scrapy crawl 0214
+这里后面的名字 不是脚本的文件名. 而是脚本里面 name 定义的名字.!!!
+
+
+1. 然后当前文件夹 就生成了一个. www.0214.live 的文件
+发现爬下来的是整个网站...
+
+
+
+
+
+
+提取item.
+
+从网页中提取数据有很多方法.
+scrapy 基于 xpath 和 css 表达式.
+/html/head/title: 选择HTML文档中 <head> 标签内的 <title> 元素
+/html/head/title/text(): 选择上面提到的 <title> 元素的文字
+//td: 选择所有的 <td> 元素
+//div[@class="mine"]: 选择所有具有 class="mine" 属性的 div 元素
+
+XPath实际上要比这远远强大的多。 
+如果您想了解的更多，我们推荐 这篇XPath教程 。
+
+
+这里必须先了解下 xpath. 
+你抓下来的是网页. 必须要取出里面的某个数据.
+最简单的就是用 xpath.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+爬所有电影:
+首先需要一个电影的列表. 列表可以看成网站!
+好的列表应该有足够多的电影URL.
+通过翻页可以找到所有电影.
+一个按更新时间排序的列表, 可以更快的抓到更新的电影.
+
+当然这么好的电影网站很难找
+那就降低要求. 
+那就根据网站的 电影分类来遍历所有的电影.
+
+
+
+
+基本知识:
+List, dict 序列化你爬的东西...
+切片:对爬取的内容进行分割
+条件判断. 
+循环: 重复爬虫动作.
+文件读取: 
+
+正则式. 最基础的爬虫
+
+URI Universal Resource Identifier .  如 HTML文档、图像、视频片段、程序等都由一个通用资源标志符 
+
+URI通常由三部分组成：
+①访问资源的命名机制；
+②存放资源的主机名；
+③资源自身 的名称，由路径表示。
+如下面的URI： http://www.why.com.cn/myhtml/html1223/ 
+我们可以这样解释它：
+①这是一个可以通过HTTP协议访问的资源，
+②位于主机 www.webmonkey.com.cn上，
+③通过路径“/html/html40”访问。
+
+
+
+
+URL是URI的一个子集。它是Uniform Resource Locator的缩写，译为“统一资源定位 符”。
+通俗地说，URL是Internet上描述信息资源的字符串，主要用在各种WWW客户程序和服务器程序上。
+采用URL可以用一种统一的格式来描述各种信息资源，包括文件、服务器的地址和目录等。
+
+URL的一般格式为(带方括号 ()的为可选项)：
+protocol :// hostname:port () / path / ;parameters ()?query ()#fragment
+ 
+URL的格式由三部分组成： 
+①第一部分是协议(或称为服务方式)。
+②第二部分是存有该资源的主机IP地址(有时也包括端口号)。
+③第三部分是主机资源的具体地址，如目录和文件名等。
+第一部分和第二部分用“://”符号隔开，
+第二部分和第三部分用“/”符号隔开。
+第一部分和第二部分是不可缺少的，第三部分有时可以省略。 
+
+URI的定义是：统一资源标识符；
+URL的定义是：统一资源定位符。
+URI表示请求服务器的路径，定义这么一个资源。
+而URL同时说明要如何访问这个资源（http://）。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+xpath
+高效的分析语言.. 会了就可以不用正则式了.
+
+Beautifulsoup
+
+美丽汤模块解析网页神器,一款神器，如果不用一些爬虫框架（如后文讲到的scrapy），配合request，urllib等模块（后面会详细讲），可以编写各种小巧精干的爬虫脚本
+
+
+
+
+抓包工具... httpfox . 火狐插件. 比谷歌好用......
+可以方便查看网站收包发包的信息
+
+
+
+
+
+python 很火.原因就是各种好用的模块.
+
+
+
+打码
+互联网安全很重要.
+网络通信的安全基础有防火墙. 
+互联网业务安全基础: 图片验证码 和 短信验证码..
+
+字符验证. 选择题 算术题 ... 一般都是人工打码的.
+12306 10块钱可以识别 400多个验证码....
+
+当然，使用打码平台的不一定就是羊毛党，还有可能是一些抢票的“黄牛党”或者黑色产业的欺诈者。
+
+羊毛党: 网站经常有优惠. 特别是新会员. 就可以用这个..
+
+在某一群里查看到售卖正反身份证图片加手持身份证的信息，只需2毛一份，如图
+
+
+
+针对普通打码平台以及手机打码平台如何进行防控。采用新型的验证码技术是一种方式，构建手机打码平台黑名单库也是一种方式。但基于构建的用户手机号信誉体系以及用户设备信誉体系，结合众多数据构建自己的安全风控系统才更为重要。
+
+新型验证码最大的特点是不再基于知识进行人机判断，而是基于人类固有的生物特征以及操作的环境信息综合决策，来判断是人类还是机器。
+
+
+比如谷歌的... 淘宝的...  虽然很难被绕过.但是也是可以的....
+
+
+
+
+现在的手机已经需要进行实名认证，对于大量手机卡滥用会有一定的效果。但是在调查中发现其中还是有大量的特殊卡，且都经过实名认证或者是进行了企业认证的卡。另外对于手机打码平台，国家已经出台了相关政策，认定手机打码平台属于违法行为，因而这些手机打码平台也都转为地下
+
+
+
+
+
+
+
+
+
+
+
+
+
+图形验证 来区分人类和机器!!!
+短信验证: 手机基本是实名认证的. 好像可以防垃圾注册.
+手机打码平台囤积大量的手机卡提供短信收发的服务。
+实际调查中发现大型手机打码平台有几百万手机卡，小型也有几万的手机卡。
+
+每个项目的价格不同，像p2p金融类的可能价格较高，其他的普通的比如115网盘手机绑定价格较便宜，一个手机号只需1毛。
+
+
+
+
+图片验证码和短信验证也面临众多的挑战，下文将带你走近互联网业务眼前的威胁——图片打码平台和短信打码平台。
+
+
+
+场景一，批量登陆12306网站，并进行购买行为，但验证码不能自动识别。
+12306的验证码比较复杂，程序较难识别。这时候就出现了普通验证码的打码平台，程序将验证码传给打码平台的识别接口，打码平台将验证码发给后端的“佣工”进行识别，并获取识别结果。这样基于此类的人工打码平台，即可实现程序的自动化。
+
+
+
+
+
+
+场景二，注册某购物平台，但其需要填写手机号和收到的验证码才可注册，如何进行批量机器注册？
+这时候就出现了手机打码平台，该平台提供大量的手机号，并能够发送和接收短信。这样只需调用手机打码平台相关接口，获取手机号并获取短信内容即可进行批量注册。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+入门项目:
+
+python脚本
+爬虫
+网站
+
+
+
+
+
+
+爬虫入门
+
+
+基本爬虫工作原理.
+http 抓取工具
+后续处理. 网页分析. 存储(这里就用到数据库了)
+
+
+
+基本原理
+•	“框架不变”：网站不同，但是原理都类似，大部分爬虫都是从 发送请求——获得页面——解析页面——下载内容——储存内容 这样的流程来进行，只是用的工具不同
+
+
+
+擦.... 爬整个草榴社区....
+
+
+
+
+
+
+
+模块安装
+import requests,urllib,urllib2,re
+模块安装方式: (一般用包管理器)
+	easy-install / pip (Mac自带pip)
+	安裝：pip install requests        一个一个模块 来安装..
+	更新：pip install -U PackageName
+	移除：pip uninstall PackageName
+	搜索：pip search PackageName
+	帮助：pip help
+
+
+
+
+
+
+Scrapy 安装
+
+Mac:    pip install scrapy
+
+
+
+
+
+
+
+
+
+
+
+
+
+

