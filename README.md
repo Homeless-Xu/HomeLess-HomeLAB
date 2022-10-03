@@ -167,6 +167,20 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 ```
 
 
+
+
+
+
+# 🎪🦚🦚🦚🦚🦚 0️⃣0️⃣ Lab.Prepair
+  
+
+###### 🟢 Git 
+
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🌐 Prepair • Git ➜ Github Delete Old Version ✅]]
+
+
+
+
 # 🎪🦚🦚🦚🦚🦚 0️⃣1️⃣ Lab.Network
 
 ###### 🟢 Cable ---- Map.Simple ✔️
@@ -226,9 +240,9 @@ STO_1001   10.01.01.0/24       NAS_01G
 STO_1010   10.10.10.0/24       NAS_10G
 STO_1012   10.12.12.0/24       CEPH
 
-APM_1921   192.168.1.0/24      wifi-Master
-APG_1922   192.168.2.0/24      wifi-Guest
-APX_1929   192.168.9.0/24      wifi-Misc
+MAP_1921   192.168.1.0/24      wifi-Master
+GAP_1922   192.168.2.0/24      wifi-Guest
+XAP_1929   192.168.9.0/24      wifi-Misc
 
 CAM_1929   192.168.9.0/24      Camera
 
@@ -237,7 +251,7 @@ Srv_1728   172.16.8.0/24       Server.test
 
 
 🟢 IP Table 
-🔶 ✔️
+
 xxxx.001 ★ FortiGate_FGT 
 xxxx.003 ✩ FortiGate_EG3  
 xxxx.005 ✩ FortiGate_EG5 
