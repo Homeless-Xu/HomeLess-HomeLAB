@@ -79,7 +79,8 @@ group:xx                                  ➜ Group
 
 ###### 🟢 LAB.Pic
 
-<img src="https://github.com/MirandaXX/Pic-ForLink/raw/main/RvLAB-600K.jpg">
+<img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/HomeLAB-221001.jpg?raw=true">
+
 
 ###### 🟢 LAB.Hardware
 ```
