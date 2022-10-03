@@ -1,12 +1,5 @@
 
 ```
-🔶 WHY
-
-abbr for search 
-
-Abbr-card-search ➜  use file name 
-Abbr-file-search ➜  manual add search tag  
-
 
 🔶 Abbr _ Card 
 

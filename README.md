@@ -1,49 +1,47 @@
 # 🦚 README
 
-```
-New Repo:    blog.0214.icu         🔥 - update ing
-
-
-❗️Need job in USA.CA                xx2610👻protonmail.com  ❗️
-❗️Need job in USA.CA                xx2610👻protonmail.com  ❗️
-❗️Need job in USA.CA                xx2610👻protonmail.com  ❗️
-```
-
-
-
-## 🟢 Repo Desc
 
 ```
-🔶 Why
-    
+🟢 Repo Why
+
     in linux     everything is file 
     in knowledge everything is card
-    
+
+    i   share    everything i  know
+
     use cards    manage all your knowledge
     use obsidiam manage all your cards
+    use homelab  show   all your know
 
 
-🔶 How 
+🟢 Repo Use 
 
-    i share everything i know here.
-    this file is cards link center, all other file are cards.
-    if you need open link. use obsidian to open this project.
-    use fixed width font in obsidian ❗️ 
+    use obsidian open this repo.
+        Readme.md  ➜ cards link center 
+        Cards-AIO  ➜ cards real path 
+        Else       ➜ notes need Organize
+
+    best use fixed font like jetbrains Mono
 
 
-🔶 Card Search Tips 
+🟢 Repo Contribute 
 
-    try search in all    files ➜ ⌘ + ⇧ + F
-    no  search in readme file  ➜ ⌘ + F
+    Telegram group:      https://t.me/+3p1p8u3C8ZE3MDIx
+
+    free to join, Share your idea. 
+
+    ❗️Need job in CA.US                xx2610👻protonmail.com  ❗️
+    ❗️Need job in CA.US                xx2610👻protonmail.com  ❗️
+    ❗️Need job in CA.US                xx2610👻protonmail.com  ❗️
 
 ```
 
 
 
 
-
-🔵 Card Stru
 ```
+🟢 Card Stru
+
 🧬0️⃣0️⃣0️⃣0️⃣-A0z9 🐬 A.B.C ➜ xxxx
 |         |    |   |      |
 |         |    |   |      |
@@ -52,9 +50,22 @@ New Repo:    blog.0214.icu         🔥 - update ing
 |         |    +--------------------------➜ Category-Icon
 |         +-------------------------------➜ Level_2        ➜ Card Sort
 +-----------------------------------------➜ Level_1        ➜ Card Sort
+
+
+🟢 Card Level 
+
+group:xx                                  ➜ Group
+	xx.A xx.B xx.C ...                    ➜ cards 
+		xx.1 xx.2 xx.3 ...                ➜ cards 
+			xx.1a xx.1b xx.1c             ➜ cards 
+				xx.1a1 xx.1a2 xx.1a3      ➜ cards 
+				...
+				...
+
 ```
 
-🔵 Repo Misc
+
+🟢 Misc
 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Repo Misc ➜ Card Level ✔️]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Repo Misc ➜ Repo Abbr ✔️ ]]
