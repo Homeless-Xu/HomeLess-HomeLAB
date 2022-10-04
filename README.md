@@ -178,8 +178,25 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
 
 
-## 🎪🌐🌐🌐🌐🌐 Lab.NET
+🟢 RPI
+docker
 
+adguard! 
+
+🟢 vps ? free ? why?
+1. for vpn. frp/else.  .
+
+
+
+
+## 🎪🌐🌐🌐🌐🌐 Lab.NET
+```
+
+    ✅ VPN:            Wireguard + Netmaker
+    ✅ DNS:            AdGuard 
+    ✅ Proxy:          Traefik
+
+```
 ###### 🟢 Cable ---- Map.Simple ✔️
 ```
 
@@ -338,7 +355,26 @@ xxxx.042 ★ Ruckus_02
  
 ###### 🟢 VPN ------ Wireguard ✅ ?
 
+```
+
+🔵 VPN 
+
+    vps.s 1214.214
+
+    ros.c 1214.011
+    ros.c 1214.022
+
+    k3s.c 1214.033
+    dkt.c 1214.144
+    mac.c 1214.099
+
+
 vps stoped. so ..
+
+
+
+```
+
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.Net.VPN.Choose ➜ Wiregurad Netmaker ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.Net.VPN.Wireguard ➜ Design & Structure ✔️]]
@@ -505,8 +541,16 @@ Zx.xx
 🔵 LAB Misc 
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.Mon ➜ Dashy ✔️]]
-
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.Tools ]]
+
+
+
+## 🎪🎉🎉🎉🎉🎉 MIS.Monitor
+
+
+metric + influxdb + grafana
+
+通过 Prometheus 采集数据
 
 
 
@@ -1567,6 +1611,12 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 # 🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰 8️⃣1️⃣ Tool
+
+✅ code-server: remote config server in web vscode
+
+  
+
+✅ DB Redis-CLI GUI redis-insight
 
 
 # 🧰🦚🦚🦚🦚🦚 8️⃣1️⃣ Tool  
