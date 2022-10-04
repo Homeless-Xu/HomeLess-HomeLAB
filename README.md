@@ -56,11 +56,10 @@
 
 group:xx                                  ➜ Group
     xx.A xx.B xx.C ...                    ➜ cards 
-xx.1 xx.2 xx.3 ...                ➜ cards 
-xx.1a xx.1b xx.1c             ➜ cards 
-xx.1a1 xx.1a2 xx.1a3      ➜ cards 
-...
-...
+        xx.1 xx.2 xx.3 ...                ➜ cards 
+            xx.1a xx.1b xx.1c             ➜ cards 
+                xx.1a1 xx.1a2 xx.1a3      ➜ cards 
+
 
 ```
 
