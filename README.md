@@ -74,7 +74,7 @@ group:xx                                  ➜ Group
 
 
 # 🎪🎪🎪🎪🎪🎪🎪0️⃣0️⃣ HomeLAB
-## 🟢 Lab.Summary
+## 🎪 Lab.Summary
 ###### 🟢 LAB.Pic ✔️
 
 <img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/HomeLAB.jpg?raw=true">
@@ -172,13 +172,13 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 
 
 
-# 🎪🦚🦚🦚🦚🦚 0️⃣0️⃣ Lab.Prepair 
+## 🎪 Lab.Prepair 
 🟢 Git  [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
 🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
 
 
-# 🎪🦚🦚🦚🦚🦚 0️⃣1️⃣ Lab.Network
+## 🎪🌐🌐🌐🌐🌐 Lab.NET
 
 ###### 🟢 Cable ---- Map.Simple ✔️
 ```
@@ -351,7 +351,44 @@ vps stoped. so ..
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.Net.Proxy.Traefik ➜ Design & Structure]]
 
 
-# 🎪🦚🦚🦚🦚🦚 0️⃣3️⃣ Lab.AAA 
+## 🎪🔐🔐🔐🔐🔐 Lab.AAA 
+
+```
+🟢 AAA.Summary
+
+    ✅ LDAP:  openLDAP     ad.rv.ark
+    ✅ LDAP:  Synology    adnas.rv.ark
+
+    ✅ Radius  RB4011 
+
+    ❌ SSO:    Authelia
+
+
+
+
+
+🔵 Radius ✅
+	Radius Server: RB4011 
+	
+	Radius Client:
+	    rb4011  winbox login ✔️
+	    hapac2  winbox login ✔️
+	    Fortigate  web login ✔️
+
+
+
+🔵 LDAP Account 
+
+    🔶 nas 
+        adu.nas ➜   user 
+        ada.nas ➜   admin 
+
+
+
+```
+
+
+
 
 ###### 🟢 Radius
 ###### 🟢 Radius - Why ✔️
@@ -380,15 +417,6 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 ```
 
 ###### 🟢 Raidus - Demo ✔️ 
-```
-Radius Server: RB4011 
-
-Radius Client:
-    rb4011  winbox login ✔️
-    hapac2  winbox login ✔️
-    Fortigate  web login ✔️
-    
-```
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.FGT ✅💯]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.RB4 ✅💯]]
@@ -403,10 +431,32 @@ Radius Client:
 
 🟢 SSO ??
 
-# 🎪🦚🦚🦚🦚🦚 0️⃣3️⃣ Lab.Storage
+## 🎪📀📀📀📀📀 Lab.STO
+
+###### 🟢 LAB.Storage Desc
+```
+NAS - Docker:  Synology - Hardware ➜ dsm 
+NAS + Docker:  Synology - VM_esxi  ➜ dvm
+
+S3:    MinIO 
+RBD:   Ceph
+
+
+🟢 Function - DVM 
+	- Docker 
+	- Cloud Sync:  Dropbox       * 4
+	- Cloud Sync:  Google Driver * 2
+
+
+🟢 CEPH-RBD 
+
+    Pool_BD-K8s-DB
+    Pool_BD-K8s-APP
+    Pool_BD-K3s-AIO
 
 
 
+```
 
 
 
@@ -448,7 +498,7 @@ DHW.NFS    ➜ ESXI     ➜  ISO/APP Mount
 
  
 
-# 🎪🦚🦚🦚🦚🦚 0️⃣5️⃣ Lab.APP
+## 🎪💠💠💠💠💠 Lab.APP
 
 
 ## 🎪🟢 LAB.APP
@@ -461,7 +511,7 @@ Zx.xx
 
 
 
-# 🎪🦚🦚🦚🦚🦚 0️⃣9️⃣ Lab.Misc
+## 🎪🎉🎉🎉🎉🎉 Lab.MIS
 
 
 🔵 LAB Misc 
