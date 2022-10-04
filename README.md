@@ -182,7 +182,7 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 docker
 
 adguard! 
-
+ 
 🟢 vps ? free ? why?
 1. for vpn. frp/else.  .
 
