@@ -172,13 +172,6 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 
 
 
-🟢 Password Manage 
-txt in nas.note
-encry sync to dropbox.
-
-local bitwadden. docker 
-bit conf backup to nas
-nas enc sync to dropbox..
 
 
 
@@ -189,19 +182,20 @@ nas enc sync to dropbox..
 
 
 🟢 RPI
-docker
 
-adguard! 
-
-
-1721.14 
+docker + adguard! 
 
 
+🟢 Password Manage 
+```
+txt in nas.note
+encry sync to dropbox.
 
+local bitwadden. docker 
+bit conf backup to nas
+nas enc sync to dropbox..
 
-
-
-
+```
 
 
 ## 🎪🌐🌐🌐🌐🌐 Lab.NET
@@ -271,15 +265,9 @@ XAP_1923   192.168.3.0/24      wifi-Misc
 
 CAM_1929   192.168.9.0/24      Camera
 
-
-
-
-
 STO_1001   10.01.01.0/24       NAS_01G
 STO_1010   10.10.10.0/24       NAS_10G
 STO_1012   10.12.12.0/24       CEPH
-
-
 
 Srv_1721   172.16.1.0/24       Server.prod
 Srv_1728   172.16.8.0/24       Server.test
@@ -311,7 +299,7 @@ xxxx.041 ★ Ruckus_01.
 xxxx.042 ★ Ruckus_02
 
 
-🔶 ?
+🔶 Misc
 1720.070 ✩ CEPH.S
 1720.077 ✩ CEPH.C
 
@@ -357,9 +345,9 @@ xxxx.042 ★ Ruckus_02
 
 ```
 
-❗️ mikrotik and fortigate use diff vxlan port,  ros: 8472,  fgt: 4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
-❗️ mikrotik and fortigate use diff vxlan port,  ros: 8472,  fgt: 4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
-❗️ mikrotik and fortigate use diff vxlan port,  ros: 8472,  fgt: 4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
+❗️ mikrotik fortigate use diff vxlan port, ros.8472, fgt.4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
+❗️ mikrotik fortigate use diff vxlan port, ros.8472, fgt.4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
+❗️ mikrotik fortigate use diff vxlan port, ros.8472, fgt.4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
 
 ```
 
@@ -419,24 +407,19 @@ vps stoped. so ..
 	Radius Server: RB4011 
 	
 	Radius Client:
-	    rb4011  winbox login ✔️
-	    hapac2  winbox login ✔️
-	    Fortigate  web login ✔️
+	    RB4/HAP    winbox login ✔️
+	    Fortigate  web    login ✔️
+        Kali       ssh    login ✔️
+        esxi ❌
+        nas ❌
 
-
-
-🔵 LDAP Account 
+🔵 LDAP Account ❌
 
     🔶 nas 
         adu.nas ➜   user 
         ada.nas ➜   admin 
 
-
-
 ```
-
-
-
 
 ###### 🟢 Radius
 ###### 🟢 Radius - Why ✔️
