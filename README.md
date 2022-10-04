@@ -171,6 +171,17 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 
 
 
+
+🟢 Password Manage 
+txt in nas.note
+encry sync to dropbox.
+
+local bitwadden. docker 
+bit conf backup to nas
+nas enc sync to dropbox..
+
+
+
 ## 🎪 Lab.Prepair 
 🟢 Git  [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
@@ -186,8 +197,9 @@ adguard!
 1721.14 
 
 
-🟢 vps ? free ? why?
-1. for vpn. frp/else.  .
+
+
+
 
 
 
