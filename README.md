@@ -468,6 +468,7 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.FGT ✅💯]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.RB4 ✅💯]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.Kali ✅💯]]
 
 
 
