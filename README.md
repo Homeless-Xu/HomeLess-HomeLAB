@@ -1506,6 +1506,12 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
+
+🟢 Network Nic Vlan ✔️
+- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Net ➜ Linux Vlan Nic Kali ✅]]
+
+
+
 # 👾🦚🦚🦚🦚🦚 4️⃣5️⃣ Mac 
     🔍F.Mac🔎
 
