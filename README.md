@@ -424,7 +424,7 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 ###### 🟢 LAB.Storage Desc
 ```
 NAS - Docker:  Synology - Hardware ➜ dsm 
-NAS + Docker:  Synology - VM_esxi  ➜ dvm
+NAS + Docker:  Synology - VM_esxi  ➜ dvm  ➜ no 24/7 .. only docker no important.
 
 S3:    MinIO 
 RBD:   Ceph
