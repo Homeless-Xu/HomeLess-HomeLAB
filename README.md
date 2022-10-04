@@ -175,7 +175,7 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 # 🎪🦚🦚🦚🦚🦚 0️⃣0️⃣ Lab.Prepair 
 🟢 Git  [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
-🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ AIO ✅]]
+🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
 
 
 # 🎪🦚🦚🦚🦚🦚 0️⃣1️⃣ Lab.Network
