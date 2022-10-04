@@ -296,6 +296,7 @@ xxxx.004 ★ Mikrotik_HAP
 xxxx.009 ★ Mikrotik_CRS
 
 xxxx.013 ★ ESXI.EG3
+xxxx.014 ★ RPI
 xxxx.015 ★ ESXI.EG5
 
 xxxx.088 ★ NAS.DHW
