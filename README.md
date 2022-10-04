@@ -354,17 +354,13 @@ vps stoped. so ..
 ## 🎪🔐🔐🔐🔐🔐 Lab.AAA 
 
 ```
-🟢 AAA.Summary
+🟢 AAA.SUM
+
+    ✅ Radius  ➜ main for wifi  
 
     ✅ LDAP:  openLDAP     ad.rv.ark
     ✅ LDAP:  Synology    adnas.rv.ark
-
-    ✅ Radius  RB4011 
-
     ❌ SSO:    Authelia
-
-
-
 
 
 🔵 Radius ✅
@@ -422,14 +418,6 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 - [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.RB4 ✅💯]]
 
 
-
-
-
-🟢 LDAP ???
-
-
-
-🟢 SSO ??
 
 ## 🎪📀📀📀📀📀 Lab.STO
 
