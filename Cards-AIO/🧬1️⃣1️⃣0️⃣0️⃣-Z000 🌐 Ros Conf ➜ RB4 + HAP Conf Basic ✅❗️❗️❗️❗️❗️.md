@@ -24,20 +24,6 @@ vm.eg5 >>>>>>> fgt.eg5 -------- hap.lan            >> hap.wan   ---- fgt.vdom.de
 🔶 vxlan 
 vm.eg5 >> 10.53.0.5 >> 10.53.0.3 >> vm.eg3 
 
-🔶 vlan 
-eg3.vlan_a  rb4.lan >> fgt.def --+
-                                 |
-eg5.vlan_b  hap.lan >> fgt.def --+
-
-
-
-🟢 vlan manage 
-
-
-esxi inside vlan    eg3.vlan1 >> fgt.eg3 >> eg3.vlan2 
-esxi esxi   vlan    eg3.vlan1 >> fgt.eg3 >> rb4. ebgp ---- hap.ebgp >> fgt.eg5 >> eg5.vlan2
-esxi ohter  vlan    eg3.vlan1 >> fgt.eg3 >> fgt.def   >> other vlan 
-
 
  ```
 

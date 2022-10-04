@@ -74,15 +74,13 @@ group:xx                                  ➜ Group
 
 
 # 🎪🎪🎪🎪🎪🎪🎪0️⃣0️⃣ HomeLAB
-
 ## 🟢 Lab.Summary
+###### 🟢 LAB.Pic ✔️
 
-###### 🟢 LAB.Pic
-
-<img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/HomeLAB-221001.jpg?raw=true">
+<img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/HomeLAB.jpg?raw=true">
 
 
-###### 🟢 LAB.Hardware
+###### 🟢 LAB.Hardware ✔️
 ```
 
 Starlink_Gen2        Internet
@@ -105,25 +103,16 @@ Camera_IPC X 4       IPC-HDW3849H-AS-PV
 Camera_PTZ X 2
 ```
 
+🔵 LAB.Hardware Choose 
 
-###### 🟢 LAB.Hardware Choose 
-
-🔶 Firewall 
-
-- [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB.HDW.Dev ➜ Homelab Firewall Choose ✔️]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Firewall ✔️]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Camera ✔️]]
 
 
-🔶 Camera 
-
-- [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB.HDW.Choose ➜ Camera IPC+PTZ ✅]]
-
-
-
-
-###### 🟢 LAB.Network Tech ✅
+###### 🟢 LAB.Network Tech
 ```
 
-vdom + vxlan + bgp ...
+vDOM + VxLAN + BGP ...
 
     VM:   Server              ➜ make one machine  to many virtual machine 
     VLAN: Switch_Layer 2      ➜ make one switch   to many virtual switch 
@@ -183,14 +172,10 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 
 
 
-# 🎪🦚🦚🦚🦚🦚 0️⃣0️⃣ Lab.Prepair
-  
+# 🎪🦚🦚🦚🦚🦚 0️⃣0️⃣ Lab.Prepair 
+🟢 Git  [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
-###### 🟢 Git 
-
-- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🌐 Prepair • Git ➜ Github Delete Old Version ✅]]
-
-
+🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ AIO ✅]]
 
 
 # 🎪🦚🦚🦚🦚🦚 0️⃣1️⃣ Lab.Network
@@ -306,58 +291,48 @@ xxxx.042 ★ Ruckus_02
 
 
 
-###### 🟢 Firewall - Conf Basic
-```
+###### 🟢 Network -- Internet ✔️
 
-1. satelite    ➜ starlink         ➜ expensive     ➜ 160 Mb
-2. LTE         ➜ mofi + visible   ➜ good          ➜ 8   Mb 
-3. Public wifi ➜ ros. ap bridge   ➜ option 
-
-```
-
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • internet ➜ Ros Wireless Bridge Public Wifi ✅ ]]
-
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FGT • Bas ➜ Config Reset ✔️]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FGT • Bas ➜ SDWAN ✔️]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FGT • VDOM ➜ Enable ✔️]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • internet.Best ➜ Visible + Mofi ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • internet.Else ➜ Ros Wireless Bridge Public Wifi ✅ ]]
 
 
+###### 🟢 Network -- Basic 
 
-🔶 VDOM. Mode ➜ NAT & Transfer 
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Firewall Mode ➜ NAT Transfer Diff ✅ ]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Firewall Mode ➜ Transfer Mode Config ✅ ]]
+🔶 FortiGate
+
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Reset ✔️]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ VDOM Enable ✔️]]
+
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Transfer Mode Enable ✔️ ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Basc ➜ NAT Mode vs Transfer Mode ✔️ ]]
 
 
-###### 🟢 Router --- Conf Basic ❗️💯❗️ 
+🔶 Mikrotik 
 
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Ros Conf ➜ Basic ✅❗️❗️❗️❗️❗️ ]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Ros Conf ➜ EBGP eg3 eg5 ✅ ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Ros Conf ➜ RB4 + HAP Conf Basic ✅❗️❗️❗️❗️❗️ ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Ros Conf ➜ EBGP eg3 eg5 ✅ ]]
 
 
-###### 🟢 VxLAN ---- Conf AIO 
-
-```
-🔶 vxlan must know 💯
-
-❗️ mikrotik and fortigate use diff vxlan port,  mikrotik: udp 8472,  fortigate: udp 4789 ❗️
-❗️ mikrotik and fortigate use diff vxlan port,  mikrotik: udp 8472,  fortigate: udp 4789 ❗️
-❗️ mikrotik and fortigate use diff vxlan port,  mikrotik: udp 8472,  fortigate: udp 4789 ❗️
-
-    if vxlan between mikrotik  and mikrotik.   ➜ no   change vxlan port
-    if vxlan between fortigate and fortigate.  ➜ no   change vxlan port
-    if vxlan between mikrotik  and fortigate.  ➜ must change vxlan port. 
-    
-        ros is easy to change port. so change ros vxlan port to 4789, both vxlan & vtep need change port ❗️
+###### 🟢 Network -- VxLAN 
 
 ```
 
-- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 NET.VXLAN ➜ why ✔️]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild VxLAN.Demo ➜ Nic.PHYS ➜ Fortigate + Mikrotik 💯❗️❗️❗️❗️❗️ ]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild VxLAN.Demo ➜ Nic.VLAN ➜ VLAN_MGT AIO 💯❗️❗️❗️❗️❗️ ]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild VxLAN.Demo ➜ NAS.89 + NAS.88 ✅ ]]
+❗️ mikrotik and fortigate use diff vxlan port,  ros: 8472,  fgt: 4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
+❗️ mikrotik and fortigate use diff vxlan port,  ros: 8472,  fgt: 4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
+❗️ mikrotik and fortigate use diff vxlan port,  ros: 8472,  fgt: 4789 ➜ change ros`s vxlan & vtep port to 4789 ❗️
+
+```
+
+- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 NET • VXLAN ➜ Why ✔️]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NET • VxLAN.Demo Phys Nic ➜ Ros + FGT 💯 ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • VxLAN.Demo VLAN Nic ➜ Manage vlan 💯 ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • VxLAN.Demo Else ➜ NAS.89 + NAS.88 ✅ ]]
 
  
-###### 🟢 VPN ------ Wireguard ✅
+###### 🟢 VPN ------ Wireguard ✅ ?
+
+vps stoped. so ..
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.Net.VPN.Choose ➜ Wiregurad Netmaker ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.Net.VPN.Wireguard ➜ Design & Structure ✔️]]
@@ -369,39 +344,15 @@ xxxx.042 ★ Ruckus_02
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.Net.Proxy.Choose ➜ Traefik ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.Net.Proxy.Traefik ➜ Design & Structure]]
 
-###### 🟢 Misc ----- NTP 
-
-- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ AIO ✅]]
-
-
-###### 🟢 Wifi ----- 
-```
-manage: use vxlan.    1219.41
-
-ssid: 1921  vlan: 1921  ➜ master ap
-ssid: 1922  vlan: 1922  ➜ guest  ap 
-ssid: RMST2 vlan: 1929  ➜ else  
-
-```
-
-
-
 
 # 🎪🦚🦚🦚🦚🦚 0️⃣3️⃣ Lab.AAA 
 
-```
-Radius Server: RB4011 
-
-Radius Client:
-    rb4011  winbox login ✔️
-    hapac2  winbox login ✔️
-    Fortigate  web login ✔️
-    
-
-```
+###### 🟢 Radius
 ###### 🟢 Radius - Why ✔️
 
 ```
+🔶 Why 
+
 in school  wifi need login 
 in company pc   need login 
 
@@ -409,8 +360,6 @@ radius allow who can login. how long etc....
 main for wifi.   can do to pc too. like employer.
 
 ```
-
-
 ###### 🟢 Raidus - Map ✔️ 
 
 ```
@@ -424,9 +373,16 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 
 ```
 
+###### 🟢 Raidus - Demo ✔️ 
+```
+Radius Server: RB4011 
 
-
-###### 🟢 Radius - Demo ➜ AIO
+Radius Client:
+    rb4011  winbox login ✔️
+    hapac2  winbox login ✔️
+    Fortigate  web login ✔️
+    
+```
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.FGT ✅💯]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-C000 🎪 AAA Radius Demo ➜ Srv.RB4 + Cli.RB4 ✅💯]]
@@ -434,6 +390,12 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 
 
 
+
+🟢 LDAP ???
+
+
+
+🟢 SSO ??
 
 # 🎪🦚🦚🦚🦚🦚 0️⃣3️⃣ Lab.Storage
 
@@ -753,6 +715,10 @@ firewall.mangle.pathhrough:  if match. go to next firewall rule
     🔍F.Ros.Basic🔎
 
 
+- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 NET.Route • Ros BGP Share Default route ✔️ ]]
+
+
+
 # 🌐🟢 Ros.CMD AIO 
 
 1. bridge cmd 
@@ -949,22 +915,11 @@ netwatch:  check device up/down.   so no need use ping
 # 🌐🟢 Ros.BGP OSPF 
 
 
-- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 NET.Route • Ros BGP Share Default route ✔️ ]]
-
-
-
-
 
 
 
 
 # 🚀🦚🦚🦚🦚🦚 1️⃣0️⃣ VPN
-
-
-
-
-
-
 
 
 
@@ -1318,9 +1273,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-
-
-
 # 👾👾👾👾👾👾👾👾👾👾👾👾👾👾 4️⃣0️⃣ OS
 
 
@@ -1328,7 +1280,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 # 👾🦚🦚🦚🦚🦚 4️⃣0️⃣ OS.X 
     🔍F.OSX🔎
-
 
 
 
@@ -1340,8 +1291,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 # 👾🦚
-
-
 
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Structure ✔️]]
 
@@ -1419,15 +1368,8 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-
-
-
-
-
-
 # 👾🦚🦚🦚🦚🦚 4️⃣3️⃣ Linux 
     🔍F.Linux🔎
-
 
 - [[🧬7️⃣9️⃣0️⃣0️⃣-Z000 👾 L.Bas ✶ Hostname AIO]]
 - [[🧬7️⃣9️⃣0️⃣0️⃣-Z000 👾 L.SSH ✶ Root ssh-key login]]
@@ -1437,124 +1379,22 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 - [[🧬7️⃣9️⃣0️⃣0️⃣-Z000 👾 L.NIC ✶ vnic ➜ add virtual nic ]]
 
 - [[🧬7️⃣9️⃣0️⃣0️⃣-Z000 👾 L.Misc ✶ ln link ]]
-
 - [[🧬7️⃣9️⃣0️⃣0️⃣-Z000 👾 L.Misc ✶ cloud-init ➜ disable ]]
 
 
 # 👾🟢 Linux-Basic 
 
 
-
 🔵 Linux Package Manager 
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM ➜ Package Manage.00 ➜ Why ✔️]]
-
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM ➜ Custom Repo ➜ Step ✔️]]
-
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM.APT.Repo Format - 🐶]]
-
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM.APT.Repo Path ✔️]]
 
-
-```
-
-
-```
-
-poe.ros... 
-
-
-
-
-
-```
-🟢 Linux NetworkManager ➜ Wifi CMD
-
-🔶 iw cmd desc
-
-iw / iwconfig ➜ cli wireless device config tool
-    i: interface 
-    w: wireless 
-
-
-🔶 iw cmd 
-
-iw dev             ➜ list  all    wireless nic  ➜ get wireless nic name 
-iw wlan0 link      ➜ check wlan0  nic state 
-sudo iw wlan0 scan ➜ cheak available wifi.  ➜ get ssid 
-
-
-iw phy phy0 channels ➜ check if wifi support 2.4g/5g
-
-
-
-🔶 
-nmtui.
-
-
-🔶 enable / disable 
-
-sudo ifconfig wlan0 up/down  
-
-
-
-
-
-🔶 create config 
-
-
-cat /etc/wifi-NoDEL.conf
-network={
-
-
-
-
-
-
-
-cat
-
-
-	SSID: HAP5
-
-
-
-	Interface wlan0
-
-
-
-
-🔵 other 
-
-🟢 Linux NetworkManager ➜ nmtui
-
-
-🔵 why 
-easy for conn wifi.  use cmd 
-
-
-
-
-🔵 check 
-
-
-sudo ifconfig wlan0 up/down  
-
-
-
-
-```
-
-
-
-
-
+- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L. Wifi Conf ✖️ ]]
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Remote.GUI ➜ Kali XRDP Demo AIO ✅]]
-
-
-
-
 
 
 
@@ -1612,10 +1452,6 @@ sudo ifconfig wlan0 up/down
 # 👾🦚🦚🦚🦚🦚 4️⃣9️⃣ PE    
     🔍F.PE🔎
 
-
-
-
-
 🔵 esxi usb installer make 
 
 • Win:    rufus  - win only 
@@ -1632,15 +1468,7 @@ sudo ifconfig wlan0 up/down
 
 
 
-
-
-
-
 # 💠💠💠💠💠💠💠💠💠💠💠💠💠💠 6️⃣0️⃣ DevOPS 
-
-
-🔶 ReadMe
-
 
 
 # 💠🦚🦚🦚🦚🦚 6️⃣0️⃣ DevOPS 
@@ -1680,19 +1508,10 @@ sudo ifconfig wlan0 up/down
 ## 🛖🔵 PROT.
 
 
-
-
-
-
-
 🔶 Discover Protocol
 - [[🧬7️⃣0️⃣0️⃣0️⃣-Z000 🛖 PROT.mactelnet ➜ Discover Device By MacAddress ✖️]]
 - [[🧬7️⃣0️⃣0️⃣0️⃣-Z000 🛖 PROT.MNDP ➜ Discover Neigjbor ]]
 - [[🧬7️⃣0️⃣0️⃣0️⃣-Z000 🛖 PROT.LLDP ➜ Discover link layer ]]
-
-
-
-  
 
 
 
@@ -1701,21 +1520,13 @@ sudo ifconfig wlan0 up/down
 # 🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰 8️⃣1️⃣ Tool
 
 
-
 # 🧰🦚🦚🦚🦚🦚 8️⃣1️⃣ Tool  
     🔍F.Tool🔎
 
 
 
-
 # 🧰🦚🦚🦚 Wireshark
     🔍F.Wireshark🔎
-
-
-
-
-
-
 
 
 
@@ -1725,16 +1536,8 @@ sudo ifconfig wlan0 up/down
 # 🧰🦚🦚🦚 Tool Network
 
 
-
 🔵 ping 
 nping (include nmap)
-
-
-
-
-
-
-
 
 
 
@@ -1753,12 +1556,6 @@ Wireshark、Nmap、Nessus、MSF
 # 🧰🦚🦚🦚 Tool.IT
 
 
-mtr  ➜ ip route
-nmap ➜ port scan
-
-
-
-
 🔶 Misc 
 wireshark 
 arpspoof ➜ arp change 
@@ -1771,34 +1568,23 @@ Driftnet ➜ catch pic in network
 # 🧰🦚🦚🦚 Tool.Mac 
     🔍F.TM🔎
 
-# 🧰🟢 Mac.Obsidian
 
+🔶 Obsidian
 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ obsidian]]
-
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ obsidian Custom ➜ Paste use plaintext]]
-
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ obsidian Custom Shortcuts ✔️ ]]
 
 
-
-
-
-
-
-
-
-#### 🔶 VScode 
+🔶 VScode 
 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ VScode]]
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ VScode Plugin.9 ➜ code server AIO ]]
 
 
-#### 🔶 Alfred
+🔶 Alfred
 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ Alfred.Plugin ➜ obsidian]]
-
-
 
 
 ### 🔵 Mac.Option
@@ -1806,11 +1592,6 @@ Driftnet ➜ catch pic in network
 ##### 🔶 Brew-CLI
 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ Brew]]
-
-
-
-
-
 
 
 
@@ -1831,8 +1612,6 @@ Driftnet ➜ catch pic in network
 
 
 
-
-
 # 🧰🦚🦚🦚 Tool Windows 
     🔍F.TW🔎
 
@@ -1841,23 +1620,11 @@ Driftnet ➜ catch pic in network
 
 
 
-
 # 🧰🦚🦚🦚 Tool Docker 
     🔍F.TD🔎
 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.D ✶ CLI ➜ Manager.lazydocker]]
-
-
-
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.D ✶ GUI ➜ lens ➜ Add Cluster minikube k3s k8s]]
-
-
-
-
-
-
-
-
 
 
 
@@ -1871,11 +1638,7 @@ Driftnet ➜ catch pic in network
 
 
 
-
-
 - Blog/CMS ➜  Docusaurus 
-
-
 
 - [[🧬8️⃣9️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ Keyboard HHKB Pair ✔️]]
 
@@ -1887,10 +1650,6 @@ Driftnet ➜ catch pic in network
 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.X ✶ Git ➜ Workflow]]
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.X ✶ Github ➜ Auth ➜ SSH & HTTPS]]
-
-
-
-
 
 
 
@@ -1908,129 +1667,12 @@ Driftnet ➜ catch pic in network
 
 
 
-
 # 🎉🦚🦚🦚 ELECT 
 
-🔵 Device Hardware 
 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ Hardware Devices ]]
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
 
-klein gfci outlet tester  ➜ test if gfci device works. 
-klein voltage tester      ➜ test if have any power. 
-    use this after turn off the main elect of house / before fix elexc
-    make sure no power
-    not for test how strong votage/current is .
-
-
-fluke multimeter 
-fluke elect tester 
-
-
-
-
-
-
-
-
-🔵 GFCI 
-```
-🔵 ELECT . gfci 
-🔶 gfci desc 
-
-gfci is a function. 
-gfci device:  a tool can protect you when elect leak happen.
-if you want use dfci device keep you safe.
-must first  choose device have gfci function.
-must second test    gfci works
-
-
-🔶 gfci how work
-
-positive cable
-negitave cable 
-ground   cable
-
-good   elect   ➜ no   elect go to ground ➜ Circunt between + - is same 
-broken elect   ➜ some elect go to ground ➜ Circunt between + - no same
-
-
-gfci test:  monite circunt between + - 
-    if same circunt.  no   power leak
-    if diff curcunt.  have power leak 
-
-
-
-
-
-🔶 gfci device 
-
-
-gfci outlet       ➜ protect outlet
-gfci power strip  ➜ protect strip 
-gfci breaker      ➜ protect whole house.
-
-
-gfci outlet       ➜ option. (wet place like bathroom need it.)
-gfci power strip  ➜ option.
-gfci breaker      ➜ Must.
-
-
-
-
-
-🔶 gfci test - before use 
-
-gfci test is test if other gfci device works.
-press test button on tester.   
-    other gfci device should work. 
-        and other gfci device will cut the elect.
-if you want eclect back.
-    you need find that gfci device.
-        and press reset buttom on that device .
-            so you have elect again. 
-
-            
-
-gfci test search all gfci enabled device in house.
-gfci test don`t harm anything even no any gfci enabled device found in house.
-if   test foud
-
-
-
-gfci test do no harm to any device. it is very safe.
-even no any dfci protect device is found in your house.
-
-but. if you house have some gfci device.
-and you test with your tool.
-that gfci device should 
-
-
-
-🔶 gfci test use
-
-
-two buttom + two light: 
-
-buttom_test   ➜ 
-buttom_reset
-light_red 
-light_green 
-
-
-
-
-...
-gfci      device itself must have two buttom to test.
-gfci test device is for double check! 
-
-
-1. press reset buttom on outlet ➜  charge phone ➜  if    charge ➜ outlet works
-2. press test  buttom on outlet ➜  charge phone ➜  if no charge ➜ gfci   works
-
-
-if no gfci outlet.
-and you not know if any gfci device is installed. 
-
-```
 
 
 
@@ -2053,11 +1695,6 @@ and you not know if any gfci device is installed.
 - [[🧬9️⃣5️⃣0️⃣0️⃣-Z000 📝 Conf.DC.11 ✶ Proxy ➜ Traefik ✅ ]]
 - [[🧬9️⃣5️⃣0️⃣0️⃣-Z000 📝 Conf.DC.22 ✶ DB ➜ MySQL Postgres ✔️ ]]
 - [[🧬9️⃣5️⃣0️⃣0️⃣-Z000 📝 Conf.DC.99 ✶ Archive ]]
-
-
-
-
-
 
 
 
