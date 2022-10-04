@@ -1494,12 +1494,22 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 # 👾🟢 Linux-Basic 
 
 
-🔵 Linux Package Manager 
+🟢 Linux PM APT ➜ Package Manager 
+
+
+🔶 Kali 
+
+- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L PM.APT Kali ➜ Kali Install Docker ✅ ]]
+
+
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM ➜ Package Manage.00 ➜ Why ✔️]]
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM ➜ Custom Repo ➜ Step ✔️]]
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM.APT.Repo Format - 🐶]]
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM.APT.Repo Path ✔️]]
+
+
+
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L. Wifi Conf ✖️ ]]
 
@@ -1510,6 +1520,11 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 🟢 Network Nic Vlan ✔️
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Net ➜ Linux Vlan Nic Kali ✅]]
+
+
+
+
+
 
 
 
