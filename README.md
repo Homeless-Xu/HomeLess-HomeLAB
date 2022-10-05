@@ -141,7 +141,7 @@ vDOM + VxLAN + BGP ...
 
 
 
-##### 🟢 OS AIO ➜ ESXI Ubuntu Kali
+##### 🟢 OS Prepair
 
 ###### 🔶 OS ➜ ESXI  
 
