@@ -146,6 +146,12 @@ dns:  adguard
 bitwarden
 
 
+🔵 LAB Auth 
+
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
+
+
+
 
 🟢 Git  
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
@@ -506,13 +512,6 @@ CMD.N ➜ Net
 - [[🧬8️⃣8️⃣0️⃣0️⃣-Z000 📟 CMD.ESXI Network ➜ Nic PortGroup vSwitch ✔️]]
 
 
-
-
-
-
-
-
-
 # 🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐 1️⃣0️⃣ Network 
 
 
@@ -528,7 +527,6 @@ DNAT: english to your
 ```
 
 
-
 🔵 Tool. Winbox 
 
 - [[🧬1️⃣0️⃣0️⃣0️⃣-Z000 🌐 Net.T.Winbox.Tips ✔️]]
@@ -536,8 +534,6 @@ DNAT: english to your
 
 # 🌐🦚🦚🦚🦚🦚 1️⃣0️⃣ Network 
     🔍F.N🔎
-
-
 
 ###### 🟢 Hardware 
 
@@ -554,8 +550,6 @@ DNAT: english to your
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB.HW.CRS • Hardware Offload ➜ Why ✅ ]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB.HW.CRS • Hardware Offload ➜ Status Check ✔️ ]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB.HW.CRS • Hw Offload Tip ➜ Use only one Bridge ✔️ ]]
-
-
 
 
 
@@ -579,12 +573,7 @@ DNAT: english to your
 🔵 Misc
 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Bas ✶ TCP vs UDP ✔️]]
-
-
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Bas.Router Type ➜ PE CE ✔️]]
-
-
-
 
 
 
