@@ -98,6 +98,14 @@ Synology_DS2015XS    NAS
 
 Camera_IPC X 4       IPC-HDW3849H-AS-PV 
 Camera_PTZ X 2
+
+🔶 want 
+
+HDD:  HC550 ➜ best 
+Server:  supermikro 
+
+
+
 ```
 
 🔵 LAB.Hardware Choose 
