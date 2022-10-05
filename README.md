@@ -146,7 +146,22 @@ vDOM + VxLAN + BGP ...
  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
 
 
-###### 🟢 OS ➜ ESXI. Install  
+
+##### 🟢 OS ➜ ESXI 
+###### ESXI 
+
+
+ESXI Hardware compatibility 
+
+[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
+
+
+ESXI IMG Custom 
+[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
+
+
+
+###### ESXI. Install  
 
 ```
 🔵  esxi usb installer make 
@@ -162,6 +177,8 @@ vDOM + VxLAN + BGP ...
     Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
     done
 ```
+
+
 
 
 
