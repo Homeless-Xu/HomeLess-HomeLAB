@@ -199,6 +199,7 @@ nas enc sync to dropbox..
 ###### 🟢 RPI-Nic Bond ✔️
 
  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ✅]]
+     ❗️ startech dual-usb nic no support this. fuck ❗️ 
 
  
 
