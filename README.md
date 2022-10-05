@@ -164,7 +164,15 @@ esxi usb installer make
 ```
 
 
-###### 🔶 OS ➜ Ubuntu.CLI
+###### 🔶 OS ➜ RPI + Ubuntu CLI
+
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
+
+
+###### 🔶 OS ➜ Kali GUI
+
+
+
 
 
 🟢 RPI ✔️
@@ -180,8 +188,6 @@ esxi usb installer make
 
 
 
-###### 🔶 OS ➜ Kali GUI
-
 
 
 
@@ -194,43 +200,12 @@ esxi usb installer make
 
 
 
-bitwarden
-
-
-
-dns:  adguard 
-
-
-
-
-
-
-🔵 LAB Auth 
-
-
-
-
 
 🟢 Git  
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
 
 🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
-
-
-
-
-
-🟢 OS ➜ Kali.GUI
-
-
-
-
-
-👾🦚 raspberry pi
-
-
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
 
 
 
