@@ -198,10 +198,35 @@ nas enc sync to dropbox..
 
 ###### 🟢 RPI-Nic Bond ✔️
 
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ✅]]
+ [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ➜ NoSupport ✅]]
      ❗️ startech dual-usb nic no support this. fuck ❗️ 
 
- 
+ [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond LDAP ]]
+
+
+
+ ```
+
+sudo vi /etc/network/interfaces
+
+
+auto eth1
+iface eth1 inet manual
+bond-master bond-usb
+
+auto eth2
+iface eth2 inet manual
+bond-master bond-usb
+
+auto bond-usb
+iface bond-usb inet dhcp
+bond-mode balance-rr
+bond-slaves eth1 eth2 
+bond-miimon 100
+
+
+
+ ```
 
 
 ## 🎪🌐🌐🌐🌐🌐 Lab.NET
