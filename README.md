@@ -132,8 +132,6 @@ vDOM + VxLAN + BGP ...
 
 ## 🎪 Lab.Prepair 
 
-🟢 Git  
-- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
 🟢 RPI ✔️
 🔶 Nic Bond
@@ -143,34 +141,22 @@ vDOM + VxLAN + BGP ...
 
 🔶 Docker 
 
+dns:  adguard 
 
-adguard
+bitwarden
+
+
+
+🟢 Git  
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
 
 🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
 
 
-🟢 RPI
-
-docker + ! 
-
-
-🟢 Password Manage ❌
-```
-txt in nas.note
-encry sync to dropbox.
-
-local bitwadden. docker 
-bit conf backup to nas
-nas enc sync to dropbox..
-
-```
-
-
 
 ## 🎪🌐🌐🌐🌐🌐 Lab.NET
 ```
-
     ✅ VPN:            Wireguard + Netmaker
     ✅ DNS:            AdGuard 
     ✅ Proxy:          Traefik
@@ -435,12 +421,6 @@ DHW.NFS    ➜ ESXI     ➜  ISO/APP Mount
 
 
 ## 🎪🟢 LAB.APP
-
-🔵 LAB Auth 
-
-Zx.xx 
-
-- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
 
 
 
