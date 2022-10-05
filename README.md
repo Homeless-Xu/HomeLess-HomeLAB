@@ -198,12 +198,9 @@ nas enc sync to dropbox..
 
 ###### 🟢 RPI-Nic Bond ✔️
 
+     ❗️ startech dual-usb nic no support Balance-rr fuck ❗️ 
  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ➜ NoSupport ✅]]
-     ❗️ startech dual-usb nic no support this. fuck ❗️ 
-
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond LDAP ]]
-
-
+ [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond 802.3AD ✅]]
 
  ```
 
