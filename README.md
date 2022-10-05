@@ -169,6 +169,10 @@ esxi usb installer make
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
 
 
+
+
+
+
 ###### 🔶 OS ➜ Kali GUI
 
 
