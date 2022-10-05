@@ -179,6 +179,10 @@ dns:  adguard
 
 
 
+🟢 OS PXE -todo 
+
+
+
 🟢 OS/PE ESXI. Install  
 🔶 esxi usb installer make 
 
@@ -193,6 +197,119 @@ dns:  adguard
  done
 ```
 
+
+
+
+
+```
+
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 PXE. NAS ✔️
+
+🔶 ref 
+
+https://linuxhint.com/configure-synology-nas-pxe-boot-server-netbooting-linux-installation-images-pxelinux-bios/
+https://linuxhint.com/configure-synology-nas-pxe-boot-server-netbooting-linux-installation-images-pxelinux-bios/
+https://linuxhint.com/configure-synology-nas-pxe-boot-server-netbooting-linux-installation-images-pxelinux-bios/
+
+
+
+
+
+🔵 why 
+
+Install os over internet not usb dirve. 
+
+PXE boot. 
+Preboot eXecution Environment
+
+
+PXE
+|--pxelinux.cfg
+     |-- default
+|-- memdisk
+|-- menu.c32
+|-- pxelinux.0
+
+
+├── dnsmasq
+│   └── dnsmasq.conf
+├── tftproot
+│   └── ipxe.efi
+├── httproot
+│   ├── menu.ipxe
+│   └── images
+│       ├── win
+│       │   ├── install.bat
+│       │   ├── pe
+│       │   │   ├── Boot
+│       │   │   │   ├── BCD
+│       │   │   │   └── boot.sdi
+│       │   │   └── sources
+│       │   │       └── boot.wim
+│       │   └── winpeshl.ini
+│       └── ubuntu
+│           ├── mnt
+│           └── ubuntu-20.04-desktop-amd64.iso
+└── smbroot
+    ├── win10_1903
+    └── win10_1909
+
+
+
+
+
+
+
+🔵 how.. 
+
+
+PXE 启动并安装系统的原理如下:
+
+PC 在 BIOS 中选择从网卡启动
+PC 网卡发出 DHCP 请求
+DHCP 服务器应答 PXE 启动配置文件路径
+PC 网卡下载对应的 PXE 启动配置文件，并启动执行环境
+PXE 在执行环境中加载系统安装文件，启动正常的系统安装过程
+
+
+
+🔵 PXELINUX
+
+6.0.3. zip 
+You can download the PXELINUX from the URL:    
+https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/
+
+
+
+syslinux/bios/core/                    pxelinux.0 
+syslinux/bios/memdisk/                 memdisk
+syslinux/bios/com32/modules/           linux.c32 
+syslinux/bios/com32/libutil/           libutil.c32
+syslinux/bios/com32/elflink/ldlinux/   ldlinux.c32
+syslinux/bios/com32/menu/              menu.c32 and vesamenu.c32 
+syslinux/bios/com32/lib/              libcom32.c32
+
+
+
+🔶 default file 
+
+
+default menu.c32
+prompt 0
+timeout 100
+
+menu title Select an option to boot
+
+label ubuntu-desktop-2004-live
+    menu label Install Ubuntu Desktop 20.04 LTS
+
+label ubuntu-server-2004-netboot
+    menu label Install Ubuntu Server 20.04 LTS (netboot)
+
+
+
+
+```
 
 
 
