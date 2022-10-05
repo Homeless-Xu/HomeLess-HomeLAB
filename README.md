@@ -179,8 +179,8 @@ dns:  adguard
 
 
 
-🟢 OS ESXI. Install  
-🔵 esxi usb installer make 
+🟢 OS/PE ESXI. Install  
+🔶 esxi usb installer make 
 
 • Win:    rufus  - win only 
 • Mac: 💯
@@ -196,7 +196,7 @@ dns:  adguard
 
 
 
-🟢 OS PE Kali-GUI     
+🟢 OS/PE Kali-GUI     
     🔍F.PE🔎
 
 
@@ -204,7 +204,6 @@ dns:  adguard
 
 
 
-- [ ] 
 
 
 
