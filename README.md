@@ -200,30 +200,7 @@ nas enc sync to dropbox..
 
      ❗️ startech dual-usb nic no support Balance-rr fuck ❗️ 
  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ➜ NoSupport ✅]]
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond 802.3AD ✅]]
-
- ```
-
-sudo vi /etc/network/interfaces
-
-
-auto eth1
-iface eth1 inet manual
-bond-master bond-usb
-
-auto eth2
-iface eth2 inet manual
-bond-master bond-usb
-
-auto bond-usb
-iface bond-usb inet dhcp
-bond-mode balance-rr
-bond-slaves eth1 eth2 
-bond-miimon 100
-
-
-
- ```
+ [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond 802.3AD ✅💯]]
 
 
 ## 🎪🌐🌐🌐🌐🌐 Lab.NET
