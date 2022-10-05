@@ -373,7 +373,7 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 ```
 
                 / iscis --> HW.RPI   ➜ S3  Storage
-Synology.DSM --->  iscsi --> VM.DVM
+Synology.DSM -->  iscsi --> VM.DVM
 		        \ iscis --> VM.CEPH  ➜ RBD Storage
 
 ```
