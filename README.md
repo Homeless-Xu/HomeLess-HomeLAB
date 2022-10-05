@@ -141,27 +141,20 @@ vDOM + VxLAN + BGP ...
 
 
 
-###### 🟢 OS ➜ PXE Server 
-
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
-
 
 
 ##### 🟢 OS ➜ ESXI 
-###### ESXI 
 
-
-ESXI Hardware compatibility 
+###### • ESXI Hardware compatibility 
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
 
 
-ESXI IMG Custom 
+###### • ESXI IMG Custom 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
 
 
-
-###### ESXI. Install  
+###### • ESXI Install  
 
 ```
 🔵  esxi usb installer make 
@@ -181,7 +174,7 @@ ESXI IMG Custom
 
 
 
-
+##### 🟢 OS ➜ 
 
 
 🟢 RPI ✔️
@@ -194,6 +187,18 @@ ESXI IMG Custom
 🔶 Docker 
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
+
+
+
+
+
+##### 🟢 OS ➜ PXE Server 
+
+ [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
+
+
+
+
 
 
 bitwarden
