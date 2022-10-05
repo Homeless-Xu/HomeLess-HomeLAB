@@ -141,16 +141,11 @@ vDOM + VxLAN + BGP ...
 
 
 
+##### 🟢 OS AIO ➜ ESXI Ubuntu Kali
 
-
-##### 🟢 OS ➜ ESXI 
-
-###### • ESXI Hardware compatibility 
+###### 🔶 ESXI  
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
-
-
-###### • ESXI IMG Custom 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
 
 
@@ -174,7 +169,7 @@ vDOM + VxLAN + BGP ...
 
 
 
-##### 🟢 OS ➜ 
+##### 🟢 OS ➜ Ubuntu - ci
 
 
 🟢 RPI ✔️
