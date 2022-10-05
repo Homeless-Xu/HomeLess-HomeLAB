@@ -584,8 +584,6 @@ DNAT: english to your
 
 # 🌐🟢 Net.Wireless 
 
-Zx.xx 
-
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Wireless.Antenna ➜ type ✔️]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Wireless.Antenna ➜ Signal Strength ✔️]]
 
@@ -596,7 +594,6 @@ Zx.xx
 
 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.wifi.channel.choose ➜ 2G vs 5G ✔️]]
-
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.wifi.band desc ➜ 20MHz 40MHz ✔️]]
 
 
@@ -653,14 +650,11 @@ router1 --- router 2 --- router3 -- internet
 
 ```
 
-
-
-
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ Summary]]
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ SNAT DNAT Masquerade Diff AIO ✅❗️]]
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ WHY ]]
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ snat vs masquerade ✅ ]]
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ snat nic_x nic_all diff ✅ ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ Summary]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ SNAT DNAT Masquerade Diff AIO ✅❗️]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ WHY ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ snat vs masquerade ✅ ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ snat nic_x nic_all diff ✅ ]]
 
 
 
@@ -752,9 +746,10 @@ ip firewall mangle add chain=prerouting action=mark-routing new-routing-mark=mai
 
 
 🔶 do-vrf-version - stoped & works
-    VRF.HAP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild HAP.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
-    VRF.RB4   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild RB4.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
-    VRF.BGP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Route.EBGP AIO ➜ EG3 EG5 RB4 HAP ✅❗️❗️❗️❗️❗️ ]]
+
+- VRF.HAP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild HAP.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
+- VRF.RB4   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild RB4.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
+- VRF.BGP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Route.EBGP AIO ➜ EG3 EG5 RB4 HAP ✅❗️❗️❗️❗️❗️ ]]
 
 
 🔵 Demo. Basic.VRF
@@ -813,7 +808,7 @@ all route device need set ospf
 
 🔵 Router 
 
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Lab.Net.Basis ➜ AS Number AIO ✅]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Lab.Net.Basis ➜ AS Number AIO ✅]]
 
 
 
@@ -821,16 +816,14 @@ all route device need set ospf
 
 🔵 VRF + VLAN ✔️
 
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ VRF On vlan nic✅]]
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ Route between vrf ➜ MPLS]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ VRF On vlan nic✅]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ Route between vrf ➜ MPLS]]
 
 ##### 🟢 Ros.MPLS 
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.MPLS ✶ Desc + Why ✅]]
 
-
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Ros BGP Multihop ✔️]]
-
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 ROS•BGP Demo ➜ EBGP HAP RB4 ✅]]
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Ros.Bas ➜ Console ✅]]
