@@ -819,7 +819,7 @@ all route device need set ospf
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ VRF On vlan nic✅]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ Route between vrf ➜ MPLS]]
 
-##### 🟢 Ros.MPLS 
+##### 🟢 Ros.MPLS ✖️
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.MPLS ✶ Desc + Why ✅]]
 
@@ -833,12 +833,8 @@ all route device need set ospf
 
 # 🌐🟢 Ros.Hardware
 
-Ax.xx 
-
 - [[🧬1️⃣3️⃣0️⃣0️⃣-A000 🌐 Ros_A.HDW.Name ➜ rule ✔️]]
 - [[🧬1️⃣3️⃣0️⃣0️⃣-A000 🌐 Ros_A.HDW.LTE.SXT AIO ✔️]]
-
-
 
 
 # 🌐🟢 Ros.Basic
@@ -856,8 +852,6 @@ Bx.xx
 
 # 🌐🟢 Ros.Misc
 
-Zx.xx 
-
 - [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros.Script.Demo ➜ Misc-2019-Miranda ?]]
 
 - [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros.Log ➜ Debug Enable ✔️]]
@@ -871,27 +865,7 @@ netwatch:  check device up/down.   so no need use ping
 
 
 
-
-
-
-
-
-# 🌐🟢 Ros.BGP OSPF 
-
-
-
-
-
-
 # 🚀🦚🦚🦚🦚🦚 1️⃣0️⃣ VPN
-
-
-
-
-
-
-
-
 
 
 
@@ -899,8 +873,6 @@ netwatch:  check device up/down.   so no need use ping
 
 
 - [[🧬1️⃣9️⃣0️⃣0️⃣-Z000 🌐 DNS.CNAME.Demo ➜ cname to URL ✔️]]
-
-
 
 
 
@@ -916,7 +888,6 @@ netwatch:  check device up/down.   so no need use ping
 
 
 # 🎉🟢 SSL 
-
 
 
 
@@ -937,10 +908,7 @@ netwatch:  check device up/down.   so no need use ping
 # 📀🦚🦚🦚 2️⃣1️⃣.✘✘ STO.Ceph 
 
 
-
 # 📀🟢 NFS.Demo
-
-
 
 
 - [[🧬5️⃣9️⃣0️⃣0️⃣-Z000 📀 STO ✶ NFS.SRV ➜ DSM]]
@@ -957,7 +925,6 @@ netwatch:  check device up/down.   so no need use ping
 - [[🧬5️⃣9️⃣0️⃣0️⃣-Z000 📀 STO ✶ ISCSI.Srv.Demo ➜ Win_2019]]
 
 - [[🧬5️⃣9️⃣0️⃣0️⃣-Z000 📀 STO ✶ ISCSI.Cli.Demo ➜ Win_7]]
-
 
 
 
