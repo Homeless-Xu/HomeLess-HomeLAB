@@ -208,6 +208,29 @@ dns:  adguard
 
 
 
+# 👾🟢 ESXI Basic 
+
+
+[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
+
+
+
+# 👾🟢 ESXI IMG
+
+[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
+
+
+
+# 👾🦚 raspberry pi
+
+
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
+
+
+
+
+
+
 
 
 ## 🎪🌐🌐🌐🌐🌐 Lab.NET
@@ -1319,13 +1342,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-# 👾🦚 raspberry pi
-
-
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
-
-
-
 
 
 
@@ -1337,18 +1353,11 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-# 👾🟢 ESXI Basic 
-
-
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
 
 
 
 
 
-# 👾🟢 ESXI IMG
-
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
 
 
 # 👾🟢 VCenter 
