@@ -124,57 +124,23 @@ vDOM + VxLAN + BGP ...
 
 
 
-###### 🟢 LAB.Domain
+###### 🟢 LAB.DND Config
 
-```
-
-🔵 Domain.internet ✅
-    
-          0214.icu   ➜ Cloudflare
-
-
-        @.0214.icu   ➜ Type.CNAME__TEMP  ➜ blog.0214.icu   ➜ 
-     blog.0214.icu   ➜ Type.CNAME__PERM  ➜ github repo     ➜  resume
- blog-old.0214.icu   ➜ Type.CNAME__PERM  ➜ github repo     ➜  resume
-  traefik.0214.icu   ➜ Type.A______PERM  ➜ VPS             ➜  traefik:        Main Proxy
-dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:          homelab dashboard
-    alist.0214.icu   ➜ Type.A______PERM  ➜ VPS             ➜  alist:          private cloud driver
-      bit.0214.icu   ➜ Type.A______PERM  ➜ VPS             ➜  bitwarden:      private password manager
-   vscode.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  vscode_server:  vscode remote config     
-      ros.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  
-     frps.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  
-      sso.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  
-
-
-🔵 Domain.Local ✔️
-
-         e3.rv.ark   ➜ Esxi-g3
-         e5.rv.ark   ➜ Esxi-g5
-       vcsa.rv.ark   ➜ vCenter 
-         fw.rv.ark   ➜ Firewall
-        ros.rv.ark   ➜ Router
-        crs.rv.ark   ➜ Switch
-        apm.rv.ark   ➜ AP.Master
-        aps.rv.ark   ➜ AP.Slaver 
-
-        dhw.rv.ark   ➜ Nas.Hardware
-        dvm.rv.ark   ➜ Nas.VM
-        sec.rv.ark   ➜ Blue Iris                            ➜ camera monitor center
-
-
-```
-
-
-
-
-
-
-
+- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ DNS Record AIO ✔️]]
 
 
 
 ## 🎪 Lab.Prepair 
 🟢 Git  [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
+
+
+🟢 RPI-Nic Bond ✔️
+
+- ❗️ startech dual-usb nic no support Balance-rr fuck ❗️ 
+- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ➜ NoSupport ✅]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond 802.3AD ✅💯]]
+
+
 
 🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
 
@@ -184,7 +150,7 @@ dashboard.0214.icu   ➜ Type.A______TEMP  ➜ VPS             ➜  dashy:      
 docker + adguard! 
 
 
-🟢 Password Manage 
+🟢 Password Manage ❌
 ```
 txt in nas.note
 encry sync to dropbox.
@@ -194,13 +160,6 @@ bit conf backup to nas
 nas enc sync to dropbox..
 
 ```
-
-
-###### 🟢 RPI-Nic Bond ✔️
-
-     ❗️ startech dual-usb nic no support Balance-rr fuck ❗️ 
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ➜ NoSupport ✅]]
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond 802.3AD ✅💯]]
 
 
 
