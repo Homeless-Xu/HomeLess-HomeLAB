@@ -142,6 +142,14 @@ vDOM + VxLAN + BGP ...
 
 
 ##### 🟢 OS Prepair
+```
+best linux os is ubuntu.20.4 ➜ almost all m
+
+
+
+```
+
+
 
 ###### 🔶 OS ➜ ESXI  
 
@@ -164,7 +172,7 @@ esxi usb installer make
 ```
 
 
-###### 🔶 OS ➜ RPI + Ubuntu CLI
+###### 🔶 OS ➜ RPI + Ubuntu + Kali 
 
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
 
