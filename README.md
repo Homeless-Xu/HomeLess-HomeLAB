@@ -371,10 +371,40 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 
 ###### 🟢 Storage MAP 
 ```
+DHW  ➜ DSM.HW: Synology Hardware DS2015XS  ➜  Weak performace & Docker No   ➜  Backup NAS
+DVM  ➜ DSM.VM: Synology VM       ESXI      ➜  High performace & Docker Yes  ➜  Main   NAS
+
+
 
                 / iscis --> HW.RPI   ➜ S3  Storage
 Synology.DSM -->  iscsi --> VM.DVM
 		        \ iscis --> VM.CEPH  ➜ RBD Storage
+
+
+
+
+
+
+🔶 Disk 
+
+DHW.01 ------\
+DHW.02 ------->  ISCSI ➜ Ceph Cluster
+DHW.03 ------/
+DHW.04 ------->  ISCSI ➜ DSM.VM
+DHW.05
+DHW.06
+DHW.07
+DHW.08
+
+
+🔶 Function
+
+DHW.ISCSI  ➜ CEPH     ➜  K8s/K3s 
+DHW.ISCSI  ➜ DVM      ➜  Docker  Mount  +  Dropbox_sync_encrypted
+DHW.NFS    ➜ ESXI     ➜  ISO/APP Mount
+
+
+
 
 ```
 
@@ -418,28 +448,6 @@ RBD:   Ceph
 ###### 🔵 LAB.Storage ✅
 
 ```
-
-DHW  ➜ DSM.HW: Synology Hardware DS2015XS  ➜  Weak performace & Docker No   ➜  Backup NAS
-DVM  ➜ DSM.VM: Synology VM       ESXI      ➜  High performace & Docker Yes  ➜  Main   NAS
-
-
-🔶 Disk 
-
-DHW.01 ---\
-DHW.02 ------->  ISCSI ➜ Ceph Cluster
-DHW.03 ---/
-DHW.04 ------->  ISCSI ➜ DSM.VM
-DHW.05
-DHW.06
-DHW.07
-DHW.08
-
-
-🔶 Function
-
-DHW.ISCSI  ➜ CEPH     ➜  K8s/K3s 
-DHW.ISCSI  ➜ DVM      ➜  Docker  Mount  +  Dropbox_sync_encrypted
-DHW.NFS    ➜ ESXI     ➜  ISO/APP Mount
 
 
 ```
