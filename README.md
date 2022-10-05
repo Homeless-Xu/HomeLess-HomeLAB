@@ -143,10 +143,10 @@ vDOM + VxLAN + BGP ...
 
 ##### 🟢 OS Prepair
 ```
-best linux os is ubuntu.20.4 ➜ almost all m
-
-
-
+best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
+best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
+best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
+    no recommand ubuntu 22 
 ```
 
 
