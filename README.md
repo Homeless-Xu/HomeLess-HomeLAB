@@ -376,11 +376,9 @@ DVM  ➜ DSM.VM: Synology VM       ESXI      ➜  High performace & Docker Yes  
 
 
 
-                / iscis --> HW.RPI   ➜ S3  Storage
-Synology.DSM -->  iscsi --> VM.DVM
-		        \ iscis --> VM.CEPH  ➜ RBD Storage
-
-
+                / iscis --> HW.RPI       ➜ S3  Storage
+Synology.DSM -->  iscsi --> VM.Synology
+		        \ iscis --> VM.CEPH      ➜ RBD Storage
 
 
 
