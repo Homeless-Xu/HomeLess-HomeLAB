@@ -369,7 +369,7 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 
 
 
-
+###### 🟢 Storage MAP 
 ```
 
                 / iscis --> HW.RPI   ➜ S3  Storage
