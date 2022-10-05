@@ -137,7 +137,34 @@ vDOM + VxLAN + BGP ...
 
 
 
-## 🎪 Lab.Prepair 
+## 🎪👾👾👾👾👾 Lab.Prepair 
+
+
+
+###### 🟢 OS ➜ PXE Server 
+
+ [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
+
+
+###### 🟢 OS ➜ ESXI. Install  
+
+```
+🔵  esxi usb installer make 
+
+    • Win: rufus  - win only 
+    • Mac: cmd 
+
+
+🔵 Mac - cmd 💯
+
+    check  usb name      CLI ➜   diskutil list     /dev/disk3
+    format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
+    Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
+    done
+```
+
+
+
 
 
 🟢 RPI ✔️
@@ -179,49 +206,13 @@ dns:  adguard
 
 
 
-🟢 OS ➜ PXE Server 
-
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
-
-
-
-🟢 OS ➜ ESXI. Install  
-
-```
-🔵  esxi usb installer make 
-
-    • Win: rufus  - win only 
-    • Mac: cmd 
-
-
-🔵 Mac - cmd 💯
-
-    check  usb name      CLI ➜   diskutil list     /dev/disk3
-    format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
-    Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
-    done
-```
-
-
 🟢 OS ➜ Kali.GUI
 
 
 
 
-# 👾🟢 ESXI Basic 
 
-
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
-
-
-
-# 👾🟢 ESXI IMG
-
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
-
-
-
-# 👾🦚 raspberry pi
+👾🦚 raspberry pi
 
 
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
