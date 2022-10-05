@@ -142,14 +142,20 @@ vDOM + VxLAN + BGP ...
 
 🔶 Docker 
 
-dns:  adguard 
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
+
 
 bitwarden
 
 
+
+dns:  adguard 
+
+
+
+
 🔵 LAB Auth 
 
-- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
 
 
 
