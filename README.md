@@ -186,32 +186,25 @@ dns:  adguard
 
 
 🟢 OS ➜ ESXI. Install  
-🔶 esxi usb installer make 
-
-• Win:    rufus  - win only 
-• Mac: 💯
 
 ```
-🔶 check  usb name      CLI ➜   diskutil list     /dev/disk3
-🔶 format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
-🔶 Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
+🔵  esxi usb installer make 
 
- done
+    • Win: rufus  - win only 
+    • Mac: cmd 
+
+
+🔵 Mac - cmd 💯
+
+    check  usb name      CLI ➜   diskutil list     /dev/disk3
+    format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
+    Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
+    done
 ```
 
 
+🟢 OS ➜ Kali.GUI
 
-
-
-
-
-🟢 OS/PE Kali-GUI     
-    🔍F.PE🔎
-
-
-
-
-🟢 PE. Online ?
 
 
 
@@ -288,7 +281,7 @@ FGT_10-FGT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WWW �
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Reset ✔️]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ VDOM Enable ✔️]]
 
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Transfer Mode Enable ✔️ ]]
+    - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Transfer Mode Enable ✔️ ]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Basc ➜ NAT Mode vs Transfer Mode ✔️ ]]
 
 
