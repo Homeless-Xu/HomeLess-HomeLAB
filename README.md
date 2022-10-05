@@ -143,22 +143,19 @@ vDOM + VxLAN + BGP ...
 
 ##### 🟢 OS AIO ➜ ESXI Ubuntu Kali
 
-###### 🔶 ESXI  
+###### 🔶 OS ➜ ESXI  
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
 
-
-###### • ESXI Install  
-
 ```
-🔵  esxi usb installer make 
+esxi usb installer make 
 
     • Win: rufus  - win only 
     • Mac: cmd 
 
 
-🔵 Mac - cmd 💯
+🔶 Mac - cmd 💯
 
     check  usb name      CLI ➜   diskutil list     /dev/disk3
     format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
@@ -167,9 +164,7 @@ vDOM + VxLAN + BGP ...
 ```
 
 
-
-
-##### 🟢 OS ➜ Ubuntu - ci
+###### 🔶 OS ➜ Ubuntu.CLI
 
 
 🟢 RPI ✔️
@@ -185,9 +180,12 @@ vDOM + VxLAN + BGP ...
 
 
 
+###### 🔶 OS ➜ Kali GUI
 
 
-##### 🟢 OS ➜ PXE Server 
+
+
+###### 🔶 OS ➜ PXE Server 
 
  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
 
