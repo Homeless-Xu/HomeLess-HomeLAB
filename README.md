@@ -177,6 +177,38 @@ dns:  adguard
 
 
 
+
+
+🟢 OS ESXI. Install  
+🔵 esxi usb installer make 
+
+• Win:    rufus  - win only 
+• Mac: 💯
+
+```
+🔶 check  usb name      CLI ➜   diskutil list     /dev/disk3
+🔶 format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
+🔶 Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
+
+ done
+```
+
+
+
+
+🟢 OS PE Kali-GUI     
+    🔍F.PE🔎
+
+
+
+
+
+
+- [ ] 
+
+
+
+
 ## 🎪🌐🌐🌐🌐🌐 Lab.NET
 ```
     ✅ VPN:            Wireguard + Netmaker
@@ -1432,23 +1464,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-
-
-# 👾🦚🦚🦚🦚🦚 4️⃣9️⃣ PE    
-    🔍F.PE🔎
-
-🔵 esxi usb installer make 
-
-• Win:    rufus  - win only 
-• Mac: 💯
-
-```
-🔶 check  usb name      CLI ➜   diskutil list     /dev/disk3
-🔶 format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
-🔶 Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
-
- done
-```
 
 
 
