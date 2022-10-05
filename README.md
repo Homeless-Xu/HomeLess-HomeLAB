@@ -101,9 +101,8 @@ Camera_PTZ X 2
 
 🔶 want 
 
-HDD:  HC550 ➜ best 
-Server:  supermikro 
-
+HDD:     HC550                ➜ best hdd 
+Server:  supermicro  e302-d9  ➜ no cheap! small + sfp + powerful
 
 
 ```
