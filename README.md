@@ -367,6 +367,20 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 
 ## 🎪📀📀📀📀📀 Lab.STO
 
+
+
+
+```
+
+                / iscis --> HW.RPI   ➜ S3  Storage
+Synology.DSM --->  iscsi --> VM.DVM
+		        \ iscis --> VM.CEPH  ➜ RBD Storage
+
+```
+
+
+
+
 ###### 🟢 LAB.Storage Desc
 ```
 NAS - Docker:  Synology - Hardware ➜ dsm 
