@@ -1001,9 +1001,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-
-
-
 # 🐬🦚🦚🦚🦚🦚 3️⃣1️⃣ Docker 
     🔍F.DK F.Docker🔎
 
