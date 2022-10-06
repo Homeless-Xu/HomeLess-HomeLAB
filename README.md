@@ -151,7 +151,7 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 
 
 
-###### 🔶 OS ➜ ESXI  
+###### 🔶 OS ➜ ESXI USB Installer  
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
@@ -181,9 +181,43 @@ esxi usb installer make
 
 
 
-###### 🔶 OS ➜ Kali GUI
+###### 🔶 OS ➜ Kali USB Install 
+
+```
+🔶 Mac / Linux 
+
+if cli ➜ easy 
+if gui ➜
+
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  mac + kali - cmd 
+
+🔶 find usb disk name 
+
+find   usb disk name       diskutil list     
+
+umount usb disk            
+  diskutil unmountDisk /dev/disk❗️
+  diskutil unmountDisk /dev/disk4
 
 
+iso file path 
+  /Users/techark/Desktop/kali-linux-2022.3-installer-everything-amd64.iso
+
+
+sudo dd if=❗️iso-path❗️ of=/dev/rdisk❗️ bs=4M status=progress
+sudo dd if=/Users/techark/Desktop/kali-linux-2022.3-installer-everything-amd64.iso of=/dev/rdisk4 bs=4M status=progress
+
+
+
+
+
+🔶 gui - ether .
+
+
+
+
+
+```
 
 
 
