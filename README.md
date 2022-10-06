@@ -177,49 +177,9 @@ esxi usb installer make
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
 
 
-
-
-
-
 ###### 🔶 OS ➜ Kali USB Install ✔️
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS ➜ Mac.CLI Make Kali usb installer ✔️💯]]
 
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS ➜ Mac Make Kali usb✔️]]
-
-```
-🔶 Mac / Linux 
-
-    if cli ➜ easy 
-    if gui ➜ search app ether 
-
-
-🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵  Mac CMD Make Kali usb installer  💯
-
-🔶 how
-
-    - plug   usb to mac 
-    - find   usb name 
-    - umount usb
-    - use dd write iso to usb 
-
-    demo: usb name:    /dev/disk4
-    demo. iso path:   /Users/techark/Desktop/kali-linux-2022.3-installer-everything-amd64.iso
-
-
-
-🔶 detail 
-
-diskutil list     
-
-diskutil unmountDisk /dev/disk4
-
-sudo dd if=/Users/techark/Desktop/kali-linux-2022.3-installer-everything-amd64.iso of=/dev/rdisk4 bs=4M status=progress
-
-
-
-
-
-
-```
 
 
 
