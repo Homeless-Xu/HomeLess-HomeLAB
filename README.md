@@ -154,8 +154,10 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 
 🔶 ESXI 
 
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
+
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB Booter • ESXI ➜ Mac Win Create USB insta ]]
 
 ```
 esxi usb installer make 
@@ -175,7 +177,6 @@ esxi usb installer make
 
 🔶 RPI
 RPI + Ubuntu + Kali 
-
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
 
 
