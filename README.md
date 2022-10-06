@@ -175,8 +175,13 @@ esxi usb installer make
 
 
 
+🔶 manual . 
 
-https://www.kali.org/docs/arm/raspberry-pi-4/
+kali + rp4  https://www.kali.org/docs/arm/raspberry-pi-4/
+
+
+
+
 
 🔶 RPI
 ###### 🔶 OS ➜ RPI + Ubuntu + Kali 
