@@ -150,21 +150,18 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 ```
 
 
-###### 🔶 OS ➜ USB Installer Make ➜ AIO 
+###### 🔶 OS ➜ USB Installer Make 
 
-ESXI & PC      - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB ESXI ➜ Make ESXI USB Installer ✅]]
-Kali & PC      - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali ➜ Make Kali usb installer ✔️💯]]
-Kali & RPI     - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali.RPI ➜ Make Kali install ✔️]]
-Kali & RPI_USB - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali.RPI ➜ Boot from USB ✅💯❗️❗️❗️❗️❗️ ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB ESXI ➜ Make ESXI USB Installer ✅]]
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali ➜ Make Kali usb installer ✔️💯]]
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali.RPI ➜ Make Kali install ✔️]]
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali.RPI.USB ➜ RPI Boot OS From USB ✅💯❗️❗️❗️❗️❗️ ]]
 
 
-
-🔶 ESXI 
+###### 🔶 OS ➜ ESXI Custom Image  
 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
-
-
 
 
 
@@ -178,7 +175,6 @@ Kali & RPI_USB - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali.RPI ➜ B
 
 
 🔶 Docker 
-
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
 
 
