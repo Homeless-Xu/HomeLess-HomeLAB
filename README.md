@@ -152,40 +152,29 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 
 ###### 🔶 OS ➜ USB Installer Make ➜ AIO 
 
-🔶 ESXI 
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB Booter • ESXI ➜ Mac Win Create USB installer ✅]]
 
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
-
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB Booter • ESXI ➜ Mac Win Create USB insta ]]
-
-```
-esxi usb installer make 
-
-    • Win: rufus  - win only 
-    • Mac: cmd 
-
-
-🔶 Mac - cmd 💯
-
-    check  usb name      CLI ➜   diskutil list     /dev/disk3
-    format usb(must)     CLI ➜   diskutil eraseDisk MS-DOS "ESXI" MBR /dev/disk3
-    Copy iso file        GUI ➜   open esxi.iso  & copy all files to usb 
-    done
-```
 
 
 🔶 RPI
 RPI + Ubuntu + Kali 
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
 
-
 OS ➜ Kali USB Install ✔️
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS ➜ Mac.CLI Make Kali usb installer ✔️💯]]
 
-
 OS ➜ RPI. USB Boot
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS RPI ➜ Boot from USB ✅💯❗️❗️❗️❗️❗️ ]]
+
+
+
+
+
+🔶 ESXI 
+
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
+
 
 
 
