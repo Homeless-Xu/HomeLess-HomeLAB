@@ -204,6 +204,32 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 
 ```
 🟢 ubuntu. 22.  arm . source  ✔️
+ 
+https://gist.github.com/ishad0w/5c0e64c72a0d4400da1f20dab3521db6
+
+
+
+
+
+
+
+deb http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
+deb-src http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
+
+deb http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
+deb-src http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
+
+deb http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse
+deb-src http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse
+
+deb http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
+deb-src http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
+
+deb http://archive.canonical.com/ubuntu jammy partner
+deb-src http://archive.canonical.com/ubuntu jammy partner
+
+
+
 
 
 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵 backupo 
@@ -227,6 +253,30 @@ deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-security main r
 
 
 
+
+🔵 nic 
+network:
+    version: 2
+    wifis:
+        renderer: networkd
+        wlan0:
+            access-points:
+                '1921':
+                    password: feb21ae928f6f22002ac9db328e9b7356a9723c3259b07e0aa1205d250a27d64
+            dhcp4: true
+            optional: true
+
+
+    ethernets:
+        eth0:
+            dhcp4: false
+            addresses: [10.219.219.14/24]
+            nameservers:
+                 addresses: [8.8.8.8,8.8.4.4]
+            routes:
+                - to: default
+                  via: 10.219.219.1
+~                                       
 
 ```
 
