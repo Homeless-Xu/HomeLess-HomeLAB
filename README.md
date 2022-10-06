@@ -152,15 +152,10 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 
 ###### 🔶 OS ➜ USB Installer Make ➜ AIO 
 
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB Booter • ESXI ➜ Mac Win Create USB installer ✅]]
-
-ESXI 
-
-Kali & PC  - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS ➜ Mac.CLI Make Kali usb installer ✔️💯]]
-Kali       - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
-RPI + Kali + USB - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS RPI ➜ Boot from USB ✅💯❗️❗️❗️❗️❗️ ]]
-
-
+ESXI & PC      - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB Booter • ESXI ➜ Mac Win Create USB installer ✅]]
+Kali & PC      - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS ➜ Mac.CLI Make Kali usb installer ✔️💯]]
+Kali & RPI     - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Misc.RPI ➜ RPI install Kali✔️]]
+Kali & RPI_USB - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS RPI ➜ Boot from USB ✅💯❗️❗️❗️❗️❗️ ]]
 
 
 
