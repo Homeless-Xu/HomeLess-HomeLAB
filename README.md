@@ -1726,13 +1726,6 @@ Driftnet ➜ catch pic in network
 
 ## 🟢 Battery 
 
-🔵 Mixing LiFePo4 and AGM - todo 
-dc to dc. 
-between lifeo4 and agm. need use  dc to dc charge. 
-    diff kind battery need diff voltage setting. ??
-
-
-
 ```
 🔵 Battery Charge Stage
 
@@ -1743,15 +1736,21 @@ between lifeo4 and agm. need use  dc to dc charge.
 
 🔵 Votage 
 
-           AGM:                 Lifepo4 
-bluk       13-14.5v 
-absorption 14.5v
-float      13.5v
+               AGM:                 Lifepo4 
+    bluk       13-14.5v 
+    absorption 14.5v
+    float      13.5v
 
 
+🔵 Demo 
 
-🟢 temp . conn lifepo4 and agm 
+    house battery:  lifepo4 
+    start battery:  agm 
 
+
+🔶 how charge agm use lifepo4 
+    - long time conn:   use dc-dc charge. 
+    - em
 
 
 
