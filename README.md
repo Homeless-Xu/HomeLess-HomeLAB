@@ -1742,6 +1742,9 @@ Driftnet ➜ catch pic in network
     float      13.5v
 
 
+🔶 normal votage
+life: 13
+
 🔵 Demo 
 
     house battery:  lifepo4 
@@ -1750,7 +1753,11 @@ Driftnet ➜ catch pic in network
 
 🔶 how charge agm use lifepo4 
     - long time conn:   use dc-dc charge. 
-    - em
+    - emergenct conn:   direct..   when car battery died
+
+    diff battery have his owm best votage. 
+    it is best use diff charge for diff battery.
+
 
 
 
