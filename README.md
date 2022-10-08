@@ -1734,7 +1734,7 @@ Driftnet ➜ catch pic in network
     • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full charge
 
 
-🔵 Votage 
+🔵 Votage - charge 
 
                AGM:                 Lifepo4 
     bluk       13-14.5v 
@@ -1742,9 +1742,20 @@ Driftnet ➜ catch pic in network
     float      13.5v
 
 
-🔶 normal votage
-lifepo4: good health;    13.1 - 13.3  
-agm: ??
+🔵 Votage - normal 
+
+🔶 normal votage 💯  lifepo4: good health;    13.1 - 13.3  
+
+🔶  agm: ??
+SOC(State of Charge)	OCV(Open-Circuit Voltage)
+100%	12.85V
+75%	12.55V
+50%	12.25V
+25%	11.95V
+0%	11.65V
+
+
+
 
 
 🔵 Demo 
@@ -1759,6 +1770,10 @@ agm: ??
 
     diff battery have his owm best votage. 
     it is best use diff charge for diff battery.
+
+
+
+
 
 
 
