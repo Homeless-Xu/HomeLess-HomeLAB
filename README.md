@@ -1732,6 +1732,24 @@ between lifeo4 and agm. need use  dc to dc charge.
     diff kind battery need diff voltage setting. ??
 
 
+
+```
+🔵 Battery Chaege 
+
+    bluk       charge:  00-80%      ➜  very fast charge 
+    absorption charge:  80-100%     ➜  slow      charge
+    float      charge : 100-100%    ➜  very slow charge  ➜ mainta
+
+
+AGM: votage 
+
+bluk       13-14.5v 
+absorption 14.5v
+float      13.5v
+
+
+```
+
 # 🎉🦚🦚🦚🦚🦚 9️⃣0️⃣ Misc
 
 
