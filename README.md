@@ -1743,7 +1743,9 @@ Driftnet ➜ catch pic in network
 
 
 🔶 normal votage
-life: 13
+lifepo4: good health;    13.1 - 13.3  
+agm: ??
+
 
 🔵 Demo 
 
