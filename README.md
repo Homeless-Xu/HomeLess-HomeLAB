@@ -1734,6 +1734,21 @@ Driftnet ➜ catch pic in network
     • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full charge
 
 
+🔵 Votage - normal 
+
+🔶 lifepo4 health votage 💯:  13.1-13.3_80% 
+
+🔶  agm: health votage  
+
+100%	12.85V
+75%	    12.55V
+50%	    12.25V
+25%	    11.95V
+0%	    11.65V
+
+
+
+
 🔵 Votage - charge 
 
                AGM:                 Lifepo4 
@@ -1741,18 +1756,6 @@ Driftnet ➜ catch pic in network
     absorption 14.5v
     float      13.5v
 
-
-🔵 Votage - normal 
-
-🔶 normal votage 💯  lifepo4: good health;    13.1 - 13.3  
-
-🔶  agm: ??
-SOC(State of Charge)	OCV(Open-Circuit Voltage)
-100%	12.85V
-75%	12.55V
-50%	12.25V
-25%	11.95V
-0%	11.65V
 
 
 
