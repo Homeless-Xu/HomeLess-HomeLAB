@@ -1727,17 +1727,7 @@ Driftnet ➜ catch pic in network
 ## 🟢 Battery 
 
 ```
-🔵 Battery Charge Stage
-
-    • Stage1  bluk       charge:  00-80%      ➜  very fast charge 
-    • Stage2  absorption charge:  80-100%     ➜  slow      charge
-    • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full charge
-
-
-v
-
-
-🔵 Battery Votage 
+🔵 Battery Votage ✅
 
     Lifepo4 good votage:  13.3 V: 90% 
     AGM     good votage:  12.5 V: 80%
@@ -1765,17 +1755,20 @@ v
             0%	    11.65V
         
 
+🔵 Battery Charge Stage ✅
+
+    • Stage1  bluk       charge:  00-80%      ➜  very fast charge 
+    • Stage2  absorption charge:  80-100%     ➜  slow      charge
+    • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full
 
 
-🔵 Votage - charge 
+
+🔵 Votage - charge ?
 
                AGM:                 Lifepo4 
-    bluk       13-14.5v 
+    bluk       13-14.5v             
     absorption 14.5v
     float      13.5v
-
-
-
 
 
 
