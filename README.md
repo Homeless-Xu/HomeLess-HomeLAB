@@ -1726,6 +1726,7 @@ Driftnet ➜ catch pic in network
 
 ## 🟢 Battery 
 
+🔵 Mixing LiFePo4 and AGM - todo 
 dc to dc. 
 between lifeo4 and agm. need use  dc to dc charge. 
     diff kind battery need diff voltage setting. ??
