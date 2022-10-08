@@ -1734,18 +1734,26 @@ between lifeo4 and agm. need use  dc to dc charge.
 
 
 ```
-🔵 Battery Chaege 
+🔵 Battery Charge Stage
 
-    bluk       charge:  00-80%      ➜  very fast charge 
-    absorption charge:  80-100%     ➜  slow      charge
-    float      charge : 100-100%    ➜  very slow charge  ➜ mainta
+    • Stage1  bluk       charge:  00-80%      ➜  very fast charge 
+    • Stage2  absorption charge:  80-100%     ➜  slow      charge
+    • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full charge
 
 
-AGM: votage 
+🔵 Votage 
 
+           AGM:                 Lifepo4 
 bluk       13-14.5v 
 absorption 14.5v
 float      13.5v
+
+
+
+🟢 temp . conn lifepo4 and agm 
+
+
+
 
 
 ```
