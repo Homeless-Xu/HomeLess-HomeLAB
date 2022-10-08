@@ -1722,6 +1722,13 @@ Driftnet ➜ catch pic in network
 
 # 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 9️⃣0️⃣ Misc
 
+# 🎉🦚🦚🦚 RV
+
+## 🟢 Battery 
+
+dc to dc. 
+between lifeo4 and agm. need use  dc to dc charge. 
+    diff kind battery need diff voltage setting. 
 
 
 # 🎉🦚🦚🦚🦚🦚 9️⃣0️⃣ Misc
