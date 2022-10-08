@@ -1728,7 +1728,7 @@ Driftnet ➜ catch pic in network
 
 dc to dc. 
 between lifeo4 and agm. need use  dc to dc charge. 
-    diff kind battery need diff voltage setting. 
+    diff kind battery need diff voltage setting. ??
 
 
 # 🎉🦚🦚🦚🦚🦚 9️⃣0️⃣ Misc
