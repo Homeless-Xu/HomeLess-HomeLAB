@@ -1734,12 +1734,17 @@ Driftnet ➜ catch pic in network
     • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full charge
 
 
-🔵 Votage - normal 
+🔵 Battery Votage 
 
-🔶 lifepo4 health votage 💯:  13.1-13.3_80% 
+    Lifepo4 health votage:  13.1-13.3_80% 
+    AGM     health votage:  12.3-12.5_80%
+    
 
-🔶  agm: health votage  
 
+
+
+
+• AGM Detail 
 100%	12.85V
 75%	    12.55V
 50%	    12.25V
