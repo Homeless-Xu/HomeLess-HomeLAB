@@ -1281,16 +1281,9 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 # 👾🟢 Linux-Basic 
 
-🟢 APT Source ➜ Package Manager 
+###### 🟢 Package Manager / APT Source
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM APT Source ➜ Ubuntu_22 ARM/RPI 💯]]
-
-
-
-
-🟢 VLAN 
-
-- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas Network.VLAN Config Demo ➜ Ubuntu ✅]]
 
 
 
@@ -1304,6 +1297,13 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM ➜ Custom Repo ➜ Step ✔️]]
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM.APT.Repo Format - 🐶]]
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM.APT.Repo Path ✔️]]
+
+
+
+###### 🟢 VLAN 
+
+- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas Network.VLAN Config Demo ➜ Ubuntu ✅]]
+
 
 
 
