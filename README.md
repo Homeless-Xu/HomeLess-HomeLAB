@@ -1283,15 +1283,14 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 ###### 🟢 Package Manager / APT Source
 
-- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM APT Source ➜ Ubuntu_22 ARM/RPI 💯]]
+🔶 Ubuntu
 
+- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM APT Source ➜ Ubuntu_22 ARM/RPI 💯]]
 
 
 🔶 Kali 
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L PM.APT Kali ➜ Kali Install Docker ✅ ]]
-
-
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM ➜ Package Manage.00 ➜ Why ✔️]]
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM ➜ Custom Repo ➜ Step ✔️]]
@@ -1300,18 +1299,21 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-###### 🟢 VLAN 
+###### 🟢 Network VLAN 
+
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas Network.VLAN Config Demo ➜ Ubuntu ✅]]
 
 
 
+- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Remote.GUI ➜ Kali XRDP Demo AIO ✅]]
+
+
+
+###### 🟢 Network Wifi
 
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L. Wifi Conf ✖️ ]]
-
-- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Remote.GUI ➜ Kali XRDP Demo AIO ✅]]
-
 
 
 
