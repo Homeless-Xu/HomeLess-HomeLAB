@@ -1444,25 +1444,7 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-🟢 VLAN - Ubuntu ✅
-```
-
-# vi /etc/netplan/xxx
-# sudo netplan apply
-
-    ethernets:
-        eth0:
-            dhcp4: false
-            addresses: [10.219.219.14/24]
-    vlans:
-        eth0.1721:
-            id: 1721
-            link: eth0
-            dhcp4: true
-
-
-```
-
+🟢 Basic VLAN 
 
 - [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas Network.VLAN Config Demo ➜ Ubuntu ✅]]
 
