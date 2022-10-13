@@ -130,7 +130,6 @@ vDOM + VxLAN + BGP ...
 ```
 
 
-
 ###### 🟢 LAB.DND Config
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ DNS Record AIO ✔️]]
@@ -141,7 +140,7 @@ vDOM + VxLAN + BGP ...
 
 
 
-##### 🟢 OS Prepair
+##### 🟢 OS Choose
 ```
 best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
 best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
@@ -1266,85 +1265,7 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 # 👾👾👾👾👾👾👾👾👾👾👾👾👾👾 4️⃣0️⃣ OS
 
 
-
-
-# 👾🦚🦚🦚🦚🦚 4️⃣0️⃣ OS.X 
-    🔍F.OSX🔎
-
-
-
-🔵 PATH 
-
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.PATH.Demo ➜ mac add cmd to PATH✔️]]
-
-
-
-
-# 👾🦚
-
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Structure ✔️]]
-
-
-
-
-# 👾🟢 Keyboard
-
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 Keyboard.Shortcuts.Mouse Control ✔️]]
-
-
-
-
-# 👾🦚 Misc 
-
-
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 Port.Table.AIO ✔️]]
-
-
-
-
-
-# 👾🦚 Debug
-
-- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 Debug.BSOD ➜ blue screen debug✔️]]
-
-
-# 👾🦚 Driver
-
-
-
-
-
-
-
-# 👾🦚🦚🦚🦚🦚 4️⃣1️⃣ ESXI
-
-
-🔍F.ESXI🔎
-
-
-
-
-
-
-
-
-
-
-# 👾🟢 VCenter 
-
-
-
-
-
-# 👾🟢 Misc 
-
-
-[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Misc esxi nsx remove ✔️]]
-
-
-
-
-# 👾🦚🦚🦚🦚🦚 4️⃣3️⃣ Linux 
+# 👾👾👾👾👾 4️⃣3️⃣ Linux 
     🔍F.Linux🔎
 
 - [[🧬7️⃣9️⃣0️⃣0️⃣-Z000 👾 L.Bas ✶ Hostname AIO]]
@@ -1451,6 +1372,83 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 - [[🧬7️⃣8️⃣0️⃣0️⃣-Z000 👾 AD.GPO.Demo Password require ✖️]]
 - [[🧬7️⃣8️⃣0️⃣0️⃣-Z000 👾 AD.GPO.Demo Auto lock screen ✖️]]
 
+
+
+
+
+
+# 👾🦚🦚🦚🦚🦚 4️⃣0️⃣ OS.X 
+    🔍F.OSX🔎
+
+
+
+🔵 PATH 
+
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.PATH.Demo ➜ mac add cmd to PATH✔️]]
+
+
+
+
+# 👾🦚
+
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 OS.Structure ✔️]]
+
+
+
+
+# 👾🟢 Keyboard
+
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 Keyboard.Shortcuts.Mouse Control ✔️]]
+
+
+
+
+# 👾🦚 Misc 
+
+
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 Port.Table.AIO ✔️]]
+
+
+
+
+
+# 👾🦚 Debug
+
+- [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 Debug.BSOD ➜ blue screen debug✔️]]
+
+
+# 👾🦚 Driver
+
+
+
+
+
+
+
+# 👾🦚🦚🦚🦚🦚 4️⃣1️⃣ ESXI
+
+
+🔍F.ESXI🔎
+
+
+
+
+
+
+
+
+
+
+# 👾🟢 VCenter 
+
+
+
+
+
+# 👾🟢 Misc 
+
+
+[[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Misc esxi nsx remove ✔️]]
 
 
 
