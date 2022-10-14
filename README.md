@@ -1695,6 +1695,9 @@ Driftnet ➜ catch pic in network
     1. battery             ➜ mast in relay panel 
     2. aulter when car run ➜ batt in relay panel
 
+    AUX ??  
+
+
 
 🔶 wire color
     black  ➜ power/ground   cable ➜ to battery - or car checy ✔️
