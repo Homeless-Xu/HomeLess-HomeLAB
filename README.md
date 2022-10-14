@@ -1687,11 +1687,22 @@ Driftnet ➜ catch pic in network
 🟢 Ambulance Elect Map 
 
 ```
-🔵 power:
+
+🔵 must know 
+
+🔶 power supply 
 
     1. battery             ➜ mast in relay panel 
     2. aulter when car run ➜ batt in relay panel
 
+
+🔶 wire color
+    black  ➜ power/ground   cable ➜ to battery - or car checy ✔️
+    red    ➜ power/hot      cable ➜ to battery +  ✔️
+    
+    yellow ➜ contorol       cable ➜ to switch
+    orange 
+    white ??? nuturl??/
 
 
 🔵 Elect Devices 
