@@ -1678,10 +1678,10 @@ Driftnet ➜ catch pic in network
 
 # 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 Ambulance RV
 
-🟢 Tool - Meter.
+🟢 Tool - Meter (fluke 87v)
     test cable conn:   (beep function / wifi icon ) 
         conn red. black.   if sound. it works... must cut power first.  
-            fluke no sound??
+            if no beep(enable beep use physical wifi key)
     
 
 🟢 Ambulance Elect Map 
@@ -1743,7 +1743,7 @@ start door open relay first.
 
 1. manual find power 
 
-
+    5 cable ?
 
 
 
