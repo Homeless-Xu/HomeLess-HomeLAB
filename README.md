@@ -1678,6 +1678,11 @@ Driftnet ➜ catch pic in network
 
 # 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 Ambulance RV
 
+🟢 Tool - Meter.
+    test cable conn:   (beep function / wifi icon ) 
+        conn red. black.   if sound. it works... must cut power first.  
+            fluke no sound??
+    
 
 🟢 Ambulance Elect Map 
 
@@ -1730,12 +1735,23 @@ two big power cable in negative.
 
 🔶 find relay panel power supply ....   relay ???
 
+all realy in relay panel are not same.
+so forget old control switch. 
+
+all manual test...   
+start door open relay first.
+
+1. manual find power 
+
 
 
 
 
 ```
 
+
+
+🟢 
 
 
 
