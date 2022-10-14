@@ -1733,6 +1733,12 @@ two big power cable in negative.
 
 
 
+
+
+🔶 relay panel- main power cable. 
+
+
+
 🔶 find relay panel power supply ....   relay ???
 
 all realy in relay panel are not same.
