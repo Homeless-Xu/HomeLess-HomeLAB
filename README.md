@@ -1676,10 +1676,49 @@ Driftnet ➜ catch pic in network
 
 
 
+# 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 Ambulance RV
 
-# 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 9️⃣0️⃣ Misc
 
-# 🎉🦚🦚🦚 RV
+🟢 Ambulance Elect Map 
+
+```
+🔵 power:
+
+    1. battery             ➜ mast in relay panel 
+    2. aulter when car run ➜ batt in relay panel
+
+
+
+🔵 Elect Devices 
+
+    - relay:                 ➜ like switch, use thin wire control big wire.    
+    - breaker:               ➜ current protect. 
+    - whelen input controles ➜ control warning lights flash. 
+
+
+
+🔵 Panel 
+    control panel:  in head 
+    relay   panel:  in body
+
+    ❗️ car function and other function are not same.
+        if remove all relay in relay panel.  car signal still works. ????
+            
+
+main board - in cab
+two big power cable in negative. 
+    - master ➜ use car auto????
+    - batt   ➜ use battery 
+
+    
+
+```
+
+
+
+
+
+
 
 ## 🟢 Battery 
 
@@ -1752,11 +1791,6 @@ Driftnet ➜ catch pic in network
 
 ```
 
-# 🎉🦚🦚🦚🦚🦚 9️⃣0️⃣ Misc
-
-
-- [[🧬9️⃣0️⃣0️⃣0️⃣-Z000 🎉 M.Driver ✶ Linux ➜ USB NIC]]
-
 
 
 
@@ -1765,6 +1799,27 @@ Driftnet ➜ catch pic in network
 
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ Hardware Devices ]]
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
+
+
+
+
+
+
+
+
+
+# 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 9️⃣0️⃣ Misc
+
+# 🎉🦚🦚🦚 RV
+
+
+
+# 🎉🦚🦚🦚🦚🦚 9️⃣0️⃣ Misc
+
+
+- [[🧬9️⃣0️⃣0️⃣0️⃣-Z000 🎉 M.Driver ✶ Linux ➜ USB NIC]]
+
+
 
 
 
