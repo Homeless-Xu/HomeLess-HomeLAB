@@ -1728,6 +1728,15 @@ two big power cable in negative.
 
     
 
+
+
+
+🔵 tested 
+    
+    relay panel.  
+    key on.   center left -      center right +  ✅
+    key off  both - ???
+    
 ```
 
 
