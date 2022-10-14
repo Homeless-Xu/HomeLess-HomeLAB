@@ -1715,6 +1715,15 @@ two big power cable in negative.
 ```
 
 
+🟢 Lights diy
+```
+1. disconn car battery.  use house battery. 
+2. remove all relay in relay panel. car function still works!   ➜ so relay panel is for extra functuon only!!! 
+
+🔶 find relay panel power supply ....   relay ???
+
+
+```
 
 
 
