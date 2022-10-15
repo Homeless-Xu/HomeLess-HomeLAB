@@ -1876,8 +1876,9 @@ start door open relay first.
 
 🟢 FET / MOSFET
 
-
-MOSFET
+❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
+❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
+❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
 
 
 🔶 mosfet vs Transistor
