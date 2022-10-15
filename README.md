@@ -1895,7 +1895,6 @@ start door open relay first.
         S8050                  ➜             max   1w 
 
 
-    expensive way: 
 
 
         
