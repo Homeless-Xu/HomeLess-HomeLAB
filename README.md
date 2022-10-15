@@ -1923,7 +1923,7 @@ start door open relay first.
 
 
 🟢 todo   
-mos管 放大模块 / 
+mos管 放大模块   mos 模块. 
         
 
         
