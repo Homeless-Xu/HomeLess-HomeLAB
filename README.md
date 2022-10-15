@@ -1874,7 +1874,7 @@ start door open relay first.
         rpi/uno only support 5v/20ma  
         
 
-🟢 FET / MOSFET
+🟢 JFET / MOS–Mosfet
 
 ❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
 ❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
