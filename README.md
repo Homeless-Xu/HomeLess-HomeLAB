@@ -1890,15 +1890,16 @@ start door open relay first.
 🔶 Transistor Choose
     depned on how many w/ current your relay use.
 
-    
+    • cheap way 
+        2N2222A NPN Transistor ➜ 800mA x12v= max 9.6w
+        S8050                  ➜             max   1w 
 
-2N2222A NPN Transistor ➜ 800mA x12v= max 9.6w
-S8050                  ➜             max   1w 
 
+    expensive way: 
 
 
         
-        2N2222Aenvn use transfer like s8050 only support 1w. less than 1.6w.
+
         
 
 
