@@ -1867,7 +1867,39 @@ start door open relay first.
 
 
 
+# 🎉🦚🦚🦚 SmartRV
 
+    arduino + car relay
+        car relay: 12vdc coil & 1.6W 
+        rpi/uno only support 5v/20ma  
+        
+
+🟢 Transistor
+
+🔶 ref ⭐️⭐️⭐️⭐️⭐️
+    
+    https://www.mcmajan.com/mcmajanwpr/blog/2012/12/04/arduino-connect-a-12v-relay-english-version/
+
+
+🔶 Transistor
+    why: rpi/uni only support 5v coil. not 12v coil
+        use Transistor allow you use extra 12v to control car relay.
+
+
+
+🔶 Transistor Choose
+    depned on how many w/ current your relay use.
+
+    
+
+2N2222A NPN Transistor ➜ 800mA x12v= max 9.6w
+S8050                  ➜             max   1w 
+
+
+
+        
+        2N2222Aenvn use transfer like s8050 only support 1w. less than 1.6w.
+        
 
 
 
