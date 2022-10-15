@@ -1874,9 +1874,18 @@ start door open relay first.
         rpi/uno only support 5v/20ma  
         
 
-🟢 Transistor
+🟢 FET / MOSFET
 
-🔶 ref ⭐️⭐️⭐️⭐️⭐️
+
+MOSFET
+
+
+🔶 mosfet vs Transistor
+
+
+
+
+🔶 Transistor ref ⭐️⭐️⭐️⭐️⭐️
     
     https://www.mcmajan.com/mcmajanwpr/blog/2012/12/04/arduino-connect-a-12v-relay-english-version/
 
