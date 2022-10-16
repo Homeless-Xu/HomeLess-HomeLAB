@@ -1687,22 +1687,25 @@ Driftnet ➜ catch pic in network
 
 🟢 Elect Devices 
 
-🔶 relay: 
+🔶 relay:  ✅
+    use small votage/current control big votage/current
+        car:   small current control big current  ➜ switch use 12v.small_current  device use 12v.big_current
+        home:  small votage  control big votage   ➜ rpi    use 5v,                device use 110/220v 
 
-
-🔵 Circuit Breaker
-    ShortStop Circuit Breaker
-        bat/hot/+  ➜    to battery 
-        aux        ➜    to device
-
-🔶 circuit breaker type
-
-https://www.galvinpower.org/what-is-a-shortstop-circuit-breaker/
-
-type1: Auto-Reset       ➜ reset after temperature coll
-type2: Modified-Reset   ➜ reset after power cut down
-type3: Manual-Reset     ➜ use reset buttom on breaker
-
+🔶 Circuit Breaker
+    prevent short connect. 
+        ShortStop Circuit Breaker
+            bat/hot/+  ➜    to battery 
+            aux        ➜    to device
+    
+        • circuit breaker type
+            
+            https://www.galvinpower.org/what-is-a-shortstop-circuit-breaker/
+            
+            type1: Auto-Reset       ➜ reset after temperature coll
+            type2: Modified-Reset   ➜ reset after power cut down
+            type3: Manual-Reset     ➜ use reset buttom on breaker
+        
 
 
 
