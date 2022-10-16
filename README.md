@@ -1687,10 +1687,13 @@ Driftnet ➜ catch pic in network
 
 🟢 Elect Devices 
 
-relay: 
-Short Stop Circuit Breaker
+🔶 relay: 
 
 
+🔶 Circuit Breaker
+    ShortStop Circuit Breaker
+        bat/hot/+  ➜    to battery 
+        aux        ➜     to device
 
 
 
