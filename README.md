@@ -1684,6 +1684,16 @@ Driftnet ➜ catch pic in network
             if no beep(enable beep use physical wifi key)
     
 
+
+🟢 Elect Devices 
+
+relay: 
+Short Stop Circuit Breaker
+
+
+
+
+
 🟢 Ambulance Elect Map 
 
 ```
