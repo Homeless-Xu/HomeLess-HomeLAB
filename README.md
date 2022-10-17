@@ -2017,6 +2017,13 @@ mos管 放大模块   mos 模块.
 ```
 
 
+
+
+🟢 Solar 
+    more watt than mppt is ok. but more voltage is not ok
+        100/50 mppt control.  if you hook1400w panel on it. this is ok. 
+            mppt only accept 50A.  other are wasted.
+            
 🟢 todo 
     more solar.
 
