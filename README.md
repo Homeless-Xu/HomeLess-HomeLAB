@@ -2007,6 +2007,24 @@ mos管 放大模块   mos 模块.
         
 
 
+🟢 relay - victron 
+
+```
+🔵 Needs: 
+    when battery full/ votage>13.6   auto turn on refridge. and keep zero.
+    how use it 
+
+```
+
+
+🟢 todo 
+    more solar.
+
+    1. solar cable in together. 
+
+    50v --
+    60v --   并联分流 电压一样? 
+    70v --
 
 
 
