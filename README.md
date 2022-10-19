@@ -266,6 +266,13 @@ FGT_10-FGT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WWW �
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • internet.Else ➜ Ros Wireless Bridge Public Wifi ✅ ]]
 
 
+###### 🟢 Network -- DNS ✔️
+
+
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • URL Redirect ➜ CloudFlare URL Redirect Demo ✅ ]]
+
+
+
 ###### 🟢 Network -- Basic 
 
 🔶 FortiGate
