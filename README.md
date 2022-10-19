@@ -158,34 +158,27 @@ OS Choose:  best linux os for learning is ubuntu.20/22 ➜ almost all document i
  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
 
 
-
 🟢 LAB.Misc 
 
-✶ DNS
-
+DNS
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ DNS Record AIO ✔️]]
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 DNS URL Redriect.1 ➜ Use CloudFlare 💯]]
 - [[🧬1️⃣9️⃣0️⃣0️⃣-Z000 🌐 DNS URL Redriect.2 ➜ Use other 💯]]
 
 
-
-✶ Git 
-
+Git 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
 
 
-✶ NTP 
-
+NTP 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
 
 
 
 
-
-
-
 🟢 RPI ✔️
+
 🔶 Nic Bond
 - ❗️ startech dual-usb nic no support Balance-rr fuck ❗️ 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ RPI Nic Bond Balance-rr ➜ NoSupport ✅]]
@@ -194,7 +187,6 @@ OS Choose:  best linux os for learning is ubuntu.20/22 ➜ almost all document i
 
 🔶 Docker 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
-
 
 
 
@@ -255,13 +247,10 @@ FGT_10-FGT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WWW �
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 VLAN IP Table ✅❗️ ✔️]]
 
 
-
 ###### 🟢 Network -- Internet ✔️
 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • internet.Best ➜ Visible + Mofi ]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • internet.Else ➜ Ros Wireless Bridge Public Wifi ✅ ]]
-
-
 
 
 ###### 🟢 Network -- Basic 
@@ -399,30 +388,28 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 DHW  ➜ DSM.HW: Synology Hardware DS2015XS  ➜  Weak performace & Docker No   ➜  Backup NAS
 DVM  ➜ DSM.VM: Synology VM       ESXI      ➜  High performace & Docker Yes  ➜  Main   NAS
 
-
-                / iscis --> HW.RPI       ➜ S3  Storage
+                / iscis --> HW.RPI          ➜ S3  Storage
 Synology.DSM -->  iscsi --> VM.Synology
-		        \ iscis --> VM.CEPH      ➜ RBD Storage
+		        \ iscis --> VM.CEPH         ➜ RBD Storage
 
 
 🔶 Disk 
 
-DHW.01 ------\
-DHW.02 ------->  ISCSI ➜ Ceph Cluster
-DHW.03 ------/
-DHW.04 ------->  ISCSI ➜ DSM.VM
-DHW.05
-DHW.06
-DHW.07
-DHW.08
+    DHW.01 ------\
+    DHW.02 ------->  ISCSI ➜ Ceph Cluster
+    DHW.03 ------/
+    DHW.04 ------->  ISCSI ➜ DSM.VM
+    DHW.05
+    DHW.06
+    DHW.07
+    DHW.08
 
 
 🔶 Function
-
-DHW.ISCSI  ➜ CEPH     ➜  K8s/K3s 
-DHW.ISCSI  ➜ DVM      ➜  Docker  Mount  +  Dropbox_sync_encrypted
-DHW.NFS    ➜ ESXI     ➜  ISO/APP Mount
-
+    
+    DHW.ISCSI  ➜ CEPH     ➜  K8s/K3s 
+    DHW.ISCSI  ➜ DVM      ➜  Docker  Mount  +  Dropbox_sync_encrypted
+    DHW.NFS    ➜ ESXI     ➜  ISO/APP Mount
 
 ```
 
@@ -438,20 +425,18 @@ S3:    MinIO
 RBD:   Ceph
 
 
-🟢 Function - DVM 
+🔶 Function - DVM 
 	- Docker 
 	- Cloud Sync:  Dropbox       * 4
 	- Cloud Sync:  Google Driver * 2
 
 
-🟢 CEPH-RBD 
-
+🔶 CEPH-RBD 
     Pool_BD-K8s-DB
     Pool_BD-K8s-APP
     Pool_BD-K3s-AIO
 
 ```
-
 
 
 🟢 Cloud 
@@ -461,16 +446,9 @@ RBD:   Ceph
 
 
 
-
 ## 🎪💠💠💠💠💠 Lab.APP
 
-
-## 🎪🟢 LAB.APP
-
-
-
 ## 🎪🎉🎉🎉🎉🎉 Lab.MIS
-
 
 🔵 LAB Misc 
 
@@ -487,16 +465,118 @@ metric + influxdb + grafana
 
 
 
-## 🎪💠💠💠💠💠 Lab.SmartHome
+
+
+# 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 RV & ELEC 
+
+<img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/RV-Ambulance.jpg?raw=true">
+
+
 ```
-device:  rpi
+RV DIY Summary 
+
+    - Power:         more panel less battery if possible
+    - Aircondition:  use mini-split  (use much less power)
+
+
 ```
 
+
+## 🟢 RV Power 
+
+🔵 Solar Panel 
+```
+Series   connect panel ➜ one panel broken.     affect whole system
+Parallel connect panel ➜ one panel broken.  no affect whole system. ➜ 👍 
+
+
+```
+
+
+🔵 Battery 
+
+Lifepo4 Choose 
+- 1st: used tesla battery
+    
+Battery Charge Must Know
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Charge Stage and Advice 💯❗️ ]]
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Votage Table 💯 ]]
+
+
+MPPT Controler
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ MPPT Use Very Large Panel 💯 ]]
+
+
+
+🔵 Misc 
+
+Cable Size Choose 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Cable Gague Size Choose ✔️ ]]
+
+DC Fuse Choose ❗️
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Fuse Choose ➜ Blue Sea Systems Class T Fuses 💯 ]]
+
+Misc
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ how charge agm use lifepo4 ✔️ ]]
+
+
+
+
+🟢 Elective Tool & Function 
+
+Tool: 
+```
+multimeter       ➜ fluke 87v
+elect   tester   ➜ 
+gfci    tester   ➜ klein gfci outlet tester  ➜ test if gfci device works. 
+voltage tester   ➜ klein voltage tester      ➜ test if have any power.    ➜ not for how big votage/current
+
+```
+
+Tool Use How 
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC test cable connect ➜ Meter Ω Func ✔️ ]]
+
+
+
+
+🟢 ELEC Common Hardware 
+
+```
+• Fuse/breaker:   ➜ prevent shortcut 
+
+• Relay(switch):  ➜ use small votage/current control big votage/current
+    current  ➜ switch small cable;  device use big cable
+    votage   ➜ rpi    use   5v;     device use 12/110/220v 
+
+```
+
+
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware ➜ FET MOS ➜ Desc ✖️ ]]
+
+
+🔶 Manual 
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware• Manual ➜ ShortStop Circuit Breaker ✅ ]]
+
+
+
+🟢 Ambulacne ELECT DIY
+
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🚑 Ambulance Relay Panel ❗️💯❗️  ]]
+
+
+🟢 ELEC Knowledge 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
+
+
+
+
+## 🎪💠💠💠💠💠 Lab.SmartHome
 
 🟢 Home Assistant
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 HA OS Choose ➜ Supervised ✔️ ]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 HA OS Install ➜ RPI4_Ubuntu22 Install Supervised ✅]]
+
 
 
 # 📟📟📟📟📟📟📟📟📟📟📟📟📟📟
@@ -1497,160 +1577,6 @@ Driftnet ➜ catch pic in network
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.X ✶ Github ➜ Auth ➜ SSH & HTTPS]]
 
 
-
-
-# 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 RV & ELEC 
-
-
-<img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/RV-Ambulance.jpg?raw=true">
-
-
-
-## 🟢 RV Power 
-
-```
-Summary 
-
-
-```
-
-
-
-
-
-🔵 Solar Panel 
-```
-Series   connect panel ➜ one panel broken.     affect whole system
-Parallel connect panel ➜ one panel broken.  no affect whole system. ➜ 👍 
-
-
-
-```
-
-
-
-
-
-
-
-🔵 Battery 
-
-✶ Lifepo4 Choose 
-    1st: used tesla battery
-    
-
-✶ Charge 
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Charge Stage and Advice 💯❗️ ]]
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Votage Table 💯 ]]
-
-
-✶ Misc
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ how charge agm use lifepo4 ✔️ ]]
-
-
-🔵 Cable 
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Cable Gague Size Choose ✔️ ]]
-
-
-🔵 MPPT 
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ MPPT Use Very Large Panel 💯 ]]
-
-
-
-
-
-
-
-🟢 Elective Tool & Function 
-
-
-🔶 Tool: 
-```
-multimeter       ➜ fluke 87v
-elect   tester   ➜ 
-gfci    tester   ➜ klein gfci outlet tester  ➜ test if gfci device works. 
-voltage tester   ➜ klein voltage tester      ➜ test if have any power.    ➜ not for how big votage/current
-
-```
-
-
-🔶 multimeter Manual 
-- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC test cable connect ➜ Meter Ω Func ✔️ ]]
-
-
-
-
-
-🟢 ELEC Common Hardware 
-
-```
-• Fuse/breaker:  ➜ prevent shortcut 
-
-• Relay:         ➜ like switch:  use small votage/current control big votage/current
-    car:   small current control big current  ➜ switch use 12v.small_current  device use 12v.big_current
-    home:  small votage  control big votage   ➜ rpi    use 5v,                device use 110/220v 
-
-```
-
-
-- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware ➜ FET MOS ➜ Desc ✖️ ]]
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV ELEC DIY ➜ JFET / MOS–Mosfet AIO ❌ todo ]]
-
-
-
-
-
-🔶 ELEC Hardware ➜ Choose 
-
-- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Fuse Choose ➜ Blue Sea Systems Class T Fuses 💯 ]]
-
-
-🔶 Manual 
-- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware• Manual ➜ ShortStop Circuit Breaker ✅ ]]
-
-
-
-
-
-🟢 ELEC Knowledge 
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
-
-
-
-
-
-
-
-
-🟢 Ambulance Elect Tipes 
-
-```
-
-🔵 must know 
-
-❗️ two totally quarented power system:  car basic function and ambulance addition fucntion ❗️ 
-    if remove all relay in relay panel.  car signal still works! 
-    so you can use your house battery for relay panel. if you want.
-
-
-
-🔶 relay panel power supply 
-    relay panel have two power input! battery + aultor
-        1. battery             ➜ mast in relay panel 
-        2. aulter when car run ➜ batt in relay panel
-
-
-🔶 wire color
-    black  ➜ power/ground   cable ➜ to battery - or car checy ✔️
-    red    ➜ power/hot      cable ➜ to battery +  ✔️    
-    yellow ➜ contorol       cable ➜ to switch
-
-
-🔵 ambulance Devices 
-
-    - whelen input controles ➜ control warning lights flash. 
-            
-```
 
 
 
