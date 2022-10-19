@@ -1501,6 +1501,66 @@ Driftnet ➜ catch pic in network
 
 # 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 RV & ELEC 
 
+
+<img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/RV-Ambulance.jpg?raw=true">
+
+
+
+## 🟢 RV Power 
+
+```
+Summary 
+
+
+```
+
+
+
+
+
+🔵 Solar Panel 
+```
+Series   connect panel ➜ one panel broken.     affect whole system
+Parallel connect panel ➜ one panel broken.  no affect whole system. ➜ 👍 
+
+
+
+```
+
+
+
+
+
+
+
+🔵 Battery 
+
+✶ Lifepo4 Choose 
+    1st: used tesla battery
+    
+
+✶ Charge 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Charge Stage and Advice 💯❗️ ]]
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Votage Table 💯 ]]
+
+
+✶ Misc
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ how charge agm use lifepo4 ✔️ ]]
+
+
+🔵 Cable 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Cable Gague Size Choose ✔️ ]]
+
+
+🔵 MPPT 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ MPPT Use Very Large Panel 💯 ]]
+
+
+
+
+
+
+
 🟢 Elective Tool & Function 
 
 
@@ -1555,41 +1615,6 @@ voltage tester   ➜ klein voltage tester      ➜ test if have any power.    �
 🟢 ELEC Knowledge 
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
 
-
-
-
-
-
-## 🟢 RV Power ➜ 
-
-🔵 Battery 
-
-```
-🔶 Battery Charge Stage ✅
-
-    • Stage1  bluk       charge:  00-80%      ➜  very fast charge 
-    • Stage2  absorption charge:  80-100%     ➜  slow      charge
-    • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full
-
-
-🔶 Battery Charge Advice ✅
-
-    • Lifepo4 Battery ➜ best not charge full. 80% for much long life 
-    • AGM     Battery ➜ best yes charge full. 
-
-```
-
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Votage Table 💯 ]]
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ how charge agm use lifepo4 ✔️ ]]
-
-
-
-🔵 MPPT 
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ MPPT Use Very Large Panel 💯 ]]
-
-
-🔵 Cable 
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Cable Gague Size Choose ✔️ ]]
 
 
 
