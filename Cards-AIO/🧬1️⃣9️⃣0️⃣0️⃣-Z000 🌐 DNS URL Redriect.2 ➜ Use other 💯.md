@@ -1,6 +1,5 @@
 ```
 
-
 🔶 desc / needs 
 use custom domain to visit a url. 
 
@@ -26,9 +25,6 @@ https://github.com/mirandaxx/notes-obsidian
 cname:  note.0214.icu 
 
 github.com.opts-slash.mirandaxx.opts-slash.notes-obsidian.opts-https.redirect.center.
-
-
-
 
 
 

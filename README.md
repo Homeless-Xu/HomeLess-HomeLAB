@@ -124,30 +124,20 @@ vDOM + VxLAN + BGP ...
     VDOM: Firewall            ➜ make one firewall to many virtual firewall 
 
 ❗️ ros.vrf function very weak.no vxlan. just for very simple use.no recommend try it !!!!!!!! ❗️
-❗️ ros.vrf function very weak.no vxlan. just for very simple use.no recommend try it !!!!!!!! ❗️
-❗️ ros.vrf function very weak.no vxlan. just for very simple use.no recommend try it !!!!!!!! ❗️
 
 ```
 
 
-###### 🟢 LAB.DND Config
 
-- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ DNS Record AIO ✔️]]
+## 🎪👾👾👾👾👾 Lab.Prepair
 
-
-
-## 🎪👾👾👾👾👾 Lab.Prepair 
-
-
-
-##### 🟢 OS Choose
-```
-best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
-best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
-best linux os for learning is ubuntu.20.4 ➜ almost all document is based on this. 
 
 ```
+OS Choose:  best linux os for learning is ubuntu.20/22 ➜ almost all document is based on this. 
+```
 
+
+🟢 OS Install AIO
 
 ###### 🔶 OS ➜ USB Installer Make 
 
@@ -163,6 +153,35 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
 
 
+###### 🔶 OS ➜ PXE Server 
+
+ [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
+
+
+
+🟢 LAB.Misc 
+
+✶ DNS
+
+- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.000 ➜ DNS Record AIO ✔️]]
+
+- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 DNS URL Redriect.1 ➜ Use CloudFlare 💯]]
+- [[🧬1️⃣9️⃣0️⃣0️⃣-Z000 🌐 DNS URL Redriect.2 ➜ Use other 💯]]
+
+
+
+✶ Git 
+
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
+
+
+✶ NTP 
+
+- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
+
+
+
+
 
 
 
@@ -175,29 +194,6 @@ best linux os for learning is ubuntu.20.4 ➜ almost all document is based on th
 
 🔶 Docker 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.APP.Password Manager ➜ Docker Bitwarden 🐶]]
-
-
-
-
-
-
-###### 🔶 OS ➜ PXE Server 
-
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
-
-
-
-
-
-
-
-🟢 Git  
-- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB.PREP • Git ➜ Del Old Git Version ✅]]
-
-
-🟢 NTP  [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
-
-
 
 
 
@@ -266,11 +262,6 @@ FGT_10-FGT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WWW �
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • internet.Else ➜ Ros Wireless Bridge Public Wifi ✅ ]]
 
 
-###### 🟢 Network -- DNS ✔️
-
-
-- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net • URL Redirect ➜ CloudFlare URL Redirect Demo ✅ ]]
-
 
 
 ###### 🟢 Network -- Basic 
@@ -280,7 +271,7 @@ FGT_10-FGT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WWW �
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Reset ✔️]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ VDOM Enable ✔️]]
 
-    - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Transfer Mode Enable ✔️ ]]
+- [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Conf ➜ Transfer Mode Enable ✔️ ]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FortiGate Basc ➜ NAT Mode vs Transfer Mode ✔️ ]]
 
 
@@ -321,11 +312,7 @@ FGT_10-FGT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WWW �
     dkt.c 1214.144
     mac.c 1214.099
 
-
 vps stoped. so ..
-
-
-
 ```
 
 
@@ -407,19 +394,15 @@ device  >> wifi  - ruckus  >> radius.client:fortigate <
 ## 🎪📀📀📀📀📀 Lab.STO
 
 
-
 ###### 🟢 Storage MAP 
 ```
 DHW  ➜ DSM.HW: Synology Hardware DS2015XS  ➜  Weak performace & Docker No   ➜  Backup NAS
 DVM  ➜ DSM.VM: Synology VM       ESXI      ➜  High performace & Docker Yes  ➜  Main   NAS
 
 
-
                 / iscis --> HW.RPI       ➜ S3  Storage
 Synology.DSM -->  iscsi --> VM.Synology
 		        \ iscis --> VM.CEPH      ➜ RBD Storage
-
-
 
 
 🔶 Disk 
@@ -439,8 +422,6 @@ DHW.08
 DHW.ISCSI  ➜ CEPH     ➜  K8s/K3s 
 DHW.ISCSI  ➜ DVM      ➜  Docker  Mount  +  Dropbox_sync_encrypted
 DHW.NFS    ➜ ESXI     ➜  ISO/APP Mount
-
-
 
 
 ```
@@ -469,8 +450,6 @@ RBD:   Ceph
     Pool_BD-K8s-APP
     Pool_BD-K3s-AIO
 
-
-
 ```
 
 
@@ -482,14 +461,6 @@ RBD:   Ceph
 
 
 
-###### 🔵 LAB.Storage ✅
-
-```
-
-
-```
-
- 
 
 ## 🎪💠💠💠💠💠 Lab.APP
 
@@ -513,9 +484,6 @@ RBD:   Ceph
 
 metric + influxdb + grafana
 
-通过 Prometheus 采集数据
-
-
 
 
 
@@ -524,24 +492,11 @@ metric + influxdb + grafana
 device:  rpi
 ```
 
+
 🟢 Home Assistant
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 HA OS Choose ➜ Supervised ✔️ ]]
-
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 HA OS Install ➜ RPI4_Ubuntu22 Install Supervised ✅]]
-
-
-
-HA + ring 
-
-HA + hue 
-
-HA + Alex 
-
-RPI / relay 
-
-
-
 
 
 # 📟📟📟📟📟📟📟📟📟📟📟📟📟📟
@@ -727,23 +682,6 @@ Mangle ➜  mark add/check
 
 ###### 🟢 Firewall.NAT ✅❗️ 
 
-```
-🔵 NAT.Masquerade Summary 💯💯💯💯💯
-
-nat connect private ip and publc ip.
-private lan to private lan            no need nat
-private lan to piblic  lan(internet)  do need nat
-
-all route under internet need set nat, not only the router direct to internet .
-
-🔶 nat demo 
-router1 --- router 2 --- router3 -- internet 
-
-1. enable nat.masquerade  at router3.wan.nic 
-2. enable nat.masquerade  at router2.wan.nic 
-3. enable nat.masquerade  at router1.wan.nic 
-
-```
 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ Summary]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Firewall.NAT ➜ SNAT DNAT Masquerade Diff AIO ✅❗️]]
@@ -753,98 +691,32 @@ router1 --- router 2 --- router3 -- internet
 
 
 
-
-
 ###### 🟢 Firewall Misc
 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 FGT • Bas ➜ Timeout ✔️]]
 
-
 firewall.mangle.pathhrough:  if match. go to next firewall rule
 
 
-🔵 fgt - vdom link www 
-1. create vlink 
-2. set staitc route under eg3 vdom . 
-3. allow traffic in under root vdom.
-
-
-
-
-# 🌐🦚🦚🦚🦚🦚 1️⃣0️⃣ RouterOS 
+# 🌐🦚🦚🦚🦚🦚 1️⃣0️⃣ RouterOS AIO
     🔍F.Ros.Basic🔎
 
 
 - [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 NET.Route • Ros BGP Share Default route ✔️ ]]
 
 
-
 # 🌐🟢 Ros.CMD AIO 
 
-1. bridge cmd 
 
-```
-
-/interface bridge add name=Bridge-RB4
-/interface bridge port add bridge=Bridge-RB4 interface=RB4.00-DEF.0X.CRS
-/interface bridge port add bridge=Bridge-RB4 interface=RB4.01-DEF.1X.FGT
+- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros CMD ➜ Bridge ✔️ ]]
+- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros CMD ➜ VRF ✔️ ]]
 
 
-```
+✶ VRF Demo, works but not use any more.
 
-
-```
-🔵 use firewall mangle mark new route-table
-
-/ip firewall mangle add chain=prerouting src-address=10.20.3.0/30  dst-address=!10.20.3.0/29 action=mark-routing new-routing-mark=WWW.EG3
-/ip firewall mangle add chain=prerouting src-address=10.20.5.0/30  dst-address=!10.20.5.0/29 action=mark-routing new-routing-mark=WWW.EG5
-/ip firewall mangle add chain=prerouting src-address=10.52.10.0/29 dst-address=!10.52.10.0/29 action=mark-routing new-routing-mark=WWW.HAP
-
-/ip firewall mangle add chain=prerouting src-address=192.168.8.0/24 action=mark-routing new-routing-mark=WWW.CAM
-/ip firewall mangle add chain=prerouting src-address=192.168.6.0/24 action=mark-routing new-routing-mark=WWW.SEC
-
-```
-
-
-
-```
-🟢 VRF to VRF ✅ 💯
-
-🔵 vrf.lan  to vrf.wan 💯  ➜ for www
-/ip route add dst-address=10.21.5.1/32 gateway=10.21.5.1@VRF-EG5 routing-table=VRF-EG3  ➜ so eg3 can ping 5.1
-/ip route add dst-address=10.21.3.1/32 gateway=10.21.3.1@VRF-EG3 routing-table=VRF-EG5  ➜ so eg5 can ping 3.1
-
-/ip route add dst-address=0.0.0.0/0 gateway=10.21.1.1@main routing-table=VRF-EG3        ➜ so eg3 can ping www
-/ip route add dst-address=0.0.0.0/0 gateway=10.21.1.1@main routing-table=VRF-EG5        ➜ so eg5 can ping www 
-
-❗️ route only from  vrfx.lan to vrfy.wan.    not vrf.x.lan to vrf.y.lan ❗️ 
-❗️ route only from  vrfx.lan to vrfy.wan.    not vrf.x.lan to vrf.y.lan ❗️ 
-❗️ route only from  vrfx.lan to vrfy.wan.    not vrf.x.lan to vrf.y.lan ❗️ 
-
-
-
-🔵 vrf.lan to vrf.lan 💯  ➜ for bgp inside rb4.
-ip firewall mangle add chain=prerouting action=mark-routing new-routing-mark=VRF-EG3 src-address=10.21.5.0/30 dst-address=10.21.3.2/32  ➜ allow 5.1 ping 3.2 ✅
-ip firewall mangle add chain=prerouting action=mark-routing new-routing-mark=VRF-EG5 src-address=10.21.3.0/30 dst-address=10.21.5.2/32  ➜ allow 3.1 ping 5.2 ✅
-
-ip firewall mangle add chain=prerouting action=mark-routing new-routing-mark=main src-address=10.21.3.0/30 dst-address=10.21.1.2/32  ➜ allow eg3 ping 1.2
-ip firewall mangle add chain=prerouting action=mark-routing new-routing-mark=main src-address=10.21.5.0/30 dst-address=10.21.1.2/32  ➜ allow eg5 ping 1.2
-
-❗️ mangle only from  vrfx.lan to vrfy.lan    not vrf.x.lan to vrf.y.wan  & no test on route, must test on client pc❗️ 
-❗️ mangle only from  vrfx.lan to vrfy.lan    not vrf.x.lan to vrf.y.wan  & no test on route, must test on client pc❗️ 
-❗️ mangle only from  vrfx.lan to vrfy.lan    not vrf.x.lan to vrf.y.wan  & no test on route, must test on client pc❗️ 
-
-
-
-```
-
-
-
-🔶 do-vrf-version - stoped & works
-
-- VRF.HAP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild HAP.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
-- VRF.RB4   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild RB4.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
-- VRF.BGP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Route.EBGP AIO ➜ EG3 EG5 RB4 HAP ✅❗️❗️❗️❗️❗️ ]]
+    - VRF.HAP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild HAP.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
+    - VRF.RB4   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild RB4.Conf.CMD ➜ AIO ✅❗️❗️❗️❗️❗️ ]]
+    - VRF.BGP   [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 NetBuild Route.EBGP AIO ➜ EG3 EG5 RB4 HAP ✅❗️❗️❗️❗️❗️ ]]
 
 
 🔵 Demo. Basic.VRF
@@ -894,11 +766,7 @@ all route device need set ospf
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Ros.OSPF.STEP.12 ➜ loopback Set IP ✔️ ]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Ros.OSPF.STEP.13 ➜ RouterID Create ✔️ ]]
 
-
-
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Ros.OSPF.STEP.13 ➜ OSPF Status Check ✔️ ]]
-
-
 
 
 🔵 Router 
@@ -914,6 +782,7 @@ all route device need set ospf
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ VRF On vlan nic✅]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.VRF ➜ Route between vrf ➜ MPLS]]
 
+
 ##### 🟢 Ros.MPLS ✖️
 
 [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 🌐 Net.Ros.MPLS ✶ Desc + Why ✅]]
@@ -926,15 +795,17 @@ all route device need set ospf
 
 
 
-# 🌐🟢 Ros.Hardware
+##### 🟢 Ros.Misc
+
+- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros.Script.Demo ➜ Misc-2019-Miranda ?]]
+- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros.Log ➜ Debug Enable ✔️]]
+
+✶ Ros.Hardware
 
 - [[🧬1️⃣3️⃣0️⃣0️⃣-A000 🌐 Ros_A.HDW.Name ➜ rule ✔️]]
 - [[🧬1️⃣3️⃣0️⃣0️⃣-A000 🌐 Ros_A.HDW.LTE.SXT AIO ✔️]]
 
-
-# 🌐🟢 Ros.Basic
-
-Bx.xx 
+✶ Ros.Basic
 
 - [[🧬1️⃣3️⃣0️⃣0️⃣-B100 🌐 Ros.Mode.AP ➜ Home AP & WISP AP ✔️]]
 - [[🧬1️⃣3️⃣0️⃣0️⃣-B200 🌐 Ros.Mode.CPE.Desc & Function ✔️]]
@@ -943,19 +814,9 @@ Bx.xx
 - [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros.Mode.PTP Bridge.Desc ✔️]]
 
 
+✶ Ros.Tool
 
-
-# 🌐🟢 Ros.Misc
-
-- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros.Script.Demo ➜ Misc-2019-Miranda ?]]
-
-- [[🧬1️⃣3️⃣0️⃣0️⃣-B300 🌐 Ros.Log ➜ Debug Enable ✔️]]
-
-
-
-# 🌐🟢 Ros.Tool
-
-netwatch:  check device up/down.   so no need use ping
+    netwatch:  check device up/down.   so no need use ping
 
 
 
@@ -967,8 +828,6 @@ netwatch:  check device up/down.   so no need use ping
 # 🎉🦚🦚🦚🦚🦚 1️⃣9️⃣ Misc
 
 
-- [[🧬1️⃣9️⃣0️⃣0️⃣-Z000 🌐 DNS.CNAME.Demo ➜ cname to URL ✔️]]
-
 
 
 # 🎉🟢 Route
@@ -979,6 +838,9 @@ netwatch:  check device up/down.   so no need use ping
 
 
 - [[🧬3️⃣0️⃣0️⃣0️⃣-Z000 🌐 DNS.Cache Update ➜ MacOS.13 ✔️]]
+
+
+
 
 
 
@@ -1070,8 +932,6 @@ netwatch:  check device up/down.   so no need use ping
 
 
 
-
-
 # 🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬 3️⃣0️⃣ Docker
 
 ```
@@ -1085,12 +945,9 @@ manage lots docker.learn local         ➜ Choose   minikube         ➜ hard
 manage lots docker.learn Cluster.test  ➜ Choose   k3s              ➜ hard
 manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
-
-
 🔵 Docker Resources
 
 ⭐️⭐️⭐️⭐️      https://www.qikqiak.com/k8strain/
-
 
 ```
 
@@ -1102,7 +959,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 # 🐬🟢 Docker. Basic 
-
 
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 🐬 D.A.Bas ✶ Docker Install ➜ Ubuntu_20]]
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 🐬 D.A.Bas ✶ Docker Uninstall ✔️]]
@@ -1128,14 +984,10 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 # 🐬🦚🦚🦚🦚🦚 Docker. Demo
 
-
-
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 🐬 D.CMD.Demo ➜ MySQL & MariaDB ✅]]
 
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 🐬 D.CMD.Demo ➜ photoprism ]]
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 🐬 D.CMD.Demo ➜ Heimdall]]
-
-
 
 
 
@@ -1152,14 +1004,10 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-
-
 # ☸️🦚🦚🦚🦚🦚 3️⃣3️⃣ Minikube
 
 
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 ☸️ Minikube.Bas ✶ CMDs ✔️]]
-
-
 
 
 
@@ -1204,12 +1052,7 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 ☸️ K8s.Adv ✶ RBAC Desc]]
-
-
 - [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 ☸️ K8s.Adv ✶ CRD ➜ Desc & WHY]]
-
-
-
 
 
 
@@ -1274,23 +1117,7 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 ### Helm.Demo traefik.minikube 
 
-```
-🔶 add repo:    helm repo add traefik https://helm.traefik.io/traefik
-🔶 run  app:    helm install traefik-test traefik/traefik
-
-🔶 check dashboard enabled
-    kubectl describe pod traefik-test          ➜    --api.dashboard=true
-
-🔶 Check port forwarding ➜  no cli 
-    lens >> network >> port forward >> traefik-test ...  >> Local Port  56387
-
-🔶 dashboard visit 
-    http://127.0.0.1:56387/dashboard/#/
-
-
-```
-
-
+- [[🧬6️⃣9️⃣0️⃣0️⃣-Z000 ☸️ Helm.Demo traefik.minikube ✖️]]
 
 
 
@@ -1465,17 +1292,6 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 🔍F.ESXI🔎
-
-
-
-
-
-
-
-
-
-
-# 👾🟢 VCenter 
 
 
 
@@ -1683,253 +1499,97 @@ Driftnet ➜ catch pic in network
 
 
 
-# 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 Ambulance RV
+# 🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑🚑 RV & ELEC 
 
-🟢 Tool - Meter (fluke 87v)
-    test cable conn:   (beep function / wifi icon ) 
-        conn red. black.   if sound. it works... must cut power first.  
-            if no beep(enable beep use physical wifi key)
-    
+🟢 Elective Tool & Function 
 
 
-🟢 Elect Devices 
-
-🔶 relay:  ✅
-    use small votage/current control big votage/current
-        car:   small current control big current  ➜ switch use 12v.small_current  device use 12v.big_current
-        home:  small votage  control big votage   ➜ rpi    use 5v,                device use 110/220v 
-
-🔶 Circuit Breaker
-    prevent short connect. 
-        ShortStop Circuit Breaker
-            bat/hot/+  ➜    to battery 
-            aux        ➜    to device
-    
-        • circuit breaker type
-            
-            https://www.galvinpower.org/what-is-a-shortstop-circuit-breaker/
-            
-            type1: Auto-Reset       ➜ reset after temperature coll
-            type2: Modified-Reset   ➜ reset after power cut down
-            type3: Manual-Reset     ➜ use reset buttom on breaker
-        
-
-
-
-🟢 fet mos igbt 
+🔶 Tool: 
 ```
-
-🔶 ref .
-
-mos:   https://www.youtube.com/watch?v=tWaPgziBnas
-igbt:  https://www.youtube.com/watch?v=f0AHrjk6KEA
-
-🔶 why 
-rpi only contril 5v coil relay.  we need use rpi control 12v coil car relay.
-
-
-🔶 function?
-    use hand control  physical switch. 
-    use mos  control  virtual  switch. / remote control. 
-
-
-🔶 summy 
-
-fet:  use current control currnt 
-mos:  use votage  control current... 
-
-fet:       cheap       ➜ for small  current
-mos:       expensive   ➜ for normal current
-igbt: most expensive   ➜ for big    current 
-
-
-
-
-
-
-🔶 
-
-
-    b
-fet c
-    e
-
-
-
-    g  ➜ control 
-mos d  power  in  + 
-    s  power  out - 
-
-        touch. g & d.    d & s turn on 
-            no need keep touch. if disconnect g & d.   still keep on .
-        touch. g & s.    d & s turn off. 
-
-
-
-
-```
-
-🟢 Ambulance Elect Map 
-
-```
-
-🔵 must know 
-
-🔶 power supply 
-
-    1. battery             ➜ mast in relay panel 
-    2. aulter when car run ➜ batt in relay panel
-
-    AUX ??  
-
-
-
-🔶 wire color
-    black  ➜ power/ground   cable ➜ to battery - or car checy ✔️
-    red    ➜ power/hot      cable ➜ to battery +  ✔️
-    
-    yellow ➜ contorol       cable ➜ to switch
-    orange 
-    white ??? nuturl??/
-
-
-🔵 Elect Devices 
-
-    - relay:                 ➜ like switch, use thin wire control big wire.    
-    - breaker:               ➜ current protect. 
-    - whelen input controles ➜ control warning lights flash. 
-
-
-
-🔵 Panel 
-    control panel:  in head 
-    relay   panel:  in body
-
-    ❗️ car function and other function are not same.
-        if remove all relay in relay panel.  car signal still works. ????
-            
-
-main board - in cab
-two big power cable in negative. 
-    - master ➜ use car auto????
-    - batt   ➜ use battery 
-
-    
-
-
-
-
-🔵 tested 
-    
-    relay panel.  
-    key on.   center left -      center right +  ✅
-    key off  both - ???
-    
-```
-
-
-🟢 Lights diy
-```
-1. disconn car battery.  use house battery. 
-2. remove all relay in relay panel. car function still works!   ➜ so relay panel is for extra functuon only!!! 
-
-
-
-🔶 tested.
-    flash control panel.   manual to negial . it work. but lights not on. 
-        flash panel have power. but lights no power. (from relay panel???   active relay panel first..)
-
-
-
-
-
-🔶 relay panel- main power cable. 
-
-
-
-🔶 find relay panel power supply ....   relay ???
-
-all realy in relay panel are not same.
-so forget old control switch. 
-
-all manual test...   
-start door open relay first.
-
-1. manual find power 
-
-    5 cable ?
-
-
+multimeter       ➜ fluke 87v
+elect   tester   ➜ 
+gfci    tester   ➜ klein gfci outlet tester  ➜ test if gfci device works. 
+voltage tester   ➜ klein voltage tester      ➜ test if have any power.    ➜ not for how big votage/current
 
 ```
 
 
-
-🟢 
-
-
+🔶 multimeter Manual 
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC test cable connect ➜ Meter Ω Func ✔️ ]]
 
 
-## 🟢 Battery 
+
+
+
+🟢 ELEC Common Hardware 
 
 ```
-🔵 Battery Votage ✅
+• Fuse/breaker:  ➜ prevent shortcut 
 
-    Lifepo4 good votage:  13.3 V: 90% 
-    AGM     good votage:  12.5 V: 80%
-    
+• Relay:         ➜ like switch:  use small votage/current control big votage/current
+    car:   small current control big current  ➜ switch use 12v.small_current  device use 12v.big_current
+    home:  small votage  control big votage   ➜ rpi    use 5v,                device use 110/220v 
 
-        • Lifep04 Detail ✔️
-            13.6V	100% (resting)
-            13.4V	99%
-            13.3V	90%
-            13.2V	70%
-            13.1V	40%
-            13.0V	30%
-            12.9V	20%
-            12.8V	17%
-            12.5V	14%
-            12.0V	9%
-            10.0V	0%
-        
-        
-        • AGM Detail ✔️
-            100%	12.85V
-            75%	    12.55V
-            50%	    12.25V
-            25%	    11.95V
-            0%	    11.65V
-        
+```
 
-🔵 Battery Charge Stage ✅
+
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware ➜ FET MOS ➜ Desc ✖️ ]]
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV ELEC DIY ➜ JFET / MOS–Mosfet AIO ❌ todo ]]
+
+
+
+
+
+🔶 ELEC Hardware ➜ Choose 
+
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Fuse Choose ➜ Blue Sea Systems Class T Fuses 💯 ]]
+
+
+🔶 Manual 
+- [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware• Manual ➜ ShortStop Circuit Breaker ✅ ]]
+
+
+
+
+
+🟢 ELEC Knowledge 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
+
+
+
+
+
+
+## 🟢 RV Power ➜ 
+
+🔵 Battery 
+
+```
+🔶 Battery Charge Stage ✅
 
     • Stage1  bluk       charge:  00-80%      ➜  very fast charge 
     • Stage2  absorption charge:  80-100%     ➜  slow      charge
     • Stage3  float      charge : 100-100%    ➜  very slow charge  ➜ maintain full
 
 
+🔶 Battery Charge Advice ✅
 
-🔵 Votage - charge ?
+    • Lifepo4 Battery ➜ best not charge full. 80% for much long life 
+    • AGM     Battery ➜ best yes charge full. 
 
-               AGM:                 Lifepo4 
-    bluk       13-14.5v             
-    absorption 14.5v
-    float      13.5v
+```
 
-
-
-🔵 Demo 
-
-    house battery:  lifepo4 
-    start battery:  agm 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Votage Table 💯 ]]
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ how charge agm use lifepo4 ✔️ ]]
 
 
-🔶 how charge agm use lifepo4 
-    - long time conn:   use dc-dc charge. 
-    - emergenct conn:   direct..   when car battery died
 
-    diff battery have his owm best votage. 
-    it is best use diff charge for diff battery.
+🔵 MPPT 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ MPPT Use Very Large Panel 💯 ]]
+
+
+🔵 Cable 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Cable Gague Size Choose ✔️ ]]
 
 
 
@@ -1937,147 +1597,50 @@ start door open relay first.
 
 
 
+🟢 Ambulance Elect Tipes 
+
+```
+
+🔵 must know 
+
+❗️ two totally quarented power system:  car basic function and ambulance addition fucntion ❗️ 
+    if remove all relay in relay panel.  car signal still works! 
+    so you can use your house battery for relay panel. if you want.
 
 
+
+🔶 relay panel power supply 
+    relay panel have two power input! battery + aultor
+        1. battery             ➜ mast in relay panel 
+        2. aulter when car run ➜ batt in relay panel
+
+
+🔶 wire color
+    black  ➜ power/ground   cable ➜ to battery - or car checy ✔️
+    red    ➜ power/hot      cable ➜ to battery +  ✔️    
+    yellow ➜ contorol       cable ➜ to switch
+
+
+🔵 ambulance Devices 
+
+    - whelen input controles ➜ control warning lights flash. 
+            
 ```
 
 
 
 
-# 🎉🦚🦚🦚 ELECT 
 
-
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ Hardware Devices ]]
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
-
-
-
-# 🎉🦚🦚🦚 SmartRV
-
-    arduino + car relay
-        car relay: 12vdc coil & 1.6W 
-        rpi/uno only support 5v/20ma  
-        
-
-🟢 JFET / MOS–Mosfet
-
-❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
-❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
-❗️ fet only for 1watt-(cheap),  mosfet for 1watt+ (expensive) ❗️
-
-
-🔶 mosfet vs Transistor
-
-
-
-
-🔶 Transistor ref ⭐️⭐️⭐️⭐️⭐️
-    
-    https://www.mcmajan.com/mcmajanwpr/blog/2012/12/04/arduino-connect-a-12v-relay-english-version/
-
-
-🔶 Transistor
-    why: rpi/uni only support 5v coil. not 12v coil
-        use Transistor allow you use extra 12v to control car relay.
-
-
-
-```
-
-🔵 Transistor Choose
-    depned on how many watt and current your relay use.
-    my car relay: SONG CHUAN 896H-1CH-C1S   12vdc. 133mA  90omu = 1.6W 
-
-
-🔵 normal Transistor table
-
-    25pcs--A1015 PNP  60V 0.1A  0.4W   8MHZ
-    25pcs--BC327 PNP  50V 0.8A  0.625W 100MHZ
-    25pcs--BC337 NPN  50V 0.8A  0.625W 100MHZ
-    25pcs--C1815 NPN  60V 0.15A 0.4W   8MHZ
-    25pcs--S8050 NPN  40V 1.5A  1W     100MHZ  
-    25pcs--S8550 PNP  40V 1.5A  1W     100MHZ
-    25pcs--2N2222 NPN 60V 0.8A  0.5W   250MHZ   ➜ current ok.  watt no 
-    25pcs--2N2907 NPN 60V 0.6A  0.4W   200MHZ
-    25pcs--2N3904 NPN 60V 0.2A  0.625W 300MHZ
-    25pcs--2N3906 PNP 40V 0.2A  0.5W   250MHZ
-
-
-
-```
-
-
-🟢 todo   
-mos管 放大模块   mos 模块. 
-        
-
-        
-
-
-🟢 relay - victron 
-
-```
-🔵 Needs: 
-    when battery full/ votage>13.6   auto turn on refridge. and keep zero.
-    how use it 
-
-```
-
-
-
-
-🟢 Solar 
-    more watt than mppt is ok. but more voltage is not ok
-        100/50 mppt control.  if you hook1400w panel on it. this is ok. 
-            mppt only accept 50A.  other are wasted.
-
-
-🔶 Solar Cable 
-    12 Gague 
-        max 20 amps continuously at @60°C/140°F
-        80% is 16 amps ➜ must remain something 
-        cable length: 15m lost 10%. 
-
-        so just like 15 amp. for 12gague long time rv use.
-
-
-https://www.batteryequivalents.com/12-gauge-wire-ampacity.html
-
-
-
-
-
-
-🔶 
-
-
-
-
-🟢 todo 
-    more solar.
-
-    1. solar cable in together. 
-
-    50v --
-    60v --   并联分流 电压一样? 
-    70v --
 
 
 
 # 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 9️⃣0️⃣ Misc
-
-# 🎉🦚🦚🦚 RV
-
 
 
 # 🎉🦚🦚🦚🦚🦚 9️⃣0️⃣ Misc
 
 
 - [[🧬9️⃣0️⃣0️⃣0️⃣-Z000 🎉 M.Driver ✶ Linux ➜ USB NIC]]
-
-
-
-
 
 
 
@@ -2092,7 +1655,7 @@ https://www.batteryequivalents.com/12-gauge-wire-ampacity.html
 
 
 
-# 🎉🟢 COnfig.DockerCompose 
+# 🎉🟢 Config.DockerCompose 
 
 
 - [[🧬9️⃣5️⃣0️⃣0️⃣-Z000 📝 Conf.DC.00 ✶ real backup ✔️ ]]
@@ -2103,17 +1666,12 @@ https://www.batteryequivalents.com/12-gauge-wire-ampacity.html
 
 
 
-
 # 🇺🇸🦚🦚🦚 USA-99
-
 
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🇺🇸 USA geo]]
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🇺🇸 USA • Visa Desc]]
 
 
-
 # 🇺🇸🟢 JOB
-
-
 
 # 🇺🇸🟢 TAX 
