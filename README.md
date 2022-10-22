@@ -72,14 +72,13 @@ group:xx                                  ➜ Group
 
 # 🎪🎪🎪🎪🎪🎪🎪0️⃣0️⃣ HomeLAB
 ## 🎪 Lab.Summary
-###### 🟢 LAB.Pic ✔️
 
+LAB.Pic 
 <img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/HomeLAB.jpg?raw=true">
 
 
-###### 🟢 LAB.Hardware ✔️
+LAB.Hardware 
 ```
-
 Starlink_Gen2        Internet
 Mofi                 Internet_LTE
 
@@ -99,23 +98,23 @@ Synology_DS2015XS    NAS
 Camera_IPC X 4       IPC-HDW3849H-AS-PV 
 Camera_PTZ X 2
 
-🔶 want 
 
-HDD:     HC550                ➜ best hdd 
-Server:  supermicro  e302-d9  ➜ no cheap! small + sfp + powerful
+🔶 Shopping List 
 
+    HDD:            HC550 Series         ➜ best hdd 
+    Mini Server.1:  supermicro  E302-9D  ➜ 1500$+ !       small + sfp +    powerful 
+    Mini Server.2:  R86s G3              ➜ 250$           small + sfp   no powerful   max-ram=16G. 
 
 ```
 
-🔵 LAB.Hardware Choose 
 
+LAB.Hardware Choose 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Firewall ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Camera ✔️]]
 
 
-###### 🟢 LAB.Network Tech
+LAB.Network Summary
 ```
-
 vDOM + VxLAN + BGP ...
 
     VM:   Server              ➜ make one machine  to many virtual machine 
@@ -127,35 +126,39 @@ vDOM + VxLAN + BGP ...
 
 ```
 
+LAB.Storage Summary
+```
+
+
+
+
+```
+
+
+
 
 
 ## 🎪👾👾👾👾👾 Lab.Prepair
-
 
 ```
 OS Choose:  best linux os for learning is ubuntu.20/22 ➜ almost all document is based on this. 
 ```
 
 
-🟢 OS Install AIO
+###### 🟢 OS Install AIO
 
-###### 🔶 OS ➜ USB Installer Make 
-
+USB Installer Make 
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 USB ESXI ➜ Make ESXI USB Installer ✅]]
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali ➜ Make Kali usb installer ✔️💯]]
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali.RPI ➜ Make Kali install ✔️]]
 - [[🧬4️⃣0️⃣0️⃣0️⃣-Z000 👾 USB.Kali.RPI.USB ➜ RPI Boot OS From USB ✅💯❗️❗️❗️❗️❗️ ]]
 
-
-###### 🔶 OS ➜ ESXI Custom Image  
-
+ESXI Custom Image  
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.Bas ✶ Hardware ➜ compatibility Check URL ✔️]]
 - [[🧬1️⃣1️⃣0️⃣0️⃣-Z000 👾 ESXI.IMG ✶ Custom Demo ➜ usb nic driver add 💯]]
 
-
-###### 🔶 OS ➜ PXE Server 
-
- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
+PXE Server 
+- [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.OS ➜ PXE Sever Prepair - 🚫 ]]
 
 
 🟢 LAB.Misc 
@@ -173,7 +176,6 @@ Git
 
 NTP 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-B000 🎪 LAB.NTP ➜ Why & How ✅]]
-
 
 
 
@@ -475,21 +477,21 @@ metric + influxdb + grafana
 ```
 RV DIY Summary 
 
-    - Power:         more panel less battery if possible
-    - Aircondition:  use mini-split  (use much less power)
+    - Power:           more panel less battery if possible
+    - Fan:             never max air: big noise trush! fuck, try diy use Noctua NF-A20
+    - Aircondition:    use mini-split  (use much less power)
+    - battery moniter: bmv-712 useless.  tell capity by votage, no need fuck this. setting is crazy and not accurate 
 
-
+    
 ```
 
 
-## 🟢 RV Power 
+## 🚑🚑🚑🚑🚑 RV Power 
 
 🔵 Solar Panel 
 ```
 Series   connect panel ➜ one panel broken.     affect whole system
 Parallel connect panel ➜ one panel broken.  no affect whole system. ➜ 👍 
-
-
 ```
 
 
@@ -498,10 +500,9 @@ Parallel connect panel ➜ one panel broken.  no affect whole system. ➜ 👍
 Lifepo4 Choose 
 - 1st: used tesla battery
     
-Battery Charge Must Know
+Battery Charge
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Charge Stage and Advice 💯❗️ ]]
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ Battery Votage Table 💯 ]]
-
 
 MPPT Controler
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 RV Power ➜ MPPT Use Very Large Panel 💯 ]]
@@ -522,7 +523,7 @@ Misc
 
 
 
-🟢 Elective Tool & Function 
+🟢 Elective Tool
 
 Tool: 
 ```
@@ -533,13 +534,11 @@ voltage tester   ➜ klein voltage tester      ➜ test if have any power.    �
 
 ```
 
-Tool Use How 
+Tool Use 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC test cable connect ➜ Meter Ω Func ✔️ ]]
 
 
-
-
-🟢 ELEC Common Hardware 
+🟢 Elective Hardware 
 
 ```
 • Fuse/breaker:   ➜ prevent shortcut 
@@ -554,9 +553,14 @@ Tool Use How
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware ➜ FET MOS ➜ Desc ✖️ ]]
 
 
-🔶 Manual 
+ELEC Hardware Use
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🚑 ELEC Hardware• Manual ➜ ShortStop Circuit Breaker ✅ ]]
 
+
+
+
+🟢 ELEC Knowledge 
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
 
 
 🟢 Ambulacne ELECT DIY
@@ -564,24 +568,72 @@ Tool Use How
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🚑 Ambulance Relay Panel ❗️💯❗️  ]]
 
 
-🟢 ELEC Knowledge 
-- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 🎉 ELECT ➜ GFCI ]]
 
+## 🚑🚑🚑🚑🚑 RV Smart
 
-
-
-## 🎪💠💠💠💠💠 Lab.SmartHome
-
-🟢 Home Assistant
+###### 🚑 Home Assistant
 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 HA OS Choose ➜ Supervised ✔️ ]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 HA OS Install ➜ RPI4_Ubuntu22 Install Supervised ✅]]
 
 
 
-# 📟📟📟📟📟📟📟📟📟📟📟📟📟📟
-# 📟📟📟📟📟📟 8️⃣8️⃣ CMD AIO
-# 📟📟📟📟📟📟📟📟📟📟📟📟📟📟
+###### 🟢 🚑 Home Assistant + Victron / Modbus
+```
+Summary 
+
+1. update all firmware.
+2. google gx_modbus-tcp_manual.pdf    modbus-tcp register list
+    https://www.victronenergy.com/panel-systems-remote-monitoring/color-control#technical-information
+
+Modbus explain 
+  - name: '⚡️🔆-Head'
+    unit_of_measurement: "W" 
+    scale: 0.1     # show 3000w, real 300w so must need this.
+    precision: 2   # if no 13v; if=1 13.1v; if=2 13.11v 
+    slave: 224     # for device(unit-id) ➜ one hardware one id 
+    address: 789   # for function        ➜ one fucntion one id. one hardware many function
+
+```
+
+
+🔶 Option ➜  victron Cerbo GX Change mapping of Unit-ID / VRM-Instance ✅
+- 01 [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 Victron Cerbo GX ➜ Change Mapping Why ✔️ ]]
+- 02 [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 Victron Cerbo GX ➜ Enable SSH ✔️ ]]
+- 03 [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 Victron Cerbo GX ➜ Change Mapping File ✔️ ]]
+
+🔶 Real Demo
+```
+Power in     ➜ solar 
+Power Out    ➜ inverter 
+battery Info ➜ cerbo gx 
+
+how show screen to ha...
+
+PV-vote
+VP-amp 
+pv-watt
+
+batt-temp.
+inverter - temp 
+out - temp 
+
+battery charge cycle..
+batt soc full persent
+```
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 HA Victron Modbus Demo ➜ prepair network and server ]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 HA Victron Modbus Demo ➜ HA_Docker Config File PATH ✔️]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 HA Victron Modbus Demo ➜ Config File with Notes❗️💯❗️ ]]
+ 
+
+
+
+how show. pic of remote console.
+
+###### 🟢 🚑 Home Assistant + Renogy Battery??
+
+
+# 📟📟📟📟📟📟📟📟📟📟📟📟📟📟 CMD AIO
 
 CMD.G ➜ all plaform 
 CMD.D ➜ Docker 
@@ -630,8 +682,6 @@ CMD.N ➜ Net
 
 - [[🧬8️⃣8️⃣0️⃣0️⃣-Z000 📟 CMD.Net.DNS.Check ➜ nslookup Use ✔️]]
 - [[🧬8️⃣8️⃣0️⃣0️⃣-Z000 📟 CMD.Net.DNS.Clear ➜ flush, Delete ✖️]]
-
-
 
 
 
@@ -1459,6 +1509,25 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 # 🧰🦚🦚🦚 Tool Network
+
+
+```
+🔶 Nic 
+nic-eth   ➜ nmcli 
+nic-wifi  ➜ nmtui    simple gui config wifi  ✅
+
+
+🔶 Port
+
+
+
+
+
+```
+
+
+
+
 
 
 🔵 ping 
