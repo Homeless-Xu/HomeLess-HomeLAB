@@ -1260,7 +1260,7 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 🔶 Ubuntu
 
-- [[🧬5️⃣3️⃣0️⃣0️⃣-Z000 👾 L.Bas PM APT Source ➜ Ubuntu_22 ARM/RPI 💯]]
+- [[RPI 💯]]
 
 
 🔶 Kali 
@@ -1470,7 +1470,14 @@ manage lots docker.learn Cluster.prod  ➜ Choose   k8s              ➜ hard
 
 
 
-# 🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰 8️⃣1️⃣ Tool
+# 🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰🧰 8️⃣1️⃣ Tool APP
+
+<img src="https://github.com/Homeless-Xu/HomeLess-HomeLAB/blob/master/Misc-Picture/APP-Alfred.jpg?raw=true">
+
+
+
+
+
 
 ✅ code-server: remote config server in web vscode
 
@@ -1563,6 +1570,10 @@ Driftnet ➜ catch pic in network
 🔶 Alfred
 
 - [[🧬8️⃣0️⃣0️⃣0️⃣-Z000 🧰 T.M ✶ Alfred.Plugin ➜ obsidian]]
+
+
+
+
 
 
 ### 🔵 Mac.Option
