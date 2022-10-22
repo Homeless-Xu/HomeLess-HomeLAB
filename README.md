@@ -597,30 +597,14 @@ Modbus explain
 ```
 
 
-🔶 Option ➜  victron Cerbo GX Change mapping of Unit-ID / VRM-Instance ✅
+🔶 Option ➜  GX Change mapping of Unit-ID / VRM-Instance ✅
 - 01 [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 Victron Cerbo GX ➜ Change Mapping Why ✔️ ]]
 - 02 [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 Victron Cerbo GX ➜ Enable SSH ✔️ ]]
 - 03 [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 Victron Cerbo GX ➜ Change Mapping File ✔️ ]]
 
-🔶 Real Demo
-```
-Power in     ➜ solar 
-Power Out    ➜ inverter 
-battery Info ➜ cerbo gx 
 
-how show screen to ha...
-
-PV-vote
-VP-amp 
-pv-watt
-
-batt-temp.
-inverter - temp 
-out - temp 
-
-battery charge cycle..
-batt soc full persent
-```
+🔶 Real Demo ✅
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 HA Victron Modbus Demo ➜ Summary ✔️ ]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 HA Victron Modbus Demo ➜ prepair network and server ]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 HA Victron Modbus Demo ➜ HA_Docker Config File PATH ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🚑 HA Victron Modbus Demo ➜ Config File with Notes❗️💯❗️ ]]

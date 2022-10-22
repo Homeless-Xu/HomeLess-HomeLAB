@@ -1,6 +1,5 @@
 ```
 
-
 # Loads default set of integrations. Do not remove.
 default_config:
 
@@ -35,6 +34,7 @@ modbus:
 
 # 🔶 power - info
       - name: '⚡️🔆' # mppt charge status: 775 bluk / abs /float 
+        unit_of_measurement: "3B,4A,5F" 
         slave: 223
         address: 775
 
@@ -62,25 +62,28 @@ modbus:
 # tempture-invetert: 61
       - name: '⚡️🔋-V' # not use gx for vote. better from mppt 
         unit_of_measurement: "V"
-        scale: 0.1  
+        scale: 0.01  
         precision: 2   # no 13v; 1 13.1v; 2 13.11v 
         slave: 226
         address: 771
 
-
-
       - name: '⚡️🔋-A'
         unit_of_measurement: "A"
         scale: 0.1  
-        precision: 2   # no 13v; 1 13.1v; 2 13.11v 
         slave: 100
         address: 841
 
       - name: '⚡️🔋-T'
         unit_of_measurement: "°C"
         scale: 0.1  
+        precision: 1
         slave: 227
         address: 61
+
+      - name: '⚡️🔋-W'
+        unit_of_measurement: "W" 
+        slave: 100
+        address: 842
 
 
 # 🔶 AC Info: 
@@ -89,10 +92,7 @@ modbus:
         slave: 100
         address: 817
 
-      - name: '⚡️♻️-BATT'
-        unit_of_measurement: "W" 
-        slave: 100
-        address: 842
+
 
 
 ```
