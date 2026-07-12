@@ -111,6 +111,7 @@ Camera_PTZ X 2
 LAB.Hardware Choose 
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Firewall ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Camera ✔️]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB Hardware Choose ➜ 抖音·海康Mini球机 拆机观察 可行性分析 ✅]]
 
 
 LAB.Network Summary
@@ -1697,3 +1698,4 @@ Driftnet ➜ catch pic in network
 # 💰🦚🦚🦚 Wealth-99
 
 - [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 💰 财富思维 ➜ 抖音·赚钱最快的路子=当收费站 可行性分析 ✅]]
+- [[🧬9️⃣9️⃣0️⃣0️⃣-Z000 💰 创业思维 ➜ 抖音·找项目先验证需求和机会 可行性分析 ✅]]
