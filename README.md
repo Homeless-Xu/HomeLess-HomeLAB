@@ -112,6 +112,7 @@ LAB.Hardware Choose
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Firewall ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-A000 🎪 LAB Hardware Choose ➜ Camera ✔️]]
 - [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB Hardware Choose ➜ 抖音·海康Mini球机 拆机观察 可行性分析 ✅]]
+- [[🧬0️⃣0️⃣0️⃣0️⃣-Z000 🎪 LAB Hardware ➜ 抖音·监控头改摄影直播机 DIY 可行性分析 ✅]]
 
 
 LAB.Network Summary
